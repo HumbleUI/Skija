@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>io.github.humbleui.skija</groupId>
+    <artifactId>skija-macos-arm64</artifactId>
+    <version>${version}</version>
+    <packaging>jar</packaging>
+
+    <name>io.github.humbleui.skija:skija-macos-arm64</name>
+    <description>Java bindings for Skia</description>
+    <url>https://github.com/humbleui/skija</url>
+    
+    <licenses>
+      <license>
+        <name>The Apache Software License, Version 2.0</name>
+        <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Nikita Prokopov</name>
+            <url>https://github.com/tonsky</url>
+            <timezone>Europe/Berlin</timezone>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/humbleui/skija.git</connection>
+        <developerConnection>scm:git:ssh://github.com/humbleui/skija.git</developerConnection>
+        <url>http://github.com/humbleui/skija/tree/master</url>
+    </scm>
+
+    <properties>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.github.humbleui.skija</groupId>
+            <artifactId>skija-shared</artifactId>
+            <version>${version}</version>
+        </dependency>
+    </dependencies>
+</project>

@@ -16,6 +16,25 @@ classifier = ('macos-' + arch if system == 'macos' else system)
 module = 'io.github.humbleui.skija.' + ('macos.' + arch if system == 'macos' else system)
 verbose = '--verbose' in sys.argv
 root = os.path.abspath(os.path.dirname(__file__) + '/..')
+ossrh_username = os.getenv('OSSRH_USERNAME')
+ossrh_password = os.getenv('OSSRH_PASSWORD')
+
+def version():
+  parser = argparse.ArgumentParser()
+  parser.add_argument('--version')
+  (args, _) = parser.parse_known_args()
+  if args.version:
+    return args.version
+
+  ref = os.getenv('GITHUB_REF')
+  if ref and ref.startswith('refs/tags/'):
+    return ref[len('refs/tags/'):]
+
+  ref = os.getenv('GITHUB_SHA')
+  if ref:
+    return ref[:10]
+
+  return '0.0.0'
 
 def check_call(args, **kwargs):
   t0 = time.time()
@@ -83,7 +102,17 @@ def replaced(filename, replacements):
     finally:
       with open(filename, 'w') as f:
         f.write(original)
-        
+
+def copy_replace(src, dst, replacements):
+  with open(src, 'r') as f:
+    original = f.read()
+  updated = original
+  for key, value in replacements.items():
+    updated = updated.replace(key, value)
+  os.makedirs(os.path.dirname(dst), exist_ok = True)
+  with open(dst, 'w') as f:
+    f.write(updated)
+
 def copy_newer(src, dst):
   if not os.path.exists(dst) or os.path.getmtime(src) > os.path.getmtime(dst):
     if os.path.exists(dst):

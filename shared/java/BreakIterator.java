@@ -478,12 +478,12 @@ public class BreakIterator extends Managed implements Cloneable {
     }
 
     /**
-     * For rule-based BreakIterators, return the status tag from the
-     * break rule that determined the boundary at the current iteration position.
-     * <p>
-     * For break iterator types that do not support a rule status,
-     * a default value of 0 is returned.
-     * <p>
+     * <p>For rule-based BreakIterators, return the status tag from the
+     * break rule that determined the boundary at the current iteration position.</p>
+     * 
+     * <p>For break iterator types that do not support a rule status,
+     * a default value of 0 is returned.</p>
+     *
      * @return The status from the break rule that determined the boundary
      * at the current iteration position.
      */
