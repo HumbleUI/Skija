@@ -86,7 +86,8 @@ jobs:
           name: windows-jar
           path: target/skija-windows-*.jar
 
-  deploy:
+  release:
+    if: startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
     needs: [build_windows, build_linux, build_macos]
     steps:
@@ -115,7 +116,6 @@ jobs:
           name: windows-jar
           path: target
       - name: Deploy to Maven Central
-        if: startsWith(github.ref, 'refs/tags/')
         run: |
           echo -n "$GPG_SIGNING_KEY" | base64 --decode | gpg --import
           python3 ./script/deploy.py
