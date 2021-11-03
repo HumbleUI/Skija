@@ -22,9 +22,9 @@ public class RuntimeEffectScene extends Scene {
             "uniform float xBias;\n" +
             "uniform float yScale;\n" +
             "uniform float yBias;\n" +
-            "uniform shader input;\n" +
+            "uniform shader image;\n" +
             "half4 main(float2 xy) {\n" +
-            "  half4 tex = sample(input, mod(xy, 100));\n" +
+            "  half4 tex = image.eval(mod(xy, 100));\n" +
             "  return half4((xy.x - xBias) /  xScale / 2 + 0.5, (xy.y - yBias) / yScale / 2 + 0.5, tex.b, 1);\n" +
             "}"
         );

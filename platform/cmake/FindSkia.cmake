@@ -26,6 +26,12 @@ else()
   find_library(SKIA_OPENGL_LIBRARY opengl NAMES GL)
 endif()
 
+# SkUnicode
+find_library(SKUNICODE_LIBRARY skunicode PATH "${SKIA_LIBRARY_DIR}")
+find_path(SKUNICODE_INCLUDE_DIR SkUnicode.h HINTS "${SKIA_DIR}/modules/skunicode/include")
+add_library(skunicode INTERFACE)
+target_link_libraries(skunicode INTERFACE ${SKUNICODE_LIBRARY})
+
 # SkShaper module + freetype + harfbuzz
 find_library(SKSHAPER_LIBRARY skshaper PATH "${SKIA_LIBRARY_DIR}")
 find_path(SKSHAPER_INCLUDE_DIR SkShaper.h HINTS "${SKIA_DIR}/modules/skshaper/include")
@@ -112,6 +118,7 @@ target_include_directories(skia INTERFACE
   ${SKIA_GPU_INCLUDE_DIR}
   ${SKIA_GPU2_INCLUDE_DIR}
   ${SKIA_SKCMS_INCLUDE_DIR}
+  ${SKUNICODE_INCLUDE_DIR}
   ${SKSHAPER_INCLUDE_DIR}
   ${SKPARAGRAPH_INCLUDE_DIR}
   ${FREETYPE_INCLUDE_DIRS}

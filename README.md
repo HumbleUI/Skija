@@ -227,7 +227,7 @@ export APPLE_CODESIGN_IDENTITY="<...>"
 ./script/build.py
 ```
 
-For building Skia itself, see https://github.com/JetBrains/skia-build/
+For building Skia itself, see [github.com/HumbleUI/SkiaBuild](https://github.com/HumbleUI/SkiaBuild)
 
 ## Running examples
 

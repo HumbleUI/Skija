@@ -8,7 +8,7 @@ def main():
   parser.add_argument('--debug', action='store_true')
   parser.add_argument('--arch', default=common.arch)
   parser.add_argument('--skia-dir')
-  parser.add_argument('--skia-release', default='m93-87e8842e8c')
+  parser.add_argument('--skia-release', default='m96-2f1f21b8a9')
   parser.add_argument('--skija-version')
   (args, _) = parser.parse_known_args()
 
@@ -22,7 +22,7 @@ def main():
     skia_dir = "Skia-" + args.skia_release + "-" + common.system + "-" + build_type + '-' + common.arch
     if not os.path.exists(skia_dir):
       zip = skia_dir + '.zip'
-      common.fetch('https://github.com/JetBrains/skia-build/releases/download/' + args.skia_release + '/' + zip, zip)
+      common.fetch('https://github.com/HumbleUI/SkiaBuild/releases/download/' + args.skia_release + '/' + zip, zip)
       with zipfile.ZipFile(zip, 'r') as f:
         print("Extracting", zip)
         f.extractall(skia_dir)
