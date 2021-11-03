@@ -3,17 +3,18 @@ import argparse, clean, common, glob, os, platform, re, subprocess, sys
 
 def package():
   version = common.version()
-  os.chdir(f'{common.root}/shared')
+  os.chdir(common.root)
+  os.makedirs("target", exist_ok = True)
 
   common.copy_replace(
-    'deploy/META-INF/maven/io.github.humbleui.skija/skija-shared/pom.xml',
-    'target/maven/META-INF/maven/io.github.humbleui.skija/skija-shared/pom.xml',
+    'shared/deploy/META-INF/maven/io.github.humbleui.skija/skija-shared/pom.xml',
+    'shared/target/maven/META-INF/maven/io.github.humbleui.skija/skija-shared/pom.xml',
     {'${version}': version}
   )
 
   common.copy_replace(
-    'deploy/META-INF/maven/io.github.humbleui.skija/skija-shared/pom.properties',
-    'target/maven/META-INF/maven/io.github.humbleui.skija/skija-shared/pom.properties',
+    'shared/deploy/META-INF/maven/io.github.humbleui.skija/skija-shared/pom.properties',
+    'shared/target/maven/META-INF/maven/io.github.humbleui.skija/skija-shared/pom.properties',
     {'${version}': version}
   )
 
@@ -22,8 +23,8 @@ def package():
   subprocess.check_call(["jar",
     "--create",
     "--file", "target/skija-shared-" + version + ".jar",
-    "-C", "target/classes", ".",
-    "-C", "target/maven", "META-INF"
+    "-C", "shared/target/classes", ".",
+    "-C", "shared/target/maven", "META-INF"
   ])
 
   # skija-shared-{version}-sources.jar
@@ -35,24 +36,24 @@ def package():
     "-jar",
     lombok,
     "delombok",
-    "java",
+    "shared/java",
     "--module-path",
     common.classpath_separator.join(common.deps()),
-    "-d", "target/generated-sources/delombok/io/github/humbleui/skija"
+    "-d", "shared/target/generated-sources/delombok/io/github/humbleui/skija"
   ])
 
   print('Packaging skija-shared-' + version + "-sources.jar")
   subprocess.check_call(["jar",
     "--create",
     "--file", "target/skija-shared-" + version + "-sources.jar",
-    "-C", "target/generated-sources/delombok", ".",
-    "-C", "deploy", "META-INF"
+    "-C", "shared/target/generated-sources/delombok", ".",
+    "-C", "shared/deploy", "META-INF"
   ])
 
   # skija-shared-{version}-javadoc.jar
   print(f'Packaging skija-shared-{version}-javadoc.jar')
-  sources = glob.glob("target/generated-sources/delombok/**/*.java", recursive = True)
-  javadoc = f"{common.root}/docs/apidocs"
+  sources = glob.glob("shared/target/generated-sources/delombok/**/*.java", recursive = True)
+  javadoc = "docs/apidocs"
   os.makedirs(javadoc, exist_ok = True)
   subprocess.check_call(["javadoc",
     "--module-path", common.classpath_separator.join(common.deps()),

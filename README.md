@@ -153,7 +153,7 @@ Maven:
 <dependencies>
   <dependency>
     <groupId>io.github.humbleui.skija</groupId>
-    <artifactId>skija-${platform}</artifactId>
+    <artifactId>${artifact}</artifactId>
     <version>${version}</version>
   </dependency>
 </dependencies>
@@ -175,6 +175,8 @@ macOS Intel | `skija-macos-x64`   | ![version](https://img.shields.io/maven-cent
 macOS M1    | `skija-macos-arm64` | ![version](https://img.shields.io/maven-central/v/io.github.humbleui.skija/skija-macos-arm64)
 Linux       | `skija-linux`       | ![version](https://img.shields.io/maven-central/v/io.github.humbleui.skija/skija-linux)
 Windows     | `skija-windows`     | ![version](https://img.shields.io/maven-central/v/io.github.humbleui.skija/skija-windows)
+
+For simplicity or if your build system is not smart enough to select artifact based on OS, you can add all four as dependencies—they will not conflict.
 
 ## Documentation
 

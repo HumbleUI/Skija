@@ -22,7 +22,7 @@ def main():
 
   # Shared
   pom = "META-INF/maven/io.github.humbleui.skija/skija-shared/pom.xml"
-  with zipfile.ZipFile(f'shared/target/skija-shared-{version}.jar', 'r') as f:
+  with zipfile.ZipFile(f'target/skija-shared-{version}.jar', 'r') as f:
     f.extract(pom, "shared/target/maven")
 
   print(f'Deploying skija-shared-{version}.jar')
@@ -30,14 +30,14 @@ def main():
     [mvn, 'gpg:sign-and-deploy-file'] + \
     mvn_settings + \
     [f'-DpomFile=shared/target/maven/{pom}',
-     f'-Dfile=shared/target/skija-shared-{version}.jar'])
+     f'-Dfile=target/skija-shared-{version}.jar'])
 
   print(f'Deploying skija-shared-{version}-sources.jar')
   subprocess.check_call(
     [mvn, 'gpg:sign-and-deploy-file'] + \
     mvn_settings + \
     [f'-DpomFile=shared/target/maven/{pom}',
-     f'-Dfile=shared/target/skija-shared-{version}-sources.jar',
+     f'-Dfile=target/skija-shared-{version}-sources.jar',
      f'-Dclassifier=sources'])
 
   print(f'Deploying skija-shared-{version}-javadoc.jar')
@@ -45,12 +45,12 @@ def main():
     [mvn, 'gpg:sign-and-deploy-file'] + \
     mvn_settings + \
     [f'-DpomFile=shared/target/maven/{pom}',
-     f'-Dfile=shared/target/skija-shared-{version}-javadoc.jar',
+     f'-Dfile=target/skija-shared-{version}-javadoc.jar',
      f'-Dclassifier=javadoc'])
 
   # Platform
   for classifier in ['windows', 'linux', 'macos-x64', 'macos-arm64']:
-    jar = f'platform/target/skija-{classifier}-{version}.jar'
+    jar = f'target/skija-{classifier}-{version}.jar'
     pom = f'META-INF/maven/io.github.humbleui.skija/skija-{classifier}/pom.xml'
     with zipfile.ZipFile(jar, 'r') as f:
       f.extract(pom, "platform/target/maven")
@@ -63,7 +63,6 @@ def main():
        f'-Dfile={jar}'])
 
   # Release
-
   headers = {
     'Accept': 'application/json',
     'Authorization': 'Basic ' + base64.b64encode((ossrh_username + ":" + ossrh_password).encode('utf-8')).decode('utf-8'),

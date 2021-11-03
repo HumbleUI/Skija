@@ -32,14 +32,14 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: macos-x64-jar
-          path: platform/target/*.jar
+          path: target/skija-macos-x64-*.jar
       - run: python3 script/clean.py
       - run: python3 script/build.py --arch arm64
       - run: python3 script/package_platform.py --arch arm64
       - uses: actions/upload-artifact@v2
         with:
           name: macos-arm64-jar
-          path: platform/target/*.jar
+          path: target/skija-macos-arm64-*.jar
 
   build_linux:
     runs-on: ubuntu-18.04
@@ -58,13 +58,13 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: shared-jar
-          path: shared/target/*.jar
+          path: target/skija-shared-*.jar
       - run: python3 script/test.py
       - run: python3 script/package_platform.py
       - uses: actions/upload-artifact@v2
         with:
           name: linux-jar
-          path: platform/target/*.jar
+          path: target/skija-linux-*.jar
 
   build_windows:
     runs-on: windows-2019
@@ -84,7 +84,7 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: windows-jar
-          path: platform/target/*.jar
+          path: target/skija-windows-*.jar
 
   deploy:
     runs-on: ubuntu-latest
@@ -97,27 +97,25 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: shared-jar
-          path: shared/target
+          path: target
       - uses: actions/download-artifact@v2
         with:
           name: macos-x64-jar
-          path: platform/target
+          path: target
       - uses: actions/download-artifact@v2
         with:
           name: macos-arm64-jar
-          path: platform/target
+          path: target
       - uses: actions/download-artifact@v2
         with:
           name: linux-jar
-          path: platform/target
+          path: target
       - uses: actions/download-artifact@v2
         with:
           name: windows-jar
-          path: platform/target
-      - run: ls -lah platform/target
-      - run: ls -lah shared/target
-      - if: ${{ startsWith(github.ref, 'refs/tags/') }}
-        name: Deploy to Maven Central
+          path: target
+      - name: Deploy to Maven Central
+        if: startsWith(github.ref, 'refs/tags/')
         run: |
           echo -n "$GPG_SIGNING_KEY" | base64 --decode | gpg --import
           python3 ./script/deploy.py

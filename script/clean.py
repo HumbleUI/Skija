@@ -3,6 +3,7 @@ import common, os, shutil, sys
 
 def main():
   os.chdir(common.root)
+  shutil.rmtree('target', ignore_errors = True)
   shutil.rmtree('shared/target', ignore_errors = True)
   shutil.rmtree('platform/build', ignore_errors = True)
   shutil.rmtree('platform/target', ignore_errors = True)
