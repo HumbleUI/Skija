@@ -31,14 +31,14 @@ jobs:
       - run: python3 script/package_platform.py
       - uses: actions/upload-artifact@v2
         with:
-          name: macos-x64-jar
+          name: macos-x64-jars
           path: target/skija-macos-x64-*.jar
       - run: python3 script/clean.py
       - run: python3 script/build.py --arch arm64
       - run: python3 script/package_platform.py --arch arm64
       - uses: actions/upload-artifact@v2
         with:
-          name: macos-arm64-jar
+          name: macos-arm64-jars
           path: target/skija-macos-arm64-*.jar
 
   build_linux:
@@ -57,13 +57,13 @@ jobs:
       - run: python3 script/package_shared.py
       - uses: actions/upload-artifact@v2
         with:
-          name: shared-jar
+          name: shared-jars
           path: target/skija-shared-*.jar
       - run: python3 script/test.py
       - run: python3 script/package_platform.py
       - uses: actions/upload-artifact@v2
         with:
-          name: linux-jar
+          name: linux-jars
           path: target/skija-linux-*.jar
 
   build_windows:
@@ -83,7 +83,7 @@ jobs:
       - run: python3 script/package_platform.py
       - uses: actions/upload-artifact@v2
         with:
-          name: windows-jar
+          name: windows-jars
           path: target/skija-windows-*.jar
 
   release:
@@ -97,23 +97,23 @@ jobs:
           echo "$JAVA_HOME_11_X64/bin" >> $GITHUB_PATH
       - uses: actions/download-artifact@v2
         with:
-          name: shared-jar
+          name: shared-jars
           path: target
       - uses: actions/download-artifact@v2
         with:
-          name: macos-x64-jar
+          name: macos-x64-jars
           path: target
       - uses: actions/download-artifact@v2
         with:
-          name: macos-arm64-jar
+          name: macos-arm64-jars
           path: target
       - uses: actions/download-artifact@v2
         with:
-          name: linux-jar
+          name: linux-jars
           path: target
       - uses: actions/download-artifact@v2
         with:
-          name: windows-jar
+          name: windows-jars
           path: target
       - name: Deploy to Maven Central
         run: |

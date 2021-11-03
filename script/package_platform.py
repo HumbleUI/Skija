@@ -30,6 +30,20 @@ def package():
     "-C", "platform/target/maven", "META-INF"
   ])
 
+  print(f'Packaging {artifact}-{version}-sources.jar')
+  subprocess.check_call(["jar",
+    "--create",
+    "--file", f"target/{artifact}-{version}-sources.jar",
+    "-C", "platform/target/maven", "META-INF"
+  ])
+
+  print(f'Packaging {artifact}-{version}-javadoc.jar')
+  subprocess.check_call(["jar",
+    "--create",
+    "--file", f"target/{artifact}-{version}-javadoc.jar",
+    "-C", "platform/target/maven", "META-INF"
+  ])
+
   return 0
 
 if __name__ == '__main__':

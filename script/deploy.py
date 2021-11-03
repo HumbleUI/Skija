@@ -56,11 +56,13 @@ def main():
       f.extract(pom, "platform/target/maven")
 
     print(f'Deploying skija-{classifier}-{version}.jar')
-    subprocess.check_call(
-      [mvn, 'gpg:sign-and-deploy-file'] + \
-      mvn_settings + \
-      [f'-DpomFile=platform/target/maven/{pom}',
-       f'-Dfile={jar}'])
+    subprocess.check_call([mvn, 'gpg:sign-and-deploy-file'] + mvn_settings + [f'-DpomFile=platform/target/maven/{pom}', f'-Dfile={jar}'])
+
+    print(f'Deploying skija-{classifier}-{version}-sources.jar')
+    subprocess.check_call([mvn, 'gpg:sign-and-deploy-file'] + mvn_settings + [f'-DpomFile=platform/target/maven/{pom}', f'-Dfile=target/skija-{classifier}-{version}.jar', "-Dclassifier=sources"])
+
+    print(f'Deploying skija-{classifier}-{version}-javadoc.jar')
+    subprocess.check_call([mvn, 'gpg:sign-and-deploy-file'] + mvn_settings + [f'-DpomFile=platform/target/maven/{pom}', f'-Dfile=target/skija-{classifier}-{version}.jar', "-Dclassifier=javadoc"])
 
   # Release
   headers = {
