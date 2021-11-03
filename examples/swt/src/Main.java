@@ -1,12 +1,12 @@
-package org.jetbrains.skija.examples.swt;
+package io.github.humbleui.skija.examples.swt;
 
 import org.eclipse.swt.*;
 import org.eclipse.swt.graphics.*;
 import org.eclipse.swt.layout.*;
 import org.eclipse.swt.opengl.*;
 import org.eclipse.swt.widgets.*;
-import org.jetbrains.skija.*;
-import org.jetbrains.skija.Canvas;
+import io.github.humbleui.skija.*;
+import io.github.humbleui.skija.Canvas;
 
 public class Main {
     public static void main(String[] args) throws Exception {

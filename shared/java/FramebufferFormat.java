@@ -1,4 +1,4 @@
-package org.jetbrains.skija;
+package io.github.humbleui.skija;
 
 public interface FramebufferFormat {
     int GR_GL_STENCIL_INDEX                = 0x1901;

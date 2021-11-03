@@ -1,4 +1,4 @@
-package org.jetbrains.skija.impl;
+package io.github.humbleui.skija.impl;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

@@ -15,9 +15,9 @@ def main():
   os.chdir(common.root + '/platform')
   artifact = "skija-" + common.classifier
 
-  with common.replaced('deploy/META-INF/maven/org.jetbrains.skija/' + artifact + '/pom.xml', {'${version}': rev}):
-    with common.replaced('deploy/META-INF/maven/org.jetbrains.skija/' + artifact + '/pom.properties', {'${version}': rev}):
-      with open('target/classes/org/jetbrains/skija/' + common.classifier.replace('-', '/') + '/skija.version', 'w') as f:
+  with common.replaced('deploy/META-INF/maven/io.github.humbleui.skija/' + artifact + '/pom.xml', {'${version}': rev}):
+    with common.replaced('deploy/META-INF/maven/io.github.humbleui.skija/' + artifact + '/pom.properties', {'${version}': rev}):
+      with open('target/classes/io/github/humbleui/skija/' + common.classifier.replace('-', '/') + '/skija.version', 'w') as f:
         f.write(rev)
 
       print("Packaging " + artifact + "-" + rev + ".jar")
@@ -25,7 +25,7 @@ def main():
         "--create",
         "--file", "target/" + artifact + "-" + rev + ".jar",
         "-C", "target/classes", ".",
-        "-C", "deploy", "META-INF/maven/org.jetbrains.skija/" + artifact
+        "-C", "deploy", "META-INF/maven/io.github.humbleui.skija/" + artifact
       ])
 
       if not args.dry_run:
@@ -38,9 +38,7 @@ def main():
           "-Dspace.password=" + os.getenv("SPACE_TOKEN"),
           "deploy:deploy-file",
           "-Dfile=target/" + artifact + "-" + rev + ".jar",
-          "-DpomFile=deploy/META-INF/maven/org.jetbrains.skija/" + artifact + "/pom.xml",
-          "-DrepositoryId=space-maven",
-          "-Durl=" + common.space_skija,
+          "-DpomFile=deploy/META-INF/maven/io.github.humbleui.skija/" + artifact + "/pom.xml",
         ])
 
   return 0

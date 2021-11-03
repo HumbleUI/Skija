@@ -1,11 +1,11 @@
-package org.jetbrains.skija.test;
+package io.github.humbleui.skija.test;
 
-import static org.jetbrains.skija.test.runner.TestRunner.*;
+import static io.github.humbleui.skija.test.runner.TestRunner.*;
 
-import org.jetbrains.skija.Bitmap;
-import org.jetbrains.skija.ColorAlphaType;
-import org.jetbrains.skija.ImageInfo;
-import org.jetbrains.skija.test.runner.*;
+import io.github.humbleui.skija.Bitmap;
+import io.github.humbleui.skija.ColorAlphaType;
+import io.github.humbleui.skija.ImageInfo;
+import io.github.humbleui.skija.test.runner.*;
 
 public class BitmapTest implements Executable {
     @Override

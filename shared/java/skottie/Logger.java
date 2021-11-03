@@ -1,13 +1,13 @@
-package org.jetbrains.skija.skottie;
+package io.github.humbleui.skija.skottie;
 
 import java.lang.ref.*;
 import org.jetbrains.annotations.*;
-import org.jetbrains.skija.*;
-import org.jetbrains.skija.impl.*;
+import io.github.humbleui.skija.*;
+import io.github.humbleui.skija.impl.*;
 
 /**
  * <p>A Logger subclass can be used to receive
- * {@link org.jetbrains.skija.skottie.AnimationBuilder} parsing errors and warnings.</p>
+ * {@link io.github.humbleui.skija.skottie.AnimationBuilder} parsing errors and warnings.</p>
  */
 public abstract class Logger extends RefCnt {
     static { Library.staticLoad(); }

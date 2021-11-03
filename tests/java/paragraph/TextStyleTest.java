@@ -1,12 +1,12 @@
-package org.jetbrains.skija.test.paragraph;
+package io.github.humbleui.skija.test.paragraph;
 
-import static org.jetbrains.skija.test.runner.TestRunner.*;
+import static io.github.humbleui.skija.test.runner.TestRunner.*;
 
-import org.jetbrains.skija.paragraph.TextStyle;
-import org.jetbrains.skija.paragraph.TextStyleAttribute;
-import org.jetbrains.skija.test.*;
-import org.jetbrains.skija.test.paragraph.*;
-import org.jetbrains.skija.test.runner.*;
+import io.github.humbleui.skija.paragraph.TextStyle;
+import io.github.humbleui.skija.paragraph.TextStyleAttribute;
+import io.github.humbleui.skija.test.*;
+import io.github.humbleui.skija.test.paragraph.*;
+import io.github.humbleui.skija.test.runner.*;
 
 public class TextStyleTest implements Executable {
     @Override

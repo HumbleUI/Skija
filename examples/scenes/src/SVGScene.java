@@ -1,12 +1,12 @@
-package org.jetbrains.skija.examples.scenes;
+package io.github.humbleui.skija.examples.scenes;
 
 import java.io.*;
 import java.net.*;
 import java.nio.file.*;
 import java.util.stream.*;
 import lombok.*;
-import org.jetbrains.skija.*;
-import org.jetbrains.skija.svg.*;
+import io.github.humbleui.skija.*;
+import io.github.humbleui.skija.svg.*;
 
 public class SVGScene extends Scene {
     public Thread _thread = null;
@@ -60,7 +60,7 @@ public class SVGScene extends Scene {
             {
                 in.transferTo(out);
                 if (_thread == this) {
-                    try (var data = org.jetbrains.skija.Data.makeFromBytes(out.toByteArray());) {
+                    try (var data = io.github.humbleui.skija.Data.makeFromBytes(out.toByteArray());) {
                         _dom = new SVGDOM(data);
                     }
                 }

@@ -1,7 +1,7 @@
-package org.jetbrains.skija.resources;
+package io.github.humbleui.skija.resources;
 
 import org.jetbrains.annotations.*;
-import org.jetbrains.skija.impl.*;
+import io.github.humbleui.skija.impl.*;
 
 public abstract class ResourceProvider extends RefCnt {
     @ApiStatus.Internal

@@ -1,9 +1,9 @@
-package org.jetbrains.skija.examples.scenes;
+package io.github.humbleui.skija.examples.scenes;
 
 import java.util.*;
 import java.util.stream.*;
-import org.jetbrains.skija.*;
-import org.jetbrains.skija.shaper.*;
+import io.github.humbleui.skija.*;
+import io.github.humbleui.skija.shaper.*;
 
 public class DebugTextBlobHandler implements RunHandler, AutoCloseable {
     public final TextBlobBuilder _builder;

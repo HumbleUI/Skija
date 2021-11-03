@@ -1,4 +1,4 @@
-package org.jetbrains.skija.svg;
+package io.github.humbleui.skija.svg;
 
 import lombok.*;
 import org.jetbrains.annotations.*;

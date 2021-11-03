@@ -1,11 +1,11 @@
-module org.jetbrains.skija.shared {
-    exports org.jetbrains.skija;
-    exports org.jetbrains.skija.impl;
-    exports org.jetbrains.skija.shaper;
-    exports org.jetbrains.skija.skottie;
-    exports org.jetbrains.skija.sksg;
-    exports org.jetbrains.skija.svg;
-    exports org.jetbrains.skija.paragraph;
+module io.github.humbleui.skija.shared {
+    exports io.github.humbleui.skija;
+    exports io.github.humbleui.skija.impl;
+    exports io.github.humbleui.skija.shaper;
+    exports io.github.humbleui.skija.skottie;
+    exports io.github.humbleui.skija.sksg;
+    exports io.github.humbleui.skija.svg;
+    exports io.github.humbleui.skija.paragraph;
 
     requires static lombok;
     requires static org.jetbrains.annotations;

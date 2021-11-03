@@ -1,8 +1,8 @@
-package org.jetbrains.skija.examples.scenes;
+package io.github.humbleui.skija.examples.scenes;
 
-import org.jetbrains.skija.*;
-import org.jetbrains.skija.shaper.*;
-import org.jetbrains.skija.paragraph.*;
+import io.github.humbleui.skija.*;
+import io.github.humbleui.skija.shaper.*;
+import io.github.humbleui.skija.paragraph.*;
 
 public class ParagraphMetricsScene extends Scene {
     public FontCollection fc = new FontCollection();

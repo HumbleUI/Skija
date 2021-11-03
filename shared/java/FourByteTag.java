@@ -1,4 +1,4 @@
-package org.jetbrains.skija;
+package io.github.humbleui.skija;
 
 public interface FourByteTag {
     static int fromString(String name) {

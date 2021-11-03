@@ -21,8 +21,8 @@ def main():
 
   if args.skija_version:
     classpath += [
-      common.fetch_maven('org.jetbrains.skija', 'skija-shared', args.skija_version, repo='https://packages.jetbrains.team/maven/p/skija/maven'),
-      common.fetch_maven('org.jetbrains.skija', 'skija-' + common.classifier, args.skija_version, repo='https://packages.jetbrains.team/maven/p/skija/maven'),
+      common.fetch_maven('io.github.humbleui.skija', 'skija-shared', args.skija_version),
+      common.fetch_maven('io.github.humbleui.skija', 'skija-' + common.classifier, args.skija_version),
     ]
   else:
     build.main()
@@ -45,7 +45,7 @@ def main():
     '-enableassertions',
     '-enablesystemassertions',
     '-Dskija.logLevel=DEBUG',
-    'org.jetbrains.skija.examples.swt.Main'])
+    'io.github.humbleui.skija.examples.swt.Main'])
 
   return 0
 

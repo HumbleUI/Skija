@@ -1,8 +1,8 @@
-package org.jetbrains.skija.svg;
+package io.github.humbleui.skija.svg;
 
 import lombok.*;
 import org.jetbrains.annotations.*;
-import org.jetbrains.skija.*;
+import io.github.humbleui.skija.*;
 
 @AllArgsConstructor @lombok.Data @With
 public class SVGLengthContext {

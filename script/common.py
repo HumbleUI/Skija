@@ -11,10 +11,9 @@ arch = args.arch
 system = {'Darwin': 'macos', 'Linux': 'linux', 'Windows': 'windows'}[platform.system()]
 classpath_separator = ';' if system == 'windows' else ':'
 mvn = "mvn.cmd" if system == "windows" else "mvn"
-space_skija = 'https://packages.jetbrains.team/maven/p/skija/maven'
 
 classifier = ('macos-' + arch if system == 'macos' else system)
-module = 'org.jetbrains.skija.' + ('macos.' + arch if system == 'macos' else system)
+module = 'io.github.humbleui.skija.' + ('macos.' + arch if system == 'macos' else system)
 verbose = '--verbose' in sys.argv
 root = os.path.abspath(os.path.dirname(__file__) + '/..')
 
@@ -34,9 +33,6 @@ def fetch(url, file):
     print('Downloading', url)
     if os.path.dirname(file):
       os.makedirs(os.path.dirname(file), exist_ok = True)
-    # if url.startswith('https://packages.jetbrains.team/'):
-    #   check_call(["curl", "--fail", "--location", '--show-error', url, '--output', file])
-    # else:
     with open(file, 'wb') as f:
       f.write(urllib.request.urlopen(url).read())
 

@@ -1,19 +1,19 @@
-package org.jetbrains.skija.test.svg;
+package io.github.humbleui.skija.test.svg;
 
-import static org.jetbrains.skija.test.runner.TestRunner.*;
+import static io.github.humbleui.skija.test.runner.TestRunner.*;
 
 import java.io.*;
 import java.nio.charset.*;
 
-import org.jetbrains.skija.Canvas;
-import org.jetbrains.skija.OutputWStream;
-import org.jetbrains.skija.Paint;
-import org.jetbrains.skija.PaintMode;
-import org.jetbrains.skija.Path;
-import org.jetbrains.skija.Rect;
-import org.jetbrains.skija.test.*;
-import org.jetbrains.skija.test.runner.*;
-import org.jetbrains.skija.svg.SVGCanvas;
+import io.github.humbleui.skija.Canvas;
+import io.github.humbleui.skija.OutputWStream;
+import io.github.humbleui.skija.Paint;
+import io.github.humbleui.skija.PaintMode;
+import io.github.humbleui.skija.Path;
+import io.github.humbleui.skija.Rect;
+import io.github.humbleui.skija.test.*;
+import io.github.humbleui.skija.test.runner.*;
+import io.github.humbleui.skija.svg.SVGCanvas;
 
 public class SVGCanvasTest implements Executable {
     @Override

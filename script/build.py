@@ -59,7 +59,7 @@ def main():
   modulepath = []
   if args.skija_version:
     modulepath += [
-      common.fetch_maven('org.jetbrains.skija', 'skija-shared', args.skija_version, repo='https://packages.jetbrains.team/maven/p/skija/maven')
+      common.fetch_maven('io.github.humbleui.skija', 'skija-shared', args.skija_version)
     ]
   else:
     build_shared.main()
@@ -70,7 +70,7 @@ def main():
   common.javac(sources, 'target/classes', modulepath = modulepath, release = '9')
 
   # Copy files
-  target = 'target/classes/org/jetbrains/skija'
+  target = 'target/classes/io/github/humbleui/skija'
   if common.classifier == 'macos-x64':
     common.copy_newer('build/libskija_x64.dylib', target + '/macos/x64/libskija_x64.dylib')
   elif common.classifier == 'macos-arm64':

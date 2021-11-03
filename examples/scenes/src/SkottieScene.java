@@ -1,4 +1,4 @@
-package org.jetbrains.skija.examples.scenes;
+package io.github.humbleui.skija.examples.scenes;
 
 import java.io.*;
 import java.net.*;
@@ -6,10 +6,10 @@ import java.nio.file.*;
 import java.nio.file.Path;
 import java.util.stream.*;
 import lombok.*;
-import org.jetbrains.skija.*;
-import org.jetbrains.skija.resources.*;
-import org.jetbrains.skija.sksg.*;
-import org.jetbrains.skija.skottie.*;
+import io.github.humbleui.skija.*;
+import io.github.humbleui.skija.resources.*;
+import io.github.humbleui.skija.sksg.*;
+import io.github.humbleui.skija.skottie.*;
 
 public class SkottieScene extends Scene {
     private Animation animation;

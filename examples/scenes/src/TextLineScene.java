@@ -1,10 +1,10 @@
-package org.jetbrains.skija.examples.scenes;
+package io.github.humbleui.skija.examples.scenes;
 
 import java.util.*;
 import java.util.stream.*;
-import org.jetbrains.skija.*;
-import org.jetbrains.skija.shaper.*;
-import org.jetbrains.skija.paragraph.*;
+import io.github.humbleui.skija.*;
+import io.github.humbleui.skija.shaper.*;
+import io.github.humbleui.skija.paragraph.*;
 
 public class TextLineScene extends Scene {
     private Paint fill = new Paint().setColor(0xFFCC3333);

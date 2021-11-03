@@ -6,7 +6,7 @@ Demonstration of Skija APIs from Clojure.
 - Clojure 1.10.1
 - `clojure` command-line tool 1.10.1.727 or later
 
-You’ll need to build Skija locally, see [README](https://github.com/JetBrains/skija/blob/master/README.md).
+You’ll need to build Skija locally, see [README](https://github.com/HumbleUI/Skija/blob/master/README.md).
 
 ## Running
 

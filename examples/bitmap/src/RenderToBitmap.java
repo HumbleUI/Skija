@@ -1,6 +1,6 @@
-package org.jetbrains.skija.examples.bitmap;
+package io.github.humbleui.skija.examples.bitmap;
 
-import org.jetbrains.skija.*;
+import io.github.humbleui.skija.*;
 
 public class RenderToBitmap {
     public static void main(String [] args) throws Exception {

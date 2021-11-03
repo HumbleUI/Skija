@@ -1,8 +1,8 @@
-package org.jetbrains.skija.examples.scenes;
+package io.github.humbleui.skija.examples.scenes;
 
 import java.util.*;
-import org.jetbrains.skija.*;
-import org.jetbrains.skija.shaper.*;
+import io.github.humbleui.skija.*;
+import io.github.humbleui.skija.shaper.*;
 
 public class FontScene extends Scene {
     public Typeface _inter;

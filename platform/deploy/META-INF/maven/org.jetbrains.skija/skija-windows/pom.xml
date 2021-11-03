@@ -1,6 +1,6 @@
 <project>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.jetbrains.skija</groupId>
+    <groupId>io.github.humbleui.skija</groupId>
     <artifactId>skija-windows</artifactId>
     <version>${version}</version>
     <properties>
@@ -10,15 +10,9 @@
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.jetbrains.skija</groupId>
+            <groupId>io.github.humbleui.skija</groupId>
             <artifactId>skija-shared</artifactId>
             <version>${version}</version>
         </dependency>
     </dependencies>
-    <distributionManagement>
-        <repository>
-            <id>space-maven</id>
-            <url>https://packages.jetbrains.team/maven/p/skija/maven</url>
-        </repository>
-    </distributionManagement>
 </project>

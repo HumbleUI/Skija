@@ -8,7 +8,7 @@ import script.build as build
 def main():
   parser = argparse.ArgumentParser()
   parser.add_argument('--skija-version')
-  parser.add_argument('--jwm-version', default='0.1.170')
+  parser.add_argument('--jwm-version', default='0.2.6')
   parser.add_argument('--jwm-dir', default=None)
   (args, _) = parser.parse_known_args()
 
@@ -27,14 +27,13 @@ def main():
     ]
   else:
     classpath += [
-      common.fetch_maven('org.jetbrains.jwm', 'jwm-shared', args.jwm_version, repo='https://packages.jetbrains.team/maven/p/jwm/maven'),
-      common.fetch_maven('org.jetbrains.jwm', 'jwm-' + common.system + '-' + common.arch, args.jwm_version, repo='https://packages.jetbrains.team/maven/p/jwm/maven'),
+      common.fetch_maven('io.github.humbleui.jwm', 'jwm', args.jwm_version),
     ]
 
   if args.skija_version:
     classpath += [
-      common.fetch_maven('org.jetbrains.skija', 'skija-shared', args.skija_version, repo='https://packages.jetbrains.team/maven/p/skija/maven'),
-      common.fetch_maven('org.jetbrains.skija', 'skija-' + common.classifier, args.skija_version, repo='https://packages.jetbrains.team/maven/p/skija/maven'),
+      common.fetch_maven('io.github.humbleui.skija', 'skija-shared'),
+      common.fetch_maven('io.github.humbleui.skija', 'skija-' + common.classifier, args.skija_version),
     ]
   else:
     build.main()
@@ -58,7 +57,7 @@ def main():
     '-enablesystemassertions',
     '-Xcheck:jni',
     '-Dskija.logLevel=DEBUG',
-    'org.jetbrains.skija.examples.jwm.Main'])
+    'io.github.humbleui.skija.examples.jwm.Main'])
 
   return 0
 

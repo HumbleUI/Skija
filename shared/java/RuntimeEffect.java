@@ -1,8 +1,8 @@
-package org.jetbrains.skija;
+package io.github.humbleui.skija;
 
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.skija.impl.*;
+import io.github.humbleui.skija.impl.*;
 
 public class RuntimeEffect extends RefCnt {
     static {

@@ -1,8 +1,8 @@
-package org.jetbrains.skija;
+package io.github.humbleui.skija;
 
 import java.lang.ref.*;
 import org.jetbrains.annotations.*;
-import org.jetbrains.skija.impl.*;
+import io.github.humbleui.skija.impl.*;
 
 /**
  * A utility proxy base class for implementing draw/paint filters.

@@ -1,10 +1,10 @@
-package org.jetbrains.skija;
+package io.github.humbleui.skija;
 
 import java.lang.ref.*;
 import java.util.*;
 import org.jetbrains.annotations.*;
-import org.jetbrains.skija.*;
-import org.jetbrains.skija.impl.*;
+import io.github.humbleui.skija.*;
+import io.github.humbleui.skija.impl.*;
 
 /**
  * <p>A class that locates boundaries in text.  This class defines a protocol for

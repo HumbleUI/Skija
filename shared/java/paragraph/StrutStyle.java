@@ -1,9 +1,9 @@
-package org.jetbrains.skija.paragraph;
+package io.github.humbleui.skija.paragraph;
 
 import java.lang.ref.*;
 import org.jetbrains.annotations.*;
-import org.jetbrains.skija.*;
-import org.jetbrains.skija.impl.*;
+import io.github.humbleui.skija.*;
+import io.github.humbleui.skija.impl.*;
 
 public class StrutStyle extends Managed {
     static { Library.staticLoad(); }

@@ -1,9 +1,9 @@
-package org.jetbrains.skija;
+package io.github.humbleui.skija;
 
 import java.lang.ref.*;
 import java.util.*;
 import org.jetbrains.annotations.*;
-import org.jetbrains.skija.impl.*;
+import io.github.humbleui.skija.impl.*;
 
 public class Typeface extends RefCnt {
     static { Library.staticLoad(); }

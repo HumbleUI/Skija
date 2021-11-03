@@ -1,4 +1,4 @@
-package org.jetbrains.skija.test.runner;
+package io.github.humbleui.skija.test.runner;
 
 import java.lang.reflect.Method;
 import java.util.ArrayDeque;
@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import org.jetbrains.skija.Matrix33;
-import org.jetbrains.skija.Point;
-import org.jetbrains.skija.test.*;
+import io.github.humbleui.skija.Matrix33;
+import io.github.humbleui.skija.Point;
+import io.github.humbleui.skija.test.*;
 
 public class TestRunner {
     public int asserts   = 0;
@@ -26,7 +26,7 @@ public class TestRunner {
         var st = Thread.currentThread().getStackTrace();
         var ste = st[1];
         for (int i = 1; i < st.length; ++i) {
-            if (st[i].getClassName() != "org.jetbrains.skija.test.TestRunner") {
+            if (st[i].getClassName() != "io.github.humbleui.skija.test.TestRunner") {
                 ste = st[i];
                 break;
             }

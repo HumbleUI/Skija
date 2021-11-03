@@ -1,13 +1,13 @@
-package org.jetbrains.skija.examples.scenes;
+package io.github.humbleui.skija.examples.scenes;
 
 import java.util.*;
 import java.io.*;
 import java.nio.file.*;
 import java.util.stream.*;
 import lombok.*;
-import org.jetbrains.skija.*;
-import org.jetbrains.skija.shaper.*;
-import org.jetbrains.skija.paragraph.*;
+import io.github.humbleui.skija.*;
+import io.github.humbleui.skija.shaper.*;
+import io.github.humbleui.skija.paragraph.*;
 
 public class WallOfTextScene extends Scene {
     private Font font = null;

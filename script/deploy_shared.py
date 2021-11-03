@@ -14,8 +14,8 @@ def main():
 
   os.chdir(common.root + '/shared')
 
-  with common.replaced('deploy/META-INF/maven/org.jetbrains.skija/skija-shared/pom.xml', {'${version}': rev}):
-    with common.replaced('deploy/META-INF/maven/org.jetbrains.skija/skija-shared/pom.properties', {'${version}': rev}):
+  with common.replaced('deploy/META-INF/maven/io.github.humbleui.skija/skija-shared/pom.xml', {'${version}': rev}):
+    with common.replaced('deploy/META-INF/maven/io.github.humbleui.skija/skija-shared/pom.properties', {'${version}': rev}):
 
       # skija-shared-*.jar
       print('Packaging skija-shared-' + rev + ".jar")
@@ -36,9 +36,7 @@ def main():
           '-Dspace.password=' + os.getenv('SPACE_TOKEN'),
           'deploy:deploy-file',
           "-Dfile=target/skija-shared-" + rev + ".jar",
-          "-DpomFile=deploy/META-INF/maven/org.jetbrains.skija/skija-shared/pom.xml",
-          "-DrepositoryId=space-maven",
-          "-Durl=" + common.space_skija,
+          "-DpomFile=deploy/META-INF/maven/io.github.humbleui.skija/skija-shared/pom.xml",
         ])
 
       # skija-shared-*-sources.jar
@@ -53,7 +51,7 @@ def main():
         "java",
         "--module-path",
         common.classpath_separator.join(common.deps()),
-        "-d", "target/generated-sources/delombok/org/jetbrains/skija"
+        "-d", "target/generated-sources/delombok/io/github/humbleui/skija"
       ])
 
       print('Packaging skija-shared-' + rev + "-sources.jar")
@@ -75,9 +73,7 @@ def main():
           'deploy:deploy-file',
           "-Dpackaging=java-source",
           "-Dfile=target/skija-shared-" + rev + "-sources.jar",
-          "-DpomFile=deploy/META-INF/maven/org.jetbrains.skija/skija-shared/pom.xml",
-          "-DrepositoryId=space-maven",
-          "-Durl=" + common.space_skija,
+          "-DpomFile=deploy/META-INF/maven/io.github.humbleui.skija/skija-shared/pom.xml",
         ])
 
   return 0

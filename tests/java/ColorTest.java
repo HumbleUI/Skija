@@ -1,12 +1,12 @@
-package org.jetbrains.skija.test;
+package io.github.humbleui.skija.test;
 
-import static org.jetbrains.skija.test.runner.TestRunner.*;
+import static io.github.humbleui.skija.test.runner.TestRunner.*;
 
 import java.util.*;
 
-import org.jetbrains.skija.Color;
-import org.jetbrains.skija.Color4f;
-import org.jetbrains.skija.test.runner.*;
+import io.github.humbleui.skija.Color;
+import io.github.humbleui.skija.Color4f;
+import io.github.humbleui.skija.test.runner.*;
 
 public class ColorTest implements Executable {
     @Override

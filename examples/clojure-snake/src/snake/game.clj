@@ -2,7 +2,7 @@
   (:require
    [clojure.stacktrace :as stacktrace])
   (:import
-   [org.jetbrains.skija Canvas Color4f Font FontStyle FontMgr Paint PaintMode PaintStrokeCap Rect Typeface]))
+   [io.github.humbleui.skija Canvas Color4f Font FontStyle FontMgr Paint PaintMode PaintStrokeCap Rect Typeface]))
 
 (def *broken (atom false))
 

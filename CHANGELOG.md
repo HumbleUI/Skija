@@ -1,3 +1,11 @@
+# 0.96.0
+
+Changed:
+
+- Skia version m93-87e8842e8c -> m96-2f1f21b8a9
+- Renamed package org.jetbrains.skija -> io.github.humbleui.skija
+- Renamed maven group org.jetbrains.skija -> io.github.humbleui.skija
+
 # 0.93.4 - Sep 20, 2021
 
 Added:

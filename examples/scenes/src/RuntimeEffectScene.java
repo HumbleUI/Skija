@@ -1,10 +1,10 @@
-package org.jetbrains.skija.examples.scenes;
+package io.github.humbleui.skija.examples.scenes;
 
 import java.nio.*;
 import java.nio.file.*;
 import java.nio.file.Path;
 import java.io.*;
-import org.jetbrains.skija.*;
+import io.github.humbleui.skija.*;
 
 public class RuntimeEffectScene extends Scene {
     public final Shader _texture;

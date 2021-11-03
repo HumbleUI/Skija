@@ -1,12 +1,12 @@
-package org.jetbrains.skija;
+package io.github.humbleui.skija;
 
 import java.lang.ref.*;
 import java.nio.ByteBuffer;
 import org.jetbrains.annotations.*;
-import org.jetbrains.skija.IRect;
-import org.jetbrains.skija.ImageInfo;
-import org.jetbrains.skija.SamplingMode;
-import org.jetbrains.skija.impl.*;
+import io.github.humbleui.skija.IRect;
+import io.github.humbleui.skija.ImageInfo;
+import io.github.humbleui.skija.SamplingMode;
+import io.github.humbleui.skija.impl.*;
 
 public class Pixmap extends Managed {
     @ApiStatus.Internal

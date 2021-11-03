@@ -1,11 +1,11 @@
-package org.jetbrains.skija.test;
+package io.github.humbleui.skija.test;
 
-import static org.jetbrains.skija.test.runner.TestRunner.*;
+import static io.github.humbleui.skija.test.runner.TestRunner.*;
 
-import org.jetbrains.skija.Font;
-import org.jetbrains.skija.TextLine;
-import org.jetbrains.skija.Typeface;
-import org.jetbrains.skija.test.runner.*;
+import io.github.humbleui.skija.Font;
+import io.github.humbleui.skija.TextLine;
+import io.github.humbleui.skija.Typeface;
+import io.github.humbleui.skija.test.runner.*;
 
 public class TextLineTest implements Executable {
     public Font inter36 = new Font(Typeface.makeFromFile("fonts/InterHinted-Regular.ttf"), 36);

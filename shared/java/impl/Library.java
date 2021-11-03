@@ -1,4 +1,4 @@
-package org.jetbrains.skija.impl;
+package io.github.humbleui.skija.impl;
 
 import java.io.*;
 import java.net.*;
@@ -21,20 +21,20 @@ public class Library {
         try {
             switch (Platform.CURRENT) {
             case WINDOWS:
-                _nativeLibraryClass = Class.forName("org.jetbrains.skija.windows.LibraryFinder");
-                _resourcePath = "/org/jetbrains/skija/windows/";
+                _nativeLibraryClass = Class.forName("io.github.humbleui.skija.windows.LibraryFinder");
+                _resourcePath = "/io/github/humbleui/skija/windows/";
                 break;
             case LINUX:
-                _nativeLibraryClass = Class.forName("org.jetbrains.skija.linux.LibraryFinder");
-                _resourcePath = "/org/jetbrains/skija/linux/";
+                _nativeLibraryClass = Class.forName("io.github.humbleui.skija.linux.LibraryFinder");
+                _resourcePath = "/io/github/humbleui/skija/linux/";
                 break;
             case MACOS_X64:
-                _nativeLibraryClass = Class.forName("org.jetbrains.skija.macos.x64.LibraryFinder");
-                _resourcePath = "/org/jetbrains/skija/macos/x64/";
+                _nativeLibraryClass = Class.forName("io.github.humbleui.skija.macos.x64.LibraryFinder");
+                _resourcePath = "/io/github/humbleui/skija/macos/x64/";
                 break;
             case MACOS_ARM64:
-                _nativeLibraryClass = Class.forName("org.jetbrains.skija.macos.arm64.LibraryFinder");
-                _resourcePath = "/org/jetbrains/skija/macos/arm64/";
+                _nativeLibraryClass = Class.forName("io.github.humbleui.skija.macos.arm64.LibraryFinder");
+                _resourcePath = "/io/github/humbleui/skija/macos/arm64/";
                 break;
             }
         } catch (ClassNotFoundException e) {

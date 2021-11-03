@@ -1,10 +1,10 @@
-package org.jetbrains.skija.shaper;
+package io.github.humbleui.skija.shaper;
 
 import java.lang.ref.*;
 import java.util.*;
 import org.jetbrains.annotations.*;
-import org.jetbrains.skija.*;
-import org.jetbrains.skija.impl.*;
+import io.github.humbleui.skija.*;
+import io.github.humbleui.skija.impl.*;
 
 /**
  * Shapes text using HarfBuzz and places the shaped text into a

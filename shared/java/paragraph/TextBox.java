@@ -1,8 +1,8 @@
-package org.jetbrains.skija.paragraph;
+package io.github.humbleui.skija.paragraph;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.jetbrains.skija.Rect;
+import io.github.humbleui.skija.Rect;
 
 @AllArgsConstructor
 @Data

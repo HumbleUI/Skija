@@ -1,12 +1,12 @@
-package org.jetbrains.skija.test;
+package io.github.humbleui.skija.test;
 
-import static org.jetbrains.skija.test.runner.TestRunner.*;
+import static io.github.humbleui.skija.test.runner.TestRunner.*;
 
-import org.jetbrains.skija.Matrix33;
-import org.jetbrains.skija.Path;
-import org.jetbrains.skija.PathMeasure;
-import org.jetbrains.skija.Point;
-import org.jetbrains.skija.test.runner.*;
+import io.github.humbleui.skija.Matrix33;
+import io.github.humbleui.skija.Path;
+import io.github.humbleui.skija.PathMeasure;
+import io.github.humbleui.skija.Point;
+import io.github.humbleui.skija.test.runner.*;
 
 public class PathMeasureTest implements Executable {
     @Override

@@ -1,16 +1,16 @@
-package org.jetbrains.skija.test.paragraph;
+package io.github.humbleui.skija.test.paragraph;
 
-import static org.jetbrains.skija.test.runner.TestRunner.assertArrayEquals;
-import static org.jetbrains.skija.test.runner.TestRunner.assertEquals;
+import static io.github.humbleui.skija.test.runner.TestRunner.assertArrayEquals;
+import static io.github.humbleui.skija.test.runner.TestRunner.assertEquals;
 
-import org.jetbrains.skija.FontMgr;
-import org.jetbrains.skija.FontStyle;
-import org.jetbrains.skija.Typeface;
-import org.jetbrains.skija.test.*;
-import org.jetbrains.skija.paragraph.FontCollection;
-import org.jetbrains.skija.paragraph.TypefaceFontProvider;
-import org.jetbrains.skija.test.runner.Executable;
-import org.jetbrains.skija.test.runner.TestRunner;
+import io.github.humbleui.skija.FontMgr;
+import io.github.humbleui.skija.FontStyle;
+import io.github.humbleui.skija.Typeface;
+import io.github.humbleui.skija.test.*;
+import io.github.humbleui.skija.paragraph.FontCollection;
+import io.github.humbleui.skija.paragraph.TypefaceFontProvider;
+import io.github.humbleui.skija.test.runner.Executable;
+import io.github.humbleui.skija.test.runner.TestRunner;
 
 public class FontCollectionTest implements Executable {
     @Override

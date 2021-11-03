@@ -1,23 +1,23 @@
-package org.jetbrains.skija.test;
+package io.github.humbleui.skija.test;
 
-import static org.jetbrains.skija.test.runner.TestRunner.assertArrayEquals;
-import static org.jetbrains.skija.test.runner.TestRunner.assertEquals;
-import static org.jetbrains.skija.test.runner.TestRunner.assertNotEquals;
-import static org.jetbrains.skija.test.runner.TestRunner.assertThrows;
+import static io.github.humbleui.skija.test.runner.TestRunner.assertArrayEquals;
+import static io.github.humbleui.skija.test.runner.TestRunner.assertEquals;
+import static io.github.humbleui.skija.test.runner.TestRunner.assertNotEquals;
+import static io.github.humbleui.skija.test.runner.TestRunner.assertThrows;
 
 import java.util.NoSuchElementException;
 
-import org.jetbrains.skija.Path;
-import org.jetbrains.skija.PathDirection;
-import org.jetbrains.skija.PathFillMode;
-import org.jetbrains.skija.PathSegment;
-import org.jetbrains.skija.PathSegmentMask;
-import org.jetbrains.skija.PathVerb;
-import org.jetbrains.skija.Point;
-import org.jetbrains.skija.RRect;
-import org.jetbrains.skija.Rect;
-import org.jetbrains.skija.test.runner.Executable;
-import org.jetbrains.skija.test.runner.TestRunner;
+import io.github.humbleui.skija.Path;
+import io.github.humbleui.skija.PathDirection;
+import io.github.humbleui.skija.PathFillMode;
+import io.github.humbleui.skija.PathSegment;
+import io.github.humbleui.skija.PathSegmentMask;
+import io.github.humbleui.skija.PathVerb;
+import io.github.humbleui.skija.Point;
+import io.github.humbleui.skija.RRect;
+import io.github.humbleui.skija.Rect;
+import io.github.humbleui.skija.test.runner.Executable;
+import io.github.humbleui.skija.test.runner.TestRunner;
 
 public class PathTest implements Executable {
     @Override

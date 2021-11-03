@@ -1,10 +1,10 @@
-package org.jetbrains.skija.paragraph;
+package io.github.humbleui.skija.paragraph;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.With;
 
-import org.jetbrains.skija.*;
+import io.github.humbleui.skija.*;
 
 @AllArgsConstructor @Data @With
 public class Shadow {

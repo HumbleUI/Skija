@@ -1,7 +1,7 @@
-package org.jetbrains.skija.examples.jwm;
+package io.github.humbleui.skija.examples.jwm;
 
-import org.jetbrains.jwm.*;
-import org.jetbrains.skija.*;
+import io.github.humbleui.jwm.Layer;
+import io.github.humbleui.skija.Canvas;
 
 public interface SkijaLayer extends Layer {
     Canvas beforePaint();

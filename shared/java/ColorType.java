@@ -1,7 +1,7 @@
-package org.jetbrains.skija;
+package io.github.humbleui.skija;
 
 import org.jetbrains.annotations.*;
-import org.jetbrains.skija.impl.*;
+import io.github.humbleui.skija.impl.*;
 
 /**
  * Describes how pixel bits encode color. A pixel may be an alpha mask, a

@@ -150,16 +150,9 @@ Using Skija is as simple as adding a jar file.
 Maven:
 
 ```xml
-<repositories>
-  <repository>
-    <id>space-maven</id>
-    <url>https://packages.jetbrains.team/maven/p/skija/maven</url>
-  </repository>
-</repositories>
-
 <dependencies>
   <dependency>
-    <groupId>org.jetbrains.skija</groupId>
+    <groupId>io.github.humbleui.skija</groupId>
     <artifactId>skija-${platform}</artifactId>
     <version>${version}</version>
   </dependency>
@@ -169,14 +162,8 @@ Maven:
 Gradle:
 
 ```gradle
-repositories {
-  maven {
-    url "https://packages.jetbrains.team/maven/p/skija/maven"
-  }
-}
-
 dependencies {
-  api "org.jetbrains.skija:${artifact}:${version}"
+  api "io.github.humbleui.skija:${artifact}:${version}"
 }
 ```
 
@@ -184,10 +171,10 @@ Replace `${artifact}` and `${version}` with:
 
 Platform    | `${artifact}`       | `${version}`
 ------------|---------------------|-------------
-macOS Intel | `skija-macos-x64`   | ![version](https://img.shields.io/badge/dynamic/xml?style=flat-square&label=latest&color=success&url=https%3A%2F%2Fpackages.jetbrains.team%2Fmaven%2Fp%2Fskija%2Fmaven%2Forg%2Fjetbrains%2Fskija%2Fskija-macos-x64%2Fmaven-metadata.xml&query=//release)
-macOS M1    | `skija-macos-arm64` | ![version](https://img.shields.io/badge/dynamic/xml?style=flat-square&label=latest&color=success&url=https%3A%2F%2Fpackages.jetbrains.team%2Fmaven%2Fp%2Fskija%2Fmaven%2Forg%2Fjetbrains%2Fskija%2Fskija-macos-arm64%2Fmaven-metadata.xml&query=//release)
-Linux       | `skija-linux`       | ![version](https://img.shields.io/badge/dynamic/xml?style=flat-square&label=latest&color=success&url=https%3A%2F%2Fpackages.jetbrains.team%2Fmaven%2Fp%2Fskija%2Fmaven%2Forg%2Fjetbrains%2Fskija%2Fskija-linux%2Fmaven-metadata.xml&query=//release)
-Windows     | `skija-windows`     | ![version](https://img.shields.io/badge/dynamic/xml?style=flat-square&label=latest&color=success&url=https%3A%2F%2Fpackages.jetbrains.team%2Fmaven%2Fp%2Fskija%2Fmaven%2Forg%2Fjetbrains%2Fskija%2Fskija-windows%2Fmaven-metadata.xml&query=//release)
+macOS Intel | `skija-macos-x64`   | ![version](https://img.shields.io/maven-central/v/io.github.humbleui.skija/skija-macos-x64)
+macOS M1    | `skija-macos-arm64` | ![version](https://img.shields.io/maven-central/v/io.github.humbleui.skija/skija-macos-arm64)
+Linux       | `skija-linux`       | ![version](https://img.shields.io/maven-central/v/io.github.humbleui.skija/skija-linux)
+Windows     | `skija-windows`     | ![version](https://img.shields.io/maven-central/v/io.github.humbleui.skija/skija-windows)
 
 ## Documentation
 
@@ -214,7 +201,7 @@ Prerequisites: Git, CMake, Ninja, JDK 9+, $JAVA_HOME, Python 3.
 Checkout:
 
 ```sh
-git clone https://github.com/JetBrains/skija.git
+git clone https://github.com/HumbleUI/Skija.git
 cd skija
 ./script/build.py
 ```

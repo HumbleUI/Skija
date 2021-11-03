@@ -1,4 +1,4 @@
-module org.jetbrains.skija.windows {
-    requires transitive org.jetbrains.skija.shared;
-    opens org.jetbrains.skija.windows;
+module io.github.humbleui.skija.windows {
+    requires transitive io.github.humbleui.skija.shared;
+    opens io.github.humbleui.skija.windows;
 }

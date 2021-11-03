@@ -1,10 +1,10 @@
-package org.jetbrains.skija;
+package io.github.humbleui.skija;
 
 import java.lang.ref.*;
 import java.nio.*;
 import lombok.*;
 import org.jetbrains.annotations.*;
-import org.jetbrains.skija.impl.*;
+import io.github.humbleui.skija.impl.*;
 
 public class Bitmap extends Managed implements IHasImageInfo {
     static { Library.staticLoad(); }

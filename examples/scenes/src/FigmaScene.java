@@ -1,9 +1,9 @@
-package org.jetbrains.skija.examples.scenes;
+package io.github.humbleui.skija.examples.scenes;
 
 import lombok.*;
 import java.nio.file.Files;
 import java.util.*;
-import org.jetbrains.skija.*;
+import io.github.humbleui.skija.*;
 
 public class FigmaScene extends Scene {
     private Font uiFont;

@@ -1,9 +1,9 @@
-package org.jetbrains.skija;
+package io.github.humbleui.skija;
 
 import java.lang.ref.*;
 import org.jetbrains.annotations.*;
-import org.jetbrains.skija.impl.*;
-import org.jetbrains.skija.shaper.*;
+import io.github.humbleui.skija.impl.*;
+import io.github.humbleui.skija.shaper.*;
 
 public class TextLine extends Managed {
     static { Library.staticLoad(); }

@@ -10,7 +10,7 @@ def main():
     "delombok",
     "java",
     "--module-path", common.classpath_separator.join(common.deps()),
-    "-d", "target/generated-sources/delombok/org/jetbrains/skija"
+    "-d", "target/generated-sources/delombok/io/github/humbleui/skija"
   ])
 
   if os.path.exists('target/generated-sources/delombok/module-info.java'):

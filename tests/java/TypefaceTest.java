@@ -1,12 +1,12 @@
-package org.jetbrains.skija.test;
+package io.github.humbleui.skija.test;
 
 import java.util.*;
 
-import org.jetbrains.skija.impl.*;
-import org.jetbrains.skija.*;
-import org.jetbrains.skija.test.runner.*;
+import io.github.humbleui.skija.impl.*;
+import io.github.humbleui.skija.*;
+import io.github.humbleui.skija.test.runner.*;
 
-import static org.jetbrains.skija.test.runner.TestRunner.*;
+import static io.github.humbleui.skija.test.runner.TestRunner.*;
 
 public class TypefaceTest implements Executable {
     @Override

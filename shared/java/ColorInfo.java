@@ -1,9 +1,9 @@
-package org.jetbrains.skija;
+package io.github.humbleui.skija;
 
 import lombok.Data;
 import lombok.*;
 import org.jetbrains.annotations.*;
-import org.jetbrains.skija.impl.*;
+import io.github.humbleui.skija.impl.*;
 
 /**
  * <p>Describes pixel and encoding. ImageInfo can be created from ColorInfo by

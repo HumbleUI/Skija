@@ -1,4 +1,4 @@
-package org.jetbrains.skija.test.runner;
+package io.github.humbleui.skija.test.runner;
 
 @FunctionalInterface
 public interface Executable {

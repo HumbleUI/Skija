@@ -1,10 +1,10 @@
-package org.jetbrains.skija.shaper;
+package io.github.humbleui.skija.shaper;
 
 import java.lang.ref.*;
 import lombok.*;
 import org.jetbrains.annotations.*;
-import org.jetbrains.skija.*;
-import org.jetbrains.skija.impl.*;
+import io.github.humbleui.skija.*;
+import io.github.humbleui.skija.impl.*;
 
 @lombok.Data
 public class FontRun {

@@ -5,26 +5,24 @@
 Add ONE of these dependencies to your ant/maven/gradle/bazel:
 
 ```
-org.jetbrains.skija:skija-windows:${version}
-org.jetbrains.skija:skija-linux:${version}
-org.jetbrains.skija:skija-macos-x64:${version}
-org.jetbrains.skija:skija-macos-arm64:${version}
+io.github.humbleui.skija:skija-windows:${version}
+io.github.humbleui.skija:skija-linux:${version}
+io.github.humbleui.skija:skija-macos-x64:${version}
+io.github.humbleui.skija:skija-macos-arm64:${version}
 ```
 
-(Replace `${version}` with ![version](https://img.shields.io/badge/dynamic/xml?style=flat-square&label=latest&color=success&url=https%3A%2F%2Fpackages.jetbrains.team%2Fmaven%2Fp%2Fskija%2Fmaven%2Forg%2Fjetbrains%2Fskija%2Fskija-macos-x64%2Fmaven-metadata.xml&query=//release))
-
-The repository url is https://packages.jetbrains.team/maven/p/skija/maven
+(Replace `${version}` with ![version](https://img.shields.io/maven-central/v/io.github.humbleui.skija/skija-shared))
 
 In your main class, import
 
 ```java
-import org.jetbrains.skija.*;
+import io.github.humbleui.skija.*;
 import java.io.IOException;
 ```
 
 ## Rendering the first image
 
-Most of the Skija value hides in [Canvas](/shared/src/main/java/org/jetbrains/skija/Canvas.java) class. Canvas let you actually draw.
+Most of the Skija value hides in [Canvas](/shared/src/main/java/io/github/humbleui/skija/Canvas.java) class. Canvas let you actually draw.
 
 Simplest way to obtain canvas is to create an in-memory, bitmap-backed one:
 
@@ -33,7 +31,7 @@ Surface surface = Surface.makeRasterN32Premul(100, 100);
 Canvas canvas = surface.getCanvas();
 ```
 
-To draw something, you often need a [Paint](/shared/src/main/java/org/jetbrains/skija/Paint.java). It stores fill color, stroke settings and various effects. We’ll use a default Paint with red fill color:
+To draw something, you often need a [Paint](/shared/src/main/java/io/github/humbleui/skija/Paint.java). It stores fill color, stroke settings and various effects. We’ll use a default Paint with red fill color:
 
 ```java
 Paint paint = new Paint();
@@ -90,7 +88,7 @@ var paint = new Paint().setColor(0xFF1D7AA2).setMode(PaintMode.STROKE).setStroke
 
 ## Resource management
 
-Most of Skija classes (those extending [RefCnt](/shared/src/main/java/org/jetbrains/skija/impl/RefCnt.java) or [Managed](/shared/src/main/java/org/jetbrains/skija/impl/Managed.java)) are backed by native pointers to C++ world of Skia. Don’t worry — Skija is smart enough to automatically manage everything for you. When java objects are collected, corresponding C++ structures are guaranteed to be freed as well. Programming in Java still feels like Java — safe by default.
+Most of Skija classes (those extending [RefCnt](/shared/src/main/java/io/github/humbleui/skija/impl/RefCnt.java) or [Managed](/shared/src/main/java/io/github/humbleui/skija/impl/Managed.java)) are backed by native pointers to C++ world of Skia. Don’t worry — Skija is smart enough to automatically manage everything for you. When java objects are collected, corresponding C++ structures are guaranteed to be freed as well. Programming in Java still feels like Java — safe by default.
 
 ```java
 void drawCircle(Canvas c) {
@@ -113,7 +111,7 @@ void drawCircle(Canvas c) {
 
 ## Note on getters
 
-You might notice that all fields in Skija are declared public. For example, [Color4f](/shared/src/main/java/org/jetbrains/skija/Color4f.java):
+You might notice that all fields in Skija are declared public. For example, [Color4f](/shared/src/main/java/io/github/humbleui/skija/Color4f.java):
 
 ```java
 @AllArgsConstructor
@@ -216,7 +214,7 @@ Embedding into AWT window: see [Skiko](https://github.com/jetbrains/skiko).
 
 For drawing text, there are two important concepts: Typeface and Font. 
 
-[Typeface](/shared/src/main/java/org/jetbrains/skija/Typeface.java) corresponds to a font file and is relatively expensive to create. You can create typeface directly:
+[Typeface](/shared/src/main/java/io/github/humbleui/skija/Typeface.java) corresponds to a font file and is relatively expensive to create. You can create typeface directly:
 
 ```java
 Typeface face = Typeface.makeFromFile("Inter.ttf");
@@ -228,7 +226,7 @@ or ask operating system to locate one for you:
 Typeface face = FontMgr.getDefault().matchFamilyStyle("Menlo", FontStyle.NORMAL);
 ```
 
-The [Font](/shared/src/main/java/org/jetbrains/skija/Font.java) contains specific settings the Typeface should be drawn with. The most important one is size:
+The [Font](/shared/src/main/java/io/github/humbleui/skija/Font.java) contains specific settings the Typeface should be drawn with. The most important one is size:
 
 ```java
 Font font = new Font(face, 13);
@@ -247,20 +245,20 @@ try (Typeface face = FontMgr.getDefault().matchFamilyStyle("Menlo", FontStyle.NO
 
 For this example, we close all resources immediately after paint. In a real application, you would want to cache both Typeface and Font, as it is expensive to recreate them on every frame.
 
-For advanced font rendering, see [Shaper](/shared/src/main/java/org/jetbrains/skija/shaper/Shaper.java) and [ParagraphBuilder](/shared/src/main/java/org/jetbrains/skija/paragraph/ParagraphBuilder.java).
+For advanced font rendering, see [Shaper](/shared/src/main/java/io/github/humbleui/skija/shaper/Shaper.java) and [ParagraphBuilder](/shared/src/main/java/io/github/humbleui/skija/paragraph/ParagraphBuilder.java).
 
 ## Discovering Skia API
 
 I recommend studying these classes first:
 
-- [Canvas](/shared/src/main/java/org/jetbrains/skija/Canvas.java)
-- [Paint](/shared/src/main/java/org/jetbrains/skija/Paint.java)
-- [Path](/shared/src/main/java/org/jetbrains/skija/Path.java)
-- [Image](/shared/src/main/java/org/jetbrains/skija/Image.java)
-- [Shader](/shared/src/main/java/org/jetbrains/skija/Shader.java)
-- [Typeface](/shared/src/main/java/org/jetbrains/skija/Typeface.java)
-- [Font](/shared/src/main/java/org/jetbrains/skija/Font.java)
-- [ParagraphBuilder](/shared/src/main/java/org/jetbrains/skija/paragraph/ParagraphBuilder.java)
+- [Canvas](/shared/src/main/java/io/github/humbleui/skija/Canvas.java)
+- [Paint](/shared/src/main/java/io/github/humbleui/skija/Paint.java)
+- [Path](/shared/src/main/java/io/github/humbleui/skija/Path.java)
+- [Image](/shared/src/main/java/io/github/humbleui/skija/Image.java)
+- [Shader](/shared/src/main/java/io/github/humbleui/skija/Shader.java)
+- [Typeface](/shared/src/main/java/io/github/humbleui/skija/Typeface.java)
+- [Font](/shared/src/main/java/io/github/humbleui/skija/Font.java)
+- [ParagraphBuilder](/shared/src/main/java/io/github/humbleui/skija/paragraph/ParagraphBuilder.java)
 
 I found [SkiaSharp documentation](https://docs.microsoft.com/en-us/xamarin/xamarin-forms/user-interface/graphics/skiasharp/) to be excellent resource on what can be done in Skia. They have nice examples and visual explanations, too.
 

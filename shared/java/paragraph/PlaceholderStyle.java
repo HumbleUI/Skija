@@ -1,4 +1,4 @@
-package org.jetbrains.skija.paragraph;
+package io.github.humbleui.skija.paragraph;
 
 import lombok.Data;
 

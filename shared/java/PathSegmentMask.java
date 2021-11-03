@@ -1,4 +1,4 @@
-package org.jetbrains.skija;
+package io.github.humbleui.skija;
 
 public interface PathSegmentMask {
     int LINE  = 0b0001;

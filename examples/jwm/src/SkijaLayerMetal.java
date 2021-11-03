@@ -1,7 +1,7 @@
-package org.jetbrains.skija.examples.jwm;
+package io.github.humbleui.skija.examples.jwm;
 
-import org.jetbrains.jwm.*;
-import org.jetbrains.skija.*;
+import io.github.humbleui.jwm.*;
+import io.github.humbleui.skija.*;
 
 public class SkijaLayerMetal extends LayerMetal implements SkijaLayer {
     public DirectContext _directContext;
@@ -22,7 +22,7 @@ public class SkijaLayerMetal extends LayerMetal implements SkijaLayer {
                      _renderTarget,
                      SurfaceOrigin.TOP_LEFT,
                      SurfaceColorFormat.BGRA_8888,
-                     ColorSpace.getDisplayP3(),  // TODO load monitor profile
+                     ColorSpace.getSRGB(),  // TODO load monitor profile
                      new SurfaceProps(PixelGeometry.RGB_H));
         return _surface.getCanvas();
     }

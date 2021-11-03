@@ -1,13 +1,13 @@
-package org.jetbrains.skija.test;
+package io.github.humbleui.skija.test;
 
-import static org.jetbrains.skija.test.runner.TestRunner.assertArrayEquals;
-import static org.jetbrains.skija.test.runner.TestRunner.assertEquals;
-import static org.jetbrains.skija.test.runner.TestRunner.assertNotEquals;
+import static io.github.humbleui.skija.test.runner.TestRunner.assertArrayEquals;
+import static io.github.humbleui.skija.test.runner.TestRunner.assertEquals;
+import static io.github.humbleui.skija.test.runner.TestRunner.assertNotEquals;
 
 import java.nio.charset.StandardCharsets;
 
-import org.jetbrains.skija.Data;
-import org.jetbrains.skija.test.runner.Executable;
+import io.github.humbleui.skija.Data;
+import io.github.humbleui.skija.test.runner.Executable;
 
 public class DataTest implements Executable {
     @Override

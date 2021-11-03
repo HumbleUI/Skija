@@ -6,9 +6,9 @@ import java.nio.file.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.stream.*;
-import org.jetbrains.skija.*;
-import org.jetbrains.skija.impl.*;
-import org.jetbrains.skija.examples.scenes.*;
+import io.github.humbleui.skija.*;
+import io.github.humbleui.skija.impl.*;
+import io.github.humbleui.skija.examples.scenes.*;
 
 public class Main {
     public static boolean verbose = false;

@@ -1,10 +1,10 @@
-package org.jetbrains.skija.skottie;
+package io.github.humbleui.skija.skottie;
 
 import java.lang.ref.*;
 import org.jetbrains.annotations.*;
-import org.jetbrains.skija.*;
-import org.jetbrains.skija.impl.*;
-import org.jetbrains.skija.sksg.InvalidationController;
+import io.github.humbleui.skija.*;
+import io.github.humbleui.skija.impl.*;
+import io.github.humbleui.skija.sksg.InvalidationController;
 
 public class Animation extends Managed {
     static { Library.staticLoad(); }

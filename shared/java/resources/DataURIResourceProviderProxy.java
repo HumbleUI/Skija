@@ -1,9 +1,9 @@
-package org.jetbrains.skija.resources;
+package io.github.humbleui.skija.resources;
 
 import java.lang.ref.*;
 import org.jetbrains.annotations.*;
-import org.jetbrains.skija.*;
-import org.jetbrains.skija.impl.*;
+import io.github.humbleui.skija.*;
+import io.github.humbleui.skija.impl.*;
 
 public class DataURIResourceProviderProxy extends ResourceProvider {
     static { Library.staticLoad(); }

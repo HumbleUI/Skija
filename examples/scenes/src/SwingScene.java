@@ -1,12 +1,12 @@
-package org.jetbrains.skija.examples.scenes;
+package io.github.humbleui.skija.examples.scenes;
 
 import lombok.SneakyThrows;
-import org.jetbrains.skija.*;
-import org.jetbrains.skija.Canvas;
-import org.jetbrains.skija.Font;
-import org.jetbrains.skija.Image;
-import org.jetbrains.skija.Paint;
-import org.jetbrains.skija.Point;
+import io.github.humbleui.skija.*;
+import io.github.humbleui.skija.Canvas;
+import io.github.humbleui.skija.Font;
+import io.github.humbleui.skija.Image;
+import io.github.humbleui.skija.Paint;
+import io.github.humbleui.skija.Point;
 
 import javax.swing.*;
 import javax.swing.plaf.metal.DefaultMetalTheme;

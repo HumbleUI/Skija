@@ -1,4 +1,4 @@
-package org.jetbrains.skija.examples.scenes;
+package io.github.humbleui.skija.examples.scenes;
 
 import java.io.*;
 import java.nio.*;
@@ -6,7 +6,7 @@ import java.nio.file.*;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.function.*;
-import org.jetbrains.skija.*;
+import io.github.humbleui.skija.*;
 
 public class BitmapImageScene extends Scene {
     public final Image image;

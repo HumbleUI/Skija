@@ -11,7 +11,7 @@ namespace skija {
             jfieldID _level;
 
             void onLoad(JNIEnv* env) {
-                jclass cls = env->FindClass("org/jetbrains/skija/shaper/BidiRun");
+                jclass cls = env->FindClass("io/github/humbleui/skija/shaper/BidiRun");
                 _end = env->GetFieldID(cls, "_end", "I");
                 _level = env->GetFieldID(cls, "_level", "I");
             }
@@ -21,7 +21,7 @@ namespace skija {
             jclass cls;
 
             void onLoad(JNIEnv* env) {
-                jclass local = env->FindClass("org/jetbrains/skija/shaper/FontMgrRunIterator");
+                jclass local = env->FindClass("io/github/humbleui/skija/shaper/FontMgrRunIterator");
                 cls  = static_cast<jclass>(env->NewGlobalRef(local));
             }
 
@@ -35,7 +35,7 @@ namespace skija {
             jmethodID _getFontPtr;
 
             void onLoad(JNIEnv* env) {
-                jclass cls = env->FindClass("org/jetbrains/skija/shaper/FontRun");
+                jclass cls = env->FindClass("io/github/humbleui/skija/shaper/FontRun");
                 _end = env->GetFieldID(cls, "_end", "I");
                 _getFontPtr = env->GetMethodID(cls, "_getFontPtr", "()J");
             }
@@ -45,7 +45,7 @@ namespace skija {
             jclass cls;
 
             void onLoad(JNIEnv* env) {
-                jclass local = env->FindClass("org/jetbrains/skija/shaper/HbIcuScriptRunIterator");
+                jclass local = env->FindClass("io/github/humbleui/skija/shaper/HbIcuScriptRunIterator");
                 cls  = static_cast<jclass>(env->NewGlobalRef(local));            
             }
 
@@ -59,7 +59,7 @@ namespace skija {
             jclass cls;
 
             void onLoad(JNIEnv* env) {
-                jclass local = env->FindClass("org/jetbrains/skija/shaper/IcuBidiRunIterator");
+                jclass local = env->FindClass("io/github/humbleui/skija/shaper/IcuBidiRunIterator");
                 cls  = static_cast<jclass>(env->NewGlobalRef(local));            
             }
 
@@ -74,7 +74,7 @@ namespace skija {
             jfieldID _language;
 
             void onLoad(JNIEnv* env) {
-                jclass cls = env->FindClass("org/jetbrains/skija/shaper/LanguageRun");
+                jclass cls = env->FindClass("io/github/humbleui/skija/shaper/LanguageRun");
                 _end = env->GetFieldID(cls, "_end", "I");
                 _language = env->GetFieldID(cls, "_language", "Ljava/lang/String;");
             }
@@ -90,13 +90,13 @@ namespace skija {
             jmethodID commitLine;
 
             void onLoad(JNIEnv* env) {
-                jclass local = env->FindClass("org/jetbrains/skija/shaper/RunHandler");
+                jclass local = env->FindClass("io/github/humbleui/skija/shaper/RunHandler");
                 cls  = static_cast<jclass>(env->NewGlobalRef(local));
                 beginLine       = env->GetMethodID(cls, "beginLine",     "()V");
-                runInfo         = env->GetMethodID(cls, "runInfo",       "(Lorg/jetbrains/skija/shaper/RunInfo;)V");
+                runInfo         = env->GetMethodID(cls, "runInfo",       "(Lio/github/humbleui/skija/shaper/RunInfo;)V");
                 commitRunInfo   = env->GetMethodID(cls, "commitRunInfo", "()V");
-                runOffset       = env->GetMethodID(cls, "runOffset",     "(Lorg/jetbrains/skija/shaper/RunInfo;)Lorg/jetbrains/skija/Point;");
-                commitRun       = env->GetMethodID(cls, "commitRun",     "(Lorg/jetbrains/skija/shaper/RunInfo;[S[Lorg/jetbrains/skija/Point;[I)V");
+                runOffset       = env->GetMethodID(cls, "runOffset",     "(Lio/github/humbleui/skija/shaper/RunInfo;)Lio/github/humbleui/skija/Point;");
+                commitRun       = env->GetMethodID(cls, "commitRun",     "(Lio/github/humbleui/skija/shaper/RunInfo;[S[Lio/github/humbleui/skija/Point;[I)V");
                 commitLine      = env->GetMethodID(cls, "commitLine",    "()V");
             }
 
@@ -111,7 +111,7 @@ namespace skija {
             jfieldID _fontPtr;
 
             void onLoad(JNIEnv* env) {
-                jclass local = env->FindClass("org/jetbrains/skija/shaper/RunInfo");
+                jclass local = env->FindClass("io/github/humbleui/skija/shaper/RunInfo");
                 cls  = static_cast<jclass>(env->NewGlobalRef(local));
                 ctor = env->GetMethodID(cls, "<init>", "(JIFFJII)V");
                 _fontPtr = env->GetFieldID(cls, "_fontPtr", "J");
@@ -147,7 +147,7 @@ namespace skija {
             jfieldID _scriptTag;
 
             void onLoad(JNIEnv* env) {
-                jclass cls = env->FindClass("org/jetbrains/skija/shaper/ScriptRun");
+                jclass cls = env->FindClass("io/github/humbleui/skija/shaper/ScriptRun");
                 _end = env->GetFieldID(cls, "_end", "I");
                 _scriptTag = env->GetFieldID(cls, "_scriptTag", "I");
             }
@@ -161,9 +161,9 @@ namespace skija {
             jfieldID _approximatePunctuation;
 
             void onLoad(JNIEnv* env) {
-                jclass cls = env->FindClass("org/jetbrains/skija/shaper/ShapingOptions");
-                _fontMgr = env->GetFieldID(cls, "_fontMgr", "Lorg/jetbrains/skija/FontMgr;");
-                _features = env->GetFieldID(cls, "_features", "[Lorg/jetbrains/skija/FontFeature;");
+                jclass cls = env->FindClass("io/github/humbleui/skija/shaper/ShapingOptions");
+                _fontMgr = env->GetFieldID(cls, "_fontMgr", "Lio/github/humbleui/skija/FontMgr;");
+                _features = env->GetFieldID(cls, "_features", "[Lio/github/humbleui/skija/FontFeature;");
                 _leftToRight = env->GetFieldID(cls, "_leftToRight", "Z");
                 _approximateSpaces = env->GetFieldID(cls, "_approximateSpaces", "Z");
                 _approximatePunctuation = env->GetFieldID(cls, "_approximatePunctuation", "Z");
@@ -178,7 +178,7 @@ namespace skija {
             jclass cls;
 
             void onLoad(JNIEnv* env) {
-                jclass local = env->FindClass("org/jetbrains/skija/shaper/TextBlobBuilderRunHandler");
+                jclass local = env->FindClass("io/github/humbleui/skija/shaper/TextBlobBuilderRunHandler");
                 cls  = static_cast<jclass>(env->NewGlobalRef(local));
             }
 

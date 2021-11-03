@@ -1,6 +1,6 @@
-package org.jetbrains.skija.examples.scenes;
+package io.github.humbleui.skija.examples.scenes;
 
-import org.jetbrains.skija.*;
+import io.github.humbleui.skija.*;
 
 public class PythagorasScene extends Scene {
     private int    color1   = 0xFFcc5333;

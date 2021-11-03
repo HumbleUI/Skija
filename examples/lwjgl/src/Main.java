@@ -1,4 +1,4 @@
-package org.jetbrains.skija.examples.lwjgl;
+package io.github.humbleui.skija.examples.lwjgl;
 
 import java.nio.IntBuffer;
 import java.util.*;
@@ -11,9 +11,9 @@ import static org.lwjgl.glfw.Callbacks.*;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
-import org.jetbrains.skija.*;
-import org.jetbrains.skija.examples.scenes.*;
-import org.jetbrains.skija.impl.*;
+import io.github.humbleui.skija.*;
+import io.github.humbleui.skija.examples.scenes.*;
+import io.github.humbleui.skija.impl.*;
 
 public class Main {
     public static void main(String [] args) throws Exception {

@@ -1,8 +1,8 @@
-package org.jetbrains.skija.examples.scenes;
+package io.github.humbleui.skija.examples.scenes;
 
 import java.util.*;
 import lombok.*;
-import org.jetbrains.skija.*;
+import io.github.humbleui.skija.*;
 
 public class Scenes {
     public static TreeMap<String, Scene> scenes;
@@ -65,7 +65,7 @@ public class Scenes {
 
     @SneakyThrows
     public static Scene newScene(String name) {
-        String className = "org.jetbrains.skija.examples.scenes." + name.replaceAll(" ", "") + "Scene";
+        String className = "io.github.humbleui.skija.examples.scenes." + name.replaceAll(" ", "") + "Scene";
         Class<Scene> cls = (Class<Scene>) Scenes.class.forName(className);
         return cls.newInstance();
     }

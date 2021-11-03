@@ -1,15 +1,15 @@
-package org.jetbrains.skija.test;
+package io.github.humbleui.skija.test;
 
-import static org.jetbrains.skija.test.runner.TestRunner.assertArrayEquals;
-import static org.jetbrains.skija.test.runner.TestRunner.assertEquals;
-import static org.jetbrains.skija.test.runner.TestRunner.assertNotEquals;
-import static org.jetbrains.skija.test.runner.TestRunner.assertThrows;
-import static org.jetbrains.skija.test.runner.TestRunner.popStack;
-import static org.jetbrains.skija.test.runner.TestRunner.pushStack;
+import static io.github.humbleui.skija.test.runner.TestRunner.assertArrayEquals;
+import static io.github.humbleui.skija.test.runner.TestRunner.assertEquals;
+import static io.github.humbleui.skija.test.runner.TestRunner.assertNotEquals;
+import static io.github.humbleui.skija.test.runner.TestRunner.assertThrows;
+import static io.github.humbleui.skija.test.runner.TestRunner.popStack;
+import static io.github.humbleui.skija.test.runner.TestRunner.pushStack;
 
 import java.util.NoSuchElementException;
 
-import org.jetbrains.skija.test.runner.*;
+import io.github.humbleui.skija.test.runner.*;
 
 public class TestTest implements Executable {
     @Override

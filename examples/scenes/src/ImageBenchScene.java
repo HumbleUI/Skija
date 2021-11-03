@@ -1,9 +1,9 @@
-package org.jetbrains.skija.examples.scenes;
+package io.github.humbleui.skija.examples.scenes;
 
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.*;
-import org.jetbrains.skija.*;
+import io.github.humbleui.skija.*;
 
 public class ImageBenchScene extends Scene {
     Image[] sprites;

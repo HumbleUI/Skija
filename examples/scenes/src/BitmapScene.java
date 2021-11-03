@@ -1,6 +1,6 @@
-package org.jetbrains.skija.examples.scenes;
+package io.github.humbleui.skija.examples.scenes;
 
-import org.jetbrains.skija.*;
+import io.github.humbleui.skija.*;
 import java.util.*;
 
 public class BitmapScene extends Scene {

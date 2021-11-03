@@ -1,10 +1,10 @@
-package org.jetbrains.skija;
+package io.github.humbleui.skija;
 
 import java.io.*;
 import java.lang.ref.*;
 import org.jetbrains.annotations.*;
-import org.jetbrains.skija.*;
-import org.jetbrains.skija.impl.*;
+import io.github.humbleui.skija.*;
+import io.github.humbleui.skija.impl.*;
 
 public class OutputWStream extends WStream {
     static { Library.staticLoad(); }

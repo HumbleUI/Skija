@@ -1,9 +1,9 @@
-package org.jetbrains.skija.examples.scenes;
+package io.github.humbleui.skija.examples.scenes;
 
 import java.io.IOException;
 import java.nio.file.Files;
 
-import org.jetbrains.skija.*;
+import io.github.humbleui.skija.*;
 
 public class ImageFiltersScene extends Scene {
     protected final Image image;

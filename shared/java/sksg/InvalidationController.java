@@ -1,9 +1,9 @@
-package org.jetbrains.skija.sksg;
+package io.github.humbleui.skija.sksg;
 
 import java.lang.ref.*;
 import org.jetbrains.annotations.*;
-import org.jetbrains.skija.*;
-import org.jetbrains.skija.impl.*;
+import io.github.humbleui.skija.*;
+import io.github.humbleui.skija.impl.*;
 
 /**
  * <p>Receiver for invalidation events.</p>

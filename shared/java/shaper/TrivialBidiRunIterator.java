@@ -1,8 +1,8 @@
-package org.jetbrains.skija.shaper;
+package io.github.humbleui.skija.shaper;
 
 import java.util.*;
 import org.jetbrains.annotations.*;
-import org.jetbrains.skija.*;
+import io.github.humbleui.skija.*;
 
 public class TrivialBidiRunIterator implements Iterator<BidiRun> {
     @ApiStatus.Internal public final int _length;

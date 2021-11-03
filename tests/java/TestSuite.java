@@ -1,8 +1,8 @@
-package org.jetbrains.skija.test;
+package io.github.humbleui.skija.test;
 
-import org.jetbrains.skija.test.paragraph.*;
-import org.jetbrains.skija.test.svg.*;
-import org.jetbrains.skija.test.runner.TestRunner;
+import io.github.humbleui.skija.test.paragraph.*;
+import io.github.humbleui.skija.test.svg.*;
+import io.github.humbleui.skija.test.runner.TestRunner;
 
 public class TestSuite {
     public static void main(String[] args) {

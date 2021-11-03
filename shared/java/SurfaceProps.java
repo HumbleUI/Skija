@@ -1,9 +1,9 @@
-package org.jetbrains.skija;
+package io.github.humbleui.skija;
 
 import lombok.*;
 import lombok.Data;
 import org.jetbrains.annotations.*;
-import org.jetbrains.skija.impl.*;
+import io.github.humbleui.skija.impl.*;
 
 @Data @With @AllArgsConstructor
 public class SurfaceProps {

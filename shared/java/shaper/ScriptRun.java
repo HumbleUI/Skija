@@ -1,8 +1,8 @@
-package org.jetbrains.skija.shaper;
+package io.github.humbleui.skija.shaper;
 
 import lombok.*;
 import org.jetbrains.annotations.*;
-import org.jetbrains.skija.*;
+import io.github.humbleui.skija.*;
 
 @AllArgsConstructor
 @lombok.Data

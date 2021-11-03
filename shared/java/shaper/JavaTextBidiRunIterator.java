@@ -1,9 +1,9 @@
-package org.jetbrains.skija.shaper;
+package io.github.humbleui.skija.shaper;
 
 import java.text.*;
 import java.util.*;
 import org.jetbrains.annotations.*;
-import org.jetbrains.skija.*;
+import io.github.humbleui.skija.*;
 
 public class JavaTextBidiRunIterator implements Iterator<BidiRun> {
     @ApiStatus.Internal public final Bidi _bidi;

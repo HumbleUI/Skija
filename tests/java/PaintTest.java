@@ -1,10 +1,10 @@
-package org.jetbrains.skija.test;
+package io.github.humbleui.skija.test;
 
-import static org.jetbrains.skija.test.runner.TestRunner.*;
+import static io.github.humbleui.skija.test.runner.TestRunner.*;
 
-import org.jetbrains.skija.BlendMode;
-import org.jetbrains.skija.Paint;
-import org.jetbrains.skija.test.runner.*;
+import io.github.humbleui.skija.BlendMode;
+import io.github.humbleui.skija.Paint;
+import io.github.humbleui.skija.test.runner.*;
 
 public class PaintTest implements Executable {
     @Override

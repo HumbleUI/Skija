@@ -1,4 +1,4 @@
-package org.jetbrains.skija;
+package io.github.humbleui.skija;
 
 public interface FontWidth {
     int ULTRA_CONDENSED = 1;

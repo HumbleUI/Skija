@@ -1,6 +1,6 @@
-package org.jetbrains.skija;
+package io.github.humbleui.skija;
 
-import org.jetbrains.skija.impl.*;
+import io.github.humbleui.skija.impl.*;
 
 public abstract class WStream extends Managed {
     public WStream(long ptr, long finalizer) {

@@ -1,4 +1,4 @@
-package org.jetbrains.skija.skottie;
+package io.github.humbleui.skija.skottie;
 
 import org.jetbrains.annotations.*;
 

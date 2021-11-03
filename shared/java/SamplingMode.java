@@ -1,11 +1,11 @@
-package org.jetbrains.skija;
+package io.github.humbleui.skija;
 
 import lombok.*;
 import org.jetbrains.annotations.*;
 
 /**
- * @see org.jetbrains.skija.FilterMipmap
- * @see org.jetbrains.skija.CubicResampler
+ * @see io.github.humbleui.skija.FilterMipmap
+ * @see io.github.humbleui.skija.CubicResampler
  */
 public interface SamplingMode {
     public static final SamplingMode DEFAULT = new FilterMipmap(FilterMode.NEAREST, MipmapMode.NONE);

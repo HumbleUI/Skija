@@ -1,15 +1,15 @@
-package org.jetbrains.skija.test;
+package io.github.humbleui.skija.test;
 
-import static org.jetbrains.skija.test.runner.TestRunner.*;
+import static io.github.humbleui.skija.test.runner.TestRunner.*;
 
 import java.io.*;
 import java.nio.file.*;
 
-import org.jetbrains.skija.EncodedImageFormat;
-import org.jetbrains.skija.Paint;
-import org.jetbrains.skija.Surface;
-import org.jetbrains.skija.Path;
-import org.jetbrains.skija.test.runner.*;
+import io.github.humbleui.skija.EncodedImageFormat;
+import io.github.humbleui.skija.Paint;
+import io.github.humbleui.skija.Surface;
+import io.github.humbleui.skija.Path;
+import io.github.humbleui.skija.test.runner.*;
 
 public class ImageTest implements Executable {
     @Override

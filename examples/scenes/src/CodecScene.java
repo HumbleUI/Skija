@@ -1,9 +1,9 @@
-package org.jetbrains.skija.examples.scenes;
+package io.github.humbleui.skija.examples.scenes;
 
 import java.io.*;
 import java.util.*;
 import java.util.stream.*;
-import org.jetbrains.skija.*;
+import io.github.humbleui.skija.*;
 
 public class CodecScene extends Scene {
     Paint stroke = new Paint().setColor(0x80CC3333).setMode(PaintMode.STROKE).setStrokeWidth(1);

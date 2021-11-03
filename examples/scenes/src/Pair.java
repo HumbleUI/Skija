@@ -1,4 +1,4 @@
-package org.jetbrains.skija.examples.scenes;
+package io.github.humbleui.skija.examples.scenes;
 
 import lombok.*;
 

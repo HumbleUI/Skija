@@ -1,5 +1,5 @@
 @SuppressWarnings("module")
-module org.jetbrains.skija.macos.arm64 {
-    requires transitive org.jetbrains.skija.shared;
-    opens org.jetbrains.skija.macos.arm64;
+module io.github.humbleui.skija.macos.arm64 {
+    requires transitive io.github.humbleui.skija.shared;
+    opens io.github.humbleui.skija.macos.arm64;
 }

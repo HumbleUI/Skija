@@ -1,13 +1,13 @@
-package org.jetbrains.skija.examples.jwm;
+package io.github.humbleui.skija.examples.jwm;
 
 import java.util.*;
 import java.util.function.*;
 import lombok.*;
 import org.jetbrains.annotations.*;
-import org.jetbrains.jwm.*;
-import org.jetbrains.skija.*;
-import org.jetbrains.skija.examples.scenes.*;
-import org.jetbrains.skija.impl.*;
+import io.github.humbleui.jwm.*;
+import io.github.humbleui.skija.*;
+import io.github.humbleui.skija.examples.scenes.*;
+import io.github.humbleui.skija.impl.*;
 
 public class Main implements Consumer<Event> {
     public Window _window;
@@ -15,25 +15,34 @@ public class Main implements Consumer<Event> {
     public int _xpos = 720, _ypos = 405, _width = 0, _height = 0;
     public float _scale = 1;
 
-    public String[] _layers = new String[] {
-        "Metal",
-        "OpenGL",
-    };
+    public String[] _layers = null;
     public int _layerIdx = 0;
 
     public Main() {
         Stats.enabled = true;
-        App.makeWindow((window) -> {
-            _window = window;
-            _window.setEventListener(this);
-            changeLayer();
-            var scale = _window.getScale();
-            _window.resize((int) (1440 * scale), (int) (810 * scale));
-            _window.move((int) (240 * scale), (int) (135 * scale));
-            _window.show();
-            accept(EventReconfigure.INSTANCE);
-            _window.requestFrame();
-        });
+
+        switch (io.github.humbleui.skija.impl.Platform.CURRENT) {
+            case MACOS_X64:
+            case MACOS_ARM64:
+                _layers = new String[] { "Metal", "GL" };
+                break;
+            case WINDOWS:
+                _layers = new String[] { "D3D12", "GL", "Raster" };
+                break;
+            case LINUX:
+                _layers = new String[] { "GL", "Raster" };
+                break;
+        }
+
+        _window = App.makeWindow();
+        _window.setEventListener(this);
+        changeLayer();
+        var scale = _window.getScreen().getScale();
+        _window.setWindowSize((int) (1440 * scale), (int) (810 * scale));
+        _window.setWindowPosition((int) (240 * scale), (int) (135 * scale));
+        _window.setVisible(true);
+        accept(EventWindowScreenChange.INSTANCE);
+        _window.requestFrame();
     }
 
     public void paint() {
@@ -45,6 +54,7 @@ public class Main implements Consumer<Event> {
         _layer.afterPaint();
     }
 
+    @SneakyThrows
     public void changeLayer() {
         if (_layer != null)
             _layer.close();
@@ -52,37 +62,38 @@ public class Main implements Consumer<Event> {
         if (HUD.extras.size() < 1)
             HUD.extras.add(null);
 
-        if ("Metal".equals(_layers[_layerIdx])) {
-            _layer = new SkijaLayerMetal();
-            HUD.extras.set(0, new Pair("L", "Layer: Metal"));
-        } else if ("OpenGL".equals(_layers[_layerIdx])) {
-            _layer = new SkijaLayerGL();
-            HUD.extras.set(0, new Pair("L", "Layer: OpenGL"));
-        }
+        String layerName = _layers[_layerIdx];
+        String className = "io.github.humbleui.skija.examples.jwm.SkijaLayer" + layerName;
+
+        _layer = (SkijaLayer) Main.class.forName(className).getDeclaredConstructor().newInstance();
+        HUD.extras.set(0, new Pair("L", "Layer: " + layerName));
 
         _layer.attach(_window);
         _layer.reconfigure();
-        _layer.resize(_window.getWidth(), _window.getHeight());
+        _layer.resize(_window.getContentRect().getWidth(), _window.getContentRect().getHeight());
     }
 
     @Override
     public void accept(Event e) {
-        if (e instanceof EventReconfigure) {
+        if (e instanceof EventWindowScreenChange) {
             _layer.reconfigure();
-            _scale = _window.getScale();
-            accept(new EventResize(_window.getWidth(), _window.getHeight()));
-        } else if (e instanceof EventResize) {
-            EventResize er = (EventResize) e;
-            _width = (int) (er.getWidth() / _scale);
-            _height = (int) (er.getHeight() / _scale);
-            _layer.resize(er.getWidth(), er.getHeight());
+            _scale = _window.getScreen().getScale();
+            accept(new EventWindowResize(
+                    _window.getWindowRect().getWidth(),
+                    _window.getWindowRect().getHeight(),
+                    _window.getContentRect().getWidth(),
+                    _window.getContentRect().getHeight()));
+        } else if (e instanceof EventWindowResize er) {
+            _width = (int) (er.getContentWidth() / _scale);
+            _height = (int) (er.getContentHeight() / _scale);
+            _layer.resize(er.getContentWidth(), er.getContentHeight());
             paint();
         } else if (e instanceof EventMouseMove) {
-            _xpos = (int) (((EventMouseMove) e).getX() / _window.getScale());
-            _ypos = (int) (((EventMouseMove) e).getY() / _window.getScale());
-        } else if (e instanceof EventKeyboard eventKeyboard) {
-            if (eventKeyboard.isPressed() == true) {
-                switch (eventKeyboard.getKey()) {
+            _xpos = (int) (((EventMouseMove) e).getX() / _scale);
+            _ypos = (int) (((EventMouseMove) e).getY() / _scale);
+        } else if (e instanceof EventKey eventKey) {
+            if (eventKey.isPressed() == true) {
+                switch (eventKey.getKey()) {
                     case S -> {
                         Scenes.stats = !Scenes.stats;
                         Stats.enabled = Scenes.stats;
@@ -107,13 +118,13 @@ public class Main implements Consumer<Event> {
                     case UP ->
                         Scenes.currentScene().changeVariant(-1);
                     default ->
-                        System.out.println("Key pressed: " + eventKeyboard.getKey());
+                        System.out.println("Key pressed: " + eventKey.getKey());
                 }
             }
         } else if (e instanceof EventFrame) {
             paint();
             _window.requestFrame();
-        } else if (e instanceof EventClose) {
+        } else if (e instanceof EventWindowCloseRequest) {
             _layer.close();
             _window.close();
             App.terminate();

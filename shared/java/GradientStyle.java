@@ -1,4 +1,4 @@
-package org.jetbrains.skija;
+package io.github.humbleui.skija;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,10 +1,10 @@
-package org.jetbrains.skija.examples.scenes;
+package io.github.humbleui.skija.examples.scenes;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
-import org.jetbrains.skija.*;
+import io.github.humbleui.skija.*;
 
 public class ImageCodecsScene extends Scene {
     public List<Pair<String, Image>> images = new ArrayList<>();
