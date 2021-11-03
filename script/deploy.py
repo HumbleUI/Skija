@@ -9,6 +9,8 @@ def main():
   if not re.fullmatch("\\d+\\.\\d+\\.\\d+", version):
     raise Exception("Expected version in a form of X.X.X, got: " + version)
 
+  # Deploy
+
   mvn = "mvn.cmd" if common.system == "windows" else "mvn"
   mvn_settings = [
     '--settings', 'shared/deploy/settings.xml',
@@ -60,49 +62,50 @@ def main():
       [f'-DpomFile=platform/target/maven/{pom}',
        f'-Dfile={jar}'])
 
+  # Release
 
-  # headers = {
-  #   'Accept': 'application/json',
-  #   'Authorization': 'Basic ' + base64.b64encode((ossrh_username + ":" + ossrh_password).encode('utf-8')).decode('utf-8'),
-  #   'Content-Type': 'application/json',
-  # }
+  headers = {
+    'Accept': 'application/json',
+    'Authorization': 'Basic ' + base64.b64encode((ossrh_username + ":" + ossrh_password).encode('utf-8')).decode('utf-8'),
+    'Content-Type': 'application/json',
+  }
 
-  # def fetch(path, data = None):
-  #   req = urllib.request.Request('https://s01.oss.sonatype.org/service/local/staging' + path,
-  #                              headers=headers,
-  #                              data = json.dumps(data).encode('utf-8') if data else None)
-  #   resp = urllib.request.urlopen(req).read().decode('utf-8')
-  #   # print(' ', path, "->", resp)
-  #   return json.loads(resp) if resp else None
+  def fetch(path, data = None):
+    req = urllib.request.Request('https://s01.oss.sonatype.org/service/local/staging' + path,
+                               headers=headers,
+                               data = json.dumps(data).encode('utf-8') if data else None)
+    resp = urllib.request.urlopen(req).read().decode('utf-8')
+    # print(' ', path, "->", resp)
+    return json.loads(resp) if resp else None
 
-  # print('Finding staging repo')
-  # resp = fetch('/profile_repositories')
-  # repo_id = resp['data'][0]["repositoryId"]
+  print('Finding staging repo')
+  resp = fetch('/profile_repositories')
+  repo_id = resp['data'][0]["repositoryId"]
   
-  # print('Closing repo', repo_id)
-  # resp = fetch('/bulk/close', data = {"data": {"description": "", "stagedRepositoryIds": [repo_id]}})
+  print('Closing repo', repo_id)
+  resp = fetch('/bulk/close', data = {"data": {"description": "", "stagedRepositoryIds": [repo_id]}})
 
-  # while True:
-  #   print('Checking repo', repo_id, 'status')
-  #   resp = fetch('/repository/' + repo_id + '/activity')
-  #   close_events = [e for e in resp if e['name'] == 'close']
-  #   close_events = close_events[0]['events'] if close_events else []
-  #   fail_events = [e for e in close_events if e['name'] == 'ruleFailed']
-  #   if fail_events:
-  #     print(fail_events)
-  #     return 1
+  while True:
+    print('Checking repo', repo_id, 'status')
+    resp = fetch('/repository/' + repo_id + '/activity')
+    close_events = [e for e in resp if e['name'] == 'close']
+    close_events = close_events[0]['events'] if close_events else []
+    fail_events = [e for e in close_events if e['name'] == 'ruleFailed']
+    if fail_events:
+      print(fail_events)
+      return 1
 
-  #   if close_events and close_events[-1]['name'] == 'repositoryClosed':
-  #     break
+    if close_events and close_events[-1]['name'] == 'repositoryClosed':
+      break
 
-  #   time.sleep(0.5)
+    time.sleep(0.5)
 
-  # print('Releasing staging repo', repo_id)
-  # resp = fetch('/bulk/promote', data = {"data": {
-  #             "autoDropAfterRelease": True,
-  #             "description": "",
-  #             "stagedRepositoryIds":[repo_id]
-  #       }})
+  print('Releasing staging repo', repo_id)
+  resp = fetch('/bulk/promote', data = {"data": {
+              "autoDropAfterRelease": True,
+              "description": "",
+              "stagedRepositoryIds":[repo_id]
+        }})
 
   return 0
 
