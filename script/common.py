@@ -10,14 +10,11 @@ arch = args.arch
 
 system = {'Darwin': 'macos', 'Linux': 'linux', 'Windows': 'windows'}[platform.system()]
 classpath_separator = ';' if system == 'windows' else ':'
-mvn = "mvn.cmd" if system == "windows" else "mvn"
 
 classifier = ('macos-' + arch if system == 'macos' else system)
 module = 'io.github.humbleui.skija.' + ('macos.' + arch if system == 'macos' else system)
 verbose = '--verbose' in sys.argv
 root = os.path.abspath(os.path.dirname(__file__) + '/..')
-ossrh_username = os.getenv('OSSRH_USERNAME')
-ossrh_password = os.getenv('OSSRH_PASSWORD')
 
 def version():
   parser = argparse.ArgumentParser()

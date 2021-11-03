@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 import argparse, glob, os, subprocess, sys, zipfile
 sys.path.append(os.path.normpath(os.path.join(os.path.dirname(__file__))))
-import build_shared, common
+import common
 
 def main():
   parser = argparse.ArgumentParser()
@@ -62,10 +62,10 @@ def main():
       common.fetch_maven('io.github.humbleui.skija', 'skija-shared', args.skija_version)
     ]
   else:
-    build_shared.main()
+    sources = common.glob('../shared/java', '*.java')
+    common.javac(sources, '../shared/target/classes', classpath = common.deps(), modulepath = common.deps(), release = '9')
     modulepath += ['../shared/target/classes']
 
-  os.chdir(common.root + '/platform')
   sources = common.glob('java-' + common.classifier, '*.java')
   common.javac(sources, 'target/classes', modulepath = modulepath, release = '9')
 

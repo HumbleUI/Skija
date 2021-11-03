@@ -1,9 +1,7 @@
 #! /usr/bin/env python3
-import argparse, build, clean, common, glob, os, platform, re, subprocess, sys
+import argparse, clean, common, glob, os, platform, re, subprocess, sys
 
 def package():
-  build.main()
-
   os.chdir(common.root + '/platform')
   artifact = "skija-" + common.classifier
   version = common.version()

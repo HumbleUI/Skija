@@ -1,9 +1,7 @@
 #! /usr/bin/env python3
-import argparse, build_shared, clean, common, glob, os, platform, re, subprocess, sys
+import argparse, clean, common, glob, os, platform, re, subprocess, sys
 
 def package():
-  build_shared.main()
-
   version = common.version()
   os.chdir(f'{common.root}/shared')
 

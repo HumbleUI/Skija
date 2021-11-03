@@ -1,7 +1,9 @@
 on:
   push:
-    branches:
-      - '**'
+    # branches:
+    #   - '**'
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
     paths-ignore:
       - 'docs/**'
       - 'examples/**'
@@ -52,6 +54,11 @@ jobs:
         with:
           fetch-depth: 0
       - run: python3 script/build.py
+      - run: python3 script/package_shared.py
+      - uses: actions/upload-artifact@v2
+        with:
+          name: shared-jar
+          path: shared/target/*.jar
       - run: python3 script/test.py
       - run: python3 script/package_platform.py
       - uses: actions/upload-artifact@v2
@@ -87,11 +94,10 @@ jobs:
       - run: |
           echo "JAVA_HOME=$JAVA_HOME_11_X64" >> $GITHUB_ENV
           echo "$JAVA_HOME_11_X64/bin" >> $GITHUB_PATH
-      - run: python3 script/package_shared.py
-      - uses: actions/upload-artifact@v2
+      - uses: actions/download-artifact@v2
         with:
           name: shared-jar
-          path: shared/target/*.jar
+          path: shared/target
       - uses: actions/download-artifact@v2
         with:
           name: macos-x64-jar
@@ -110,3 +116,12 @@ jobs:
           path: platform/target
       - run: ls -lah platform/target
       - run: ls -lah shared/target
+      - if: ${{ startsWith(github.ref, 'refs/tags/') }}
+        name: Deploy to Maven Central
+        run: |
+          echo -n "$GPG_SIGNING_KEY" | base64 --decode | gpg --import
+          python3 ./script/deploy.py
+        env:
+          GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
+          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
