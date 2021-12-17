@@ -1,31 +1,29 @@
 #! /usr/bin/env python3
-
 import argparse, glob, os, subprocess, sys
-sys.path.append(os.path.normpath(os.path.join(os.path.dirname(__file__), '..', '..', '..')))
-import script.common as common
-import script.build as build
+sys.path.append(os.path.normpath(os.path.dirname(__file__) + '/../../../script'))
+import common, build, build_utils
 
 def main():
   parser = argparse.ArgumentParser()
   parser.add_argument('--skija-version')
+  parser.add_argument('--lwjgl-version', default='3.2.3')
   (args, _) = parser.parse_known_args()
 
   # Javac
-  lwjgl_classifier = "natives-" + common.system
-  classpath = [
-    common.fetch_maven('org.projectlombok', 'lombok', '1.18.20'),
-    common.fetch_maven('org.lwjgl', 'lwjgl', '3.2.3'),
-    common.fetch_maven('org.lwjgl', 'lwjgl-glfw', '3.2.3'),
-    common.fetch_maven('org.lwjgl', 'lwjgl-opengl', '3.2.3'),
-    common.fetch_maven('org.lwjgl', 'lwjgl', '3.2.3', classifier=lwjgl_classifier),
-    common.fetch_maven('org.lwjgl', 'lwjgl-glfw', '3.2.3', classifier=lwjgl_classifier),
-    common.fetch_maven('org.lwjgl', 'lwjgl-opengl', '3.2.3', classifier=lwjgl_classifier)
+  lwjgl_classifier = "natives-" + build_utils.system
+  classpath = common.deps_compile() + [
+    build_utils.fetch_maven('org.lwjgl', 'lwjgl', args.lwjgl_version),
+    build_utils.fetch_maven('org.lwjgl', 'lwjgl-glfw', args.lwjgl_version),
+    build_utils.fetch_maven('org.lwjgl', 'lwjgl-opengl', args.lwjgl_version),
+    build_utils.fetch_maven('org.lwjgl', 'lwjgl', args.lwjgl_version, classifier=lwjgl_classifier),
+    build_utils.fetch_maven('org.lwjgl', 'lwjgl-glfw', args.lwjgl_version, classifier=lwjgl_classifier),
+    build_utils.fetch_maven('org.lwjgl', 'lwjgl-opengl', args.lwjgl_version, classifier=lwjgl_classifier)
   ]
 
   if args.skija_version:
     classpath += [
-      common.fetch_maven('io.github.humbleui.skija', 'skija-shared', args.skija_version),
-      common.fetch_maven('io.github.humbleui.skija', 'skija-' + common.classifier, args.skija_version),
+      build_utils.fetch_maven('io.github.humbleui.skija', 'skija-shared', args.skija_version),
+      build_utils.fetch_maven('io.github.humbleui.skija', 'skija-' + common.classifier, args.skija_version),
     ]
   else:
     build.main()
@@ -34,16 +32,16 @@ def main():
       os.path.join('..', '..', 'shared', 'target', 'classes')
     ]
 
-  os.chdir(common.root + '/examples/lwjgl')
+  os.chdir(common.basedir + '/examples/lwjgl')
 
-  sources = common.glob('src', '*.java') + common.glob('../scenes/src', '*.java')
-  common.javac(sources, 'target/classes', classpath = classpath, release = '16')
+  sources = build_utils.files('src/**/*.java', '../scenes/src/**/*.java')
+  build_utils.javac(sources, 'target/classes', classpath = classpath, release = '16')
 
   # Java
-  common.check_call([
+  subprocess.check_call([
     'java',
-    '--class-path', common.classpath_separator.join(['target/classes'] + classpath)]
-    + (['-XstartOnFirstThread'] if 'macos' == common.system else [])
+    '--class-path', build_utils.classpath_join(['target/classes'] + classpath)]
+    + (['-XstartOnFirstThread'] if 'macos' == build_utils.system else [])
     + ['-Djava.awt.headless=true',
     '-enableassertions',
     '-enablesystemassertions',

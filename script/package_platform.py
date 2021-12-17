@@ -1,19 +1,18 @@
 #! /usr/bin/env python3
-import argparse, clean, common, glob, os, platform, re, subprocess, sys
+import build_utils, common, os, sys
 
 def package():
-  os.chdir(common.root)
-  os.makedirs("target", exist_ok = True)
+  os.chdir(common.basedir)
   artifact = "skija-" + common.classifier
   version = common.version()
 
-  common.copy_replace(
+  build_utils.copy_replace(
     f'platform/deploy/META-INF/maven/io.github.humbleui.skija/{artifact}/pom.xml',
     f'platform/target/maven/META-INF/maven/io.github.humbleui.skija/{artifact}/pom.xml',
     {'${version}': version}
   )
 
-  common.copy_replace(
+  build_utils.copy_replace(
     f'platform/deploy/META-INF/maven/io.github.humbleui.skija/{artifact}/pom.properties',
     f'platform/target/maven/META-INF/maven/io.github.humbleui.skija/{artifact}/pom.properties',
     {'${version}': version}
@@ -22,27 +21,15 @@ def package():
   with open('platform/target/classes/io/github/humbleui/skija/' + common.classifier.replace('-', '/') + '/skija.version', 'w') as f:
     f.write(version)
 
-  print(f"Packaging {artifact}-{version}.jar")
-  subprocess.check_call(["jar",
-    "--create",
-    "--file", f"target/{artifact}-{version}.jar",
-    "-C", "platform/target/classes", ".",
-    "-C", "platform/target/maven", "META-INF"
-  ])
+  build_utils.jar(f"target/{artifact}-{version}.jar",
+                  ("platform/target/classes", "."),
+                  ("platform/target/maven", "META-INF"))
 
-  print(f'Packaging {artifact}-{version}-sources.jar')
-  subprocess.check_call(["jar",
-    "--create",
-    "--file", f"target/{artifact}-{version}-sources.jar",
-    "-C", "platform/target/maven", "META-INF"
-  ])
+  build_utils.jar(f"target/{artifact}-{version}-sources.jar",
+                  ("platform/target/maven", "META-INF"))
 
-  print(f'Packaging {artifact}-{version}-javadoc.jar')
-  subprocess.check_call(["jar",
-    "--create",
-    "--file", f"target/{artifact}-{version}-javadoc.jar",
-    "-C", "platform/target/maven", "META-INF"
-  ])
+  build_utils.jar(f"target/{artifact}-{version}-javadoc.jar",
+                  ("platform/target/maven", "META-INF"))
 
   return 0
 

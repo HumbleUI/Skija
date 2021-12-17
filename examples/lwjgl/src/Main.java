@@ -14,6 +14,7 @@ import static org.lwjgl.system.MemoryUtil.*;
 import io.github.humbleui.skija.*;
 import io.github.humbleui.skija.examples.scenes.*;
 import io.github.humbleui.skija.impl.*;
+import io.github.humbleui.types.*;
 
 public class Main {
     public static void main(String [] args) throws Exception {

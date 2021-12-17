@@ -1,9 +1,7 @@
 #! /usr/bin/env python3
-
 import argparse, glob, os, subprocess, sys
-sys.path.append(os.path.normpath(os.path.join(os.path.dirname(__file__), '..', '..', '..')))
-import script.common as common
-import script.build as build
+sys.path.append(os.path.normpath(os.path.dirname(__file__) + '/../../../script'))
+import common, build, build_utils
 
 def main():
   parser = argparse.ArgumentParser()
@@ -13,28 +11,24 @@ def main():
   (args, _) = parser.parse_known_args()
 
   # Javac
-  classpath = [
-    common.fetch_maven('org.projectlombok', 'lombok', '1.18.22'),
-    common.fetch_maven('org.jetbrains', 'annotations', '20.1.0'),
-    common.fetch_maven('io.github.humbleui', 'types', '0.1.0')
-  ]
+  classpath = common.deps_compile()
 
   if args.jwm_dir:
     jwm_dir = os.path.abspath(args.jwm_dir)
     classpath += [
       os.path.join(jwm_dir, 'shared', 'target', 'classes'),
-      os.path.join(jwm_dir, common.system, 'build'),
-      os.path.join(jwm_dir, common.system, 'target', 'classes')
+      os.path.join(jwm_dir, build_utils.system, 'build'),
+      os.path.join(jwm_dir, build_utils.system, 'target', 'classes')
     ]
   else:
     classpath += [
-      common.fetch_maven('io.github.humbleui.jwm', 'jwm', args.jwm_version),
+      build_utils.fetch_maven('io.github.humbleui.jwm', 'jwm', args.jwm_version),
     ]
 
   if args.skija_version:
     classpath += [
-      common.fetch_maven('io.github.humbleui.skija', 'skija-shared'),
-      common.fetch_maven('io.github.humbleui.skija', 'skija-' + common.classifier, args.skija_version),
+      build_utils.fetch_maven('io.github.humbleui.skija', 'skija-shared'),
+      build_utils.fetch_maven('io.github.humbleui.skija', 'skija-' + common.classifier, args.skija_version),
     ]
   else:
     build.main()
@@ -43,16 +37,16 @@ def main():
       os.path.join('..', '..', 'shared', 'target', 'classes')
     ]
 
-  os.chdir(common.root + '/examples/jwm')
+  os.chdir(common.basedir + '/examples/jwm')
 
-  sources = common.glob('src', '*.java') + common.glob('../scenes/src', '*.java')
-  common.javac(sources, 'target/classes', classpath = classpath, release = '16')
+  sources = build_utils.files('src/**/*.java', '../scenes/src/**/*.java')
+  build_utils.javac(sources, 'target/classes', classpath = classpath, release = '16')
 
   # Java
-  common.check_call([
+  subprocess.check_call([
     'java',
-    '--class-path', common.classpath_separator.join(['target/classes'] + classpath)]
-    + (['-XstartOnFirstThread'] if 'macos' == common.system else [])
+    '--class-path', build_utils.classpath_join(['target/classes'] + classpath)]
+    + (['-XstartOnFirstThread'] if 'macos' == build_utils.system else [])
     + ['-Djava.awt.headless=true',
     '-enableassertions',
     '-enablesystemassertions',

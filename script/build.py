@@ -1,28 +1,25 @@
 #! /usr/bin/env python3
-import argparse, glob, os, subprocess, sys, zipfile
-sys.path.append(os.path.normpath(os.path.join(os.path.dirname(__file__))))
-import common
+import argparse, build_utils, common, glob, os, subprocess, sys, zipfile
 
 def main():
   parser = argparse.ArgumentParser()
   parser.add_argument('--debug', action='store_true')
-  parser.add_argument('--arch', default=common.arch)
+  parser.add_argument('--arch', default=build_utils.arch)
   parser.add_argument('--skia-dir')
   parser.add_argument('--skia-release', default='m96-2f1f21b8a9')
-  parser.add_argument('--skija-version')
   (args, _) = parser.parse_known_args()
 
   # Fetch Skia
   build_type = 'Debug' if args.debug else 'Release'
   if args.skia_dir:
     skia_dir = os.path.abspath(args.skia_dir)
-    os.chdir(common.root + '/platform')
+    os.chdir(common.basedir + '/platform')
   else:
-    os.chdir(common.root + '/platform')
-    skia_dir = "Skia-" + args.skia_release + "-" + common.system + "-" + build_type + '-' + common.arch
+    os.chdir(common.basedir + '/platform')
+    skia_dir = "Skia-" + args.skia_release + "-" + build_utils.system + "-" + build_type + '-' + build_utils.arch
     if not os.path.exists(skia_dir):
       zip = skia_dir + '.zip'
-      common.fetch('https://github.com/HumbleUI/SkiaBuild/releases/download/' + args.skia_release + '/' + zip, zip)
+      build_utils.fetch('https://github.com/HumbleUI/SkiaBuild/releases/download/' + args.skia_release + '/' + zip, zip)
       with zipfile.ZipFile(zip, 'r') as f:
         print("Extracting", zip)
         f.extractall(skia_dir)
@@ -31,56 +28,55 @@ def main():
   print("Using Skia from", skia_dir)
 
   # CMake
-  os.makedirs("build", exist_ok = True)
-  common.check_call([
+  build_utils.makedirs("build")
+  subprocess.check_call([
     "cmake",
     "-G", "Ninja",
     "-DCMAKE_BUILD_TYPE=" + build_type,
     "-DSKIA_DIR=" + skia_dir,
-    "-DSKIA_ARCH=" + common.arch]
-    + (["-DCMAKE_OSX_ARCHITECTURES=" + {"x64": "x86_64", "arm64": "arm64"}[common.arch]] if common.system == "macos" else [])
+    "-DSKIA_ARCH=" + build_utils.arch]
+    + (["-DCMAKE_OSX_ARCHITECTURES=" + {"x64": "x86_64", "arm64": "arm64"}[build_utils.arch]] if build_utils.system == "macos" else [])
     + [".."],
     cwd=os.path.abspath('build'))
 
   # Ninja
-  common.check_call(["ninja"], cwd=os.path.abspath('build'))
+  subprocess.check_call(["ninja"], cwd=os.path.abspath('build'))
 
   # Codesign
-  if common.system == "macos" and os.getenv("APPLE_CODESIGN_IDENTITY"):
+  if build_utils.system == "macos" and os.getenv("APPLE_CODESIGN_IDENTITY"):
     subprocess.call(["codesign",
                      # "--force",
                      # "-vvvvvv",
                      "--deep",
                      "--sign",
                      os.getenv("APPLE_CODESIGN_IDENTITY"),
-                     "build/libskija_" + common.arch + ".dylib"])
+                     "build/libskija_" + build_utils.arch + ".dylib"])
 
   # javac
   modulepath = []
-  if args.skija_version:
-    modulepath += [
-      common.fetch_maven('io.github.humbleui.skija', 'skija-shared', args.skija_version)
-    ]
-  else:
-    sources = common.glob('../shared/java', '*.java')
-    common.javac(sources, '../shared/target/classes', classpath = common.deps(), modulepath = common.deps(), release = '9')
-    modulepath += ['../shared/target/classes']
+  sources = build_utils.files('../shared/java/**/*.java')
+  build_utils.javac(sources,
+                    '../shared/target/classes',
+                    classpath = common.deps_compile(),
+                    modulepath = common.deps_compile(),
+                    release = '9')
+  modulepath += ['../shared/target/classes']
 
-  sources = common.glob('java-' + common.classifier, '*.java')
-  common.javac(sources, 'target/classes', modulepath = modulepath, release = '9')
+  sources = build_utils.files(f'java-{common.classifier}/**/*.java')
+  build_utils.javac(sources, 'target/classes', modulepath = modulepath, release = '9')
 
   # Copy files
   target = 'target/classes/io/github/humbleui/skija'
   if common.classifier == 'macos-x64':
-    common.copy_newer('build/libskija_x64.dylib', target + '/macos/x64/libskija_x64.dylib')
+    build_utils.copy_newer('build/libskija_x64.dylib', target + '/macos/x64/libskija_x64.dylib')
   elif common.classifier == 'macos-arm64':
-    common.copy_newer('build/libskija_arm64.dylib', target + '/macos/arm64/libskija_arm64.dylib')
+    build_utils.copy_newer('build/libskija_arm64.dylib', target + '/macos/arm64/libskija_arm64.dylib')
   elif common.classifier == 'linux':
-    common.copy_newer('build/libskija.so', target + '/linux/libskija.so')
+    build_utils.copy_newer('build/libskija.so', target + '/linux/libskija.so')
   elif common.classifier == 'windows':
-    common.copy_newer('build/skija.dll', target + '/windows/skija.dll')
-    common.copy_newer(skia_dir + '/out/' + build_type + '-' + common.arch + '/icudtl.dat',
-                      target + '/windows/icudtl.dat')
+    build_utils.copy_newer('build/skija.dll', target + '/windows/skija.dll')
+    build_utils.copy_newer(skia_dir + '/out/' + build_type + '-' + build_utils.arch + '/icudtl.dat',
+                           target + '/windows/icudtl.dat')
 
   return 0
 

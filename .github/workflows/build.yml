@@ -115,10 +115,10 @@ jobs:
         with:
           name: windows-jars
           path: target
-      - name: Deploy to Maven Central
+      - name: Release to Maven Central
         run: |
           echo -n "$GPG_SIGNING_KEY" | base64 --decode | gpg --import
-          python3 ./script/deploy.py
+          python3 ./script/release.py
         env:
           GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}

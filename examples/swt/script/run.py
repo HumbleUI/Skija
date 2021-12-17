@@ -1,9 +1,7 @@
 #! /usr/bin/env python3
-
-import argparse, glob, os, platform, shutil, subprocess, sys, urllib.request, zipfile
-sys.path.append(os.path.normpath(os.path.join(os.path.dirname(__file__), '..', '..', '..')))
-import script.common as common 
-import script.build as build 
+import argparse, glob, os, subprocess, sys
+sys.path.append(os.path.normpath(os.path.dirname(__file__) + '/../../../script'))
+import common, build, build_utils
 
 def main():
   parser = argparse.ArgumentParser()
@@ -13,16 +11,16 @@ def main():
   # Javac
   swt_artifact = {'macos': 'org.eclipse.swt.cocoa.macosx.x86_64',
                   'windows': 'org.eclipse.swt.win32.win32.x86_64',
-                  'linux': 'org.eclipse.swt.gtk.linux.x86_64'}[common.system]
-  classpath = [
-    # common.fetch_maven('org.projectlombok', 'lombok', '1.18.20'),
-    common.fetch_maven('org.eclipse.platform', swt_artifact, '3.115.100')
+                  'linux': 'org.eclipse.swt.gtk.linux.x86_64'}[build_utils.system]
+  classpath = common.deps_compile() + [
+    # build_utils.fetch_maven('org.projectlombok', 'lombok', '1.18.20'),
+    build_utils.fetch_maven('org.eclipse.platform', swt_artifact, '3.115.100')
   ]
 
   if args.skija_version:
     classpath += [
-      common.fetch_maven('io.github.humbleui.skija', 'skija-shared', args.skija_version),
-      common.fetch_maven('io.github.humbleui.skija', 'skija-' + common.classifier, args.skija_version),
+      build_utils.fetch_maven('io.github.humbleui.skija', 'skija-shared', args.skija_version),
+      build_utils.fetch_maven('io.github.humbleui.skija', 'skija-' + common.classifier, args.skija_version),
     ]
   else:
     build.main()
@@ -33,14 +31,14 @@ def main():
 
   os.chdir(os.path.join(os.path.dirname(__file__), os.pardir))
 
-  sources = common.glob('src', '*.java')
-  common.javac(sources, 'target/classes', classpath = classpath, release = '16')
+  sources = build_utils.files('src/**/*.java')
+  build_utils.javac(sources, 'target/classes', classpath = classpath, release = '16')
 
   # Java
-  common.check_call([
+  subprocess.check_call([
     'java',
-    '--class-path', common.classpath_separator.join(['target/classes'] + classpath)]
-    + (['-XstartOnFirstThread'] if 'macos' == common.system else [])
+    '--class-path', build_utils.classpath_join(['target/classes'] + classpath)]
+    + (['-XstartOnFirstThread'] if 'macos' == build_utils.system else [])
     + ['-Djava.awt.headless=true',
     '-enableassertions',
     '-enablesystemassertions',

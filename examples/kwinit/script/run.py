@@ -1,9 +1,7 @@
 #! /usr/bin/env python3
-
-import argparse, glob, os, platform, shutil, subprocess, sys, urllib.request, zipfile
-sys.path.append(os.path.normpath(os.path.join(os.path.dirname(__file__), '..', '..', '..')))
-import script.common as common
-import script.build as build
+import argparse, glob, os, subprocess, sys
+sys.path.append(os.path.normpath(os.path.dirname(__file__) + '/../../../script'))
+import common, build, build_utils
 
 def main():
   parser = argparse.ArgumentParser()
@@ -12,15 +10,14 @@ def main():
   (args, _) = parser.parse_known_args()
 
   # Javac
-  classpath = [
-    common.fetch_maven('org.projectlombok', 'lombok', '1.18.20'),
-    common.fetch_maven('com.google.code.gson', 'gson', '2.8.6')
+  classpath = common.deps_compile() + [
+    build_utils.fetch_maven('com.google.code.gson', 'gson', '2.8.6')
   ]
 
   if args.skija_version:
     classpath += [
-      common.fetch_maven('io.github.humbleui.skija', 'skija-shared', args.skija_version),
-      common.fetch_maven('io.github.humbleui.skija', 'skija-' + common.classifier, args.skija_version),
+      build_utils.fetch_maven('io.github.humbleui.skija', 'skija-shared', args.skija_version),
+      build_utils.fetch_maven('io.github.humbleui.skija', 'skija-' + common.classifier, args.skija_version),
     ]
   else:
     build.main()
@@ -31,22 +28,22 @@ def main():
 
   os.chdir(os.path.join(os.path.dirname(__file__), os.pardir))
 
-  sources = common.glob('src_java', '*.java') + common.glob('../scenes/src', '*.java')
-  common.javac(sources, 'target/classes', classpath = classpath, release = '16')
+  sources = build_utils.files('src_java/**/*.java', '../scenes/src/**/*.java')
+  build_utils.javac(sources, 'target/classes', classpath = classpath, release = '16')
 
   # Rust
-  common.check_call(['cargo', 'build', '--release', '--lib'])
+  subprocess.check_call(['cargo', 'build', '--release', '--lib'])
 
   # Java
   env = os.environ.copy()
   env['RUST_BACKTRACE'] = '1'
-  # if 'windows' == common.system:
+  # if 'windows' == build_utils.system:
   #   env['KWINIT_ANGLE'] = '1'
 
   common.check_call([
     'java',
-    '--class-path', common.classpath_separator.join(['target/classes'] + classpath)]
-    + (['-XstartOnFirstThread'] if 'macos' == common.system else [])
+    '--class-path', build_utils.classpath_join(['target/classes'] + classpath)]
+    + (['-XstartOnFirstThread'] if 'macos' == build_utils.system else [])
     + ['-Djava.awt.headless=true',
     '-enableassertions',
     '-enablesystemassertions',

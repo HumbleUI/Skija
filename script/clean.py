@@ -1,18 +1,17 @@
 #! /usr/bin/env python3
-import common, os, shutil, sys
+import build_utils, common, os, shutil, sys
 
 def main():
-  os.chdir(common.root)
-  shutil.rmtree('target', ignore_errors = True)
-  shutil.rmtree('shared/target', ignore_errors = True)
-  shutil.rmtree('platform/build', ignore_errors = True)
-  shutil.rmtree('platform/target', ignore_errors = True)
-  shutil.rmtree('tests/target', ignore_errors = True)
-  shutil.rmtree('examples/lwjgl/target', ignore_errors = True)
-  shutil.rmtree('examples/kwinit/target', ignore_errors = True)
-  shutil.rmtree('examples/jwm/target', ignore_errors = True)
-  shutil.rmtree('examples/swt/target', ignore_errors = True)
-
+  os.chdir(common.basedir)
+  build_utils.rmdir("target")
+  build_utils.rmdir("shared/target")
+  build_utils.rmdir("platform/build")
+  build_utils.rmdir("platform/target")
+  build_utils.rmdir("tests/target")
+  build_utils.rmdir("examples/lwjgl/target")
+  build_utils.rmdir("examples/kwinit/target")
+  build_utils.rmdir("examples/jwm/target")
+  build_utils.rmdir("examples/swt/target")
   return 0
 
 if __name__ == '__main__':

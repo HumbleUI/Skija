@@ -1,12 +1,12 @@
 #! /usr/bin/env python3
-import argparse, build, common, glob, os, sys
+import argparse, build, build_utils, common, glob, os, subprocess, sys
 
 def main():
   parser = argparse.ArgumentParser()
   parser.add_argument('--skija-version')
   (args, _) = parser.parse_known_args()
 
-  modulepath = [common.fetch_maven('io.github.humbleui', 'types', '0.1.0')]
+  modulepath = common.deps_run()
   if args.skija_version:
     modulepath += [
       common.fetch_maven('io.github.humbleui.skija', 'skija-shared', args.skija_version),
@@ -16,18 +16,16 @@ def main():
     build.main()
     modulepath += ['../shared/target/classes', '../platform/target/classes']
 
-  os.chdir(common.root + '/tests')
-  sources = common.glob('java', '*.java')
-  common.javac(sources, 'target/classes', modulepath = modulepath, add_modules = [common.module])
+  os.chdir(common.basedir + '/tests')
+  sources = build_utils.files('java/**/*.java')
+  build_utils.javac(sources, 'target/classes', modulepath = modulepath, add_modules = [common.module])
 
-  common.check_call([
-    'java',
-    # '--class-path', common.classpath_separator.join(modulepath + ['target/classes']),
+  subprocess.check_call(['java',
     '--class-path', 'target/classes',
-    '--module-path', common.classpath_separator.join(modulepath),
-    '--add-modules', common.module
-    ] + (['-XstartOnFirstThread'] if 'macos' == common.system else [])
-    + ['-Djava.awt.headless=true',
+    '--module-path', build_utils.classpath_join(modulepath),
+    '--add-modules', common.module,
+    *(['-XstartOnFirstThread'] if 'macos' == build_utils.system else []),
+    '-Djava.awt.headless=true',
     '-enableassertions',
     '-enablesystemassertions',
     '-Xcheck:jni',
