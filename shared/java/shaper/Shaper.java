@@ -5,6 +5,7 @@ import java.util.*;
 import org.jetbrains.annotations.*;
 import io.github.humbleui.skija.*;
 import io.github.humbleui.skija.impl.*;
+import io.github.humbleui.types.*;
 
 /**
  * Shapes text using HarfBuzz and places the shaped text into a

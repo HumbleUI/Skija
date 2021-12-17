@@ -60,8 +60,9 @@ def fetch_maven(group, name, version, classifier=None, repo='https://repo1.maven
 
 def deps():
   return [
-    fetch_maven('org.projectlombok', 'lombok', '1.18.20'),
-    fetch_maven('org.jetbrains', 'annotations', '20.1.0'),
+    fetch_maven('org.projectlombok', 'lombok', '1.18.22'),
+    fetch_maven('org.jetbrains', 'annotations', '23.0.0'),
+    fetch_maven('io.github.humbleui', 'types', '0.1.0'),
   ]
 
 def javac(sources, target, classpath = [], modulepath = [], add_modules = [], release = '11', opts = []):
@@ -84,21 +85,6 @@ def javac(sources, target, classpath = [], modulepath = [], add_modules = [], re
 
 def glob(dir, pattern):
   return [str(x) for x in pathlib.Path(dir).rglob(pattern)]
-
-@contextlib.contextmanager
-def replaced(filename, replacements):
-    with open(filename, 'r') as f:
-      original = f.read()
-    try:  
-      updated = original
-      for key, value in replacements.items():
-        updated = updated.replace(key, value)
-      with open(filename, 'w') as f:
-        f.write(updated)
-      yield f
-    finally:
-      with open(filename, 'w') as f:
-        f.write(original)
 
 def copy_replace(src, dst, replacements):
   with open(src, 'r') as f:

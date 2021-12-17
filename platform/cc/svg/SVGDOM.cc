@@ -26,7 +26,7 @@ extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_svg_SVGDOM__1
   (JNIEnv* env, jclass jclass, jlong ptr) {
     SkSVGDOM* instance = reinterpret_cast<SkSVGDOM*>(static_cast<uintptr_t>(ptr));
     const SkSize& size = instance->containerSize();
-    return skija::Point::make(env, size.fWidth, size.fHeight);
+    return types::Point::make(env, size.fWidth, size.fHeight);
 }
 
 extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGDOM__1nSetContainerSize

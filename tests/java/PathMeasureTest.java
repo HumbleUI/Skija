@@ -5,7 +5,7 @@ import static io.github.humbleui.skija.test.runner.TestRunner.*;
 import io.github.humbleui.skija.Matrix33;
 import io.github.humbleui.skija.Path;
 import io.github.humbleui.skija.PathMeasure;
-import io.github.humbleui.skija.Point;
+import io.github.humbleui.types.Point;
 import io.github.humbleui.skija.test.runner.*;
 
 public class PathMeasureTest implements Executable {

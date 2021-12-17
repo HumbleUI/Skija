@@ -95,8 +95,8 @@ namespace skija {
                 beginLine       = env->GetMethodID(cls, "beginLine",     "()V");
                 runInfo         = env->GetMethodID(cls, "runInfo",       "(Lio/github/humbleui/skija/shaper/RunInfo;)V");
                 commitRunInfo   = env->GetMethodID(cls, "commitRunInfo", "()V");
-                runOffset       = env->GetMethodID(cls, "runOffset",     "(Lio/github/humbleui/skija/shaper/RunInfo;)Lio/github/humbleui/skija/Point;");
-                commitRun       = env->GetMethodID(cls, "commitRun",     "(Lio/github/humbleui/skija/shaper/RunInfo;[S[Lio/github/humbleui/skija/Point;[I)V");
+                runOffset       = env->GetMethodID(cls, "runOffset",     "(Lio/github/humbleui/skija/shaper/RunInfo;)Lio/github/humbleui/types/Point;");
+                commitRun       = env->GetMethodID(cls, "commitRun",     "(Lio/github/humbleui/skija/shaper/RunInfo;[S[Lio/github/humbleui/types/Point;[I)V");
                 commitLine      = env->GetMethodID(cls, "commitLine",    "()V");
             }
 

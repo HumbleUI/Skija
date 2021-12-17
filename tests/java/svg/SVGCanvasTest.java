@@ -10,7 +10,7 @@ import io.github.humbleui.skija.OutputWStream;
 import io.github.humbleui.skija.Paint;
 import io.github.humbleui.skija.PaintMode;
 import io.github.humbleui.skija.Path;
-import io.github.humbleui.skija.Rect;
+import io.github.humbleui.types.Rect;
 import io.github.humbleui.skija.test.*;
 import io.github.humbleui.skija.test.runner.*;
 import io.github.humbleui.skija.svg.SVGCanvas;

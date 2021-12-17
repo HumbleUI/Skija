@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.stream.*;
 import io.github.humbleui.skija.*;
 import io.github.humbleui.skija.shaper.*;
+import io.github.humbleui.types.*;
 
 public class TextLineDecorationsScene extends Scene {
     public final String descenders = " (go-pay)";

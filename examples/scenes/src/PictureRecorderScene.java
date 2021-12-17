@@ -3,6 +3,7 @@ package io.github.humbleui.skija.examples.scenes;
 import io.github.humbleui.skija.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
+import io.github.humbleui.types.*;
 
 public class PictureRecorderScene extends Scene {
     @Override

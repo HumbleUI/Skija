@@ -4,6 +4,7 @@ import lombok.*;
 import java.nio.file.Files;
 import java.util.*;
 import io.github.humbleui.skija.*;
+import io.github.humbleui.types.*;
 
 public class FigmaScene extends Scene {
     private Font uiFont;

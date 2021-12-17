@@ -1,6 +1,7 @@
 package io.github.humbleui.skija.examples.scenes;
 
 import io.github.humbleui.skija.*;
+import io.github.humbleui.types.*;
 
 public class DrawableScene extends Scene {
     public final Font inter18 = new Font(inter, 18);

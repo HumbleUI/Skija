@@ -289,8 +289,8 @@ public:
         java::lang::Throwable::exceptionThrown(fEnv);
         fEnv->SetLongField(runInfoObj.get(), skija::shaper::RunInfo::_fontPtr, 0);
 
-        jfloat x = fEnv->GetFloatField(point.get(), skija::Point::x);
-        jfloat y = fEnv->GetFloatField(point.get(), skija::Point::y);
+        jfloat x = fEnv->GetFloatField(point.get(), types::Point::x);
+        jfloat y = fEnv->GetFloatField(point.get(), types::Point::y);
 
         return SkShaper::RunHandler::Buffer{
             reinterpret_cast<SkGlyphID*>(fGlyphs.data()),
@@ -308,7 +308,7 @@ public:
         size_t end = fIndicesConverter.from8To16(info.utf8Range.fBegin + info.utf8Range.fSize);
         skija::AutoLocal<jobject> runInfoObj(fEnv, skija::shaper::RunInfo::toJava(fEnv, info, begin, end));
         skija::AutoLocal<jshortArray> glyphs(fEnv, javaShortArray(fEnv, fGlyphs));
-        skija::AutoLocal<jobjectArray> positions(fEnv, skija::Point::fromSkPoints(fEnv, fPositions));
+        skija::AutoLocal<jobjectArray> positions(fEnv, types::Point::fromSkPoints(fEnv, fPositions));
         fEnv->CallVoidMethod(fRunHandler, skija::shaper::RunHandler::commitRun, runInfoObj.get(), glyphs.get(), positions.get(), clusters.get());
         java::lang::Throwable::exceptionThrown(fEnv);
         fEnv->SetLongField(runInfoObj.get(), skija::shaper::RunInfo::_fontPtr, 0);

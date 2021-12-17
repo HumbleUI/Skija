@@ -5,8 +5,10 @@ import io.github.humbleui.skija.*;
 import io.github.humbleui.skija.Canvas;
 import io.github.humbleui.skija.Font;
 import io.github.humbleui.skija.Image;
+import io.github.humbleui.types.IRect;
 import io.github.humbleui.skija.Paint;
-import io.github.humbleui.skija.Point;
+import io.github.humbleui.types.Point;
+import io.github.humbleui.types.Rect;
 
 import javax.swing.*;
 import javax.swing.plaf.metal.DefaultMetalTheme;

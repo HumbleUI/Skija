@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.function.*;
 import io.github.humbleui.skija.*;
+import io.github.humbleui.types.*;
 
 public class BitmapImageScene extends Scene {
     public final Image image;

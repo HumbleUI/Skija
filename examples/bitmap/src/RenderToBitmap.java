@@ -1,5 +1,6 @@
 package io.github.humbleui.skija.examples.bitmap;
 
+import io.github.humbleui.types.*;
 import io.github.humbleui.skija.*;
 
 public class RenderToBitmap {

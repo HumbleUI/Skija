@@ -13,9 +13,9 @@ import io.github.humbleui.skija.PathFillMode;
 import io.github.humbleui.skija.PathSegment;
 import io.github.humbleui.skija.PathSegmentMask;
 import io.github.humbleui.skija.PathVerb;
-import io.github.humbleui.skija.Point;
-import io.github.humbleui.skija.RRect;
-import io.github.humbleui.skija.Rect;
+import io.github.humbleui.types.Point;
+import io.github.humbleui.types.RRect;
+import io.github.humbleui.types.Rect;
 import io.github.humbleui.skija.test.runner.Executable;
 import io.github.humbleui.skija.test.runner.TestRunner;
 

@@ -10,7 +10,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import io.github.humbleui.skija.Matrix33;
-import io.github.humbleui.skija.Point;
+import io.github.humbleui.types.Point;
 import io.github.humbleui.skija.test.*;
 
 public class TestRunner {

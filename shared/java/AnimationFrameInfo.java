@@ -2,6 +2,7 @@ package io.github.humbleui.skija;
 
 import lombok.*;
 import org.jetbrains.annotations.*;
+import io.github.humbleui.types.*;
 
 /**
  * Information about individual frames in a multi-framed image.

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.*;
 import java.util.*;
 import io.github.humbleui.skija.*;
+import io.github.humbleui.types.*;
 
 public class ImageBenchScene extends Scene {
     Image[] sprites;

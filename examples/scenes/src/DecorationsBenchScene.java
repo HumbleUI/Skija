@@ -1,6 +1,7 @@
 package io.github.humbleui.skija.examples.scenes;
 
 import io.github.humbleui.skija.*;
+import io.github.humbleui.types.*;
 
 public class DecorationsBenchScene extends Scene {
     public Path element = new Path().moveTo(0, -1.5f).lineTo(2, 0.5f).lineTo(4, -1.5f).lineTo(4, -0.5f).lineTo(2, 1.5f).lineTo(0, -0.5f).closePath().transform(Matrix33.makeScale(1));

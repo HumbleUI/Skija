@@ -1,8 +1,10 @@
 package io.github.humbleui.skija.examples.scenes;
 
 import lombok.*;
+import io.github.humbleui.types.*;
 import io.github.humbleui.skija.*;
 import io.github.humbleui.skija.shaper.*;
+import io.github.humbleui.types.*;
 
 @AllArgsConstructor
 @lombok.Data

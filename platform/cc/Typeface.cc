@@ -240,5 +240,5 @@ extern "C" JNIEXPORT jstring JNICALL Java_io_github_humbleui_skija_Typeface__1nG
 extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_Typeface__1nGetBounds
   (JNIEnv* env, jclass jclass, jlong ptr) {
     SkTypeface* instance = reinterpret_cast<SkTypeface*>(static_cast<uintptr_t>(ptr));
-    return skija::Rect::fromSkRect(env, instance->getBounds());
+    return types::Rect::fromSkRect(env, instance->getBounds());
 }

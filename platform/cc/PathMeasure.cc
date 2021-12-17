@@ -39,7 +39,7 @@ extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_PathMeasure__
     SkPathMeasure* instance = reinterpret_cast<SkPathMeasure*>(static_cast<uintptr_t>(ptr));
     SkPoint position;
     if (instance->getPosTan(distance, &position, nullptr))
-        return skija::Point::fromSkPoint(env, position);
+        return types::Point::fromSkPoint(env, position);
     else
         return nullptr;
 }
@@ -49,7 +49,7 @@ extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_PathMeasure__
     SkPathMeasure* instance = reinterpret_cast<SkPathMeasure*>(static_cast<uintptr_t>(ptr));
     SkVector tangent;
     if (instance->getPosTan(distance, nullptr, &tangent))
-        return skija::Point::fromSkPoint(env, tangent);
+        return types::Point::fromSkPoint(env, tangent);
     else
         return nullptr;
 }

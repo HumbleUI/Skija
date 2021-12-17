@@ -257,7 +257,7 @@ extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_Font__1nMeasu
     SkRect bounds;
     instance->measureText(chars, len * sizeof(jchar), SkTextEncoding::kUTF16, &bounds, paint);
     env->ReleaseStringCritical(str, chars);
-    return skija::Rect::fromSkRect(env, bounds);
+    return types::Rect::fromSkRect(env, bounds);
 }
 
 extern "C" JNIEXPORT jfloat JNICALL Java_io_github_humbleui_skija_Font__1nMeasureTextWidth
@@ -292,9 +292,9 @@ extern "C" JNIEXPORT jobjectArray JNICALL Java_io_github_humbleui_skija_Font__1n
     instance->getBounds(reinterpret_cast<SkGlyphID*>(glyphs), count, bounds.data(), paint);
     env->ReleaseShortArrayElements(glyphsArr, glyphs, 0);
 
-    jobjectArray res = env->NewObjectArray(count, skija::Rect::cls, nullptr);
+    jobjectArray res = env->NewObjectArray(count, types::Rect::cls, nullptr);
     for (int i = 0; i < count; ++i) {
-        skija::AutoLocal<jobject> boundsObj(env, skija::Rect::fromSkRect(env, bounds[i]));
+        skija::AutoLocal<jobject> boundsObj(env, types::Rect::fromSkRect(env, bounds[i]));
         env->SetObjectArrayElement(res, i, boundsObj.get());
     }
 
@@ -311,7 +311,7 @@ extern "C" JNIEXPORT jobjectArray JNICALL Java_io_github_humbleui_skija_Font__1n
     instance->getPos(reinterpret_cast<SkGlyphID*>(glyphs), count, positions.data(), {dx, dy});
     env->ReleaseShortArrayElements(glyphsArr, glyphs, 0);
 
-    return skija::Point::fromSkPoints(env, positions);
+    return types::Point::fromSkPoints(env, positions);
 }
 
 extern "C" JNIEXPORT jfloatArray JNICALL Java_io_github_humbleui_skija_Font__1nGetXPositions

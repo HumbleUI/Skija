@@ -14,8 +14,9 @@ def main():
 
   # Javac
   classpath = [
-    common.fetch_maven('org.projectlombok', 'lombok', '1.18.20'),
-    common.fetch_maven('org.jetbrains', 'annotations', '20.1.0')
+    common.fetch_maven('org.projectlombok', 'lombok', '1.18.22'),
+    common.fetch_maven('org.jetbrains', 'annotations', '20.1.0'),
+    common.fetch_maven('io.github.humbleui', 'types', '0.1.0')
   ]
 
   if args.jwm_dir:

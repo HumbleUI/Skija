@@ -2,7 +2,7 @@ package io.github.humbleui.skija.paragraph;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import io.github.humbleui.skija.Rect;
+import io.github.humbleui.types.Rect;
 
 @AllArgsConstructor
 @Data

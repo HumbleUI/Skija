@@ -4,6 +4,7 @@ import lombok.*;
 import org.jetbrains.annotations.*;
 import io.github.humbleui.skija.*;
 import io.github.humbleui.skija.impl.*;
+import io.github.humbleui.types.*;
 
 @lombok.Data
 public class RunInfo {

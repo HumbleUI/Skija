@@ -3,6 +3,7 @@ package io.github.humbleui.skija.svg;
 import lombok.*;
 import org.jetbrains.annotations.*;
 import io.github.humbleui.skija.*;
+import io.github.humbleui.types.*;
 
 @AllArgsConstructor @lombok.Data @With
 public class SVGLengthContext {

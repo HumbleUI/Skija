@@ -4,6 +4,7 @@ import java.lang.ref.*;
 import java.util.function.*;
 import org.jetbrains.annotations.*;
 import io.github.humbleui.skija.impl.*;
+import io.github.humbleui.types.*;
 
 public class PictureRecorder extends Managed {
     static { Library.staticLoad(); }

@@ -2,8 +2,10 @@ package io.github.humbleui.skija.examples.scenes;
 
 import java.util.*;
 import java.util.stream.*;
+import io.github.humbleui.types.*;
 import io.github.humbleui.skija.*;
 import io.github.humbleui.skija.shaper.*;
+import io.github.humbleui.types.*;
 
 public class DebugTextBlobHandler implements RunHandler, AutoCloseable {
     public final TextBlobBuilder _builder;

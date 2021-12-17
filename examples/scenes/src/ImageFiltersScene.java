@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 
 import io.github.humbleui.skija.*;
+import io.github.humbleui.types.*;
 
 public class ImageFiltersScene extends Scene {
     protected final Image image;

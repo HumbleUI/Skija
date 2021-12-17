@@ -40,7 +40,7 @@ extern "C" JNIEXPORT jboolean JNICALL Java_io_github_humbleui_skija_Region__1nIs
 
 extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_Region__1nGetBounds(JNIEnv* env, jclass jclass, jlong ptr) {
     SkRegion* instance = reinterpret_cast<SkRegion*>(static_cast<uintptr_t>(ptr));
-    return skija::IRect::fromSkIRect(env, instance->getBounds());
+    return types::IRect::fromSkIRect(env, instance->getBounds());
 }
 
 extern "C" JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_Region__1nComputeRegionComplexity(JNIEnv* env, jclass jclass, jlong ptr) {

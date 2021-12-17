@@ -2,6 +2,7 @@ package io.github.humbleui.skija.examples.scenes;
 
 import java.util.*;
 import io.github.humbleui.skija.*;
+import io.github.humbleui.types.*;
 
 public abstract class Scene {
     public static final Typeface inter = Typeface.makeFromFile(file("fonts/InterHinted-Regular.ttf"));

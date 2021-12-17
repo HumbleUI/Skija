@@ -73,7 +73,7 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Canvas__1nDrawRR
   (JNIEnv* env, jclass jclass, jlong canvasPtr, jfloat left, jfloat top, jfloat right, jfloat bottom, jfloatArray jradii, jlong paintPtr) {
     SkCanvas* canvas = reinterpret_cast<SkCanvas*>(static_cast<uintptr_t>(canvasPtr));
     SkPaint* paint = reinterpret_cast<SkPaint*>(static_cast<uintptr_t>(paintPtr));
-    canvas->drawRRect(skija::RRect::toSkRRect(env, left, top, right, bottom, jradii), *paint);
+    canvas->drawRRect(types::RRect::toSkRRect(env, left, top, right, bottom, jradii), *paint);
 }
 
 extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Canvas__1nDrawDRRect
@@ -83,8 +83,8 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Canvas__1nDrawDR
    jlong paintPtr) {
     SkCanvas* canvas = reinterpret_cast<SkCanvas*>(static_cast<uintptr_t>(canvasPtr));
     SkPaint* paint = reinterpret_cast<SkPaint*>(static_cast<uintptr_t>(paintPtr));
-    canvas->drawDRRect(skija::RRect::toSkRRect(env, ol, ot, oright, ob, ojradii),
-        skija::RRect::toSkRRect(env, il, it, ir, ib, ijradii), *paint);
+    canvas->drawDRRect(types::RRect::toSkRRect(env, ol, ot, oright, ob, ojradii),
+        types::RRect::toSkRRect(env, il, it, ir, ib, ijradii), *paint);
 }
 
 extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Canvas__1nDrawPath
@@ -247,7 +247,7 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Canvas__1nClipRe
 extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Canvas__1nClipRRect
   (JNIEnv* env, jclass jclass, jlong canvasPtr, jfloat left, jfloat top, jfloat right, jfloat bottom, jfloatArray jradii, jint mode, jboolean antiAlias) {
     SkCanvas* canvas = reinterpret_cast<SkCanvas*>(static_cast<uintptr_t>(canvasPtr));
-    canvas->clipRRect(skija::RRect::toSkRRect(env, left, top, right, bottom, jradii), static_cast<SkClipOp>(mode), antiAlias);
+    canvas->clipRRect(types::RRect::toSkRRect(env, left, top, right, bottom, jradii), static_cast<SkClipOp>(mode), antiAlias);
 }
 
 extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Canvas__1nClipPath

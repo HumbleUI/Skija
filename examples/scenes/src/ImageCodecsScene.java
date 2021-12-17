@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 import io.github.humbleui.skija.*;
+import io.github.humbleui.types.*;
 
 public class ImageCodecsScene extends Scene {
     public List<Pair<String, Image>> images = new ArrayList<>();

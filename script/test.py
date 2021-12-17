@@ -6,7 +6,7 @@ def main():
   parser.add_argument('--skija-version')
   (args, _) = parser.parse_known_args()
 
-  modulepath = []
+  modulepath = [common.fetch_maven('io.github.humbleui', 'types', '0.1.0')]
   if args.skija_version:
     modulepath += [
       common.fetch_maven('io.github.humbleui.skija', 'skija-shared', args.skija_version),

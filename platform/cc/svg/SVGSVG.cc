@@ -44,7 +44,7 @@ extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_svg_SVGSVG__1
   (JNIEnv* env, jclass jclass, jlong ptr) {
     SkSVGSVG* instance = reinterpret_cast<SkSVGSVG*>(static_cast<uintptr_t>(ptr));
     SkTLazy<SkSVGViewBoxType> viewBox = instance->getViewBox();
-    return viewBox.isValid() ? skija::Rect::fromSkRect(env, *viewBox.get()) : nullptr;
+    return viewBox.isValid() ? types::Rect::fromSkRect(env, *viewBox.get()) : nullptr;
 }
 
 extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_svg_SVGSVG__1nGetIntrinsicSize
@@ -52,7 +52,7 @@ extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_svg_SVGSVG__1
     SkSVGSVG* instance = reinterpret_cast<SkSVGSVG*>(static_cast<uintptr_t>(ptr));
     SkSVGLengthContext lc({width, height}, dpi);
     SkSize size = instance->intrinsicSize(lc);
-    return skija::Point::fromSkPoint(env, {size.width(), size.height()});
+    return types::Point::fromSkPoint(env, {size.width(), size.height()});
 }
 
 extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGSVG__1nSetX

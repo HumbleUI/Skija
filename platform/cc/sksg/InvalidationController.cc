@@ -30,7 +30,7 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_sksg_Invalidatio
 extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_sksg_InvalidationController__1nGetBounds
   (JNIEnv* env, jclass jclass, jlong ptr) {
     InvalidationController* instance = reinterpret_cast<InvalidationController*>(static_cast<uintptr_t>(ptr));
-    return skija::Rect::fromSkRect(env, instance->bounds());
+    return types::Rect::fromSkRect(env, instance->bounds());
 }
 
 extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_sksg_InvalidationController__1nReset

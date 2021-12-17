@@ -4,6 +4,7 @@ import java.lang.ref.*;
 import org.jetbrains.annotations.*;
 import io.github.humbleui.skija.*;
 import io.github.humbleui.skija.impl.*;
+import io.github.humbleui.types.*;
 
 public class TextBlobBuilderRunHandler<T> extends Managed implements RunHandler {
     static { Library.staticLoad(); }

@@ -2,7 +2,8 @@
   (:require
    [nrepl.server :as nrepl])
   (:import
-   [io.github.humbleui.skija BackendRenderTarget Canvas ColorSpace DirectContext FramebufferFormat Paint Rect Surface SurfaceColorFormat SurfaceOrigin]
+   [io.github.humbleui.skija BackendRenderTarget Canvas ColorSpace DirectContext FramebufferFormat Paint Surface SurfaceColorFormat SurfaceOrigin]
+   [io.github.humbleui.types Rect]
    [org.lwjgl.glfw Callbacks GLFW GLFWErrorCallback]
    [org.lwjgl.opengl GL GL11]
    [org.lwjgl.system MemoryUtil]))

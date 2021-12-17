@@ -3,6 +3,7 @@ package io.github.humbleui.skija;
 import java.lang.ref.*;
 import org.jetbrains.annotations.*;
 import io.github.humbleui.skija.impl.*;
+import io.github.humbleui.types.*;
 
 public class Canvas extends Managed {
     static { Library.staticLoad(); }

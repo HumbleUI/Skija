@@ -4,6 +4,7 @@ import java.lang.ref.*;
 import org.jetbrains.annotations.*;
 import io.github.humbleui.skija.*;
 import io.github.humbleui.skija.impl.*;
+import io.github.humbleui.types.*;
 
 public class Paragraph extends Managed {
     static { Library.staticLoad(); }

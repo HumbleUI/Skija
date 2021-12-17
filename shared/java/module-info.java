@@ -9,4 +9,5 @@ module io.github.humbleui.skija.shared {
 
     requires static lombok;
     requires static org.jetbrains.annotations;
+    requires io.github.humbleui.types;
 }

@@ -17,6 +17,8 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_impl_Library__1n
   (JNIEnv* env, jclass jclass) {
     env->EnsureLocalCapacity(64);
     java::onLoad(env);
+    types::onLoad(env);
+    java::lang::Throwable::exceptionThrown(env);
     skija::onLoad(env);
     skija::shaper::onLoad(env);
     skija::skottie::onLoad(env);
@@ -34,5 +36,6 @@ JNIEXPORT void JNICALL JNI_OnUnload(JavaVM* vm, void* reserved) {
     skija::skottie::onUnload(env);
     skija::shaper::onUnload(env);
     skija::onUnload(env);
+    types::onUnload(env);
     java::onUnload(env);
 }

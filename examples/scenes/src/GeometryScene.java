@@ -1,6 +1,7 @@
 package io.github.humbleui.skija.examples.scenes;
 
 import io.github.humbleui.skija.*;
+import io.github.humbleui.types.*;
 
 public class GeometryScene extends Scene {
     @Override

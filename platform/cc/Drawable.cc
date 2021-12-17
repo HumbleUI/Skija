@@ -29,7 +29,7 @@ protected:
     SkRect onGetBounds() override {
         skija::AutoLocal<jobject> rect(fEnv, fEnv->CallObjectMethod(fObject, skija::Drawable::onGetBounds));
         java::lang::Throwable::exceptionThrown(fEnv);
-        return *(skija::Rect::toSkRect(fEnv, rect.get()));
+        return *(types::Rect::toSkRect(fEnv, rect.get()));
     }
 
 private:

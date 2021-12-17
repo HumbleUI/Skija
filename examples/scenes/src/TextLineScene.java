@@ -5,6 +5,7 @@ import java.util.stream.*;
 import io.github.humbleui.skija.*;
 import io.github.humbleui.skija.shaper.*;
 import io.github.humbleui.skija.paragraph.*;
+import io.github.humbleui.types.*;
 
 public class TextLineScene extends Scene {
     private Paint fill = new Paint().setColor(0xFFCC3333);

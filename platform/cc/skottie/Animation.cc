@@ -100,5 +100,5 @@ extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_skottie_Anima
   (JNIEnv* env, jclass jclass, jlong ptr) {
     Animation* instance = reinterpret_cast<Animation*>(static_cast<uintptr_t>(ptr));
     const SkSize& size = instance->size();
-    return skija::Point::make(env, size.fWidth, size.fHeight);
+    return types::Point::make(env, size.fWidth, size.fHeight);
 }

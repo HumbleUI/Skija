@@ -1,6 +1,7 @@
 package io.github.humbleui.skija.examples.scenes;
 
 import io.github.humbleui.skija.*;
+import io.github.humbleui.types.*;
 import java.util.*;
 
 public class BitmapScene extends Scene {
@@ -120,6 +121,8 @@ public class BitmapScene extends Scene {
         target = target.intersect(screen);
         if (target == null) return;
 
+        if (target.getWidth() <= 20 || target.getHeight() <= 20)
+            return;
         IRect inner = IRect.makeXYWH(target.getLeft() + 10, target.getTop() + 10, target.getWidth() - 20, target.getHeight() - 20);
         if (inner == null) return;
 

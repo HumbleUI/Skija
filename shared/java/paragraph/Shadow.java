@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.With;
 
 import io.github.humbleui.skija.*;
+import io.github.humbleui.types.*;
 
 @AllArgsConstructor @Data @With
 public class Shadow {

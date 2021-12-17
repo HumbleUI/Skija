@@ -6,6 +6,7 @@ import java.nio.file.*;
 import java.util.stream.*;
 import io.github.humbleui.skija.*;
 import io.github.humbleui.skija.svg.*;
+import io.github.humbleui.types.*;
 
 public class SVGScalingScene extends Scene {
     public final Paint border = new Paint().setColor(0xFF3333CC).setMode(PaintMode.STROKE).setStrokeWidth(1);

@@ -187,28 +187,6 @@ namespace skija {
         jobject toJava(JNIEnv* env, const SkImageInfo& imageInfo);
     }
 
-    namespace IPoint {
-        extern jclass cls;
-        extern jmethodID ctor;
-        void onLoad(JNIEnv* env);
-        void onUnload(JNIEnv* env);
-        jobject make(JNIEnv* env, float x, float y);
-        jobject fromSkIPoint(JNIEnv* env, const SkIPoint& p);
-    }
-
-    namespace IRect {
-        extern jclass cls;
-        extern jmethodID makeLTRB;
-        extern jfieldID left;
-        extern jfieldID top;
-        extern jfieldID right;
-        extern jfieldID bottom;
-        void onLoad(JNIEnv* env);
-        void onUnload(JNIEnv* env);
-        jobject fromSkIRect(JNIEnv* env, const SkIRect& rect);
-        std::unique_ptr<SkIRect> toSkIRect(JNIEnv* env, jobject obj);
-    }
-
     namespace Path {
         extern jclass cls;
         extern jmethodID ctor;
@@ -228,18 +206,6 @@ namespace skija {
         void onUnload(JNIEnv* env);
     }
 
-    namespace Point {
-        extern jclass cls;
-        extern jmethodID ctor;
-        extern jfieldID x;
-        extern jfieldID y;
-        void onLoad(JNIEnv* env);
-        void onUnload(JNIEnv* env);
-        jobject make(JNIEnv* env, float x, float y);
-        jobject fromSkPoint(JNIEnv* env, const SkPoint& p);
-        jobjectArray fromSkPoints(JNIEnv* env, const std::vector<SkPoint>& ps);
-    }
-
     namespace PaintFilterCanvas {
         extern jmethodID onFilterId;
         void onLoad(JNIEnv* env);
@@ -247,38 +213,6 @@ namespace skija {
         bool onFilter(jobject obj, SkPaint& paint);
         jobject attach(JNIEnv* env, jobject obj);
         void detach(jobject obj);
-    }
-
-    namespace Rect {
-        extern jclass cls;
-        extern jmethodID makeLTRB;
-        extern jfieldID left;
-        extern jfieldID top;
-        extern jfieldID right;
-        extern jfieldID bottom;
-        void onLoad(JNIEnv* env);
-        void onUnload(JNIEnv* env);
-        std::unique_ptr<SkRect> toSkRect(JNIEnv* env, jobject rect);
-        jobject fromLTRB(JNIEnv* env, float left, float top, float right, float bottom);
-        jobject fromSkRect(JNIEnv* env, const SkRect& rect);
-    }
-
-    namespace RRect {
-        extern jclass cls;
-        extern jmethodID makeLTRB1;
-        extern jmethodID makeLTRB2;
-        extern jmethodID makeLTRB4;
-        extern jmethodID makeNinePatchLTRB;
-        extern jmethodID makeComplexLTRB;
-        extern jfieldID left;
-        extern jfieldID top;
-        extern jfieldID right;
-        extern jfieldID bottom;
-        extern jfieldID radii;
-        void onLoad(JNIEnv* env);
-        void onUnload(JNIEnv* env);
-        SkRRect toSkRRect(JNIEnv* env, jfloat left, jfloat top, jfloat right, jfloat bottom, jfloatArray jradii);
-        jobject fromSkRRect(JNIEnv* env, const SkRRect& rect);
     }
 
     namespace RSXform {
@@ -324,6 +258,77 @@ namespace skija {
         size_t from16To8(uint32_t i16);
         uint32_t from8To16(size_t i8);
     };
+}
+
+namespace types {
+    namespace IPoint {
+        extern jclass cls;
+        extern jmethodID ctor;
+        void onLoad(JNIEnv* env);
+        void onUnload(JNIEnv* env);
+        jobject make(JNIEnv* env, float x, float y);
+        jobject fromSkIPoint(JNIEnv* env, const SkIPoint& p);
+    }
+
+    namespace IRect {
+        extern jclass cls;
+        extern jmethodID makeLTRB;
+        extern jfieldID left;
+        extern jfieldID top;
+        extern jfieldID right;
+        extern jfieldID bottom;
+        void onLoad(JNIEnv* env);
+        void onUnload(JNIEnv* env);
+        jobject fromSkIRect(JNIEnv* env, const SkIRect& rect);
+        std::unique_ptr<SkIRect> toSkIRect(JNIEnv* env, jobject obj);
+    }
+
+    namespace Point {
+        extern jclass cls;
+        extern jmethodID ctor;
+        extern jfieldID x;
+        extern jfieldID y;
+        void onLoad(JNIEnv* env);
+        void onUnload(JNIEnv* env);
+        jobject make(JNIEnv* env, float x, float y);
+        jobject fromSkPoint(JNIEnv* env, const SkPoint& p);
+        jobjectArray fromSkPoints(JNIEnv* env, const std::vector<SkPoint>& ps);
+    }
+
+    namespace Rect {
+        extern jclass cls;
+        extern jmethodID makeLTRB;
+        extern jfieldID left;
+        extern jfieldID top;
+        extern jfieldID right;
+        extern jfieldID bottom;
+        void onLoad(JNIEnv* env);
+        void onUnload(JNIEnv* env);
+        std::unique_ptr<SkRect> toSkRect(JNIEnv* env, jobject rect);
+        jobject fromLTRB(JNIEnv* env, float left, float top, float right, float bottom);
+        jobject fromSkRect(JNIEnv* env, const SkRect& rect);
+    }
+
+    namespace RRect {
+        extern jclass cls;
+        extern jmethodID makeLTRB1;
+        extern jmethodID makeLTRB2;
+        extern jmethodID makeLTRB4;
+        extern jmethodID makeNinePatchLTRB;
+        extern jmethodID makeComplexLTRB;
+        extern jfieldID left;
+        extern jfieldID top;
+        extern jfieldID right;
+        extern jfieldID bottom;
+        extern jfieldID radii;
+        void onLoad(JNIEnv* env);
+        void onUnload(JNIEnv* env);
+        SkRRect toSkRRect(JNIEnv* env, jfloat left, jfloat top, jfloat right, jfloat bottom, jfloatArray jradii);
+        jobject fromSkRRect(JNIEnv* env, const SkRRect& rect);
+    }
+
+    void onLoad(JNIEnv* env);
+    void onUnload(JNIEnv* env);
 }
 
 std::unique_ptr<SkMatrix> skMatrix(JNIEnv* env, jfloatArray arr);

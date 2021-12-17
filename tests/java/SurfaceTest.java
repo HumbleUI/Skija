@@ -4,7 +4,7 @@ import static io.github.humbleui.skija.test.runner.TestRunner.*;
 
 import io.github.humbleui.skija.Bitmap;
 import io.github.humbleui.skija.ContentChangeMode;
-import io.github.humbleui.skija.IRect;
+import io.github.humbleui.types.IRect;
 import io.github.humbleui.skija.ImageInfo;
 import io.github.humbleui.skija.Surface;
 import io.github.humbleui.skija.test.runner.*;

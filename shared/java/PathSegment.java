@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.util.Objects;
+import io.github.humbleui.types.*;
 
 @AllArgsConstructor
 @Getter

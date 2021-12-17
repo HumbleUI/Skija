@@ -10,6 +10,7 @@ import io.github.humbleui.skija.*;
 import io.github.humbleui.skija.resources.*;
 import io.github.humbleui.skija.sksg.*;
 import io.github.humbleui.skija.skottie.*;
+import io.github.humbleui.types.*;
 
 public class SkottieScene extends Scene {
     private Animation animation;

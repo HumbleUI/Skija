@@ -2,6 +2,7 @@ package io.github.humbleui.skija;
 
 import lombok.Data;
 import org.jetbrains.annotations.*;
+import io.github.humbleui.types.*;
 
 /** 
   * <p>Matrix holds a 3x3 matrix for transforming coordinates. This allows mapping

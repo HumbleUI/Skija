@@ -5,6 +5,7 @@ import java.nio.*;
 import lombok.*;
 import org.jetbrains.annotations.*;
 import io.github.humbleui.skija.impl.*;
+import io.github.humbleui.types.*;
 
 public class Bitmap extends Managed implements IHasImageInfo {
     static { Library.staticLoad(); }

@@ -4,6 +4,7 @@ import java.lang.ref.*;
 import lombok.*;
 import org.jetbrains.annotations.*;
 import io.github.humbleui.skija.impl.*;
+import io.github.humbleui.types.*;
 
 public class Codec extends Managed implements IHasImageInfo {
     static { Library.staticLoad(); }

@@ -44,7 +44,7 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Picture__1nPlayb
 extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_Picture__1nGetCullRect
   (JNIEnv* env, jclass jclass, jlong ptr) {
     SkPicture* instance = reinterpret_cast<SkPicture*>(static_cast<uintptr_t>(ptr));
-    return skija::Rect::fromSkRect(env, instance->cullRect());
+    return types::Rect::fromSkRect(env, instance->cullRect());
 }
 
 extern "C" JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_Picture__1nGetUniqueId
@@ -86,7 +86,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Picture__1nMake
     SkTileMode tmy = static_cast<SkTileMode>(tmyValue);
     SkFilterMode filterMode = static_cast<SkFilterMode>(filterModeValue);
     std::unique_ptr<SkMatrix> localMatrix = skMatrix(env, localMatrixArr);
-    std::unique_ptr<SkRect> tileRect = skija::Rect::toSkRect(env, tileRectObj);
+    std::unique_ptr<SkRect> tileRect = types::Rect::toSkRect(env, tileRectObj);
     SkShader* shader = instance->makeShader(tmx, tmy, filterMode, localMatrix.get(), tileRect.get()).release();
     return reinterpret_cast<jlong>(shader);
 }

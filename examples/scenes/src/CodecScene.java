@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.*;
 import java.util.stream.*;
 import io.github.humbleui.skija.*;
+import io.github.humbleui.types.*;
 
 public class CodecScene extends Scene {
     Paint stroke = new Paint().setColor(0x80CC3333).setMode(PaintMode.STROKE).setStrokeWidth(1);

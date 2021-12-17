@@ -3,6 +3,7 @@ package io.github.humbleui.skija.examples.scenes;
 import java.util.*;
 import io.github.humbleui.skija.*;
 import io.github.humbleui.skija.shaper.*;
+import io.github.humbleui.types.*;
 
 public class FontScene extends Scene {
     public Typeface _inter;

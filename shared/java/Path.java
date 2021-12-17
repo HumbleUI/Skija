@@ -3,6 +3,7 @@ package io.github.humbleui.skija;
 import java.lang.ref.*;
 import org.jetbrains.annotations.*;
 import io.github.humbleui.skija.impl.*;
+import io.github.humbleui.types.*;
 
 /**
  * <p>Path contain geometry. Path may be empty, or contain one or more verbs that

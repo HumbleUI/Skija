@@ -3,6 +3,7 @@ package io.github.humbleui.skija.shaper;
 import org.jetbrains.annotations.*;
 import io.github.humbleui.skija.*;
 import io.github.humbleui.skija.impl.*;
+import io.github.humbleui.types.*;
 
 public interface RunHandler {
     /**

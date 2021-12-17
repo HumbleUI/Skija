@@ -1,3 +1,9 @@
+# WIP
+
+Changed:
+
+- [ BREAKING ] Moved IPoint, IRange, IRect, Point, Point3, Rect, RRect to `io.github.humbleui.types`
+
 # 0.96.0 - Nov 3, 2021
 
 Changed:

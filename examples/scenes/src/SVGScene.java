@@ -7,6 +7,7 @@ import java.util.stream.*;
 import lombok.*;
 import io.github.humbleui.skija.*;
 import io.github.humbleui.skija.svg.*;
+import io.github.humbleui.types.*;
 
 public class SVGScene extends Scene {
     public Thread _thread = null;

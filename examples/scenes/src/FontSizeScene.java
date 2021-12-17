@@ -2,6 +2,7 @@ package io.github.humbleui.skija.examples.scenes;
 
 import java.util.*;
 import io.github.humbleui.skija.*;
+import io.github.humbleui.types.*;
 
 public class FontSizeScene extends Scene {
     Paint grayStroke  = new Paint().setColor(0x40808080).setMode(PaintMode.STROKE).setStrokeWidth(1);

@@ -4,6 +4,7 @@ import java.lang.ref.*;
 import java.util.*;
 import org.jetbrains.annotations.*;
 import io.github.humbleui.skija.impl.*;
+import io.github.humbleui.types.*;
 
 public class Typeface extends RefCnt {
     static { Library.staticLoad(); }

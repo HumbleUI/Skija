@@ -148,7 +148,7 @@ namespace skija {
         void onLoad(JNIEnv* env) {
             jclass local = env->FindClass("io/github/humbleui/skija/AnimationFrameInfo");
             cls  = static_cast<jclass>(env->NewGlobalRef(local));
-            ctor = env->GetMethodID(cls, "<init>", "(IIZIZIILio/github/humbleui/skija/IRect;)V");
+            ctor = env->GetMethodID(cls, "<init>", "(IIZIZIILio/github/humbleui/types/IRect;)V");
         }
 
         void onUnload(JNIEnv* env) {
@@ -173,7 +173,7 @@ namespace skija {
                                          i.fHasAlphaWithinBounds,
                                          static_cast<jint>(i.fDisposalMethod),
                                          static_cast<jint>(blend),
-                                         IRect::fromSkIRect(env, i.fFrameRect));
+                                         types::IRect::fromSkIRect(env, i.fFrameRect));
             return java::lang::Throwable::exceptionThrown(env) ? nullptr : res;
         }
     }
@@ -202,7 +202,7 @@ namespace skija {
             jclass local = env->FindClass("io/github/humbleui/skija/Drawable");
             cls = static_cast<jclass>(env->NewGlobalRef(local));
             onDraw = env->GetMethodID(cls, "_onDraw", "(J)V");
-            onGetBounds = env->GetMethodID(cls, "onGetBounds", "()Lio/github/humbleui/skija/Rect;");
+            onGetBounds = env->GetMethodID(cls, "onGetBounds", "()Lio/github/humbleui/types/Rect;");
         }
 
         void onUnload(JNIEnv* env) {
@@ -377,70 +377,6 @@ namespace skija {
         }
     }
 
-    namespace IPoint {
-        jclass    cls;
-        jmethodID ctor;
-
-        void onLoad(JNIEnv* env) {
-            jclass local = env->FindClass("io/github/humbleui/skija/IPoint");
-            cls  = static_cast<jclass>(env->NewGlobalRef(local));
-            ctor = env->GetMethodID(cls, "<init>", "(II)V");
-        }
-
-        void onUnload(JNIEnv* env) {
-            env->DeleteGlobalRef(cls);
-        }
-
-        jobject make(JNIEnv* env, jint x, jint y) {
-            return env->NewObject(cls, ctor, x, y);
-        }
-
-        jobject fromSkIPoint(JNIEnv* env, const SkIPoint& p) {
-            return env->NewObject(cls, ctor, p.fX, p.fY);
-        }
-    }
-
-    namespace IRect {
-        jclass cls;
-        jmethodID makeLTRB;
-        jfieldID left;
-        jfieldID top;
-        jfieldID right;
-        jfieldID bottom;    
-
-        void onLoad(JNIEnv* env) {
-            jclass local = env->FindClass("io/github/humbleui/skija/IRect");
-            cls      = static_cast<jclass>(env->NewGlobalRef(local));
-            makeLTRB = env->GetStaticMethodID(cls, "makeLTRB", "(IIII)Lio/github/humbleui/skija/IRect;");
-            left     = env->GetFieldID(cls, "_left",   "I");
-            top      = env->GetFieldID(cls, "_top",    "I");
-            right    = env->GetFieldID(cls, "_right",  "I");
-            bottom   = env->GetFieldID(cls, "_bottom", "I");
-        }
-
-        void onUnload(JNIEnv* env) {
-            env->DeleteGlobalRef(cls);
-        }
-
-        jobject fromSkIRect(JNIEnv* env, const SkIRect& rect) {
-            jobject res = env->CallStaticObjectMethod(cls, makeLTRB, rect.fLeft, rect.fTop, rect.fRight, rect.fBottom);
-            return java::lang::Throwable::exceptionThrown(env) ? nullptr : res;
-        }
-
-        std::unique_ptr<SkIRect> toSkIRect(JNIEnv* env, jobject obj) {
-            if (obj == nullptr)
-                return std::unique_ptr<SkIRect>(nullptr);
-            else {
-                return std::unique_ptr<SkIRect>(new SkIRect{
-                    env->GetIntField(obj, left), 
-                    env->GetIntField(obj, top), 
-                    env->GetIntField(obj, right), 
-                    env->GetIntField(obj, bottom)
-                });
-            }
-        }
-    }
-
     namespace Path {
         jclass cls;
         jmethodID ctor;
@@ -481,42 +417,6 @@ namespace skija {
         }
     }
 
-    namespace Point {
-        jclass    cls;
-        jmethodID ctor;
-        jfieldID x;
-        jfieldID y;
-
-        void onLoad(JNIEnv* env) {
-            jclass local = env->FindClass("io/github/humbleui/skija/Point");
-            cls  = static_cast<jclass>(env->NewGlobalRef(local));
-            ctor = env->GetMethodID(cls, "<init>", "(FF)V");
-            x = env->GetFieldID(cls, "_x", "F");
-            y = env->GetFieldID(cls, "_y", "F");
-        }
-
-        void onUnload(JNIEnv* env) {
-            env->DeleteGlobalRef(cls);
-        }
-
-        jobject make(JNIEnv* env, float x, float y) {
-            return env->NewObject(cls, ctor, x, y);
-        }
-
-        jobject fromSkPoint(JNIEnv* env, const SkPoint& p) {
-            return env->NewObject(cls, ctor, p.fX, p.fY);
-        }
-
-        jobjectArray fromSkPoints(JNIEnv* env, const std::vector<SkPoint>& ps) {
-            jobjectArray res = env->NewObjectArray((jsize) ps.size(), cls, nullptr);
-            for (int i = 0; i < ps.size(); ++i) {
-                skija::AutoLocal<jobject> pointObj(env, fromSkPoint(env, ps[i]));
-                env->SetObjectArrayElement(res, i, pointObj.get());
-            }
-            return res;
-        }
-    }
-
     namespace PaintFilterCanvas {
         JavaVM* _vm;
         jmethodID onFilterId;
@@ -547,155 +447,6 @@ namespace skija {
             _vm->AttachCurrentThread((void **) &env, NULL);
             env->DeleteGlobalRef(obj);
             _vm->DetachCurrentThread();
-        }
-    }
-
-    namespace Rect {
-        jclass cls;
-        jmethodID makeLTRB;
-        jfieldID left;
-        jfieldID top;
-        jfieldID right;
-        jfieldID bottom;
-
-        void onLoad(JNIEnv* env) {
-            jclass local = env->FindClass("io/github/humbleui/skija/Rect");
-            cls      = static_cast<jclass>(env->NewGlobalRef(local));
-            makeLTRB = env->GetStaticMethodID(cls, "makeLTRB", "(FFFF)Lio/github/humbleui/skija/Rect;");
-            left     = env->GetFieldID(cls, "_left",   "F");
-            top      = env->GetFieldID(cls, "_top",    "F");
-            right    = env->GetFieldID(cls, "_right",  "F");
-            bottom   = env->GetFieldID(cls, "_bottom", "F");
-        }
-
-        void onUnload(JNIEnv* env) {
-            env->DeleteGlobalRef(cls);
-        }
-
-        std::unique_ptr<SkRect> toSkRect(JNIEnv* env, jobject rectObj) {
-            if (rectObj == nullptr)
-                return std::unique_ptr<SkRect>(nullptr);
-            else {
-                SkRect* rect = new SkRect();
-                rect->setLTRB(env->GetFloatField(rectObj, left), 
-                              env->GetFloatField(rectObj, top), 
-                              env->GetFloatField(rectObj, right), 
-                              env->GetFloatField(rectObj, bottom));
-                if (java::lang::Throwable::exceptionThrown(env))
-                    return std::unique_ptr<SkRect>(nullptr);
-                return std::unique_ptr<SkRect>(rect);
-            }
-        }
-
-        jobject fromLTRB(JNIEnv* env, float left, float top, float right, float bottom) {
-            jobject res = env->CallStaticObjectMethod(cls, makeLTRB, left, top, right, bottom);
-            return java::lang::Throwable::exceptionThrown(env) ? nullptr : res;
-        }
-
-        jobject fromSkRect(JNIEnv* env, const SkRect& rect) {
-            return fromLTRB(env, rect.fLeft, rect.fTop, rect.fRight, rect.fBottom);
-        }
-    }
-
-    namespace RRect {
-        jclass cls;
-        jmethodID makeLTRB1;
-        jmethodID makeLTRB2;
-        jmethodID makeLTRB4;
-        jmethodID makeNinePatchLTRB;
-        jmethodID makeComplexLTRB;
-        jfieldID left;
-        jfieldID top;
-        jfieldID right;
-        jfieldID bottom;
-        jfieldID radii;
-
-        void onLoad(JNIEnv* env) {
-            jclass local = env->FindClass("io/github/humbleui/skija/RRect");
-            cls      = static_cast<jclass>(env->NewGlobalRef(local));
-            makeLTRB1 = env->GetStaticMethodID(cls, "makeLTRB", "(FFFFF)Lio/github/humbleui/skija/RRect;");
-            makeLTRB2 = env->GetStaticMethodID(cls, "makeLTRB", "(FFFFFF)Lio/github/humbleui/skija/RRect;");
-            makeLTRB4 = env->GetStaticMethodID(cls, "makeLTRB", "(FFFFFFFF)Lio/github/humbleui/skija/RRect;");
-            makeNinePatchLTRB = env->GetStaticMethodID(cls, "makeNinePatchLTRB", "(FFFFFFFF)Lio/github/humbleui/skija/RRect;");
-            makeComplexLTRB = env->GetStaticMethodID(cls, "makeComplexLTRB", "(FFFF[F)Lio/github/humbleui/skija/RRect;");
-            left     = env->GetFieldID(cls, "_left",   "F");
-            top      = env->GetFieldID(cls, "_top",    "F");
-            right    = env->GetFieldID(cls, "_right",  "F");
-            bottom   = env->GetFieldID(cls, "_bottom", "F");
-            radii    = env->GetFieldID(cls, "_radii",  "[F");
-        }
-
-        void onUnload(JNIEnv* env) {
-            env->DeleteGlobalRef(cls);
-        }
-
-        SkRRect toSkRRect(JNIEnv* env, jfloat left, jfloat top, jfloat right, jfloat bottom, jfloatArray jradii) {
-            SkRect rect {left, top, right, bottom};
-            SkRRect rrect = SkRRect::MakeEmpty();
-            jfloat* radii = env->GetFloatArrayElements(jradii, 0);
-            switch (env->GetArrayLength(jradii)) {
-                case 1:
-                    rrect.setRectXY(rect, radii[0], radii[0]);
-                    break;
-                case 2:
-                    rrect.setRectXY(rect, radii[0], radii[1]);
-                    break;
-                case 4: {
-                    SkVector vradii[4] = {{radii[0], radii[0]}, {radii[1], radii[1]}, {radii[2], radii[2]}, {radii[3], radii[3]}};
-                    rrect.setRectRadii(rect, vradii);
-                    break;
-                }
-                case 8: {
-                    SkVector vradii[4] = {{radii[0], radii[1]}, {radii[2], radii[3]}, {radii[4], radii[5]}, {radii[6], radii[7]}};
-                    rrect.setRectRadii(rect, vradii);
-                    break;
-                }
-            }
-            env->ReleaseFloatArrayElements(jradii, radii, 0);
-            return rrect;
-        }
-
-        jobject fromSkRRect(JNIEnv* env, const SkRRect& rr) {
-            const SkRect& r = rr.rect();
-            switch (rr.getType()) {
-                case SkRRect::Type::kEmpty_Type:
-                case SkRRect::Type::kRect_Type:
-                    return env->CallStaticObjectMethod(cls, makeLTRB1, r.fLeft, r.fTop, r.fRight, r.fBottom, 0);
-
-                case SkRRect::Type::kOval_Type:
-                case SkRRect::Type::kSimple_Type: {
-                    float rx = rr.getSimpleRadii().fX;
-                    float ry = rr.getSimpleRadii().fY;
-                    if (SkScalarNearlyEqual(rx, ry))
-                        return env->CallStaticObjectMethod(cls, makeLTRB1, r.fLeft, r.fTop, r.fRight, r.fBottom, rx);
-                    else
-                        return env->CallStaticObjectMethod(cls, makeLTRB2, r.fLeft, r.fTop, r.fRight, r.fBottom, rx, ry);
-                }
-
-                case SkRRect::Type::kNinePatch_Type:
-                    return env->CallStaticObjectMethod(cls, makeNinePatchLTRB,
-                        r.fLeft, r.fTop, r.fRight, r.fBottom,
-                        rr.radii(SkRRect::Corner::kUpperLeft_Corner).fX,
-                        rr.radii(SkRRect::Corner::kUpperLeft_Corner).fY,
-                        rr.radii(SkRRect::Corner::kLowerRight_Corner).fX,
-                        rr.radii(SkRRect::Corner::kLowerRight_Corner).fY);
-
-                case SkRRect::Type::kComplex_Type:
-                    std::vector<float> radii = {
-                        rr.radii(SkRRect::Corner::kUpperLeft_Corner).fX,
-                        rr.radii(SkRRect::Corner::kUpperLeft_Corner).fY,
-                        rr.radii(SkRRect::Corner::kUpperRight_Corner).fX,
-                        rr.radii(SkRRect::Corner::kUpperRight_Corner).fY,
-                        rr.radii(SkRRect::Corner::kLowerRight_Corner).fX,
-                        rr.radii(SkRRect::Corner::kLowerRight_Corner).fY,
-                        rr.radii(SkRRect::Corner::kLowerLeft_Corner).fX,
-                        rr.radii(SkRRect::Corner::kLowerLeft_Corner).fY
-                    };
-
-                    return env->CallStaticObjectMethod(cls, makeComplexLTRB, r.fLeft, r.fTop, r.fRight, r.fBottom, javaFloatArray(env, radii));
-            }
-
-            return nullptr;
         }
     }
 
@@ -780,14 +531,9 @@ namespace skija {
         FontVariation::onLoad(env);
         FontVariationAxis::onLoad(env);
         ImageInfo::onLoad(env);
-        IPoint::onLoad(env);
-        IRect::onLoad(env);
         Path::onLoad(env);
         PathSegment::onLoad(env);
-        Point::onLoad(env);
         PaintFilterCanvas::onLoad(env);
-        Rect::onLoad(env);
-        RRect::onLoad(env);
         RSXform::onLoad(env);
         SurfaceProps::onLoad(env);
         
@@ -796,14 +542,9 @@ namespace skija {
 
     void onUnload(JNIEnv* env) {
         RSXform::onUnload(env);
-        RRect::onUnload(env);
-        Rect::onUnload(env);
         PaintFilterCanvas::onUnload(env);
-        Point::onUnload(env);
         PathSegment::onUnload(env);
         Path::onUnload(env);
-        IRect::onUnload(env);
-        IPoint::onUnload(env);
         ImageInfo::onUnload(env);
         FontVariationAxis::onUnload(env);
         FontVariation::onUnload(env);
@@ -815,6 +556,274 @@ namespace skija {
         AnimationFrameInfo::onUnload(env);
     }
 }
+
+namespace types {
+    namespace IPoint {
+        jclass    cls;
+        jmethodID ctor;
+
+        void onLoad(JNIEnv* env) {
+            jclass local = env->FindClass("io/github/humbleui/types/IPoint");
+            cls  = static_cast<jclass>(env->NewGlobalRef(local));
+            ctor = env->GetMethodID(cls, "<init>", "(II)V");
+        }
+
+        void onUnload(JNIEnv* env) {
+            env->DeleteGlobalRef(cls);
+        }
+
+        jobject make(JNIEnv* env, jint x, jint y) {
+            return env->NewObject(cls, ctor, x, y);
+        }
+
+        jobject fromSkIPoint(JNIEnv* env, const SkIPoint& p) {
+            return env->NewObject(cls, ctor, p.fX, p.fY);
+        }
+    }
+
+    namespace IRect {
+        jclass cls;
+        jmethodID makeLTRB;
+        jfieldID left;
+        jfieldID top;
+        jfieldID right;
+        jfieldID bottom;    
+
+        void onLoad(JNIEnv* env) {
+            jclass local = env->FindClass("io/github/humbleui/types/IRect");
+            cls      = static_cast<jclass>(env->NewGlobalRef(local));
+            makeLTRB = env->GetStaticMethodID(cls, "makeLTRB", "(IIII)Lio/github/humbleui/types/IRect;");
+            left     = env->GetFieldID(cls, "_left",   "I");
+            top      = env->GetFieldID(cls, "_top",    "I");
+            right    = env->GetFieldID(cls, "_right",  "I");
+            bottom   = env->GetFieldID(cls, "_bottom", "I");
+        }
+
+        void onUnload(JNIEnv* env) {
+            env->DeleteGlobalRef(cls);
+        }
+
+        jobject fromSkIRect(JNIEnv* env, const SkIRect& rect) {
+            jobject res = env->CallStaticObjectMethod(cls, makeLTRB, rect.fLeft, rect.fTop, rect.fRight, rect.fBottom);
+            return java::lang::Throwable::exceptionThrown(env) ? nullptr : res;
+        }
+
+        std::unique_ptr<SkIRect> toSkIRect(JNIEnv* env, jobject obj) {
+            if (obj == nullptr)
+                return std::unique_ptr<SkIRect>(nullptr);
+            else {
+                return std::unique_ptr<SkIRect>(new SkIRect{
+                    env->GetIntField(obj, left), 
+                    env->GetIntField(obj, top), 
+                    env->GetIntField(obj, right), 
+                    env->GetIntField(obj, bottom)
+                });
+            }
+        }
+    }
+
+    namespace Point {
+        jclass    cls;
+        jmethodID ctor;
+        jfieldID x;
+        jfieldID y;
+
+        void onLoad(JNIEnv* env) {
+            jclass local = env->FindClass("io/github/humbleui/types/Point");
+            cls  = static_cast<jclass>(env->NewGlobalRef(local));
+            ctor = env->GetMethodID(cls, "<init>", "(FF)V");
+            x = env->GetFieldID(cls, "_x", "F");
+            y = env->GetFieldID(cls, "_y", "F");
+        }
+
+        void onUnload(JNIEnv* env) {
+            env->DeleteGlobalRef(cls);
+        }
+
+        jobject make(JNIEnv* env, float x, float y) {
+            return env->NewObject(cls, ctor, x, y);
+        }
+
+        jobject fromSkPoint(JNIEnv* env, const SkPoint& p) {
+            return env->NewObject(cls, ctor, p.fX, p.fY);
+        }
+
+        jobjectArray fromSkPoints(JNIEnv* env, const std::vector<SkPoint>& ps) {
+            jobjectArray res = env->NewObjectArray((jsize) ps.size(), cls, nullptr);
+            for (int i = 0; i < ps.size(); ++i) {
+                skija::AutoLocal<jobject> pointObj(env, fromSkPoint(env, ps[i]));
+                env->SetObjectArrayElement(res, i, pointObj.get());
+            }
+            return res;
+        }
+    }
+
+    namespace Rect {
+        jclass cls;
+        jmethodID makeLTRB;
+        jfieldID left;
+        jfieldID top;
+        jfieldID right;
+        jfieldID bottom;
+
+        void onLoad(JNIEnv* env) {
+            jclass local = env->FindClass("io/github/humbleui/types/Rect");
+            cls      = static_cast<jclass>(env->NewGlobalRef(local));
+            makeLTRB = env->GetStaticMethodID(cls, "makeLTRB", "(FFFF)Lio/github/humbleui/types/Rect;");
+            left     = env->GetFieldID(cls, "_left",   "F");
+            top      = env->GetFieldID(cls, "_top",    "F");
+            right    = env->GetFieldID(cls, "_right",  "F");
+            bottom   = env->GetFieldID(cls, "_bottom", "F");
+        }
+
+        void onUnload(JNIEnv* env) {
+            env->DeleteGlobalRef(cls);
+        }
+
+        std::unique_ptr<SkRect> toSkRect(JNIEnv* env, jobject rectObj) {
+            if (rectObj == nullptr)
+                return std::unique_ptr<SkRect>(nullptr);
+            else {
+                SkRect* rect = new SkRect();
+                rect->setLTRB(env->GetFloatField(rectObj, left), 
+                              env->GetFloatField(rectObj, top), 
+                              env->GetFloatField(rectObj, right), 
+                              env->GetFloatField(rectObj, bottom));
+                if (java::lang::Throwable::exceptionThrown(env))
+                    return std::unique_ptr<SkRect>(nullptr);
+                return std::unique_ptr<SkRect>(rect);
+            }
+        }
+
+        jobject fromLTRB(JNIEnv* env, float left, float top, float right, float bottom) {
+            jobject res = env->CallStaticObjectMethod(cls, makeLTRB, left, top, right, bottom);
+            return java::lang::Throwable::exceptionThrown(env) ? nullptr : res;
+        }
+
+        jobject fromSkRect(JNIEnv* env, const SkRect& rect) {
+            return fromLTRB(env, rect.fLeft, rect.fTop, rect.fRight, rect.fBottom);
+        }
+    }
+
+    namespace RRect {
+        jclass cls;
+        jmethodID makeLTRB1;
+        jmethodID makeLTRB2;
+        jmethodID makeLTRB4;
+        jmethodID makeNinePatchLTRB;
+        jmethodID makeComplexLTRB;
+        jfieldID left;
+        jfieldID top;
+        jfieldID right;
+        jfieldID bottom;
+        jfieldID radii;
+
+        void onLoad(JNIEnv* env) {
+            jclass local = env->FindClass("io/github/humbleui/types/RRect");
+            cls      = static_cast<jclass>(env->NewGlobalRef(local));
+            makeLTRB1 = env->GetStaticMethodID(cls, "makeLTRB", "(FFFFF)Lio/github/humbleui/types/RRect;");
+            makeLTRB2 = env->GetStaticMethodID(cls, "makeLTRB", "(FFFFFF)Lio/github/humbleui/types/RRect;");
+            makeLTRB4 = env->GetStaticMethodID(cls, "makeLTRB", "(FFFFFFFF)Lio/github/humbleui/types/RRect;");
+            makeNinePatchLTRB = env->GetStaticMethodID(cls, "makeNinePatchLTRB", "(FFFFFFFF)Lio/github/humbleui/types/RRect;");
+            makeComplexLTRB = env->GetStaticMethodID(cls, "makeComplexLTRB", "(FFFF[F)Lio/github/humbleui/types/RRect;");
+            left     = env->GetFieldID(cls, "_left",   "F");
+            top      = env->GetFieldID(cls, "_top",    "F");
+            right    = env->GetFieldID(cls, "_right",  "F");
+            bottom   = env->GetFieldID(cls, "_bottom", "F");
+            radii    = env->GetFieldID(cls, "_radii",  "[F");
+        }
+
+        void onUnload(JNIEnv* env) {
+            env->DeleteGlobalRef(cls);
+        }
+
+        SkRRect toSkRRect(JNIEnv* env, jfloat left, jfloat top, jfloat right, jfloat bottom, jfloatArray jradii) {
+            SkRect rect {left, top, right, bottom};
+            SkRRect rrect = SkRRect::MakeEmpty();
+            jfloat* radii = env->GetFloatArrayElements(jradii, 0);
+            switch (env->GetArrayLength(jradii)) {
+                case 1:
+                    rrect.setRectXY(rect, radii[0], radii[0]);
+                    break;
+                case 2:
+                    rrect.setRectXY(rect, radii[0], radii[1]);
+                    break;
+                case 4: {
+                    SkVector vradii[4] = {{radii[0], radii[0]}, {radii[1], radii[1]}, {radii[2], radii[2]}, {radii[3], radii[3]}};
+                    rrect.setRectRadii(rect, vradii);
+                    break;
+                }
+                case 8: {
+                    SkVector vradii[4] = {{radii[0], radii[1]}, {radii[2], radii[3]}, {radii[4], radii[5]}, {radii[6], radii[7]}};
+                    rrect.setRectRadii(rect, vradii);
+                    break;
+                }
+            }
+            env->ReleaseFloatArrayElements(jradii, radii, 0);
+            return rrect;
+        }
+
+        jobject fromSkRRect(JNIEnv* env, const SkRRect& rr) {
+            const SkRect& r = rr.rect();
+            switch (rr.getType()) {
+                case SkRRect::Type::kEmpty_Type:
+                case SkRRect::Type::kRect_Type:
+                    return env->CallStaticObjectMethod(cls, makeLTRB1, r.fLeft, r.fTop, r.fRight, r.fBottom, 0);
+
+                case SkRRect::Type::kOval_Type:
+                case SkRRect::Type::kSimple_Type: {
+                    float rx = rr.getSimpleRadii().fX;
+                    float ry = rr.getSimpleRadii().fY;
+                    if (SkScalarNearlyEqual(rx, ry))
+                        return env->CallStaticObjectMethod(cls, makeLTRB1, r.fLeft, r.fTop, r.fRight, r.fBottom, rx);
+                    else
+                        return env->CallStaticObjectMethod(cls, makeLTRB2, r.fLeft, r.fTop, r.fRight, r.fBottom, rx, ry);
+                }
+
+                case SkRRect::Type::kNinePatch_Type:
+                    return env->CallStaticObjectMethod(cls, makeNinePatchLTRB,
+                        r.fLeft, r.fTop, r.fRight, r.fBottom,
+                        rr.radii(SkRRect::Corner::kUpperLeft_Corner).fX,
+                        rr.radii(SkRRect::Corner::kUpperLeft_Corner).fY,
+                        rr.radii(SkRRect::Corner::kLowerRight_Corner).fX,
+                        rr.radii(SkRRect::Corner::kLowerRight_Corner).fY);
+
+                case SkRRect::Type::kComplex_Type:
+                    std::vector<float> radii = {
+                        rr.radii(SkRRect::Corner::kUpperLeft_Corner).fX,
+                        rr.radii(SkRRect::Corner::kUpperLeft_Corner).fY,
+                        rr.radii(SkRRect::Corner::kUpperRight_Corner).fX,
+                        rr.radii(SkRRect::Corner::kUpperRight_Corner).fY,
+                        rr.radii(SkRRect::Corner::kLowerRight_Corner).fX,
+                        rr.radii(SkRRect::Corner::kLowerRight_Corner).fY,
+                        rr.radii(SkRRect::Corner::kLowerLeft_Corner).fX,
+                        rr.radii(SkRRect::Corner::kLowerLeft_Corner).fY
+                    };
+
+                    return env->CallStaticObjectMethod(cls, makeComplexLTRB, r.fLeft, r.fTop, r.fRight, r.fBottom, javaFloatArray(env, radii));
+            }
+
+            return nullptr;
+        }
+    }
+
+    void onLoad(JNIEnv* env) {
+        IPoint::onLoad(env);
+        IRect::onLoad(env);
+        Point::onLoad(env);
+        Rect::onLoad(env);
+        RRect::onLoad(env);
+    }
+
+    void onUnload(JNIEnv* env) {
+        IPoint::onUnload(env);
+        IRect::onUnload(env);
+        Point::onUnload(env);
+        Rect::onUnload(env);
+        RRect::onUnload(env);
+    }
+}
+
 std::unique_ptr<SkMatrix> skMatrix(JNIEnv* env, jfloatArray matrixArray) {
     if (matrixArray == nullptr)
         return std::unique_ptr<SkMatrix>(nullptr);

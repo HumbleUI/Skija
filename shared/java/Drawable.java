@@ -4,6 +4,7 @@ import java.lang.ref.*;
 import java.io.*;
 import io.github.humbleui.skija.impl.*;
 import org.jetbrains.annotations.*;
+import io.github.humbleui.types.*;
 
 /**
  * <p>Base class for objects that draw into Canvas.</p>

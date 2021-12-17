@@ -244,7 +244,7 @@ extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_Bitmap__1nExt
     SkPaint* paint = reinterpret_cast<SkPaint*>(static_cast<uintptr_t>(paintPtr));
     SkIPoint offset;
     if (instance->extractAlpha(dst, paint, &offset))
-        return skija::IPoint::fromSkIPoint(env, offset);
+        return types::IPoint::fromSkIPoint(env, offset);
     else
         return nullptr;
 }

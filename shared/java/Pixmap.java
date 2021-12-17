@@ -3,10 +3,11 @@ package io.github.humbleui.skija;
 import java.lang.ref.*;
 import java.nio.ByteBuffer;
 import org.jetbrains.annotations.*;
-import io.github.humbleui.skija.IRect;
+import io.github.humbleui.types.IRect;
 import io.github.humbleui.skija.ImageInfo;
 import io.github.humbleui.skija.SamplingMode;
 import io.github.humbleui.skija.impl.*;
+import io.github.humbleui.types.*;
 
 public class Pixmap extends Managed {
     @ApiStatus.Internal

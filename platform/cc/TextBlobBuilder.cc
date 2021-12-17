@@ -28,7 +28,7 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_TextBlobBuilder_
     SkTextBlobBuilder* instance = reinterpret_cast<SkTextBlobBuilder*>(static_cast<uintptr_t>(ptr));
     SkFont* font = reinterpret_cast<SkFont*>(static_cast<uintptr_t>(fontPtr));
     jsize len = env->GetArrayLength(glyphsArr);
-    std::unique_ptr<SkRect> bounds = skija::Rect::toSkRect(env, boundsObj);
+    std::unique_ptr<SkRect> bounds = types::Rect::toSkRect(env, boundsObj);
     SkTextBlobBuilder::RunBuffer run = instance->allocRun(*font, len, x, y, bounds.get());
     env->GetShortArrayRegion(glyphsArr, 0, len, reinterpret_cast<jshort*>(run.glyphs));
 }
@@ -38,7 +38,7 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_TextBlobBuilder_
     SkTextBlobBuilder* instance = reinterpret_cast<SkTextBlobBuilder*>(static_cast<uintptr_t>(ptr));
     SkFont* font = reinterpret_cast<SkFont*>(static_cast<uintptr_t>(fontPtr));
     jsize len = env->GetArrayLength(glyphsArr);
-    std::unique_ptr<SkRect> bounds = skija::Rect::toSkRect(env, boundsObj);
+    std::unique_ptr<SkRect> bounds = types::Rect::toSkRect(env, boundsObj);
     SkTextBlobBuilder::RunBuffer run = instance->allocRunPosH(*font, len, y, bounds.get());
     env->GetShortArrayRegion(glyphsArr, 0, len, reinterpret_cast<jshort*>(run.glyphs));
     env->GetFloatArrayRegion(xsArr, 0, len, reinterpret_cast<jfloat*>(run.pos));
@@ -49,7 +49,7 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_TextBlobBuilder_
     SkTextBlobBuilder* instance = reinterpret_cast<SkTextBlobBuilder*>(static_cast<uintptr_t>(ptr));
     SkFont* font = reinterpret_cast<SkFont*>(static_cast<uintptr_t>(fontPtr));
     jsize len = env->GetArrayLength(glyphsArr);
-    std::unique_ptr<SkRect> bounds = skija::Rect::toSkRect(env, boundsObj);
+    std::unique_ptr<SkRect> bounds = types::Rect::toSkRect(env, boundsObj);
     SkTextBlobBuilder::RunBuffer run = instance->allocRunPos(*font, len, bounds.get());
     env->GetShortArrayRegion(glyphsArr, 0, len, reinterpret_cast<jshort*>(run.glyphs));
     env->GetFloatArrayRegion(posArr, 0, len * 2, reinterpret_cast<jfloat*>(run.pos));

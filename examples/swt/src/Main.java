@@ -7,6 +7,7 @@ import org.eclipse.swt.opengl.*;
 import org.eclipse.swt.widgets.*;
 import io.github.humbleui.skija.*;
 import io.github.humbleui.skija.Canvas;
+import io.github.humbleui.types.*;
 
 public class Main {
     public static void main(String[] args) throws Exception {

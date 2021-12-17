@@ -5,6 +5,7 @@ import java.util.stream.*;
 import io.github.humbleui.skija.*;
 import io.github.humbleui.skija.shaper.*;
 import io.github.humbleui.skija.paragraph.*;
+import io.github.humbleui.types.*;
 
 public class TextShapeBenchScene extends Scene {
     public final Font font;

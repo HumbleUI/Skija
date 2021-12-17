@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.*;
 import org.jetbrains.annotations.*;
 import io.github.humbleui.skija.impl.*;
+import io.github.humbleui.types.*;
 
 /**
  * <p>Describes pixel dimensions and encoding. Bitmap, Image, Pixmap, and Surface

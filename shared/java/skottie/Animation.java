@@ -5,6 +5,7 @@ import org.jetbrains.annotations.*;
 import io.github.humbleui.skija.*;
 import io.github.humbleui.skija.impl.*;
 import io.github.humbleui.skija.sksg.InvalidationController;
+import io.github.humbleui.types.*;
 
 public class Animation extends Managed {
     static { Library.staticLoad(); }

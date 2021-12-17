@@ -19,7 +19,7 @@ extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_TextBlob__1nB
   (JNIEnv* env, jclass jclass, jlong ptr) {
     SkTextBlob* instance = reinterpret_cast<SkTextBlob*>(static_cast<uintptr_t>(ptr));
     SkRect bounds = instance->bounds();
-    return skija::Rect::fromSkRect(env, instance->bounds());
+    return types::Rect::fromSkRect(env, instance->bounds());
 }
 
 extern "C" JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_TextBlob__1nGetUniqueId
@@ -241,7 +241,7 @@ extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_TextBlob__1nG
         tmpBounds.offset(posBuffer[0], posBuffer[1]);
         bounds.join(tmpBounds);
     }
-    return skija::Rect::fromSkRect(env, bounds);
+    return types::Rect::fromSkRect(env, bounds);
 }
 
 extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_TextBlob__1nGetBlockBounds
@@ -272,7 +272,7 @@ extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_TextBlob__1nG
         auto runBounds = SkRect::MakeLTRB(posBuffer[0], posBuffer[1] + metrics.fAscent, lastLeft + lastWidth, posBuffer[1] + metrics.fDescent);
         bounds.join(runBounds);
     }
-    return skija::Rect::fromSkRect(env, bounds);
+    return types::Rect::fromSkRect(env, bounds);
 }
 
 extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_TextBlob__1nGetFirstBaseline
