@@ -6,14 +6,14 @@ def package():
   version = common.version()
 
   build_utils.copy_replace(
-    'shared/deploy/META-INF/maven/io.github.humbleui.skija/skija-shared/pom.xml',
-    'shared/target/maven/META-INF/maven/io.github.humbleui.skija/skija-shared/pom.xml',
+    'shared/deploy/META-INF/maven/io.github.humbleui/skija-shared/pom.xml',
+    'shared/target/maven/META-INF/maven/io.github.humbleui/skija-shared/pom.xml',
     {'${version}': version}
   )
 
   build_utils.copy_replace(
-    'shared/deploy/META-INF/maven/io.github.humbleui.skija/skija-shared/pom.properties',
-    'shared/target/maven/META-INF/maven/io.github.humbleui.skija/skija-shared/pom.properties',
+    'shared/deploy/META-INF/maven/io.github.humbleui/skija-shared/pom.properties',
+    'shared/target/maven/META-INF/maven/io.github.humbleui/skija-shared/pom.properties',
     {'${version}': version}
   )
 

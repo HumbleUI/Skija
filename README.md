@@ -152,7 +152,7 @@ Maven:
 ```xml
 <dependencies>
   <dependency>
-    <groupId>io.github.humbleui.skija</groupId>
+    <groupId>io.github.humbleui</groupId>
     <artifactId>${artifact}</artifactId>
     <version>${version}</version>
   </dependency>
@@ -163,7 +163,7 @@ Gradle:
 
 ```gradle
 dependencies {
-  api "io.github.humbleui.skija:${artifact}:${version}"
+  api "io.github.humbleui:${artifact}:${version}"
 }
 ```
 
@@ -171,10 +171,10 @@ Replace `${artifact}` and `${version}` with:
 
 Platform    | `${artifact}`       | `${version}`
 ------------|---------------------|-------------
-macOS Intel | `skija-macos-x64`   | ![version](https://img.shields.io/maven-central/v/io.github.humbleui.skija/skija-macos-x64)
-macOS M1    | `skija-macos-arm64` | ![version](https://img.shields.io/maven-central/v/io.github.humbleui.skija/skija-macos-arm64)
-Linux       | `skija-linux`       | ![version](https://img.shields.io/maven-central/v/io.github.humbleui.skija/skija-linux)
-Windows     | `skija-windows`     | ![version](https://img.shields.io/maven-central/v/io.github.humbleui.skija/skija-windows)
+macOS Intel | `skija-macos-x64`   | ![version](https://img.shields.io/maven-central/v/io.github.humbleui/skija-macos-x64)
+macOS M1    | `skija-macos-arm64` | ![version](https://img.shields.io/maven-central/v/io.github.humbleui/skija-macos-arm64)
+Linux       | `skija-linux`       | ![version](https://img.shields.io/maven-central/v/io.github.humbleui/skija-linux)
+Windows     | `skija-windows`     | ![version](https://img.shields.io/maven-central/v/io.github.humbleui/skija-windows)
 
 For simplicity or if your build system is not smart enough to select artifact based on OS, you can add all four as dependencies—they will not conflict.
 

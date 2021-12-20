@@ -7,14 +7,14 @@ def package():
   version = common.version()
 
   build_utils.copy_replace(
-    f'platform/deploy/META-INF/maven/io.github.humbleui.skija/{artifact}/pom.xml',
-    f'platform/target/maven/META-INF/maven/io.github.humbleui.skija/{artifact}/pom.xml',
+    f'platform/deploy/META-INF/maven/io.github.humbleui/{artifact}/pom.xml',
+    f'platform/target/maven/META-INF/maven/io.github.humbleui/{artifact}/pom.xml',
     {'${version}': version}
   )
 
   build_utils.copy_replace(
-    f'platform/deploy/META-INF/maven/io.github.humbleui.skija/{artifact}/pom.properties',
-    f'platform/target/maven/META-INF/maven/io.github.humbleui.skija/{artifact}/pom.properties',
+    f'platform/deploy/META-INF/maven/io.github.humbleui/{artifact}/pom.properties',
+    f'platform/target/maven/META-INF/maven/io.github.humbleui/{artifact}/pom.properties',
     {'${version}': version}
   )
 

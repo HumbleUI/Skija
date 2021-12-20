@@ -13,8 +13,8 @@ def main():
 
   if args.skija_version:
     classpath += [
-      build_utils.fetch_maven('io.github.humbleui.skija', 'skija-shared'),
-      build_utils.fetch_maven('io.github.humbleui.skija', 'skija-' + common.classifier, args.skija_version),
+      build_utils.fetch_maven('io.github.humbleui', 'skija-shared'),
+      build_utils.fetch_maven('io.github.humbleui', 'skija-' + common.classifier, args.skija_version),
     ]
   else:
     build.main()

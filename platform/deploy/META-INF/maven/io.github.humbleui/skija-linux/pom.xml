@@ -2,12 +2,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>io.github.humbleui.skija</groupId>
-    <artifactId>skija-shared</artifactId>
+    <groupId>io.github.humbleui</groupId>
+    <artifactId>skija-linux</artifactId>
     <version>${version}</version>
     <packaging>jar</packaging>
 
-    <name>io.github.humbleui.skija:skija-shared</name>
+    <name>io.github.humbleui:skija-linux</name>
     <description>Java bindings for Skia</description>
     <url>https://github.com/humbleui/skija</url>
     
@@ -40,10 +40,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.jetbrains</groupId>
-            <artifactId>annotations</artifactId>
-            <version>20.1.0</version>
-            <scope>provided</scope>
+            <groupId>io.github.humbleui</groupId>
+            <artifactId>skija-shared</artifactId>
+            <version>${version}</version>
         </dependency>
     </dependencies>
 </project>

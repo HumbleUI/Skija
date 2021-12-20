@@ -9,8 +9,8 @@ def main():
   modulepath = common.deps_run()
   if args.skija_version:
     modulepath += [
-      common.fetch_maven('io.github.humbleui.skija', 'skija-shared', args.skija_version),
-      common.fetch_maven('io.github.humbleui.skija', 'skija-' + common.classifier, args.skija_version)
+      common.fetch_maven('io.github.humbleui', 'skija-shared', args.skija_version),
+      common.fetch_maven('io.github.humbleui', 'skija-' + common.classifier, args.skija_version)
     ]
   else:
     build.main()

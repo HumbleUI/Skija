@@ -5,13 +5,13 @@
 Add ONE of these dependencies to your ant/maven/gradle/bazel:
 
 ```
-io.github.humbleui.skija:skija-windows:${version}
-io.github.humbleui.skija:skija-linux:${version}
-io.github.humbleui.skija:skija-macos-x64:${version}
-io.github.humbleui.skija:skija-macos-arm64:${version}
+io.github.humbleui:skija-windows:${version}
+io.github.humbleui:skija-linux:${version}
+io.github.humbleui:skija-macos-x64:${version}
+io.github.humbleui:skija-macos-arm64:${version}
 ```
 
-(Replace `${version}` with ![version](https://img.shields.io/maven-central/v/io.github.humbleui.skija/skija-shared))
+(Replace `${version}` with ![version](https://img.shields.io/maven-central/v/io.github.humbleui/skija-shared))
 
 In your main class, import
 
