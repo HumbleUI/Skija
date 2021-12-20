@@ -20,20 +20,4 @@ def deps_compile():
     build_utils.fetch_maven('org.jetbrains', 'annotations', '20.1.0')
   ] + deps_run()
 
-@functools.lru_cache(maxsize=1)
-def version():
-  parser = argparse.ArgumentParser()
-  parser.add_argument('--version')
-  (args, _) = parser.parse_known_args()
-  if args.version:
-    return args.version
-
-  ref = os.getenv('GITHUB_REF')
-  if ref and ref.startswith('refs/tags/'):
-    return ref[len('refs/tags/'):]
-
-  ref = os.getenv('GITHUB_SHA')
-  if ref:
-    return ref[:10]
-
-  return '0.0.0'
+version = build_utils.get_arg("version") or build_utils.parse_ref() or build_utils.parse_sha() or "0.0.0-SNAPSHOT"

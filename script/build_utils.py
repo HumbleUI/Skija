@@ -16,9 +16,15 @@ mvn = "mvn.cmd" if platform.system() == "Windows" else "mvn"
 def classpath_join(entries):
   return classpath_separator.join(entries)
 
-def parse_ref(ref: str) -> str:
-  if ref and (match := re.fullmatch("refs/[^/]+/([^/]+)", ref)):
-    return match.group(1)
+def parse_ref() -> str:
+  ref = get_arg("ref") or os.getenv('GITHUB_REF')
+  if ref and ref.startswith('refs/tags/'):
+    return ref[len('refs/tags/'):]
+
+def parse_sha() -> str:
+  sha = get_arg("sha") or os.getenv('GITHUB_SHA')
+  if sha:
+    return sha[:10]
 
 def makedirs(path):
   os.makedirs(path, exist_ok=True)
@@ -105,7 +111,6 @@ def jar(target: str, *content: List[Tuple[str, str]]) -> str:
     subprocess.check_call(["jar",
       "--create",
       "--file", target] + sum([["-C", dir, file] for (dir, file) in content], start=[]))
-    return target
   return target
 
 @functools.lru_cache(maxsize=1)
@@ -184,6 +189,7 @@ def deploy(jar,
     [f'-DpomFile={tempdir}/{pom}',
      f'-Dfile={jar}']
     + ([f"-Dclassifier={classifier}"] if classifier else []))
+  return 0
 
 def release(ossrh_username = os.getenv('OSSRH_USERNAME'),
             ossrh_password = os.getenv('OSSRH_PASSWORD'),
@@ -204,6 +210,10 @@ def release(ossrh_username = os.getenv('OSSRH_USERNAME'),
 
   print('Finding staging repo')
   resp = fetch('/profile_repositories')
+  if len(resp['data']) != 1:
+    print("Too many open repositories:", [repo['repositoryId'] for repo in resp['data']])
+    return 1
+
   repo_id = resp['data'][0]["repositoryId"]
   
   print('Closing repo', repo_id)
@@ -212,7 +222,7 @@ def release(ossrh_username = os.getenv('OSSRH_USERNAME'),
   while True:
     print('Checking repo', repo_id, 'status')
     resp = fetch('/repository/' + repo_id + '/activity')
-    close_events = [e for e in resp if e['name'] == 'close']
+    close_events = [e for e in resp if e['name'] == 'close' and 'stopped' in e and 'events' in e]
     close_events = close_events[0]['events'] if close_events else []
     fail_events = [e for e in close_events if e['name'] == 'ruleFailed']
     if fail_events:
@@ -231,3 +241,4 @@ def release(ossrh_username = os.getenv('OSSRH_USERNAME'),
               "stagedRepositoryIds":[repo_id]
         }})
   print('Success! Just released', repo_id)
+  return 0
