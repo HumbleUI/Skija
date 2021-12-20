@@ -9,18 +9,18 @@ else:
   classifier = build_utils.system
   module = 'io.github.humbleui.skija.' + build_utils.system
 
-@functools.cache
+@functools.lru_cache(maxsize=1)
 def deps_run():
   return [build_utils.fetch_maven('io.github.humbleui', 'types', '0.1.0')]
 
-@functools.cache
+@functools.lru_cache(maxsize=1)
 def deps_compile():
   return [
     build_utils.fetch_maven('org.projectlombok', 'lombok', '1.18.22'),
     build_utils.fetch_maven('org.jetbrains', 'annotations', '20.1.0')
   ] + deps_run()
 
-@functools.cache
+@functools.lru_cache(maxsize=1)
 def version():
   parser = argparse.ArgumentParser()
   parser.add_argument('--version')

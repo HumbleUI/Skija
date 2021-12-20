@@ -2,6 +2,7 @@
 
 Changed:
 
+- Skia version m96-2f1f21b8a9 -> m98-e7cf73334f
 - [ BREAKING ] Moved IPoint, IRange, IRect, Point, Point3, Rect, RRect to `io.github.humbleui.types`
 
 # 0.96.0 - Nov 3, 2021

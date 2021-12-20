@@ -108,7 +108,7 @@ def jar(target: str, *content: List[Tuple[str, str]]) -> str:
     return target
   return target
 
-@functools.cache
+@functools.lru_cache(maxsize=1)
 def lombok():
   return fetch_maven('org.projectlombok', 'lombok', '1.18.22')
 
