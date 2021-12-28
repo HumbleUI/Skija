@@ -11,7 +11,7 @@ import io.github.humbleui.skija.impl.*;
 
 public class Main implements Consumer<Event> {
     public Window _window;
-    public SkijaLayer _layer;
+    public Layer _layer;
     public int _xpos = 720, _ypos = 405, _width = 0, _height = 0;
     public float _scale = 1;
 
@@ -41,56 +41,38 @@ public class Main implements Consumer<Event> {
         _window.setWindowSize((int) (1440 * scale), (int) (810 * scale));
         _window.setWindowPosition((int) (240 * scale), (int) (135 * scale));
         _window.setVisible(true);
-        accept(EventWindowScreenChange.INSTANCE);
-        _window.requestFrame();
+        _window.accept(EventWindowScreenChange.INSTANCE);
     }
 
-    public void paint() {
-        if (_layer == null)
-            return;
-
-        var canvas = _layer.beforePaint();
+    public void paint(Canvas canvas) {
         Scenes.draw(canvas, _width, _height, _scale, Math.max(0, Math.min(_xpos, _width)), Math.max(0, Math.min(_ypos, _height)));
-        _layer.afterPaint();
     }
 
     @SneakyThrows
     public void changeLayer() {
-        if (_layer != null)
-            _layer.close();
-
         if (HUD.extras.size() < 1)
             HUD.extras.add(null);
 
         String layerName = _layers[_layerIdx];
-        String className = "io.github.humbleui.skija.examples.jwm.SkijaLayer" + layerName;
+        String className = "io.github.humbleui.jwm.skija.Layer" + layerName + "Skija";
 
-        _layer = (SkijaLayer) Main.class.forName(className).getDeclaredConstructor().newInstance();
+        _layer = (Layer) Main.class.forName(className).getDeclaredConstructor().newInstance();
         HUD.extras.set(0, new Pair("L", "Layer: " + layerName));
-
-        _layer.attach(_window);
-        _layer.reconfigure();
-        _layer.resize(_window.getContentRect().getWidth(), _window.getContentRect().getHeight());
+        _window.setLayer(_layer);
     }
 
     @Override
     public void accept(Event e) {
         if (e instanceof EventWindowScreenChange) {
-            _layer.reconfigure();
             _scale = _window.getScreen().getScale();
-            accept(new EventWindowResize(
-                    _window.getWindowRect().getWidth(),
-                    _window.getWindowRect().getHeight(),
-                    _window.getContentRect().getWidth(),
-                    _window.getContentRect().getHeight()));
         } else if (e instanceof EventWindowResize er) {
             _width = (int) (er.getContentWidth() / _scale);
-            _height = (int) (er.getContentHeight() / _scale);
-            _layer.resize(er.getContentWidth(), er.getContentHeight());
-            paint();
+            _height = (int) (er.getContentHeight() / _scale);            
         } else if (e instanceof EventMouseMove) {
             _xpos = (int) (((EventMouseMove) e).getX() / _scale);
             _ypos = (int) (((EventMouseMove) e).getY() / _scale);
+        } else if (e instanceof EventMouseScroll ee) {
+            Scenes.currentScene().onScroll(ee.getDeltaX() / _scale, ee.getDeltaY() / _scale);
         } else if (e instanceof EventKey eventKey) {
             if (eventKey.isPressed() == true) {
                 switch (eventKey.getKey()) {
@@ -121,8 +103,8 @@ public class Main implements Consumer<Event> {
                         System.out.println("Key pressed: " + eventKey.getKey());
                 }
             }
-        } else if (e instanceof EventFrame) {
-            paint();
+        } else if (e instanceof EventFrameSkija ee) {
+            paint(ee.getSurface().getCanvas());
             _window.requestFrame();
         } else if (e instanceof EventWindowCloseRequest) {
             _layer.close();

@@ -6,8 +6,9 @@ def get_arg(name):
   parser = argparse.ArgumentParser()
   parser.add_argument(f'--{name}')
   (args, _) = parser.parse_known_args()
-  return vars(args).get(name)
+  return vars(args).get(name.replace("-", "_"))
 
+execdir = os.getcwd()
 arch   = get_arg("arch") or {'AMD64': 'x64', 'x86_64': 'x64', 'arm64': 'arm64'}[platform.machine()]
 system = get_arg("system") or {'Darwin': 'macos', 'Linux': 'linux', 'Windows': 'windows'}[platform.system()]
 classpath_separator = ';' if platform.system() == 'Windows' else ':'
