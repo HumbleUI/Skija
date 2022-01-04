@@ -6,6 +6,7 @@
 
 ![](extras/logo.png)
 
+> Note: this is an active and supported branch of what was previously hosted at [JetBrains/Skija](https://github.com/JetBrains/Skija). JetBrains/Skija is no longer updated.
 
 ## Motivation: Why Skija?
 
