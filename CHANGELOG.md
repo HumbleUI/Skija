@@ -1,8 +1,13 @@
-# WIP
+# 0.98.1 - Jan 5, 2021
+
+Added:
+
+- RuntimeEffect::makeColorFilter
 
 Changed:
 
 - types 0.1.0 -> 0.1.1
+- Removed unnecessary LineMetrics UTF-8 to UTF-16 conversion #9
 
 
 # 0.98.0 - Dec 20, 2021
