@@ -136,6 +136,7 @@ public class ParagraphMetricsScene extends Scene {
 
             String text = "12345\n"
                 + "абвгд\n"
+                + "𝕨𝕨𝕨𝕨𝕨\n"
                 + "space     \n"
                 // https://bugs.chromium.org/p/skia/issues/detail?id=11986
                 + (System.getProperty("os.name").toLowerCase().contains("linux") ? "" : "\\r\\n\r\n")
@@ -173,6 +174,7 @@ public class ParagraphMetricsScene extends Scene {
         for (String text: new String[] {
             "ggg",
             "жжж",
+            "𝕨𝕨𝕨𝕨𝕨",
             "𨭎",
             "𨭎𨭎",
             "ggg𨭎𨭎𨭎",
