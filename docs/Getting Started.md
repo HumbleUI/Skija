@@ -61,7 +61,7 @@ ByteBuffer pngBytes = pngData.toByteBuffer();
 
 try
 {
-    Path path = Path.of("output.png");
+    java.nio.file.Path path =  java.nio.file.Path.of("output.png");
     ByteChannel channel = Files.newByteChannel(
         path,
         StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE);
