@@ -22,8 +22,7 @@ Java_io_github_humbleui_skija_RuntimeEffect__1nMakeShader(JNIEnv* env,
                                                      jlong ptr,
                                                      jlong uniformPtr,
                                                      jlongArray childrenPtrsArr,
-                                                     jfloatArray localMatrixArr,
-                                                     jboolean isOpaque) {
+                                                     jfloatArray localMatrixArr) {
     SkRuntimeEffect* runtimeEffect = jlongToPtr<SkRuntimeEffect*>(ptr);
     SkData* uniform = jlongToPtr<SkData*>(uniformPtr);
     std::unique_ptr<SkMatrix> localMatrix = skMatrix(env, localMatrixArr);
@@ -40,8 +39,7 @@ Java_io_github_humbleui_skija_RuntimeEffect__1nMakeShader(JNIEnv* env,
     sk_sp<SkShader> shader = runtimeEffect->makeShader(sk_ref_sp<SkData>(uniform),
                                                        children.data(),
                                                        childCount,
-                                                       localMatrix.get(),
-                                                       isOpaque);
+                                                       localMatrix.get());
     return ptrToJlong(shader.release());
 }
 

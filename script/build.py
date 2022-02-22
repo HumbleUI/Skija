@@ -6,7 +6,7 @@ def main():
   parser.add_argument('--debug', action='store_true')
   parser.add_argument('--arch', default=build_utils.arch)
   parser.add_argument('--skia-dir')
-  parser.add_argument('--skia-release', default='m98-e7cf73334f')
+  parser.add_argument('--skia-release', default='m100-d5a507cafd')
   (args, _) = parser.parse_known_args()
 
   # Fetch Skia

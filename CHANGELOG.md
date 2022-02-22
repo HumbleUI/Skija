@@ -1,4 +1,12 @@
-# 0.98.1 - Jan 5, 2021
+# 0.100.0 - Feb 22, 20222
+
+Changed:
+
+- Skia version m98-e7cf73334f -> m100-d5a507cafd
+- [ BREAKING ] RuntimeEffect::makeShader lost isOpaque argument
+- [ BREAKING ] C++ 14 -> 17
+
+# 0.98.1 - Jan 5, 2022
 
 Added:
 

@@ -56,7 +56,7 @@ public class RuntimeEffectScene extends Scene {
             canvas.translate(20, 20);
 
             try (var child = _texture.makeShader();
-                 var shader = _effectForShader.makeShader(data, new Shader[] { child }, null, true);
+                 var shader = _effectForShader.makeShader(data, new Shader[] { child }, null);
                  var paint = new Paint().setShader(shader);)
             {
                 canvas.drawRect(Rect.makeXYWH(0, 0, 200, 200), paint);
