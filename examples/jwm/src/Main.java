@@ -5,6 +5,7 @@ import java.util.function.*;
 import lombok.*;
 import org.jetbrains.annotations.*;
 import io.github.humbleui.jwm.*;
+import io.github.humbleui.jwm.skija.*;
 import io.github.humbleui.skija.*;
 import io.github.humbleui.skija.examples.scenes.*;
 import io.github.humbleui.skija.impl.*;
@@ -107,15 +108,12 @@ public class Main implements Consumer<Event> {
             paint(ee.getSurface().getCanvas());
             _window.requestFrame();
         } else if (e instanceof EventWindowCloseRequest) {
-            _layer.close();
             _window.close();
             App.terminate();
         }
     }
 
     public static void main(String[] args) {
-        App.init();
-        new Main();
-        App.start();
+        App.start(() -> new Main());
     }
 }
