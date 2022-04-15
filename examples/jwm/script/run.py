@@ -6,7 +6,7 @@ import common, build, build_utils
 def main():
   parser = argparse.ArgumentParser()
   parser.add_argument('--skija-version')
-  parser.add_argument('--jwm-version', default='0.3.0')
+  parser.add_argument('--jwm-version', default='0.4.1')
   parser.add_argument('--jwm-dir', default=None)
   (args, _) = parser.parse_known_args()
 
@@ -27,7 +27,7 @@ def main():
 
   if args.skija_version:
     classpath += [
-      build_utils.fetch_maven('io.github.humbleui', 'skija-shared'),
+      build_utils.fetch_maven('io.github.humbleui', 'skija-shared', args.skija_version),
       build_utils.fetch_maven('io.github.humbleui', 'skija-' + common.classifier, args.skija_version),
     ]
   else:

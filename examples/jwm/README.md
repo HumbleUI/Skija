@@ -3,7 +3,7 @@ This demo displays most of the Skia/Skija APIs rendered via [JWM](https://github
 Run with version from Maven:
 
 ```
-python3 script/run.py --skija-version 0.96.0 --jwm-version 0.2.6
+python3 script/run.py --skija-version 0.100.0 --jwm-version 0.4.1
 ```
 
 Build Skija locally and run with local version:
