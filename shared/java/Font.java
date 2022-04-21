@@ -8,6 +8,9 @@ import io.github.humbleui.types.*;
 
 public class Font extends Managed {
     static { Library.staticLoad(); }
+
+    @ApiStatus.Internal public FontMetrics _metrics = null;
+    @ApiStatus.Internal public Float _spacing = null;
     
     @ApiStatus.Internal
     public Font(long ptr) {
@@ -76,6 +79,12 @@ public class Font extends Managed {
             Reference.reachabilityFence(this);
             Reference.reachabilityFence(other);
         }
+    }
+
+    @ApiStatus.Internal 
+    public void _resetMetrics() {
+        _metrics = null;
+        _spacing = null;
     }
 
     @ApiStatus.Internal
@@ -172,6 +181,7 @@ public class Font extends Managed {
      * @return       this
      */
     public Font setAutoHintingForced(boolean value) {
+        _resetMetrics();
         Stats.onNativeCall();
         _nSetAutoHintingForced(_ptr, value);
         return this;
@@ -184,6 +194,7 @@ public class Font extends Managed {
      * @return       this
      */
     public Font setBitmapsEmbedded(boolean value) {
+        _resetMetrics();
         Stats.onNativeCall();
         _nSetBitmapsEmbedded(_ptr, value);
         return this;
@@ -196,6 +207,7 @@ public class Font extends Managed {
      * @return       this
      */
     public Font setSubpixel(boolean value) {
+        _resetMetrics();
         Stats.onNativeCall();
         _nSetSubpixel(_ptr, value);
         return this;
@@ -211,6 +223,7 @@ public class Font extends Managed {
      * @return       this
      */
     public Font setMetricsLinear(boolean value) {
+        _resetMetrics();
         Stats.onNativeCall();
         _nSetMetricsLinear(_ptr, value);
         return this;
@@ -223,6 +236,7 @@ public class Font extends Managed {
      * @return       this
      */
     public Font setEmboldened(boolean value) {
+        _resetMetrics();
         Stats.onNativeCall();
         _nSetEmboldened(_ptr, value);
         return this;
@@ -236,6 +250,7 @@ public class Font extends Managed {
      * @return       this
      */
     public Font setBaselineSnapped(boolean value) {
+        _resetMetrics();
         Stats.onNativeCall();
         _nSetBaselineSnapped(_ptr, value);
         return this;
@@ -258,6 +273,7 @@ public class Font extends Managed {
      * partial transparency.
      */
     public Font setEdging(FontEdging value) {
+        _resetMetrics();
         Stats.onNativeCall();
         _nSetEdging(_ptr, value.ordinal());
         return this;
@@ -279,6 +295,7 @@ public class Font extends Managed {
      * Sets level of glyph outline adjustment. Does not check for valid values of hintingLevel.
      */
     public Font setHinting(FontHinting value) {
+        _resetMetrics();
         Stats.onNativeCall();
         _nSetHinting(_ptr, value.ordinal());
         return this;
@@ -359,6 +376,7 @@ public class Font extends Managed {
      */
     public Font setTypeface(@Nullable Typeface typeface) {
         try {
+            _resetMetrics();
             Stats.onNativeCall();
             _nSetTypeface(_ptr, Native.getPtr(typeface));
             return this;
@@ -371,6 +389,7 @@ public class Font extends Managed {
      * Sets text size in points. Has no effect if value is not greater than or equal to zero.
      */
     public Font setSize(float value) {
+        _resetMetrics();
         Stats.onNativeCall();
         _nSetSize(_ptr, value);
         return this;
@@ -380,6 +399,7 @@ public class Font extends Managed {
      * Sets text scale on x-axis. Default value is 1.
      */
     public Font setScaleX(float value) {
+        _resetMetrics();
         Stats.onNativeCall();
         _nSetScaleX(_ptr, value);
         return this;
@@ -389,6 +409,7 @@ public class Font extends Managed {
      * Sets text skew on x-axis. Default value is 0.
      */
     public Font setSkewX(float value) {
+        _resetMetrics();
         Stats.onNativeCall();
         _nSetSkewX(_ptr, value);
         return this;
@@ -588,10 +609,14 @@ public class Font extends Managed {
      * Returns FontMetrics associated with Typeface. Results are scaled by text size but does not take into account
      * dimensions required by text scale, text skew, fake bold, style stroke, and {@link PathEffect}.
      */
+    @NotNull
     public FontMetrics getMetrics() {
         try {
-            Stats.onNativeCall();
-            return _nGetMetrics(_ptr);
+            if (_metrics == null) {
+                Stats.onNativeCall();
+                _metrics = _nGetMetrics(_ptr);
+            }
+            return _metrics;
         } finally {
             Reference.reachabilityFence(this);
         }
@@ -603,8 +628,11 @@ public class Font extends Managed {
      */
     public float getSpacing() {
         try {
-            Stats.onNativeCall();
-            return _nGetSpacing(_ptr);
+            if (_spacing == null) {
+                Stats.onNativeCall();
+                _spacing = _nGetSpacing(_ptr);
+            }
+            return _spacing;
         } finally {
             Reference.reachabilityFence(this);
         }

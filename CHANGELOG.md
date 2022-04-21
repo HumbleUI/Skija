@@ -1,4 +1,11 @@
-# 0.100.0 - Feb 22, 20222
+# 0.102.0 - April 21, 2022
+
+Changed:
+
+- Skia version m100-d5a507cafd -> m102-32283b3f00
+- Cache Font::getMetrics #17
+
+# 0.100.0 - Feb 22, 2022
 
 Changed:
 
