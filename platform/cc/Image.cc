@@ -1,5 +1,6 @@
 #include <iostream>
 #include <jni.h>
+#include "SkBitmap.h"
 #include "SkData.h"
 #include "SkImage.h"
 #include "interop.hh"
