@@ -652,6 +652,7 @@ public class Surface extends RefCnt {
      * @return Image initialized with Surface contents
      * @see <a href="https://fiddle.skia.org/c/@Surface_makeImageSnapshot">https://fiddle.skia.org/c/@Surface_makeImageSnapshot</a>
      */
+    @NotNull
     public Image makeImageSnapshot() {
         try {
             Stats.onNativeCall();
@@ -677,10 +678,12 @@ public class Surface extends RefCnt {
      * @see <a href="https://fiddle.skia.org/c/@Surface_makeImageSnapshot_2">https://fiddle.skia.org/c/@Surface_makeImageSnapshot_2</a>
      */
     @Nullable
-    public Image makeImageSnapshot(IRect area) {
+    public Image makeImageSnapshot(@NotNull IRect area) {
         try {
+            assert area != null : "Can’t Surface.makeImageSnapshot with area == null";
             Stats.onNativeCall();
-            return new Image(_nMakeImageSnapshotR(_ptr, area._left, area._top, area._right, area._bottom));
+            long ptr = _nMakeImageSnapshotR(_ptr, area._left, area._top, area._right, area._bottom);
+            return ptr == 0 ? null : new Image(ptr);
         } finally {
             Reference.reachabilityFence(this);
         }

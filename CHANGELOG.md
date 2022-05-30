@@ -1,3 +1,9 @@
+# WIP
+
+Fixed:
+
+- Surface::makeImageSnapshot can now correctly return null #23
+
 # 0.102.0 - April 21, 2022
 
 Changed:
