@@ -6,7 +6,7 @@ import io.github.humbleui.skija.*;
 
 public class Scenes {
     public static TreeMap<String, Scene> scenes;
-    public static String currentScene = "Runtime Effect";
+    public static String currentScene = "Text Line Locale";
     public static HUD hud = new HUD();
     public static boolean stats = true;
 
@@ -58,6 +58,7 @@ public class Scenes {
         scenes.put("Text Blob", null);
         scenes.put("Text Line", null);
         scenes.put("Text Line Decorations", null);
+        scenes.put("Text Line Locale", null);
         scenes.put("Wall Of Text", null);
         scenes.put("Watches", null);
         setScene(currentScene);

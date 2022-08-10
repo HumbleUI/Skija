@@ -301,7 +301,7 @@ namespace skija {
         
         void onLoad(JNIEnv* env) {
             jclass local = env->FindClass("io/github/humbleui/skija/FontMgr");
-            cls  = static_cast<jclass>(env->NewGlobalRef(local));
+            cls = static_cast<jclass>(env->NewGlobalRef(local));
         }
 
         void onUnload(JNIEnv* env) {
@@ -528,6 +528,7 @@ namespace skija {
         FontFamilyName::onLoad(env);
         FontFeature::onLoad(env);
         FontMetrics::onLoad(env);
+        FontMgr::onLoad(env);
         FontVariation::onLoad(env);
         FontVariationAxis::onLoad(env);
         ImageInfo::onLoad(env);
@@ -548,6 +549,7 @@ namespace skija {
         ImageInfo::onUnload(env);
         FontVariationAxis::onUnload(env);
         FontVariation::onUnload(env);
+        FontMgr::onUnload(env);
         FontMetrics::onUnload(env);
         FontFeature::onUnload(env);
         FontFamilyName::onUnload(env);

@@ -4,15 +4,17 @@
 #include "FontRunIterator.hh"
 #include "SkFontMgr.h"
 #include "SkShaper.h"
+#include "RunIterators.hh"
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_shaper_FontMgrRunIterator__1nMake
-  (JNIEnv* env, jclass jclass, jlong textPtr, jlong fontPtr, jobject opts) {
+  (JNIEnv* env, jclass jclass, jlong textPtr, jlong fontPtr, jobject languageRunIterObj, jobject opts) {
     SkString* text = reinterpret_cast<SkString*>(static_cast<uintptr_t>(textPtr));
     SkFont* font = reinterpret_cast<SkFont*>(static_cast<uintptr_t>(fontPtr));
     jobject fontMgrObj = env->GetObjectField(opts, skija::shaper::ShapingOptions::_fontMgr);
     sk_sp<SkFontMgr> fontMgr = fontMgrObj == nullptr
       ? SkFontMgr::RefDefault()
       : sk_ref_sp(reinterpret_cast<SkFontMgr*>(skija::impl::Native::fromJava(env, fontMgrObj, skija::FontMgr::cls)));
+    auto languageRunIter = std::shared_ptr<SkShaper::LanguageRunIterator>(languageRunIterObj == nullptr ? nullptr : new SkijaLanguageRunIterator(env, languageRunIterObj, *text));
     std::shared_ptr<UBreakIterator> graphemeIter = skija::shaper::graphemeBreakIterator(*text);
     if (!graphemeIter) return 0;
 
@@ -21,6 +23,9 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_shaper_FontMgrR
       text->size(),
       *font,
       fontMgr,
+      nullptr,
+      SkFontStyle(),
+      languageRunIter,
       graphemeIter,
       env->GetBooleanField(opts, skija::shaper::ShapingOptions::_approximateSpaces),
       env->GetBooleanField(opts, skija::shaper::ShapingOptions::_approximatePunctuation)

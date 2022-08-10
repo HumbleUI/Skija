@@ -142,9 +142,9 @@ public class TextStyleScene extends Scene {
         // TODO single font?
         for (String locale: new String[] { "zh-Hans", "zh-Hant", "zh-Hant-HK", "ja", "ko", "vi-Hani" }) {
             // for (String family: new String[] { "PingFang SC", "PingFang TC", "PingFang HK", "Apple SD Gothic Neo", "Hiragino Sans" }) {
-                try (var ts = new TextStyle().setColor(0xFF000000).setLetterSpacing(2).setLocale(locale)/*.setFontFamily(family)*/) {
+                try (var ts = new TextStyle().setColor(0xFF000000).setLetterSpacing(2).setLocale(locale) /*.setFontFamilies(new String[] { "Noto Sans", "Noto Sans JP", "Noto Sans TC", "Noto Sans SC"}) */) {
                     assert locale.equals(ts.getLocale());
-                    drawLine(canvas, "令免入全关具刃化外情才抵次海直真示神空者草蔥角道雇骨 " + locale, ts);
+                    drawLine(canvas, "刃令免入全关具刃化外情才抵次海直真示神空者草蔥角道雇骨 " + locale, ts);
                 }
             // }
         }

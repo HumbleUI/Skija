@@ -1,5 +1,10 @@
 # WIP
 
+Added:
+
+- TextLineRunHandler
+- FontMgrRunIterator ctor that accepts languageIterator
+
 Fixed:
 
 - Surface::makeImageSnapshot can now correctly return null #23

@@ -11,7 +11,7 @@ public:
                     sk_sp<SkFontMgr> fallbackMgr,
                     const char* requestName,
                     SkFontStyle requestStyle,
-                    const SkShaper::LanguageRunIterator* lang,
+                    std::shared_ptr<SkShaper::LanguageRunIterator> lang,
                     std::shared_ptr<UBreakIterator> graphemeIter,
                     bool approximateSpaces,
                     bool approximatePunctuation)
@@ -79,7 +79,7 @@ private:
     SkFont* fCurrentFont;
     char const * const fRequestName;
     SkFontStyle const fRequestStyle;
-    SkShaper::LanguageRunIterator const * const fLanguage;
+    std::shared_ptr<SkShaper::LanguageRunIterator> fLanguage;
     std::shared_ptr<UBreakIterator> fGraphemeIter;
     bool fApproximateSpaces;
     bool fApproximatePunctuation;

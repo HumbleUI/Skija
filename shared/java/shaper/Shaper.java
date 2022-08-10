@@ -124,6 +124,24 @@ public class Shaper extends Managed {
         }
     }
 
+
+    @NotNull @Contract("_, _, _ -> new")
+    public TextLine shapeLine(String text, Font font, @NotNull ShapingOptions opts) {
+        try {
+            assert opts != null : "Can’t Shaper::shapeLine with opts == null";
+            Stats.onNativeCall();
+            return new TextLine(_nShapeLine(_ptr, text, Native.getPtr(font), opts));
+        } finally {
+            Reference.reachabilityFence(this);
+            Reference.reachabilityFence(font);
+        }
+    }
+
+    @NotNull @Contract("_, _, _ -> new")
+    public TextLine shapeLine(String text, Font font) {
+        return shapeLine(text, font, ShapingOptions.DEFAULT);
+    }
+
     @NotNull @Contract("_, _, _, _, _ -> this")
     public Shaper shape(String text,
                         Font font,
@@ -166,31 +184,18 @@ public class Shaper extends Managed {
                         float width,
                         @NotNull RunHandler runHandler)
     {
-        assert fontIter != null : "FontRunIterator == null";
-        assert bidiIter != null : "BidiRunIterator == null";
-        assert scriptIter != null : "ScriptRunIterator == null";
-        assert langIter != null : "LanguageRunIterator == null";
-        assert opts != null : "Can’t Shaper::shape with opts == null";
-        Stats.onNativeCall();
-        _nShape(_ptr, Native.getPtr(textUtf8), fontIter, bidiIter, scriptIter, langIter, opts, width, runHandler);
-        return this;
-    }
-
-    @NotNull @Contract("_, _, _ -> new")
-    public TextLine shapeLine(String text, Font font, @NotNull ShapingOptions opts) {
         try {
-            assert opts != null : "Can’t Shaper::shapeLine with opts == null";
+            assert fontIter != null : "FontRunIterator == null";
+            assert bidiIter != null : "BidiRunIterator == null";
+            assert scriptIter != null : "ScriptRunIterator == null";
+            assert langIter != null : "LanguageRunIterator == null";
+            assert opts != null : "Can’t Shaper::shape with opts == null";
             Stats.onNativeCall();
-            return new TextLine(_nShapeLine(_ptr, text, Native.getPtr(font), opts));
+            _nShape(_ptr, Native.getPtr(textUtf8), fontIter, bidiIter, scriptIter, langIter, opts, width, runHandler);
+            return this;
         } finally {
-            Reference.reachabilityFence(this);
-            Reference.reachabilityFence(font);
+            Reference.reachabilityFence(textUtf8);
         }
-    }
-
-    @NotNull @Contract("_, _, _ -> new")
-    public TextLine shapeLine(String text, Font font) {
-        return shapeLine(text, font, ShapingOptions.DEFAULT);
     }
 
     @ApiStatus.Internal

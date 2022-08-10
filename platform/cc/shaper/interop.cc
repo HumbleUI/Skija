@@ -187,6 +187,19 @@ namespace skija {
             }
        }
        
+        namespace TextLineRunHandler {
+            jclass cls;
+
+            void onLoad(JNIEnv* env) {
+                jclass local = env->FindClass("io/github/humbleui/skija/shaper/TextLineRunHandler");
+                cls  = static_cast<jclass>(env->NewGlobalRef(local));
+            }
+
+            void onUnload(JNIEnv* env) {
+                env->DeleteGlobalRef(cls);
+            }
+       }
+
        void onLoad(JNIEnv* env) {
             BidiRun::onLoad(env);
             FontMgrRunIterator::onLoad(env);
@@ -199,11 +212,13 @@ namespace skija {
             ScriptRun::onLoad(env);
             ShapingOptions::onLoad(env);
             TextBlobBuilderRunHandler::onLoad(env);
+            TextLineRunHandler::onLoad(env);
 
             SkLoadICU();
         }
 
         void onUnload(JNIEnv* env) {
+            TextLineRunHandler::onUnload(env);
             TextBlobBuilderRunHandler::onUnload(env);
             RunInfo::onUnload(env);
             RunHandler::onUnload(env);
