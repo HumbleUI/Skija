@@ -55,6 +55,39 @@ public class Canvas extends Managed {
         Reference.reachabilityFence(bitmap);
     }
 
+    /**
+     * Returns the SurfaceProps associated with the canvas (i.e., at the base of the layer
+     * stack).
+     *
+     * @return  SurfaceProps
+     */
+    @NotNull
+    public SurfaceProps getBaseProps() {
+        try {
+            Stats.onNativeCall();
+            return _nGetBaseProps(_ptr);
+        } finally {
+            Reference.reachabilityFence(this);
+        }
+    }
+
+    /**
+     * Returns the SurfaceProps associated with the canvas that are currently active (i.e., at
+     * the top of the layer stack). This can differ from {getBaseProps()} depending on the flags
+     * passed to saveLayer.
+     * 
+     * @return  SurfaceProps active in the current/top layer
+     */
+    @NotNull
+    public SurfaceProps getTopProps() {
+        try {
+            Stats.onNativeCall();
+            return _nGetTopProps(_ptr);
+        } finally {
+            Reference.reachabilityFence(this);
+        }
+    }
+
     @NotNull @Contract("_, _, _ -> this")
     public Canvas drawPoint(float x, float y, @NotNull Paint paint) {
         assert paint != null : "Can’t drawPoint with paint == null";
@@ -1230,6 +1263,8 @@ public class Canvas extends Managed {
 
     public static native long _nGetFinalizer();
     public static native long _nMakeFromBitmap(long bitmapPtr, int flags, int pixelGeometry);
+    public static native SurfaceProps _nGetBaseProps(long ptr);
+    public static native SurfaceProps _nGetTopProps(long ptr);
     public static native void _nDrawPoint(long ptr, float x, float y, long paintPtr);
     public static native void _nDrawPoints(long ptr, int mode, float[] coords, long paintPtr);
     public static native void _nDrawLine(long ptr, float x0, float y0, float x1, float y1, long paintPtr);

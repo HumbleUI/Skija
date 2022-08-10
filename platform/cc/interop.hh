@@ -227,9 +227,13 @@ namespace skija {
     }
 
     namespace SurfaceProps {
+        extern jclass cls;
+        extern jmethodID ctor;
         extern jmethodID _getFlags;
         extern jmethodID _getPixelGeometryOrdinal;
         void onLoad(JNIEnv* env);
+        void onUnload(JNIEnv* env);
+        jobject toJava(JNIEnv* env, const SkSurfaceProps& props);
         std::unique_ptr<SkSurfaceProps> toSkSurfaceProps(JNIEnv* env, jobject surfacePropsObj);
     }
 

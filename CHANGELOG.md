@@ -1,4 +1,8 @@
-# WIP
+# 0.105.0 - Aug 10, 2022
+
+Changed:
+
+- Skia version m102-32283b3f00 -> m105-f204b137b9
 
 Added:
 
@@ -11,10 +15,8 @@ Added:
 - Bitmap::erase(Color4f, ColorSpace, IRect)
 - Bitmap::getColor4f(int, int)
 - Pixmap::getColor4f(int, int)
-
-Changed:
-
-- Skia version m102-32283b3f00 -> m105-f204b137b9
+- Canvas::getBaseProps()
+- Canvas::getTopProps()
 
 Fixed:
 

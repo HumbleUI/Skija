@@ -276,6 +276,9 @@ public class BitmapScene extends Scene {
 
     @Override
     public void draw(Canvas canvas, int width, int height, float dpi, int xpos, int ypos) {
+        assert null != canvas.getBaseProps();
+        assert null != canvas.getTopProps();
+
         try (var fill = new Paint();
              var stroke = new Paint().setColor(0xFFE5E5E5).setMode(PaintMode.STROKE).setStrokeWidth(1);)
         {

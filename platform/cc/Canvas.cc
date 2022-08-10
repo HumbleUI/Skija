@@ -23,6 +23,20 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Canvas__1nMakeF
     return reinterpret_cast<jlong>(canvas);
 }
 
+extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_Canvas__1nGetBaseProps
+  (JNIEnv* env, jclass jclass, jlong canvasPtr) {
+    SkCanvas* canvas = reinterpret_cast<SkCanvas*>(static_cast<uintptr_t>(canvasPtr));
+    SkSurfaceProps props = canvas->getBaseProps();
+    return skija::SurfaceProps::toJava(env, props);
+}
+
+extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_Canvas__1nGetTopProps
+  (JNIEnv* env, jclass jclass, jlong canvasPtr) {
+    SkCanvas* canvas = reinterpret_cast<SkCanvas*>(static_cast<uintptr_t>(canvasPtr));
+    SkSurfaceProps props = canvas->getTopProps();
+    return skija::SurfaceProps::toJava(env, props);
+}
+
 extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Canvas__1nDrawPoint
   (JNIEnv* env, jclass jclass, jlong canvasPtr, jfloat x, jfloat y, jlong paintPtr) {
     SkCanvas* canvas = reinterpret_cast<SkCanvas*>(static_cast<uintptr_t>(canvasPtr));

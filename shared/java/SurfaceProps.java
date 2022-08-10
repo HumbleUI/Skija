@@ -13,6 +13,11 @@ public class SurfaceProps {
     @ApiStatus.Internal 
     public final PixelGeometry _pixelGeometry;
 
+    @ApiStatus.Internal
+    public SurfaceProps(boolean deviceIndependentFonts, int pixelGeometry) {
+        this(deviceIndependentFonts, PixelGeometry.values()[pixelGeometry]);
+    }
+
     public SurfaceProps() {
         this(false, PixelGeometry.UNKNOWN);
     }

@@ -483,13 +483,26 @@ namespace skija {
     }
 
     namespace SurfaceProps {
+        jclass cls;
+        jmethodID ctor;
         jmethodID _getFlags;
         jmethodID _getPixelGeometryOrdinal;
 
         void onLoad(JNIEnv* env) {
-            jclass cls = env->FindClass("io/github/humbleui/skija/SurfaceProps");
+            jclass local = env->FindClass("io/github/humbleui/skija/SurfaceProps");
+            cls = static_cast<jclass>(env->NewGlobalRef(local));
+            ctor = env->GetMethodID(cls, "<init>", "(ZI)V");
             _getFlags = env->GetMethodID(cls, "_getFlags", "()I");
             _getPixelGeometryOrdinal = env->GetMethodID(cls, "_getPixelGeometryOrdinal", "()I");
+        }
+
+        void onUnload(JNIEnv* env) {
+            env->DeleteGlobalRef(cls);
+        }
+
+        jobject toJava(JNIEnv* env, const SkSurfaceProps& props) {
+            jobject res = env->NewObject(cls, ctor, props.isUseDeviceIndependentFonts(), static_cast<jint>(props.pixelGeometry()));
+            return java::lang::Throwable::exceptionThrown(env) ? nullptr : res;
         }
 
         std::unique_ptr<SkSurfaceProps> toSkSurfaceProps(JNIEnv* env, jobject surfacePropsObj) {
@@ -545,6 +558,7 @@ namespace skija {
     }
 
     void onUnload(JNIEnv* env) {
+        SurfaceProps::onUnload(env);
         RSXform::onUnload(env);
         PaintFilterCanvas::onUnload(env);
         PathSegment::onUnload(env);
