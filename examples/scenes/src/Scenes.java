@@ -6,7 +6,7 @@ import io.github.humbleui.skija.*;
 
 public class Scenes {
     public static TreeMap<String, Scene> scenes;
-    public static String currentScene = "Text Line Locale";
+    public static String currentScene = "Squircle";
     public static HUD hud = new HUD();
     public static boolean stats = true;
 
@@ -52,6 +52,7 @@ public class Scenes {
         scenes.put("Shapers", null);
         scenes.put("Skottie", null);
         scenes.put("Squares", null);
+        scenes.put("Squircle", null);
         scenes.put("Swing", null);
         scenes.put("Text Shape Bench", null);
         scenes.put("Text Style", null);
