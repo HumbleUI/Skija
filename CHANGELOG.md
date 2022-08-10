@@ -4,10 +4,19 @@ Added:
 
 - TextLineRunHandler
 - FontMgrRunIterator ctor that accepts languageIterator
+- SamplingModeAnisotropic
+
+Changed:
+
+- Skia version m102-32283b3f00 -> m105-f204b137b9
 
 Fixed:
 
 - Surface::makeImageSnapshot can now correctly return null #23
+
+Removed:
+
+- [ BREAKING ] ParagraphBuilder::setParagraphStyle
 
 # 0.102.0 - April 21, 2022
 

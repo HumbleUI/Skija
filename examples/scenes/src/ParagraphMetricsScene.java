@@ -51,8 +51,7 @@ public class ParagraphMetricsScene extends Scene {
              TextStyle ligaTs    = new TextStyle().setFontSize(24).setColor(0xFF000000).setFontFamilies(new String[] { "Interface" });
              TextStyle zapfinoTs = new TextStyle().setFontSize(24).setColor(0xFF000000).setFontFamilies(new String[] { "Zapfino" });
              ParagraphStyle ps   = new ParagraphStyle();
-             ParagraphBuilder pb = new ParagraphBuilder(ps, fc);
-             ParagraphStyle ps2  = new ParagraphStyle().setAlignment(Alignment.RIGHT);)
+             ParagraphBuilder pb = new ParagraphBuilder(ps, fc);)
         {
             // default style
             pb.pushStyle(defaultTs);
@@ -77,7 +76,6 @@ public class ParagraphMetricsScene extends Scene {
             pb.addText(" is false\n");
             pb.popStyle();
 
-            pb.setParagraphStyle(ps2);
             pb.pushStyle(defaultTs);
             pb.addText("— Vicious circularity, \n");
             pb.pushStyle(smallTs);

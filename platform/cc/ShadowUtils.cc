@@ -1,6 +1,7 @@
+#include "interop.hh"
 #include <jni.h>
 #include "SkShadowUtils.h"
-#include "interop.hh"
+#include "SkPoint3.h"
 
 extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_ShadowUtils__1nDrawShadow
   (JNIEnv* env, jclass jclass, jlong canvasPtr, jlong pathPtr, jfloat zPlaneX, jfloat zPlaneY, jfloat zPlaneZ,

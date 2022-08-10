@@ -14,6 +14,6 @@ public class FilterMipmap implements SamplingMode {
 
     @ApiStatus.Internal @Override
     public long _pack() {
-        return 0x7FFFFFFFFFFFFFFFL & (((long) _filterMode.ordinal() << 32) | (long) _mipmapMode.ordinal());
+        return 0x3FFFFFFFFFFFFFFFL & (((long) _filterMode.ordinal() << 32) | (long) _mipmapMode.ordinal());
     }
 }

@@ -50,16 +50,6 @@ public class ParagraphBuilder extends Managed {
         return this;
     }
 
-    public ParagraphBuilder setParagraphStyle(ParagraphStyle style) {
-        try {
-            Stats.onNativeCall();
-            _nSetParagraphStyle(_ptr, Native.getPtr(style));
-            return this;
-        } finally {
-            Reference.reachabilityFence(style);
-        }
-    }
-
     public Paragraph build() {
         try {
             Stats.onNativeCall();
@@ -82,6 +72,5 @@ public class ParagraphBuilder extends Managed {
     public static native void _nPopStyle(long ptr);
     public static native void _nAddText(long ptr, String text);
     public static native void _nAddPlaceholder(long ptr, float width, float height, int alignment, int baselineMode, float baseline);
-    public static native void _nSetParagraphStyle(long ptr, long stylePtr);
     public static native long _nBuild(long ptr);
 }

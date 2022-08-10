@@ -3,6 +3,7 @@ package io.github.humbleui.skija.examples.scenes;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.*;
 import io.github.humbleui.skija.*;
 import io.github.humbleui.types.*;
 
@@ -47,14 +48,28 @@ public class ImagesScene extends Scene {
         canvas.translate(90, 0);
         canvas.drawImageRect(ducks, Rect.makeXYWH(0, 0, 640, 640), Rect.makeXYWH(0, 0, 160, 80), null, true);
         canvas.translate(170, 0);
-        canvas.drawImageRect(ducks, Rect.makeXYWH(300, 300, 40, 40), Rect.makeXYWH(0, 0, 160, 160), null, false);
-        canvas.translate(170, 0);
-        canvas.drawImageRect(ducks, Rect.makeXYWH(300, 300, 40, 40), Rect.makeXYWH(0, 0, 160, 160), SamplingMode.MITCHELL, null, false);
-        canvas.translate(170, 0);
-        canvas.drawImageRect(ducks, Rect.makeXYWH(300, 300, 40, 40), Rect.makeXYWH(0, 0, 160, 160), SamplingMode.CATMULL_ROM, null, false);
-        canvas.translate(170, 0);
         canvas.restore();
         canvas.translate(0, 170);
+
+        canvas.save();
+        for (var pair: Pair.arrayOf("None/None", SamplingMode.DEFAULT,
+                                    "Linear/None", SamplingMode.LINEAR,
+                                    "Linear/Nearest", new FilterMipmap(FilterMode.LINEAR, MipmapMode.NEAREST),
+                                    "Linear/Linear", new FilterMipmap(FilterMode.LINEAR, MipmapMode.LINEAR),
+                                    "Mitchell", SamplingMode.MITCHELL,
+                                    "Catmull-Rom", SamplingMode.CATMULL_ROM,
+                                    "Anisotropic(10)", new SamplingModeAnisotropic(10)))
+        {
+            String name = pair.getFirst();
+            SamplingMode mode = pair.getSecond();
+
+            canvas.drawImageRect(circus, Rect.makeXYWH(0, 0, 320, 640), Rect.makeXYWH(0, 0, 80, 160), mode, null, false);
+            canvas.drawImageRect(circus, Rect.makeXYWH(200, 220, 60, 100), Rect.makeXYWH(80, 0, 80, 160), mode, null, false);
+            canvas.drawString(name, 0, 175, inter13, blackFill);
+            canvas.translate(170, 0);
+        }
+        canvas.restore();
+        canvas.translate(0, 200);
 
         canvas.save();
         try (Paint paint = new Paint().setBlendMode(BlendMode.SCREEN)) {

@@ -28,6 +28,6 @@ public class CubicResampler implements SamplingMode {
 
     @ApiStatus.Internal @Override
     public long _pack() {
-        return 0x8000000000000000L | ((long) Float.floatToIntBits(_B) << 32) | (long) Float.floatToIntBits(_C);
+        return 0x8000000000000000L | (0x3FFFFFFFFFFFFFFFL & (((long) Float.floatToIntBits(_B) << 32) | (long) Float.floatToIntBits(_C)));
     }
 }

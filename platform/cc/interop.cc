@@ -471,6 +471,9 @@ namespace skija {
                 val = val & 0x7FFFFFFFFFFFFFFF;
                 float* ptr = reinterpret_cast<float*>(&val);
                 return SkSamplingOptions(SkCubicResampler {ptr[1], ptr[0]});
+            } else if (0x4000000000000000 & val) {
+                int32_t maxAniso = (int32_t) (val & 0xFFFFFFFF);
+                return SkSamplingOptions::Aniso(maxAniso);
             } else {
                 int32_t filter = (int32_t) ((val >> 32) & 0xFFFFFFFF);
                 int32_t mipmap = (int32_t) (val & 0xFFFFFFFF);
