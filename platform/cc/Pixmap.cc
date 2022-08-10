@@ -107,6 +107,13 @@ extern "C" {
         return static_cast<jint>(pixmap->getColor(x, y));
     }
 
+    JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_Pixmap__1nGetColor4f
+      (JNIEnv *env, jclass klass, jlong ptr, jint x, jint y) {
+        SkPixmap* pixmap = jlongToPtr<SkPixmap*>(ptr);
+        SkColor4f color = pixmap->getColor4f(x, y);
+        return env->NewObject(skija::Color4f::cls, skija::Color4f::ctor, color.fR, color.fG, color.fB, color.fA);
+    }
+
     JNIEXPORT jfloat JNICALL Java_io_github_humbleui_skija_Pixmap__1nGetAlphaF
       (JNIEnv *env, jclass klass, jlong ptr, jint x, jint y) {
         SkPixmap* pixmap = jlongToPtr<SkPixmap*>(ptr);

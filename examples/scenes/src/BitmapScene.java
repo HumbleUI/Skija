@@ -83,7 +83,8 @@ public class BitmapScene extends Scene {
     private void drawBitmapCanvas(Canvas canvas, IRect target, float dpi) {
         try (var bitmap = new Bitmap();
              var path = new Path();
-             var stroke = new Paint().setColor(0xFFe76f51).setMode(PaintMode.STROKE).setStrokeWidth(10);) {
+             var stroke = new Paint().setColor(0xFFe76f51).setMode(PaintMode.STROKE).setStrokeWidth(10);)
+        {
             bitmap.allocPixels(ImageInfo.makeS32((int) (target.getWidth() * dpi), (int) (target.getHeight() * dpi), ColorAlphaType.PREMUL));
             
             bitmap.erase(0x80a8dadc);
@@ -205,7 +206,7 @@ public class BitmapScene extends Scene {
         {
             var srcInfo = ImageInfo.makeS32((int) (target.getWidth() * dpi), (int) (target.getHeight() / 2 * dpi), ColorAlphaType.UNPREMUL);
             src.allocPixels(srcInfo);
-            int len = (int) (target.getWidth() * dpi);
+            int len = (int) (target.getWidth() / 2 * dpi);
             for (int x = 0; x < len; ++x) {
                 int alpha = (int) (255f * x / len);
                 int color = (alpha << 24) | (alpha << 16) | (0 << 8) | (255 - alpha);
@@ -224,6 +225,52 @@ public class BitmapScene extends Scene {
 
         try(var stroke = new Paint().setColor(0xFFE5E5E5).setMode(PaintMode.STROKE).setStrokeWidth(1);) {
             canvas.drawRect(target.toRect(), stroke);
+        }
+    }
+
+    public void drawErase(Canvas canvas, IRect target, IRect screen, float dpi) {
+        var w = target.getWidth() / 2;
+        var h = target.getHeight() / 2;
+        var srcInfo = ImageInfo.makeS32((int) (w * dpi), (int) (h * dpi), ColorAlphaType.UNPREMUL);
+        var red = new Color4f(0.93725497f, 0, 0);
+        try (var src = new Bitmap();) {
+            src.allocPixels(srcInfo);
+            src.erase(red, ColorSpace.getDisplayP3());
+            var color = src.getColor4f((int) (w / 2 * dpi), (int) (h / 2 * dpi));
+            assert new Color4f(1, 0, 0).equals(color) : "Expected " + new Color4f(1, 0, 0) + ", got " + color;
+            try (var image = Image.makeFromBitmap(src.setImmutable());) {
+                canvas.drawImageRect(image, Rect.makeXYWH(target.getLeft(), target.getTop(), w, h));
+            }
+        }
+
+        try (var src = new Bitmap();) {
+            src.allocPixels(srcInfo);
+            src.erase(red);
+            var color = src.getColor4f((int) (w / 2 * dpi), (int) (h / 2 * dpi));
+            assert red.equals(color) : "Expected " + red + ", got " + color;
+            try (var image = Image.makeFromBitmap(src.setImmutable());) {
+                canvas.drawImageRect(image, Rect.makeXYWH(target.getLeft() + w, target.getTop(), w, h));
+            }
+        }
+
+        try (var src = new Bitmap();) {
+            src.allocPixels(srcInfo);
+            src.erase(red, ColorSpace.getDisplayP3(), IRect.makeXYWH((int) (w / 4 * dpi), (int) (h / 4 * dpi), (int) (w / 2 * dpi), (int) (h / 2 * dpi)));
+            var color = src.getColor4f((int) (w / 2 * dpi), (int) (h / 2 * dpi));
+            assert new Color4f(1, 0, 0).equals(color) : "Expected " + new Color4f(1, 0, 0) + ", got " + color;
+            try (var image = Image.makeFromBitmap(src.setImmutable());) {
+                canvas.drawImageRect(image, Rect.makeXYWH(target.getLeft(), target.getTop() + h, w, h));
+            }
+        }
+
+        try (var src = new Bitmap();) {
+            src.allocPixels(srcInfo);
+            src.erase(red, null, IRect.makeXYWH((int) (w / 4 * dpi), (int) (h / 4 * dpi), (int) (w / 2 * dpi), (int) (h / 2 * dpi)));
+            var color = src.getColor4f((int) (w / 2 * dpi), (int) (h / 2 * dpi));
+            assert red.equals(color) : "Expected " + red + ", got " + color;
+            try (var image = Image.makeFromBitmap(src.setImmutable());) {
+                canvas.drawImageRect(image, Rect.makeXYWH(target.getLeft() + w, target.getTop() + h, w, h));
+            }
         }
     }
 
@@ -264,6 +311,9 @@ public class BitmapScene extends Scene {
             left = xpos - bw - 20 - bw / 2 - 10;
             top  = ypos + bh / 2 + 10;
             drawAlpha(canvas, IRect.makeXYWH(left, top, bw, bh), screen, dpi);
+
+            left = xpos - bw / 2 - 10;
+            drawErase(canvas, IRect.makeXYWH(left, top, bw, bh), screen, dpi);
         }
     }
 }

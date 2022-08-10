@@ -143,6 +143,15 @@ public class Pixmap extends Managed {
         }
     }
 
+    public Color4f getColor4f(int x, int y) {
+        Stats.onNativeCall();
+        try {
+            return _nGetColor4f(_ptr, x, y);
+        } finally {
+            Reference.reachabilityFence(this);
+        }
+    }
+
     public float getAlphaF(int x, int y) {
         Stats.onNativeCall();
         try {
@@ -264,6 +273,7 @@ public class Pixmap extends Managed {
     public static native int _nComputeByteSize(long ptr);
     public static native boolean _nComputeIsOpaque(long ptr);
     public static native int _nGetColor(long ptr, int x, int y);
+    public static native Color4f _nGetColor4f(long ptr, int x, int y);
     public static native float _nGetAlphaF(long ptr, int x, int y);
     public static native long _nGetAddrAt(long ptr, int x, int y);
     // methods related to C++ types(addr8/16/32/64, writable_addr8/16/32/64) not included - not needed

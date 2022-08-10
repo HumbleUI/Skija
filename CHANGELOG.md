@@ -5,6 +5,12 @@ Added:
 - TextLineRunHandler
 - FontMgrRunIterator ctor that accepts languageIterator
 - SamplingModeAnisotropic
+- Bitmap::erase(Color4f)
+- Bitmap::erase(Color4f, ColorSpace)
+- Bitmap::erase(Color4f, IRect)
+- Bitmap::erase(Color4f, ColorSpace, IRect)
+- Bitmap::getColor4f(int, int)
+- Pixmap::getColor4f(int, int)
 
 Changed:
 
