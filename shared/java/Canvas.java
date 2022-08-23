@@ -918,6 +918,22 @@ public class Canvas extends Managed {
     }
 
     /**
+     * Replaces Matrix with matrix.
+     * Unlike concat(), any prior matrix state is overwritten.
+     *
+     * @param matrix  matrix to copy, replacing existing Matrix
+     *
+     * @see <a href="https://fiddle.skia.org/c/@Canvas_setMatrix">https://fiddle.skia.org/c/@Canvas_setMatrix</a>
+     */
+    @NotNull @Contract("_ -> this")
+    public Canvas setMatrix(@NotNull Matrix44 matrix) {
+        assert matrix != null : "Can’t setMatrix with matrix == null";
+        Stats.onNativeCall();
+        _nSetMatrix(_ptr, matrix._mat);
+        return this;
+    }
+
+    /**
      * Sets SkMatrix to the identity matrix.
      * Any prior matrix state is overwritten.
      *
