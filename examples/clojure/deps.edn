@@ -1,10 +1,11 @@
 {
   :deps {
-    org.clojure/clojure    {:mvn/version "1.10.3"}
-    org.lwjgl/lwjgl        {:mvn/version "3.2.3"}
-    org.lwjgl/lwjgl-glfw   {:mvn/version "3.2.3"}
-    org.lwjgl/lwjgl-opengl {:mvn/version "3.2.3"}
-    nrepl/nrepl            {:mvn/version "0.8.3"}
+    org.clojure/clojure      {:mvn/version "1.11.1"}
+    org.lwjgl/lwjgl          {:mvn/version "3.2.3"}
+    org.lwjgl/lwjgl-glfw     {:mvn/version "3.2.3"}
+    org.lwjgl/lwjgl-opengl   {:mvn/version "3.2.3"}
+    nrepl/nrepl              {:mvn/version "0.8.3"}
+    io.github.humbleui/types {:mvn/version "0.1.2"}
   }
   :paths ["src" "../../platform/build" "../../platform/target/classes" "../../shared/target/classes" ]
   :aliases {
