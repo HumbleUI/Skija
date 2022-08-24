@@ -929,7 +929,7 @@ public class Canvas extends Managed {
     public Canvas setMatrix(@NotNull Matrix44 matrix) {
         assert matrix != null : "Can’t setMatrix with matrix == null";
         Stats.onNativeCall();
-        _nSetMatrix(_ptr, matrix._mat);
+        _nSetMatrix44(_ptr, matrix._mat);
         return this;
     }
 
@@ -1302,6 +1302,7 @@ public class Canvas extends Managed {
     public static native void _nClear(long ptr, int color);
     public static native void _nDrawPaint(long ptr, long paintPtr);
     public static native void _nSetMatrix(long ptr, float[] matrix);
+    public static native void _nSetMatrix44(long ptr, float[] matrix);
     public static native float[] _nGetLocalToDevice(long ptr);
     public static native void _nResetMatrix(long ptr);
     public static native void _nClipRect(long ptr, float left, float top, float right, float bottom, int mode, boolean antiAlias);

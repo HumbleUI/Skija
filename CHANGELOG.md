@@ -1,3 +1,9 @@
+# WIP
+
+Added:
+
+- Canvas::setMatrix(Matrix44) #26 via @Algeseven
+
 # 0.105.0 - Aug 10, 2022
 
 Changed:

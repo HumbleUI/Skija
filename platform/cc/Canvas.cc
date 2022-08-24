@@ -237,6 +237,13 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Canvas__1nSetMat
     canvas->setMatrix(*matrix);
 }
 
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Canvas__1nSetMatrix44
+  (JNIEnv* env, jclass jclass, jlong canvasPtr, jfloatArray matrixArr) {
+    SkCanvas* canvas = reinterpret_cast<SkCanvas*>(static_cast<uintptr_t>(canvasPtr));
+    std::unique_ptr<SkM44> matrix = skM44(env, matrixArr);
+    canvas->setMatrix(*matrix);
+}
+
 extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Canvas__1nResetMatrix
   (JNIEnv* env, jclass jclass, jlong canvasPtr) {
     SkCanvas* canvas = reinterpret_cast<SkCanvas*>(static_cast<uintptr_t>(canvasPtr));
