@@ -105,6 +105,8 @@ public class FigmaScene extends Scene {
 
     @Override
     public void draw(Canvas canvas, int width, int height, float dpi, int xpos, int ypos) {
+        if (width < 700) { width = 700; }
+        if (height < 700) { height = 700; }
         drawTabbar(canvas, width, height);
         drawToolbar(canvas, width, height);
         drawLeft(canvas, width, height, dpi);
