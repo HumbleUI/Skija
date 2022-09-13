@@ -6,12 +6,13 @@ import io.github.humbleui.skija.*;
 
 public class Scenes {
     public static TreeMap<String, Scene> scenes;
-    public static String currentScene = "Bitmap";
+    public static String currentScene = "Backdrop";
     public static HUD hud = new HUD();
     public static boolean stats = true;
 
     static {
         scenes = new TreeMap<>(Comparator.comparing(s -> s.toLowerCase()));
+        scenes.put("Backdrop", null);
         scenes.put("Bitmap", null);
         scenes.put("Bitmap Image", null);
         scenes.put("Blends", null);

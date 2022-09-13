@@ -3,6 +3,8 @@
 Added:
 
 - Canvas::setMatrix(Matrix44) #26 via @Algeseven
+- Canvas::saveLayerAlpha
+- Canvas::saveLayer(SaveLayerRec) #27
 
 # 0.105.0 - Aug 10, 2022
 

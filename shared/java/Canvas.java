@@ -886,6 +886,31 @@ public class Canvas extends Managed {
     }
 
     @NotNull @Contract("_ -> this")
+    public Canvas drawColor(int color) {
+        return drawColor(color, BlendMode.SRC_OVER);
+    }
+
+    @NotNull @Contract("_, _ -> this")
+    public Canvas drawColor(int color, @NotNull BlendMode mode) {
+        Stats.onNativeCall();
+        _nDrawColor(_ptr, color, mode.ordinal());
+        return this;
+    }
+
+    @NotNull @Contract("_ -> this")
+    public Canvas drawColor(@NotNull Color4f color) {
+        return drawColor(color, BlendMode.SRC_OVER);
+    }
+
+    @NotNull @Contract("_, _ -> this")
+    public Canvas drawColor(@NotNull Color4f color, @NotNull BlendMode mode) {
+        Stats.onNativeCall();
+        _nDrawColor4f(_ptr, color._r, color._g, color._b, color._a, mode.ordinal());
+        return this;
+    }
+
+
+    @NotNull @Contract("_ -> this")
     public Canvas clear(int color) {
         Stats.onNativeCall();
         _nClear(_ptr, color);
@@ -1249,6 +1274,72 @@ public class Canvas extends Managed {
         }
     }
 
+    /**
+     * <p>Saves matrix and clip, and allocates bitmap for subsequent drawing.</p>
+     * 
+     * <p>Calling restore() discards changes to matrix and clip,
+     * and blends layer with alpha opacity onto prior layer.</p>
+     *
+     * <p>matrix may be changed by translate(), scale(), rotate(), skew(), concat(),
+     * setMatrix(), and resetMatrix(). Clip may be changed by clipRect(), clipRRect(),
+     * clipPath(), clipRegion().</p>
+     *
+     * <p>Bounds suggests but does not define layer size. To clip drawing to
+     * a specific rectangle, use clipRect().</p>
+     *
+     * <p>Call restoreToCount() with returned value to restore this and subsequent saves.</p>
+     *
+     * @param bounds  hint to limit the size of layer; may be null
+     * @param alpha   opacity of layer, zero is fully transparent, 255 is fully opaque.
+     * @return        depth of saved stack
+     *
+     * @see <a href="https://fiddle.skia.org/c/@Canvas_saveLayerAlpha">https://fiddle.skia.org/c/@Canvas_saveLayerAlpha</a>
+     */
+    public int saveLayerAlpha(@Nullable Rect bounds, int alpha) {
+        try {
+            Stats.onNativeCall();
+            if (bounds == null)
+                return _nSaveLayerAlpha(_ptr, alpha);
+            else
+                return _nSaveLayerAlphaRect(_ptr, bounds._left, bounds._top, bounds._right, bounds._bottom, alpha);
+        } finally {
+            Reference.reachabilityFence(this);
+        }
+    }
+
+    /**
+     * <p>Saves matrix and clip, and allocates Bitmap for subsequent drawing.</p>
+     * 
+     * <p>Calling restore() discards changes to matrix and clip,
+     * and blends Bitmap with alpha opacity onto the prior layer.</p>
+     * 
+     * <p>matrix may be changed by translate(), scale(), rotate(), skew(), concat(),
+     * setMatrix(), and resetMatrix(). Clip may be changed by clipRect(), clipRRect(),
+     * clipPath(), clipRegion().</p>
+     * 
+     * <p>SaveLayerRec contains the state used to create the layer.</p>
+     * 
+     * <p>Call restoreToCount() with returned value to restore this and subsequent saves.</p>
+     * 
+     * @param layerRec  layer state
+     * @return          depth of save state stack before this call was made.
+     * 
+     * @see <a href="https://fiddle.skia.org/c/@Canvas_saveLayer_3">https://fiddle.skia.org/c/@Canvas_saveLayer_3</a>
+     */
+    public int saveLayer(@NotNull SaveLayerRec layerRec) {
+        try {
+            Stats.onNativeCall();
+            Rect bounds = layerRec._bounds;
+            if (bounds == null)
+                return _nSaveLayerRec(_ptr, Native.getPtr(layerRec._paint), Native.getPtr(layerRec._backdrop), layerRec._flags);
+            else
+                return _nSaveLayerRecRect(_ptr, bounds._left, bounds._top, bounds._right, bounds._bottom, Native.getPtr(layerRec._paint), Native.getPtr(layerRec._backdrop), layerRec._flags);
+        } finally {
+            Reference.reachabilityFence(this);
+            Reference.reachabilityFence(layerRec);
+        }
+    }
+
     public int getSaveCount() {
         try {
             Stats.onNativeCall();
@@ -1299,6 +1390,8 @@ public class Canvas extends Managed {
     public static native void _nDrawVertices(long ptr, int verticesMode, float[] cubics, int[] colors, float[] texCoords, short[] indices, int blendMode, long paintPtr);
     public static native void _nDrawPatch(long ptr, float[] cubics, int[] colors, float[] texCoords, int blendMode, long paintPtr);
     public static native void _nDrawDrawable(long ptr, long drawablePrt, float[] matrix);
+    public static native void _nDrawColor(long ptr, int color, int blendMode);
+    public static native void _nDrawColor4f(long ptr, float r, float g, float b, float a, int blendMode);
     public static native void _nClear(long ptr, int color);
     public static native void _nDrawPaint(long ptr, long paintPtr);
     public static native void _nSetMatrix(long ptr, float[] matrix);
@@ -1316,6 +1409,10 @@ public class Canvas extends Managed {
     public static native int  _nSave(long ptr);
     public static native int  _nSaveLayer(long ptr, long paintPtr);
     public static native int  _nSaveLayerRect(long ptr, float left, float top, float right, float bottom, long paintPtr);
+    public static native int  _nSaveLayerAlpha(long ptr, int alpha);
+    public static native int  _nSaveLayerAlphaRect(long ptr, float left, float top, float right, float bottom, int alpha);
+    public static native int  _nSaveLayerRec(long ptr, long paintPtr, long backdropPtr, int flags);
+    public static native int  _nSaveLayerRecRect(long ptr, float left, float top, float right, float bottom, long paintPtr, long backdropPtr, int flags);
     public static native int  _nGetSaveCount(long ptr);
     public static native void _nRestore(long ptr);
     public static native void _nRestoreToCount(long ptr, int saveCount);

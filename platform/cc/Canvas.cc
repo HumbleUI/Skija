@@ -218,6 +218,17 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Canvas__1nDrawDr
     canvas->drawDrawable(drawable, matrix.get());
 }
 
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Canvas__1nDrawColor(JNIEnv* env, jclass jclass, jlong ptr, jint color, jint blendMode) {
+    SkCanvas* canvas = reinterpret_cast<SkCanvas*>(static_cast<uintptr_t>(ptr));
+    canvas->drawColor(color, static_cast<SkBlendMode>(blendMode));
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Canvas__1nDrawColor4f(JNIEnv* env, jclass jclass, jlong ptr, jfloat r, jfloat g, jfloat b, jfloat a, jint blendMode) {
+    SkCanvas* canvas = reinterpret_cast<SkCanvas*>(static_cast<uintptr_t>(ptr));
+    SkColor4f color { r, g, b, a };
+    canvas->drawColor(color, static_cast<SkBlendMode>(blendMode));
+}
+
 extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Canvas__1nClear(JNIEnv* env, jclass jclass, jlong ptr, jint color) {
     SkCanvas* canvas = reinterpret_cast<SkCanvas*>(static_cast<uintptr_t>(ptr));
     canvas->clear(color);
@@ -330,6 +341,38 @@ extern "C" JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_Canvas__1nSaveLa
     SkRect bounds {left, top, right, bottom};
     SkPaint* paint = reinterpret_cast<SkPaint*>(static_cast<uintptr_t>(paintPtr));
     return canvas->saveLayer(&bounds, paint);
+}
+
+extern "C" JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_Canvas__1nSaveLayerAlpha
+  (JNIEnv* env, jclass jclass, jlong ptr, jint alpha) {
+    SkCanvas* canvas = reinterpret_cast<SkCanvas*>(static_cast<uintptr_t>(ptr));
+    return canvas->saveLayerAlpha(nullptr, alpha);
+}
+
+extern "C" JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_Canvas__1nSaveLayerAlphaRect
+  (JNIEnv* env, jclass jclass, jlong ptr, jfloat left, jfloat top, jfloat right, jfloat bottom, jint alpha) {
+    SkCanvas* canvas = reinterpret_cast<SkCanvas*>(static_cast<uintptr_t>(ptr));
+    SkRect bounds {left, top, right, bottom};
+    return canvas->saveLayerAlpha(&bounds, alpha);
+}
+
+extern "C" JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_Canvas__1nSaveLayerRec
+  (JNIEnv* env, jclass jclass, jlong ptr, jlong paintPtr, jlong backdropPtr, jint flags) {
+    SkCanvas* canvas = reinterpret_cast<SkCanvas*>(static_cast<uintptr_t>(ptr));
+    SkPaint* paint = reinterpret_cast<SkPaint*>(static_cast<uintptr_t>(paintPtr));
+    SkImageFilter* backdrop = reinterpret_cast<SkImageFilter*>(static_cast<uintptr_t>(backdropPtr));
+    SkCanvas::SaveLayerRec layerRec(nullptr, paint, backdrop, flags);
+    return canvas->saveLayer(layerRec);
+}
+
+extern "C" JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_Canvas__1nSaveLayerRecRect
+  (JNIEnv* env, jclass jclass, jlong ptr, jfloat left, jfloat top, jfloat right, jfloat bottom, jlong paintPtr, jlong backdropPtr, jint flags) {
+    SkCanvas* canvas = reinterpret_cast<SkCanvas*>(static_cast<uintptr_t>(ptr));
+    SkRect bounds {left, top, right, bottom};
+    SkPaint* paint = reinterpret_cast<SkPaint*>(static_cast<uintptr_t>(paintPtr));
+    SkImageFilter* backdrop = reinterpret_cast<SkImageFilter*>(static_cast<uintptr_t>(backdropPtr));
+    SkCanvas::SaveLayerRec layerRec(&bounds, paint, backdrop, flags);
+    return canvas->saveLayer(layerRec);
 }
 
 extern "C" JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_Canvas__1nGetSaveCount(JNIEnv* env, jclass jclass, jlong ptr) {
