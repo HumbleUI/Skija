@@ -2,6 +2,7 @@
 #include <jni.h>
 #include "SkCanvas.h"
 #include "SkRRect.h"
+#include "SkSurface.h"
 #include "SkTextBlob.h"
 #include "SkVertices.h"
 #include "hb.h"
@@ -35,6 +36,14 @@ extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_Canvas__1nGet
     SkCanvas* canvas = reinterpret_cast<SkCanvas*>(static_cast<uintptr_t>(canvasPtr));
     SkSurfaceProps props = canvas->getTopProps();
     return skija::SurfaceProps::toJava(env, props);
+}
+
+extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Canvas__1nGetSurface
+  (JNIEnv* env, jclass jclass, jlong canvasPtr) {
+    SkCanvas* canvas = reinterpret_cast<SkCanvas*>(static_cast<uintptr_t>(canvasPtr));
+    SkSurface* surface = canvas->getSurface();
+    surface->ref();
+    return reinterpret_cast<jlong>(surface);
 }
 
 extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Canvas__1nDrawPoint

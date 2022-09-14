@@ -1,10 +1,15 @@
-# WIP
+# 0.106.0 - Sep 14, 2022
+
+Changed:
+
+- Skia version m105-f204b137b9 -> m106-ba6bc7d02d
 
 Added:
 
 - Canvas::setMatrix(Matrix44) #26 via @Algeseven
 - Canvas::saveLayerAlpha
 - Canvas::saveLayer(SaveLayerRec) #27
+- Canvas::getSurface
 
 # 0.105.0 - Aug 10, 2022
 

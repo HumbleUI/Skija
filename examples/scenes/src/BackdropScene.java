@@ -50,31 +50,39 @@ public class BackdropScene extends Scene {
             }
         }
 
-        var colorMatrix = new ColorMatrix(
-            0.21f, 0.72f, 0.07f, 0, 0,
-            0.21f, 0.72f, 0.07f, 0, 0,
-            0.21f, 0.72f, 0.07f, 0, 0,
-            0,     0,     0,     1, 0
-        );
+        Rect screen = Rect.makeXYWH(0, 0, width, height);
 
-        try (var backdrop20  = ImageFilter.makeBlur(20, 20, FilterTileMode.CLAMP);
-             var backdrop100 = ImageFilter.makeBlur(100, 100, FilterTileMode.CLAMP);
-             var colorFilter = ColorFilter.makeMatrix(colorMatrix);
-             var grayscale   = ImageFilter.makeColorFilter(colorFilter, null, null);
-             var paint = new Paint().setImageFilter(backdrop100);)
+        // Just backdrop
+        try (var backdrop = ImageFilter.makeBlur(20, 20, FilterTileMode.CLAMP);)
         {
-            Rect screen = Rect.makeXYWH(0, 0, width, height);
-
-            Rect rect = Rect.makeXYWH(xpos - 210, ypos - 210, 200, 200).intersect(screen);
+            Rect rect = Rect.makeXYWH(xpos - 310, ypos - 310, 200, 200).intersect(screen);
             if (rect != null) {
                 int layer = canvas.save();
                 canvas.clipRect(rect, true);
-                canvas.saveLayer(new SaveLayerRec(rect, null, backdrop20));
-                canvas.drawColor(0x40000000);
+                canvas.saveLayer(new SaveLayerRec(rect, null, backdrop));
+                canvas.drawColor(0x40FFFFFF);
                 canvas.restoreToCount(layer);
             }
 
-            rect = Rect.makeXYWH(xpos + 10, ypos - 210, 200, 200).intersect(screen);
+            rect = Rect.makeXYWH(xpos - 100, ypos - 310, 200, 200).intersect(screen);
+            if (rect != null) {
+                int layer = canvas.save();
+                canvas.clipRect(rect, true);
+                canvas.saveLayer(new SaveLayerRec(rect, null, backdrop));
+                canvas.translate(xpos - 100, ypos - 310);
+                canvas.drawColor(0x80000000);
+                try (var fill = new Paint().setColor(0x80FFFFFF)) {
+                    canvas.drawRect(Rect.makeXYWH(50, 50, 100, 100), fill);
+                }
+                canvas.restoreToCount(layer);
+            }
+        }
+
+        // Backdrop in paint, smaller blur
+        try (var backdrop = ImageFilter.makeBlur(5, 5, FilterTileMode.CLAMP);
+             var paint = new Paint().setImageFilter(backdrop);)
+        {
+            Rect rect = Rect.makeXYWH(xpos + 110, ypos - 310, 200, 200).intersect(screen);
             if (rect != null) {
                 int layer = canvas.save();
                 canvas.clipRect(rect, true);
@@ -82,26 +90,41 @@ public class BackdropScene extends Scene {
                 canvas.drawColor(0x40FFFFFF);
                 canvas.restoreToCount(layer);
             }
-
-            rect = Rect.makeXYWH(xpos - 210, ypos + 10, 200, 200).intersect(screen);
+        }
+        
+        // ColorFilter
+        var grayscaleMatrix = new ColorMatrix(
+            0.21f, 0.72f, 0.07f, 0, 0,
+            0.21f, 0.72f, 0.07f, 0, 0,
+            0.21f, 0.72f, 0.07f, 0, 0,
+            0,     0,     0,     1, 0
+        );
+        try (var colorFilter = ColorFilter.makeMatrix(grayscaleMatrix);
+             var backdrop = ImageFilter.makeColorFilter(colorFilter, null, null);)
+        {
+            Rect rect = Rect.makeXYWH(xpos - 310, ypos - 100, 200, 200).intersect(screen);
             if (rect != null) {
                 int layer = canvas.save();
                 canvas.clipRect(rect, true);
-                canvas.saveLayer(new SaveLayerRec(rect, null, backdrop20));
-                canvas.translate(xpos - 210, ypos + 10);
-                canvas.drawColor(0x80000000);
-                try (var fill = new Paint().setColor(0x80FFFFFF)) {
-                    canvas.drawRect(Rect.makeXYWH(50, 50, 100, 100), fill);
-                }
+                canvas.saveLayer(new SaveLayerRec(rect, null, backdrop, SaveLayerRecFlag.INIT_WITH_PREVIOUS));
                 canvas.restoreToCount(layer);
-            }
+            }            
+        }
 
-            rect = Rect.makeXYWH(xpos + 10, ypos + 10, 200, 200).intersect(screen);
-            if (rect != null) {
+        // makeImageSnapshot
+        Rect rect = Rect.makeXYWH(xpos - 100, ypos - 100, 200, 200).intersect(screen);
+        if (rect != null) {
+            try (var surface = canvas.getSurface();
+                 var image   = surface.makeImageSnapshot(rect.scale(dpi).toIRect());
+                 var filter  = ImageFilter.makeBlur(20, 20, FilterTileMode.CLAMP);
+                 var paint   = new Paint().setImageFilter(filter);
+                 var fill    = new Paint().setColor(0x40FFFFFF);)
+            {
                 int layer = canvas.save();
                 canvas.clipRect(rect, true);
-                canvas.saveLayer(new SaveLayerRec(rect, null, grayscale, SaveLayerRecFlag.INIT_WITH_PREVIOUS));
+                canvas.drawImageRect(image, rect, paint);
                 canvas.restoreToCount(layer);
+                canvas.drawRect(rect, fill);
             }
         }
     }

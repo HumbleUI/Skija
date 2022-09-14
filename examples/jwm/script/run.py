@@ -6,7 +6,7 @@ import common, build, build_utils
 def main():
   parser = argparse.ArgumentParser()
   parser.add_argument('--skija-version')
-  parser.add_argument('--jwm-version', default='0.4.1')
+  parser.add_argument('--jwm-version', default='0.4.8')
   parser.add_argument('--jwm-dir', default=None)
   (args, _) = parser.parse_known_args()
 
@@ -16,9 +16,7 @@ def main():
   if args.jwm_dir:
     jwm_dir = os.path.abspath(args.jwm_dir)
     classpath += [
-      os.path.join(jwm_dir, 'shared', 'target', 'classes'),
-      os.path.join(jwm_dir, build_utils.system, 'build'),
-      os.path.join(jwm_dir, build_utils.system, 'target', 'classes')
+      os.path.join(jwm_dir, 'target', 'classes'),
     ]
   else:
     classpath += [

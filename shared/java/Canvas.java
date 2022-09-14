@@ -88,6 +88,17 @@ public class Canvas extends Managed {
         }
     }
 
+    @Nullable
+    public Surface getSurface() {
+        try {
+            Stats.onNativeCall();
+            long ptr = _nGetSurface(_ptr);
+            return ptr == 0 ? null : new Surface(ptr);
+        } finally {
+            Reference.reachabilityFence(this);
+        }
+    }
+
     @NotNull @Contract("_, _, _ -> this")
     public Canvas drawPoint(float x, float y, @NotNull Paint paint) {
         assert paint != null : "Can’t drawPoint with paint == null";
@@ -1372,6 +1383,7 @@ public class Canvas extends Managed {
     public static native long _nMakeFromBitmap(long bitmapPtr, int flags, int pixelGeometry);
     public static native SurfaceProps _nGetBaseProps(long ptr);
     public static native SurfaceProps _nGetTopProps(long ptr);
+    public static native long _nGetSurface(long ptr);
     public static native void _nDrawPoint(long ptr, float x, float y, long paintPtr);
     public static native void _nDrawPoints(long ptr, int mode, float[] coords, long paintPtr);
     public static native void _nDrawLine(long ptr, float x0, float y0, float x1, float y1, long paintPtr);
