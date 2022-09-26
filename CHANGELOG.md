@@ -1,3 +1,9 @@
+# WIP
+
+Fixed:
+
+- Added `Library.staticLoad()` to `BufferUtil` #29
+
 # 0.106.0 - Sep 14, 2022
 
 Changed:

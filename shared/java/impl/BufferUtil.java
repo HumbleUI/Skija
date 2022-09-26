@@ -3,6 +3,8 @@ package io.github.humbleui.skija.impl;
 import java.nio.ByteBuffer;
 
 public class BufferUtil {
+    static { Library.staticLoad(); }
+
     public static ByteBuffer getByteBufferFromPointer(long ptr, int size) {
         ByteBuffer result = _nGetByteBufferFromPointer(ptr, size);
         if (result == null)
