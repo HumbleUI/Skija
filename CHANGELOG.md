@@ -2,7 +2,7 @@
 
 Fixed:
 
-- Added `Library.staticLoad()` to `BufferUtil` #29
+- Added `Library.staticLoad()` to `BufferUtil`, `Pixmap`, `ColorType` #29
 
 # 0.106.0 - Sep 14, 2022
 

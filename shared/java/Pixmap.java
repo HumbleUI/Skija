@@ -10,6 +10,8 @@ import io.github.humbleui.skija.impl.*;
 import io.github.humbleui.types.*;
 
 public class Pixmap extends Managed {
+    static { Library.staticLoad(); }
+
     @ApiStatus.Internal
     public Pixmap(long ptr, boolean managed) {
         super(ptr, _FinalizerHolder.PTR, managed);

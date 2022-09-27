@@ -116,6 +116,8 @@ public enum ColorType {
      */
     R16G16B16A16_UNORM;
 
+    static { Library.staticLoad(); }
+
     @ApiStatus.Internal public static final ColorType[] _values = values();
 
     /**
