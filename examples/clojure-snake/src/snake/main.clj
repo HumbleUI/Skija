@@ -8,8 +8,6 @@
    [org.lwjgl.opengl GL GL11]
    [org.lwjgl.system MemoryUtil]))
 
-(set! *warn-on-reflection* true)
-
 (defn display-scale [window]
   (let [x (make-array Float/TYPE 1)
         y (make-array Float/TYPE 1)]

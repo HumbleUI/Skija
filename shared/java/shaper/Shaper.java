@@ -112,9 +112,10 @@ public class Shaper extends Managed {
     }
 
     @Nullable @Contract("_, _, _, _, _ -> new")
-    public TextBlob shape(String text, Font font, @NotNull ShapingOptions opts, float width, @NotNull Point offset) {
+    public TextBlob shape(String text, @NotNull Font font, @NotNull ShapingOptions opts, float width, @NotNull Point offset) {
         try {
             assert opts != null : "Can’t Shaper::shape with opts == null";
+            assert font != null : "Can’t Shaper::shape with font == null";
             Stats.onNativeCall();
             long ptr = _nShapeBlob(_ptr, text, Native.getPtr(font), opts, width, offset._x, offset._y);
             return 0 == ptr ? null : new TextBlob(ptr);
@@ -124,11 +125,11 @@ public class Shaper extends Managed {
         }
     }
 
-
     @NotNull @Contract("_, _, _ -> new")
-    public TextLine shapeLine(String text, Font font, @NotNull ShapingOptions opts) {
+    public TextLine shapeLine(String text, @NotNull Font font, @NotNull ShapingOptions opts) {
         try {
             assert opts != null : "Can’t Shaper::shapeLine with opts == null";
+            assert font != null : "Can’t Shaper::shapeLine with font == null";
             Stats.onNativeCall();
             return new TextLine(_nShapeLine(_ptr, text, Native.getPtr(font), opts));
         } finally {

@@ -8,8 +8,6 @@
    [org.lwjgl.opengl GL GL11]
    [org.lwjgl.system MemoryUtil]))
 
-(set! *warn-on-reflection* true)
-
 (defn color [^long l]
   (.intValue (Long/valueOf l)))
 
