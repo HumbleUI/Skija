@@ -20,7 +20,7 @@ public class SVGSVG extends SVGContainer {
             Stats.onNativeCall();
             return _nGetX(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -30,7 +30,7 @@ public class SVGSVG extends SVGContainer {
             Stats.onNativeCall();
             return _nGetY(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -40,7 +40,7 @@ public class SVGSVG extends SVGContainer {
             Stats.onNativeCall();
             return _nGetWidth(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -50,7 +50,7 @@ public class SVGSVG extends SVGContainer {
             Stats.onNativeCall();
             return _nGetHeight(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -60,7 +60,7 @@ public class SVGSVG extends SVGContainer {
             Stats.onNativeCall();
             return _nGetPreserveAspectRatio(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -70,7 +70,7 @@ public class SVGSVG extends SVGContainer {
             Stats.onNativeCall();
             return _nGetViewBox(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -80,7 +80,7 @@ public class SVGSVG extends SVGContainer {
             Stats.onNativeCall();
             return _nGetIntrinsicSize(_ptr, lc._width, lc._height, lc._dpi);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -91,7 +91,7 @@ public class SVGSVG extends SVGContainer {
             _nSetX(_ptr, length._value, length._unit.ordinal());
             return this;
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -102,7 +102,7 @@ public class SVGSVG extends SVGContainer {
             _nSetY(_ptr, length._value, length._unit.ordinal());
             return this;
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -113,7 +113,7 @@ public class SVGSVG extends SVGContainer {
             _nSetWidth(_ptr, length._value, length._unit.ordinal());
             return this;
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -124,7 +124,7 @@ public class SVGSVG extends SVGContainer {
             _nSetHeight(_ptr, length._value, length._unit.ordinal());
             return this;
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -135,7 +135,7 @@ public class SVGSVG extends SVGContainer {
             _nSetPreserveAspectRatio(_ptr, ratio._align._value, ratio._scale.ordinal());
             return this;
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -146,7 +146,7 @@ public class SVGSVG extends SVGContainer {
             _nSetViewBox(_ptr, viewBox._left, viewBox._top, viewBox._right, viewBox._bottom);
             return this;
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 

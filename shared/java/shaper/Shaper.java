@@ -31,7 +31,7 @@ public class Shaper extends Managed {
             Stats.onNativeCall();
             return new Shaper(_nMakeShaperDrivenWrapper(Native.getPtr(fontMgr)));
         } finally {
-            Reference.reachabilityFence(fontMgr);
+            ReferenceUtil.reachabilityFence(fontMgr);
         }
     }
 
@@ -46,7 +46,7 @@ public class Shaper extends Managed {
             Stats.onNativeCall();
             return new Shaper(_nMakeShapeThenWrap(Native.getPtr(fontMgr)));
         } finally {
-            Reference.reachabilityFence(fontMgr);
+            ReferenceUtil.reachabilityFence(fontMgr);
         }
     }
 
@@ -61,7 +61,7 @@ public class Shaper extends Managed {
             Stats.onNativeCall();
             return new Shaper(_nMakeShapeDontWrapOrReorder(Native.getPtr(fontMgr)));
         } finally {
-            Reference.reachabilityFence(fontMgr);
+            ReferenceUtil.reachabilityFence(fontMgr);
         }
     }
 
@@ -92,7 +92,7 @@ public class Shaper extends Managed {
             Stats.onNativeCall();
             return new Shaper(_nMake(Native.getPtr(fontMgr)));
         } finally {
-            Reference.reachabilityFence(fontMgr);
+            ReferenceUtil.reachabilityFence(fontMgr);
         }
     }
 
@@ -120,8 +120,8 @@ public class Shaper extends Managed {
             long ptr = _nShapeBlob(_ptr, text, Native.getPtr(font), opts, width, offset._x, offset._y);
             return 0 == ptr ? null : new TextBlob(ptr);
         } finally {
-            Reference.reachabilityFence(this);
-            Reference.reachabilityFence(font);
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(font);
         }
     }
 
@@ -133,8 +133,8 @@ public class Shaper extends Managed {
             Stats.onNativeCall();
             return new TextLine(_nShapeLine(_ptr, text, Native.getPtr(font), opts));
         } finally {
-            Reference.reachabilityFence(this);
-            Reference.reachabilityFence(font);
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(font);
         }
     }
 
@@ -195,7 +195,7 @@ public class Shaper extends Managed {
             _nShape(_ptr, Native.getPtr(textUtf8), fontIter, bidiIter, scriptIter, langIter, opts, width, runHandler);
             return this;
         } finally {
-            Reference.reachabilityFence(textUtf8);
+            ReferenceUtil.reachabilityFence(textUtf8);
         }
     }
 

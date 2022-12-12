@@ -15,8 +15,8 @@ public class ImageFilter extends RefCnt {
             Stats.onNativeCall();
             return new ImageFilter(_nMakeAlphaThreshold(Native.getPtr(r), innerMin, outerMax, Native.getPtr(input), crop));
         } finally {
-            Reference.reachabilityFence(r);
-            Reference.reachabilityFence(input);
+            ReferenceUtil.reachabilityFence(r);
+            ReferenceUtil.reachabilityFence(input);
         }
     }
 
@@ -25,8 +25,8 @@ public class ImageFilter extends RefCnt {
             Stats.onNativeCall();
             return new ImageFilter(_nMakeArithmetic(k1, k2, k3, k4, enforcePMColor, Native.getPtr(bg), Native.getPtr(fg), crop));
         } finally {
-            Reference.reachabilityFence(bg);
-            Reference.reachabilityFence(fg);
+            ReferenceUtil.reachabilityFence(bg);
+            ReferenceUtil.reachabilityFence(fg);
         }
     }
 
@@ -35,8 +35,8 @@ public class ImageFilter extends RefCnt {
             Stats.onNativeCall();
             return new ImageFilter(_nMakeBlend(blendMode.ordinal(), Native.getPtr(bg), Native.getPtr(fg), crop));
         } finally {
-            Reference.reachabilityFence(bg);
-            Reference.reachabilityFence(fg);
+            ReferenceUtil.reachabilityFence(bg);
+            ReferenceUtil.reachabilityFence(fg);
         }
     }
 
@@ -49,7 +49,7 @@ public class ImageFilter extends RefCnt {
             Stats.onNativeCall();
             return new ImageFilter(_nMakeBlur(sigmaX, sigmaY, mode.ordinal(), Native.getPtr(input), crop));
         } finally {
-            Reference.reachabilityFence(input);
+            ReferenceUtil.reachabilityFence(input);
         }
     }
 
@@ -58,8 +58,8 @@ public class ImageFilter extends RefCnt {
             Stats.onNativeCall();
             return new ImageFilter(_nMakeColorFilter(Native.getPtr(f), Native.getPtr(input), crop));
         } finally {
-            Reference.reachabilityFence(f);
-            Reference.reachabilityFence(input);
+            ReferenceUtil.reachabilityFence(f);
+            ReferenceUtil.reachabilityFence(input);
         }
     }
 
@@ -68,8 +68,8 @@ public class ImageFilter extends RefCnt {
             Stats.onNativeCall();
             return new ImageFilter(_nMakeCompose(Native.getPtr(outer), Native.getPtr(inner)));
         } finally {
-            Reference.reachabilityFence(outer);
-            Reference.reachabilityFence(inner);
+            ReferenceUtil.reachabilityFence(outer);
+            ReferenceUtil.reachabilityFence(inner);
         }
     }
 
@@ -78,8 +78,8 @@ public class ImageFilter extends RefCnt {
             Stats.onNativeCall();
             return new ImageFilter(_nMakeDisplacementMap(x.ordinal(), y.ordinal(), scale, Native.getPtr(displacement), Native.getPtr(color), crop));
         } finally {
-            Reference.reachabilityFence(displacement);
-            Reference.reachabilityFence(color);
+            ReferenceUtil.reachabilityFence(displacement);
+            ReferenceUtil.reachabilityFence(color);
         }
     }
 
@@ -92,7 +92,7 @@ public class ImageFilter extends RefCnt {
             Stats.onNativeCall();
             return new ImageFilter(_nMakeDropShadow(dx, dy, sigmaX, sigmaY, color, Native.getPtr(input), crop));
         } finally {
-            Reference.reachabilityFence(input);
+            ReferenceUtil.reachabilityFence(input);
         }
     }
 
@@ -105,7 +105,7 @@ public class ImageFilter extends RefCnt {
             Stats.onNativeCall();
             return new ImageFilter(_nMakeDropShadowOnly(dx, dy, sigmaX, sigmaY, color, Native.getPtr(input), crop));
         } finally {
-            Reference.reachabilityFence(input);
+            ReferenceUtil.reachabilityFence(input);
         }
     }
 
@@ -119,7 +119,7 @@ public class ImageFilter extends RefCnt {
             Stats.onNativeCall();
             return new ImageFilter(_nMakeImage(Native.getPtr(image), src._left, src._top, src._right, src._bottom, dst._left, dst._top, dst._right, dst._bottom, mode._pack()));
         } finally {
-            Reference.reachabilityFence(image);
+            ReferenceUtil.reachabilityFence(image);
         }
     }
 
@@ -128,7 +128,7 @@ public class ImageFilter extends RefCnt {
             Stats.onNativeCall();
             return new ImageFilter(_nMakeMagnifier(r._left, r._top, r._right, r._bottom, inset, Native.getPtr(input), crop));
         } finally {
-            Reference.reachabilityFence(input);
+            ReferenceUtil.reachabilityFence(input);
         }
     }
 
@@ -137,7 +137,7 @@ public class ImageFilter extends RefCnt {
             Stats.onNativeCall();
             return new ImageFilter(_nMakeMatrixConvolution(kernelW, kernelH, kernel, gain, bias, offsetX, offsetY, tileMode.ordinal(), convolveAlpha, Native.getPtr(input), crop));
         } finally {
-            Reference.reachabilityFence(input);
+            ReferenceUtil.reachabilityFence(input);
         }
     }
 
@@ -146,7 +146,7 @@ public class ImageFilter extends RefCnt {
             Stats.onNativeCall();
             return new ImageFilter(_nMakeMatrixTransform(matrix.getMat(), mode._pack(), Native.getPtr(input)));
         } finally {
-            Reference.reachabilityFence(input);
+            ReferenceUtil.reachabilityFence(input);
         }
     }
 
@@ -157,7 +157,7 @@ public class ImageFilter extends RefCnt {
             Arrays.setAll(filterPtrs, i -> Native.getPtr(filters[i]));
             return new ImageFilter(_nMakeMerge(filterPtrs, crop));
         } finally {
-            Reference.reachabilityFence(filters);
+            ReferenceUtil.reachabilityFence(filters);
         }
     }
 
@@ -166,7 +166,7 @@ public class ImageFilter extends RefCnt {
             Stats.onNativeCall();
             return new ImageFilter(_nMakeOffset(dx, dy, Native.getPtr(input), crop));
         } finally {
-            Reference.reachabilityFence(input);
+            ReferenceUtil.reachabilityFence(input);
         }
     }
 
@@ -175,7 +175,7 @@ public class ImageFilter extends RefCnt {
             Stats.onNativeCall();
             return new ImageFilter(_nMakePaint(Native.getPtr(paint), crop));
         } finally {
-            Reference.reachabilityFence(paint);
+            ReferenceUtil.reachabilityFence(paint);
         }
     }
 
@@ -189,7 +189,7 @@ public class ImageFilter extends RefCnt {
             Stats.onNativeCall();
             return new ImageFilter(_nMakeTile(src._left, src._top, src._right, src._bottom, dst._left, dst._top, dst._right, dst._bottom, Native.getPtr(input)));
         } finally {
-            Reference.reachabilityFence(input);
+            ReferenceUtil.reachabilityFence(input);
         }
     }
 
@@ -198,7 +198,7 @@ public class ImageFilter extends RefCnt {
             Stats.onNativeCall();
             return new ImageFilter(_nMakeDilate(rx, ry, Native.getPtr(input), crop));
         } finally {
-            Reference.reachabilityFence(input);
+            ReferenceUtil.reachabilityFence(input);
         }
     }
 
@@ -207,7 +207,7 @@ public class ImageFilter extends RefCnt {
             Stats.onNativeCall();
             return new ImageFilter(_nMakeErode(rx, ry, Native.getPtr(input), crop));
         } finally {
-            Reference.reachabilityFence(input);
+            ReferenceUtil.reachabilityFence(input);
         }
     }
 
@@ -216,7 +216,7 @@ public class ImageFilter extends RefCnt {
             Stats.onNativeCall();
             return new ImageFilter(_nMakeDistantLitDiffuse(x, y, z, lightColor, surfaceScale, kd, Native.getPtr(input), crop));
         } finally {
-            Reference.reachabilityFence(input);
+            ReferenceUtil.reachabilityFence(input);
         }
     }
 
@@ -225,7 +225,7 @@ public class ImageFilter extends RefCnt {
             Stats.onNativeCall();
             return new ImageFilter(_nMakePointLitDiffuse(x, y, z, lightColor, surfaceScale, kd, Native.getPtr(input), crop));
         } finally {
-            Reference.reachabilityFence(input);
+            ReferenceUtil.reachabilityFence(input);
         }
     }
 
@@ -234,7 +234,7 @@ public class ImageFilter extends RefCnt {
             Stats.onNativeCall();
             return new ImageFilter(_nMakeSpotLitDiffuse(x0, y0, z0, x1, y1, z1, falloffExponent, cutoffAngle, lightColor, surfaceScale, kd, Native.getPtr(input), crop));
         } finally {
-            Reference.reachabilityFence(input);
+            ReferenceUtil.reachabilityFence(input);
         }
     }
 
@@ -243,7 +243,7 @@ public class ImageFilter extends RefCnt {
             Stats.onNativeCall();
             return new ImageFilter(_nMakeDistantLitSpecular(x, y, z, lightColor, surfaceScale, ks, shininess, Native.getPtr(input), crop));
         } finally {
-            Reference.reachabilityFence(input);
+            ReferenceUtil.reachabilityFence(input);
         }
     }
 
@@ -252,7 +252,7 @@ public class ImageFilter extends RefCnt {
             Stats.onNativeCall();
             return new ImageFilter(_nMakePointLitSpecular(x, y, z, lightColor, surfaceScale, ks, shininess, Native.getPtr(input), crop));
         } finally {
-            Reference.reachabilityFence(input);
+            ReferenceUtil.reachabilityFence(input);
         }
     }
 
@@ -261,7 +261,7 @@ public class ImageFilter extends RefCnt {
             Stats.onNativeCall();
             return new ImageFilter(_nMakeSpotLitSpecular(x0, y0, z0, x1, y1, z1, falloffExponent, cutoffAngle, lightColor, surfaceScale, ks, shininess, Native.getPtr(input), crop));
         } finally {
-            Reference.reachabilityFence(input);
+            ReferenceUtil.reachabilityFence(input);
         }
     }
 

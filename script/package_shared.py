@@ -18,14 +18,15 @@ def package():
 
   build_utils.jar(f"target/skija-shared-{common.version}.jar",
                   ("shared/target/classes", "."),
-                  ("shared/target/maven", "META-INF"))
+                  ("shared/target/maven", "META-INF"),
+                  opts = ["--release", "9", "-C", "shared/target/classes-java9", "."])
 
-  build_utils.delombok(["shared/java"], "shared/target/delomboked/io/github/humbleui/skija", modulepath=common.deps_compile())
+  build_utils.delombok(["shared/java"], "shared/target/delomboked/io/github/humbleui/skija", classpath=common.deps_compile())
   build_utils.jar(f"target/skija-shared-{common.version}-sources.jar",
                   ("shared/target/delomboked", "."),
                   ("shared/target/maven", "META-INF"))
 
-  build_utils.javadoc(["shared/target/delomboked"], "shared/target/apidocs", modulepath=common.deps_compile())
+  build_utils.javadoc(["shared/target/delomboked"], "shared/target/apidocs", classpath=common.deps_compile())
   build_utils.jar(f"target/skija-shared-{common.version}-javadoc.jar",
                   ("shared/target/apidocs", "."),
                   ("shared/target/maven", "META-INF"))

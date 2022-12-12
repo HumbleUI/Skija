@@ -6,24 +6,22 @@ def main():
   parser.add_argument('--skija-version')
   (args, _) = parser.parse_known_args()
 
-  modulepath = common.deps_run()
+  classpath = common.deps_run()
   if args.skija_version:
-    modulepath += [
+    classpath += [
       common.fetch_maven('io.github.humbleui', 'skija-shared', args.skija_version),
       common.fetch_maven('io.github.humbleui', 'skija-' + common.classifier, args.skija_version)
     ]
   else:
     build.main()
-    modulepath += ['../shared/target/classes', '../platform/target/classes']
+    classpath += ['../shared/target/classes-java9', '../shared/target/classes', '../platform/target/classes']
 
   os.chdir(common.basedir + '/tests')
   sources = build_utils.files('java/**/*.java')
-  build_utils.javac(sources, 'target/classes', modulepath = modulepath, add_modules = [common.module])
+  build_utils.javac(sources, 'target/classes', classpath = classpath)
 
   subprocess.check_call(['java',
-    '--class-path', 'target/classes',
-    '--module-path', build_utils.classpath_join(modulepath),
-    '--add-modules', common.module,
+    '--class-path', build_utils.classpath_join(classpath + ['target/classes']),
     *(['-XstartOnFirstThread'] if 'macos' == build_utils.system else []),
     '-Djava.awt.headless=true',
     '-enableassertions',

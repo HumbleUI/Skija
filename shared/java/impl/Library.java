@@ -2,6 +2,7 @@ package io.github.humbleui.skija.impl;
 
 import java.io.*;
 import java.net.*;
+import java.nio.charset.*;
 import java.nio.file.*;
 import java.util.*;
 import lombok.*;
@@ -51,9 +52,15 @@ public class Library {
         URL url = _nativeLibraryClass.getResource(path);
         if (url == null)
             return null;
-        try (InputStream is = url.openStream()) {
-            byte[] bytes = is.readAllBytes();
-            return new String(bytes).trim();
+
+        try (Reader reader = new InputStreamReader(url.openStream(), StandardCharsets.UTF_8)) {
+            StringBuilder builder = new StringBuilder();
+
+            int ch;
+            while ((ch = reader.read()) >= 0) {
+                builder.append((char) ch);
+            }
+            return builder.toString().trim();
         } catch (IOException e) {
             return null;
         }
