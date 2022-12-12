@@ -1,6 +1,5 @@
 package io.github.humbleui.skija;
 
-import java.lang.ref.*;
 import java.nio.*;
 import org.jetbrains.annotations.*;
 import io.github.humbleui.skija.impl.*;

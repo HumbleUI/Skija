@@ -1,7 +1,6 @@
 package io.github.humbleui.skija.impl;
 
 import org.jetbrains.annotations.*;
-import java.lang.ref.*;
 
 public abstract class Managed extends Native implements AutoCloseable {
     @ApiStatus.Internal

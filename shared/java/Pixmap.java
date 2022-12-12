@@ -1,6 +1,5 @@
 package io.github.humbleui.skija;
 
-import java.lang.ref.*;
 import java.nio.ByteBuffer;
 import org.jetbrains.annotations.*;
 import io.github.humbleui.types.IRect;
