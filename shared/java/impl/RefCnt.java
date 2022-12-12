@@ -1,6 +1,5 @@
 package io.github.humbleui.skija.impl;
 
-import java.lang.ref.*;
 import org.jetbrains.annotations.*;
 
 public abstract class RefCnt extends Managed {
