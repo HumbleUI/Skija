@@ -26,7 +26,7 @@ public class Paragraph extends Managed {
             Stats.onNativeCall();
             return _nGetMaxWidth(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -35,7 +35,7 @@ public class Paragraph extends Managed {
             Stats.onNativeCall();
             return _nGetHeight(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -44,7 +44,7 @@ public class Paragraph extends Managed {
             Stats.onNativeCall();
             return _nGetMinIntrinsicWidth(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -53,7 +53,7 @@ public class Paragraph extends Managed {
             Stats.onNativeCall();
             return _nGetMaxIntrinsicWidth(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -62,7 +62,7 @@ public class Paragraph extends Managed {
             Stats.onNativeCall();
             return _nGetAlphabeticBaseline(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -71,7 +71,7 @@ public class Paragraph extends Managed {
             Stats.onNativeCall();
             return _nGetIdeographicBaseline(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -80,7 +80,7 @@ public class Paragraph extends Managed {
             Stats.onNativeCall();
             return _nGetLongestLine(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -89,7 +89,7 @@ public class Paragraph extends Managed {
             Stats.onNativeCall();
             return _nDidExceedMaxLines(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -105,7 +105,7 @@ public class Paragraph extends Managed {
             _nPaint(_ptr, Native.getPtr(canvas), x, y);
             return this;
         } finally {
-            Reference.reachabilityFence(canvas);
+            ReferenceUtil.reachabilityFence(canvas);
         }
     }
 
@@ -118,7 +118,7 @@ public class Paragraph extends Managed {
             Stats.onNativeCall();
             return _nGetRectsForRange(_ptr, start, end, rectHeightMode.ordinal(), rectWidthMode.ordinal());
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -127,7 +127,7 @@ public class Paragraph extends Managed {
             Stats.onNativeCall();
             return _nGetRectsForPlaceholders(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -140,7 +140,7 @@ public class Paragraph extends Managed {
             else
                 return new PositionWithAffinity(-res-1, Affinity.UPSTREAM);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -149,7 +149,7 @@ public class Paragraph extends Managed {
             Stats.onNativeCall();
             return IRange._makeFromLong(_nGetWordBoundary(_ptr, offset));
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -160,8 +160,8 @@ public class Paragraph extends Managed {
             Stats.onNativeCall();
             return _nGetLineMetrics(_ptr, Native.getPtr(_text));
         } finally {
-            Reference.reachabilityFence(this);
-            Reference.reachabilityFence(_text);
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(_text);
         }
     }
 
@@ -170,7 +170,7 @@ public class Paragraph extends Managed {
             Stats.onNativeCall();
             return _nGetLineNumber(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -185,7 +185,7 @@ public class Paragraph extends Managed {
             Stats.onNativeCall();
             return _nGetUnresolvedGlyphsCount(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -210,7 +210,7 @@ public class Paragraph extends Managed {
             }
             return this;
         } finally {
-            Reference.reachabilityFence(_text);
+            ReferenceUtil.reachabilityFence(_text);
         }
     }
 
@@ -222,8 +222,8 @@ public class Paragraph extends Managed {
             }
             return this;
         } finally {
-            Reference.reachabilityFence(paint);
-            Reference.reachabilityFence(_text);
+            ReferenceUtil.reachabilityFence(paint);
+            ReferenceUtil.reachabilityFence(_text);
         }
     }
 
@@ -235,8 +235,8 @@ public class Paragraph extends Managed {
             }
             return this;
         } finally {
-            Reference.reachabilityFence(paint);
-            Reference.reachabilityFence(_text);
+            ReferenceUtil.reachabilityFence(paint);
+            ReferenceUtil.reachabilityFence(_text);
         }
     }
 

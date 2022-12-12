@@ -12,8 +12,8 @@ public class Shader extends RefCnt {
         try {
             return new Shader(_nMakeWithColorFilter(_ptr, Native.getPtr(f)));
         } finally {
-            Reference.reachabilityFence(this);
-            Reference.reachabilityFence(f);
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(f);
         }
     }
 
@@ -55,7 +55,7 @@ public class Shader extends RefCnt {
             Stats.onNativeCall();
             return new Shader(_nMakeLinearGradientCS(x0, y0, x1, y1, Color4f.flattenArray(colors), Native.getPtr(cs), positions, style.getTileMode().ordinal(), style._getFlags(), style._getMatrixArray()));
         } finally {
-            Reference.reachabilityFence(cs);
+            ReferenceUtil.reachabilityFence(cs);
         }
     }
 
@@ -97,7 +97,7 @@ public class Shader extends RefCnt {
             Stats.onNativeCall();
             return new Shader(_nMakeRadialGradientCS(x, y, r, Color4f.flattenArray(colors), Native.getPtr(cs), positions, style.getTileMode().ordinal(), style._getFlags(), style._getMatrixArray()));
         } finally {
-            Reference.reachabilityFence(cs);
+            ReferenceUtil.reachabilityFence(cs);
         }
     }
 
@@ -139,7 +139,7 @@ public class Shader extends RefCnt {
             Stats.onNativeCall();
             return new Shader(_nMakeTwoPointConicalGradientCS(x0, y0, r0, x1, y1, r1, Color4f.flattenArray(colors), Native.getPtr(cs), positions, style.getTileMode().ordinal(), style._getFlags(), style._getMatrixArray()));
         } finally {
-            Reference.reachabilityFence(cs);
+            ReferenceUtil.reachabilityFence(cs);
         }
     }
 
@@ -189,7 +189,7 @@ public class Shader extends RefCnt {
             Stats.onNativeCall();
             return new Shader(_nMakeSweepGradientCS(x, y, startAngle, endAngle, Color4f.flattenArray(colors), Native.getPtr(cs), positions, style.getTileMode().ordinal(), style._getFlags(), style._getMatrixArray()));
         } finally {
-            Reference.reachabilityFence(cs);
+            ReferenceUtil.reachabilityFence(cs);
         }
     }
 
@@ -210,7 +210,7 @@ public class Shader extends RefCnt {
             Stats.onNativeCall();
             return new Shader(_nMakeColorCS(color.getR(), color.getG(), color.getB(), color.getA(), Native.getPtr(space)));
         } finally {
-            Reference.reachabilityFence(space);
+            ReferenceUtil.reachabilityFence(space);
         }
     }
 
@@ -219,8 +219,8 @@ public class Shader extends RefCnt {
             Stats.onNativeCall();
             return new Shader(_nMakeBlend(mode.ordinal(), Native.getPtr(dst), Native.getPtr(src)));
         } finally {
-            Reference.reachabilityFence(dst);
-            Reference.reachabilityFence(src);
+            ReferenceUtil.reachabilityFence(dst);
+            ReferenceUtil.reachabilityFence(src);
         }
     }
 

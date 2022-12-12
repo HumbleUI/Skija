@@ -109,14 +109,14 @@ def javac(sources, target, classpath = [], modulepath = [], add_modules = [], re
       '-d', target,
       *new_sources])
 
-def jar(target: str, *content: List[Tuple[str, str]]) -> str:
+def jar(target: str, *content: List[Tuple[str, str]], opts=[]) -> str:
   if has_newer(files(*[dir + "/" + subdir + "/**" for (dir, subdir) in content]), [target]):
     print(f"Packaging {os.path.basename(target)}")
     makedirs(os.path.dirname(target))
     subprocess.check_call(["jar",
       "--create",
       "--file", target,
-      *cat([["-C", dir, file] for (dir, file) in content])])
+      *cat([["-C", dir, file] for (dir, file) in content])] + opts)
   return target
 
 @functools.lru_cache(maxsize=1)
@@ -143,6 +143,7 @@ def javadoc(dirs: List[str], target: str, classpath: List[str] = [], modulepath:
   if has_newer(sources, files(target + "/**")):
     print("Generating JavaDoc", *dirs, "to", target)
     subprocess.check_call(["javadoc",
+      "-encoding", "UTF-8",
       *(["--class-path", classpath_join(classpath)] if classpath else []),
       *(["--module-path", classpath_join(modulepath)] if modulepath else []),
       "-d", target,

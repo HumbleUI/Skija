@@ -38,7 +38,7 @@ public class Font extends Managed {
     public Font(@Nullable Typeface typeface) {
         this(_nMakeTypeface(Native.getPtr(typeface)));
         Stats.onNativeCall();
-        Reference.reachabilityFence(typeface);
+        ReferenceUtil.reachabilityFence(typeface);
     }
 
     /**
@@ -48,7 +48,7 @@ public class Font extends Managed {
     public Font(@Nullable Typeface typeface, float size) {
         this(_nMakeTypefaceSize(Native.getPtr(typeface), size));
         Stats.onNativeCall();
-        Reference.reachabilityFence(typeface);
+        ReferenceUtil.reachabilityFence(typeface);
     }
 
     /**
@@ -64,7 +64,7 @@ public class Font extends Managed {
     public Font(@Nullable Typeface typeface, float size, float scaleX, float skewX) {
         this(_nMakeTypefaceSizeScaleSkew(Native.getPtr(typeface), size, scaleX, skewX));
         Stats.onNativeCall();
-        Reference.reachabilityFence(typeface);
+        ReferenceUtil.reachabilityFence(typeface);
     }
 
     /**
@@ -76,8 +76,8 @@ public class Font extends Managed {
         try {
             return _nEquals(_ptr, Native.getPtr(other));
         } finally {
-            Reference.reachabilityFence(this);
-            Reference.reachabilityFence(other);
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(other);
         }
     }
 
@@ -104,7 +104,7 @@ public class Font extends Managed {
             Stats.onNativeCall();
             return _nIsAutoHintingForced(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -116,7 +116,7 @@ public class Font extends Managed {
             Stats.onNativeCall();
             return _nAreBitmapsEmbedded(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -128,7 +128,7 @@ public class Font extends Managed {
             Stats.onNativeCall();
             return _nIsSubpixel(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -140,7 +140,7 @@ public class Font extends Managed {
             Stats.onNativeCall();
             return _nAreMetricsLinear(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -155,7 +155,7 @@ public class Font extends Managed {
             Stats.onNativeCall();
             return _nIsEmboldened(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -170,7 +170,7 @@ public class Font extends Managed {
             Stats.onNativeCall();
             return _nIsBaselineSnapped(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -264,7 +264,7 @@ public class Font extends Managed {
             Stats.onNativeCall();
             return FontEdging._values[_nGetEdging(_ptr)];
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -287,7 +287,7 @@ public class Font extends Managed {
             Stats.onNativeCall();
             return FontHinting._values[_nGetHinting(_ptr)];
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -318,7 +318,7 @@ public class Font extends Managed {
             long ptr = _nGetTypeface(_ptr);
             return ptr == 0 ? null : new Typeface(ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -331,7 +331,7 @@ public class Font extends Managed {
             Stats.onNativeCall();
             return new Typeface(_nGetTypefaceOrDefault(_ptr));
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -343,7 +343,7 @@ public class Font extends Managed {
             Stats.onNativeCall();
             return _nGetSize(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -355,7 +355,7 @@ public class Font extends Managed {
             Stats.onNativeCall();
             return _nGetScaleX(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -367,7 +367,7 @@ public class Font extends Managed {
             Stats.onNativeCall();
             return _nGetSkewX(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -381,7 +381,7 @@ public class Font extends Managed {
             _nSetTypeface(_ptr, Native.getPtr(typeface));
             return this;
         } finally {
-            Reference.reachabilityFence(typeface);
+            ReferenceUtil.reachabilityFence(typeface);
         }
     }
 
@@ -434,7 +434,7 @@ public class Font extends Managed {
             Stats.onNativeCall();
             return _nGetUTF32Glyphs(_ptr, uni);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -446,7 +446,7 @@ public class Font extends Managed {
             Stats.onNativeCall();
             return _nGetUTF32Glyph(_ptr, unichar);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -458,7 +458,7 @@ public class Font extends Managed {
             Stats.onNativeCall();
             return _nGetStringGlyphsCount(_ptr, s);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -478,8 +478,8 @@ public class Font extends Managed {
             Stats.onNativeCall();
             return _nMeasureText(_ptr, s, Native.getPtr(p));
         } finally {
-            Reference.reachabilityFence(this);
-            Reference.reachabilityFence(p);
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(p);
         }
     }
 
@@ -493,8 +493,8 @@ public class Font extends Managed {
             Stats.onNativeCall();
             return _nMeasureTextWidth(_ptr, s, Native.getPtr(p));
         } finally {
-            Reference.reachabilityFence(this);
-            Reference.reachabilityFence(p);
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(p);
         }
     }
 
@@ -506,7 +506,7 @@ public class Font extends Managed {
             Stats.onNativeCall();
             return _nGetWidths(_ptr, glyphs);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -525,8 +525,8 @@ public class Font extends Managed {
             Stats.onNativeCall();
             return _nGetBounds(_ptr, glyphs, Native.getPtr(p));
         } finally {
-            Reference.reachabilityFence(this);
-            Reference.reachabilityFence(p);
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(p);
         }
     }
 
@@ -538,7 +538,7 @@ public class Font extends Managed {
             Stats.onNativeCall();
             return _nGetPositions(_ptr, glyphs, 0, 0);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }    
 
@@ -550,7 +550,7 @@ public class Font extends Managed {
             Stats.onNativeCall();
             return _nGetPositions(_ptr, glyphs, offset._x, offset._y);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -562,7 +562,7 @@ public class Font extends Managed {
             Stats.onNativeCall();
             return _nGetXPositions(_ptr, glyphs, 0);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }    
 
@@ -574,7 +574,7 @@ public class Font extends Managed {
             Stats.onNativeCall();
             return _nGetXPositions(_ptr, glyphs, offset);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -589,7 +589,7 @@ public class Font extends Managed {
             long ptr = _nGetPath(_ptr, glyph);
             return ptr == 0 ? null : new Path(ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -601,7 +601,7 @@ public class Font extends Managed {
             Stats.onNativeCall();
             return _nGetPaths(_ptr, glyphs);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -618,7 +618,7 @@ public class Font extends Managed {
             }
             return _metrics;
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -634,7 +634,7 @@ public class Font extends Managed {
             }
             return _spacing;
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 

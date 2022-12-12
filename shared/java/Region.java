@@ -29,8 +29,8 @@ public class Region extends Managed {
             Stats.onNativeCall();
             return _nSet(_ptr, Native.getPtr(r));
         } finally {
-            Reference.reachabilityFence(this);
-            Reference.reachabilityFence(r);
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(r);
         }
     }
 
@@ -39,7 +39,7 @@ public class Region extends Managed {
             Stats.onNativeCall();
             return _nIsEmpty(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -48,7 +48,7 @@ public class Region extends Managed {
             Stats.onNativeCall();
             return _nIsRect(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -57,7 +57,7 @@ public class Region extends Managed {
             Stats.onNativeCall();
             return _nIsComplex(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -66,7 +66,7 @@ public class Region extends Managed {
             Stats.onNativeCall();
             return _nGetBounds(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -75,7 +75,7 @@ public class Region extends Managed {
             Stats.onNativeCall();
             return _nComputeRegionComplexity(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -84,8 +84,8 @@ public class Region extends Managed {
             Stats.onNativeCall();
             return _nGetBoundaryPath(_ptr, Native.getPtr(p));
         } finally {
-            Reference.reachabilityFence(this);
-            Reference.reachabilityFence(p);
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(p);
         }
     }
 
@@ -94,7 +94,7 @@ public class Region extends Managed {
             Stats.onNativeCall();
             return _nSetEmpty(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -103,7 +103,7 @@ public class Region extends Managed {
             Stats.onNativeCall();
             return _nSetRect(_ptr, rect._left, rect._top, rect._right, rect._bottom);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -119,7 +119,7 @@ public class Region extends Managed {
             Stats.onNativeCall();
             return _nSetRects(_ptr, arr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -128,8 +128,8 @@ public class Region extends Managed {
             Stats.onNativeCall();
             return _nSetRegion(_ptr, Native.getPtr(r));
         } finally {
-            Reference.reachabilityFence(this);
-            Reference.reachabilityFence(r);
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(r);
         }
     }
 
@@ -138,9 +138,9 @@ public class Region extends Managed {
             Stats.onNativeCall();
             return _nSetPath(_ptr, Native.getPtr(path), Native.getPtr(clip));
         } finally {
-            Reference.reachabilityFence(this);
-            Reference.reachabilityFence(path);
-            Reference.reachabilityFence(clip);
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(path);
+            ReferenceUtil.reachabilityFence(clip);
         }
     }
 
@@ -149,7 +149,7 @@ public class Region extends Managed {
             Stats.onNativeCall();
             return _nIntersectsIRect(_ptr, rect._left, rect._top, rect._right, rect._bottom);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -158,8 +158,8 @@ public class Region extends Managed {
             Stats.onNativeCall();
             return _nIntersectsRegion(_ptr, Native.getPtr(r));
         } finally {
-            Reference.reachabilityFence(this);
-            Reference.reachabilityFence(r);
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(r);
         }
     }
 
@@ -168,7 +168,7 @@ public class Region extends Managed {
             Stats.onNativeCall();
             return _nContainsIPoint(_ptr, x, y);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -177,7 +177,7 @@ public class Region extends Managed {
             Stats.onNativeCall();
             return _nContainsIRect(_ptr, rect._left, rect._top, rect._right, rect._bottom);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -186,8 +186,8 @@ public class Region extends Managed {
             Stats.onNativeCall();
             return _nContainsRegion(_ptr, Native.getPtr(r));
         } finally {
-            Reference.reachabilityFence(this);
-            Reference.reachabilityFence(r);
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(r);
         }
     }
 
@@ -196,7 +196,7 @@ public class Region extends Managed {
             Stats.onNativeCall();
             return _nQuickContains(_ptr, rect._left, rect._top, rect._right, rect._bottom);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -205,7 +205,7 @@ public class Region extends Managed {
             Stats.onNativeCall();
             return _nQuickRejectIRect(_ptr, rect._left, rect._top, rect._right, rect._bottom);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -214,8 +214,8 @@ public class Region extends Managed {
             Stats.onNativeCall();
             return _nQuickRejectRegion(_ptr, Native.getPtr(r));
         } finally {
-            Reference.reachabilityFence(this);
-            Reference.reachabilityFence(r);
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(r);
         }
     }
 
@@ -224,7 +224,7 @@ public class Region extends Managed {
             Stats.onNativeCall();
             _nTranslate(_ptr, dx, dy);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -233,7 +233,7 @@ public class Region extends Managed {
             Stats.onNativeCall();
             return _nOpIRect(_ptr, rect._left, rect._top, rect._right, rect._bottom, op.ordinal());
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -242,8 +242,8 @@ public class Region extends Managed {
             Stats.onNativeCall();
             return _nOpRegion(_ptr, Native.getPtr(r), op.ordinal());
         } finally {
-            Reference.reachabilityFence(this);
-            Reference.reachabilityFence(r);
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(r);
         }
     }
 
@@ -252,8 +252,8 @@ public class Region extends Managed {
             Stats.onNativeCall();
             return _nOpIRectRegion(_ptr, rect._left, rect._top, rect._right, rect._bottom, Native.getPtr(r), op.ordinal());
         } finally {
-            Reference.reachabilityFence(this);
-            Reference.reachabilityFence(r);
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(r);
         }
     }
 
@@ -262,8 +262,8 @@ public class Region extends Managed {
             Stats.onNativeCall();
             return _nOpRegionIRect(_ptr, Native.getPtr(r), rect._left, rect._top, rect._right, rect._bottom, op.ordinal());
         } finally {
-            Reference.reachabilityFence(this);
-            Reference.reachabilityFence(r);
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(r);
         }
     }
 
@@ -272,9 +272,9 @@ public class Region extends Managed {
             Stats.onNativeCall();
             return _nOpRegionRegion(_ptr, Native.getPtr(a), Native.getPtr(b), op.ordinal());
         } finally {
-            Reference.reachabilityFence(this);
-            Reference.reachabilityFence(a);
-            Reference.reachabilityFence(b);
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(a);
+            ReferenceUtil.reachabilityFence(b);
         }
     }
 
