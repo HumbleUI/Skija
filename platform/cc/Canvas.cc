@@ -99,6 +99,19 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Canvas__1nDrawRR
     canvas->drawRRect(types::RRect::toSkRRect(env, left, top, right, bottom, jradii), *paint);
 }
 
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Canvas__1nQuickReject
+  (JNIEnv* env, jclass jclass, jlong canvasPtr, jfloat left, jfloat top, jfloat right, jfloat bottom) {
+    SkCanvas* canvas = reinterpret_cast<SkCanvas*>(static_cast<uintptr_t>(canvasPtr));
+    return canvas->quickReject({left, top, right, bottom});
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Canvas__1nQuickRejectPath
+  (JNIEnv* env, jclass jclass, jlong canvasPtr, jlong pathPtr) {
+    SkCanvas* canvas = reinterpret_cast<SkCanvas*>(static_cast<uintptr_t>(canvasPtr));
+    SkPath* path = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(pathPtr));
+    return canvas->quickReject(*path);
+}
+
 extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Canvas__1nDrawDRRect
   (JNIEnv* env, jclass jclass, jlong canvasPtr,
    jfloat ol, jfloat ot, jfloat oright, jfloat ob, jfloatArray ojradii,
