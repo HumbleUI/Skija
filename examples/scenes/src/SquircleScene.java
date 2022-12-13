@@ -10,32 +10,32 @@ public class SquircleScene extends Scene {
         try (var paint = new Paint().setColor(0xFF0B99FF)) {
             try (var path = squircle(100, 100, 10)) {
                 canvas.drawPath(path, paint);
-                canvas.drawRRect(RRect.makeXYWH(110, 0, 100, 100, 10), paint);
-                canvas.translate(0, 110);
+                canvas.drawRRect(RRect.makeXYWH(0, 110, 100, 100, 10), paint);
+                canvas.translate(110, 0);
             }
 
             try (var path = squircle(100, 100, 30)) {
                 canvas.drawPath(path, paint);
-                canvas.drawRRect(RRect.makeXYWH(110, 0, 100, 100, 30), paint);
-                canvas.translate(0, 110);
+                canvas.drawRRect(RRect.makeXYWH(0, 110, 100, 100, 30), paint);
+                canvas.translate(110, 0);
             }
 
             try (var path = squircle(100, 100, 50)) {
                 canvas.drawPath(path, paint);
-                canvas.drawRRect(RRect.makeXYWH(110, 0, 100, 100, 50), paint);
-                canvas.translate(0, 110);
+                canvas.drawRRect(RRect.makeXYWH(0, 110, 100, 100, 50), paint);
+                canvas.translate(110, 0);
             }
 
             try (var path = squircle(100, 40, 10)) {
                 canvas.drawPath(path, paint);
-                canvas.drawRRect(RRect.makeXYWH(110, 0, 100, 40, 10), paint);
-                canvas.translate(0, 50);
+                canvas.drawRRect(RRect.makeXYWH(0, 110, 100, 40, 10), paint);
+                canvas.translate(110, 0);
             }
 
             try (var path = squircle(40, 100, 10)) {
                 canvas.drawPath(path, paint);
-                canvas.drawRRect(RRect.makeXYWH(110, 0, 40, 100, 10), paint);
-                canvas.translate(0, 110);
+                canvas.drawRRect(RRect.makeXYWH(0, 110, 40, 100, 10), paint);
+                canvas.translate(110, 0);
             }
         }
     }
