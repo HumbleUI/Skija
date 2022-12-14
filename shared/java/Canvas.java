@@ -325,6 +325,29 @@ public class Canvas extends Managed {
         return this;
     }
 
+    @NotNull @Contract("_ -> this")
+    public boolean quickReject(@NotNull Rect r) {
+        try {
+            assert r != null : "Can’t quickReject with r == null";
+            Stats.onNativeCall();
+            return _nQuickReject(_ptr, r._left, r._top, r._right, r._bottom);
+        } finally {
+            Reference.reachabilityFence(this);
+        }
+    }
+
+    @NotNull @Contract("_ -> this")
+    public boolean quickReject(@NotNull Path path) {
+        try {
+            assert path != null : "Can’t quickReject with path == null";
+            Stats.onNativeCall();
+            return _nQuickRejectPath(_ptr, Native.getPtr(path));
+        } finally {
+            Reference.reachabilityFence(this);
+            Reference.reachabilityFence(path);
+        }
+    }
+
     @NotNull @Contract("_, _, _ -> this")
     public Canvas drawDRRect(@NotNull RRect outer, @NotNull RRect inner, @NotNull Paint paint) {
         assert outer != null : "Can’t drawDRRect with outer == null";
@@ -1390,6 +1413,8 @@ public class Canvas extends Managed {
     public static native void _nDrawRect(long ptr, float left, float top, float right, float bottom, long paintPtr);
     public static native void _nDrawOval(long ptr, float left, float top, float right, float bottom, long paint);
     public static native void _nDrawRRect(long ptr, float left, float top, float right, float bottom, float[] radii, long paintPtr);
+    public static native boolean _nQuickReject(long ptr, float left, float top, float right, float bottom);
+    public static native boolean _nQuickRejectPath(long ptr, long pathPtr);
     public static native void _nDrawDRRect(long ptr, float ol, float ot, float or, float ob, float[] oradii, float il, float it, float ir, float ib, float[] iradii, long paintPtr);
     public static native void _nDrawPath(long ptr, long nativePath, long paintPtr);
     public static native void _nDrawImageRect(long ptr, long nativeImage, float sl, float st, float sr, float sb, float dl, float dt, float dr, float db, long samplingMode, long paintPtr, boolean strict);
