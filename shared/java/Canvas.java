@@ -332,7 +332,7 @@ public class Canvas extends Managed {
             Stats.onNativeCall();
             return _nQuickReject(_ptr, r._left, r._top, r._right, r._bottom);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -343,8 +343,8 @@ public class Canvas extends Managed {
             Stats.onNativeCall();
             return _nQuickRejectPath(_ptr, Native.getPtr(path));
         } finally {
-            Reference.reachabilityFence(this);
-            Reference.reachabilityFence(path);
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(path);
         }
     }
 
