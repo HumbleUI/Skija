@@ -42,7 +42,7 @@ jobs:
           path: target/skija-macos-arm64-*.jar
 
   build_linux:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
       - run: |
           echo "JAVA_HOME=$JAVA_HOME_11_X64" >> $GITHUB_ENV
