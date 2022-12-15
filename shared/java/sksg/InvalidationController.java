@@ -1,6 +1,5 @@
 package io.github.humbleui.skija.sksg;
 
-import java.lang.ref.*;
 import org.jetbrains.annotations.*;
 import io.github.humbleui.skija.*;
 import io.github.humbleui.skija.impl.*;
@@ -40,7 +39,7 @@ public class InvalidationController extends Managed {
             Stats.onNativeCall();
             return _nGetBounds(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 

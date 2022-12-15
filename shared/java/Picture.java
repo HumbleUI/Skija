@@ -1,6 +1,5 @@
 package io.github.humbleui.skija;
 
-import java.lang.ref.*;
 import java.util.function.*;
 import org.jetbrains.annotations.*;
 import io.github.humbleui.skija.impl.*;
@@ -26,7 +25,7 @@ public class Picture extends RefCnt {
             long ptr = _nMakeFromData(Native.getPtr(data));
             return ptr == 0 ? null : new Picture(ptr);
         } finally {
-            Reference.reachabilityFence(data);
+            ReferenceUtil.reachabilityFence(data);
         }
     }
 
@@ -65,7 +64,7 @@ public class Picture extends RefCnt {
             _nPlayback(_ptr, Native.getPtr(canvas), abort);
             return this;
         } finally {
-            Reference.reachabilityFence(canvas);
+            ReferenceUtil.reachabilityFence(canvas);
         }
     }
 
@@ -85,7 +84,7 @@ public class Picture extends RefCnt {
             Stats.onNativeCall();
             return _nGetCullRect(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -99,7 +98,7 @@ public class Picture extends RefCnt {
             Stats.onNativeCall();
             return _nGetUniqueId(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -113,7 +112,7 @@ public class Picture extends RefCnt {
             Stats.onNativeCall();
             return new Data(_nSerializeToData(_ptr));
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -150,7 +149,7 @@ public class Picture extends RefCnt {
             Stats.onNativeCall();
             return _nGetApproximateOpCount(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -167,7 +166,7 @@ public class Picture extends RefCnt {
             Stats.onNativeCall();
             return _nGetApproximateBytesUsed(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -231,7 +230,7 @@ public class Picture extends RefCnt {
             float[] arr = localMatrix == null ? null : localMatrix._mat;
             return new Shader(_nMakeShader(_ptr, tmx.ordinal(), tmy.ordinal(), mode.ordinal(), arr, tileRect));
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 

@@ -1,6 +1,5 @@
 package io.github.humbleui.skija.paragraph;
 
-import java.lang.ref.*;
 import org.jetbrains.annotations.*;
 import io.github.humbleui.skija.*;
 import io.github.humbleui.skija.impl.*;
@@ -14,7 +13,7 @@ public class ParagraphCache extends Native {
             Stats.onNativeCall();
             _nAbandon(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -24,7 +23,7 @@ public class ParagraphCache extends Native {
             Stats.onNativeCall();
             _nReset(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -34,8 +33,8 @@ public class ParagraphCache extends Native {
             Stats.onNativeCall();
             return _nUpdateParagraph(_ptr, Native.getPtr(paragraph));
         } finally {
-            Reference.reachabilityFence(this);
-            Reference.reachabilityFence(paragraph);
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(paragraph);
         }
     }
 
@@ -45,8 +44,8 @@ public class ParagraphCache extends Native {
             Stats.onNativeCall();
             return _nFindParagraph(_ptr, Native.getPtr(paragraph));
         } finally {
-            Reference.reachabilityFence(this);
-            Reference.reachabilityFence(paragraph);
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(paragraph);
         }
     }
 
@@ -56,7 +55,7 @@ public class ParagraphCache extends Native {
             Stats.onNativeCall();
             _nPrintStatistics(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -66,7 +65,7 @@ public class ParagraphCache extends Native {
             Stats.onNativeCall();
             _nSetEnabled(_ptr, value);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -76,7 +75,7 @@ public class ParagraphCache extends Native {
             Stats.onNativeCall();
             return _nGetCount(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -95,7 +94,7 @@ public class ParagraphCache extends Native {
             if (Native.getPtr(_owner) == 0)
                 throw new IllegalStateException("ParagraphCache needs owning FontCollection to be alive");
         } finally {
-            Reference.reachabilityFence(_owner);
+            ReferenceUtil.reachabilityFence(_owner);
         }
     }
 

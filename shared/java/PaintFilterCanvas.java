@@ -1,6 +1,5 @@
 package io.github.humbleui.skija;
 
-import java.lang.ref.*;
 import org.jetbrains.annotations.*;
 import io.github.humbleui.skija.impl.*;
 
@@ -18,7 +17,7 @@ public abstract class PaintFilterCanvas extends Canvas {
         Stats.onNativeCall();
         _nAttachToJava(_ptr);
         Stats.onNativeCall();
-        Reference.reachabilityFence(canvas);
+        ReferenceUtil.reachabilityFence(canvas);
     }
 
     /**

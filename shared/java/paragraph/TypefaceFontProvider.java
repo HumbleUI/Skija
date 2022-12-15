@@ -1,6 +1,5 @@
 package io.github.humbleui.skija.paragraph;
 
-import java.lang.ref.*;
 import org.jetbrains.annotations.*;
 import io.github.humbleui.skija.*;
 import io.github.humbleui.skija.impl.*;
@@ -23,7 +22,7 @@ public class TypefaceFontProvider extends FontMgr {
             _nRegisterTypeface(_ptr, Native.getPtr(typeface), alias);
             return this;
         } finally {
-            Reference.reachabilityFence(typeface);
+            ReferenceUtil.reachabilityFence(typeface);
         }
     }
 

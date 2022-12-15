@@ -1,6 +1,5 @@
 package io.github.humbleui.skija;
 
-import java.lang.ref.*;
 import org.jetbrains.annotations.*;
 import io.github.humbleui.skija.impl.*;
 
@@ -21,7 +20,7 @@ public class MaskFilter extends RefCnt {
             Stats.onNativeCall();
             return new MaskFilter(_nMakeShader(Native.getPtr(s)));
         } finally {
-            Reference.reachabilityFence(s);
+            ReferenceUtil.reachabilityFence(s);
         }
     }
 

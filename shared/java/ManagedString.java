@@ -1,6 +1,5 @@
 package io.github.humbleui.skija;
 
-import java.lang.ref.*;
 import lombok.*;
 import org.jetbrains.annotations.*;
 import io.github.humbleui.skija.impl.*;
@@ -24,7 +23,7 @@ public class ManagedString extends Managed {
             Stats.onNativeCall();
             return _nToString(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 

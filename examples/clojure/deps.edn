@@ -7,7 +7,7 @@
     nrepl/nrepl              {:mvn/version "0.8.3"}
     io.github.humbleui/types {:mvn/version "0.1.2"}
   }
-  :paths ["src" "../../platform/build" "../../platform/target/classes" "../../shared/target/classes" ]
+  :paths ["src" "../../platform/build" "../../platform/target/classes" "../../shared/target/classes-java9" "../../shared/target/classes" ]
   :aliases {
     :macos {
       :extra-deps {

@@ -1,7 +1,6 @@
 package io.github.humbleui.skija;
 
 import java.nio.ByteBuffer;
-import java.lang.ref.*;
 import org.jetbrains.annotations.*;
 import io.github.humbleui.skija.impl.*;
 
@@ -16,7 +15,7 @@ public class Data extends Managed {
             Stats.onNativeCall();
             return _nSize(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -29,7 +28,7 @@ public class Data extends Managed {
             Stats.onNativeCall();
             return _nBytes(_ptr, offset, length);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -43,8 +42,8 @@ public class Data extends Managed {
             Stats.onNativeCall();
             return _nEquals(_ptr, Native.getPtr(other));
         } finally {
-            Reference.reachabilityFence(this);
-            Reference.reachabilityFence(other);
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(other);
         }
     }
 
@@ -75,7 +74,7 @@ public class Data extends Managed {
             Stats.onNativeCall();
             return new Data(_nMakeSubset(_ptr, offset, length));
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -84,7 +83,7 @@ public class Data extends Managed {
             Stats.onNativeCall();
             return new Data(_nMakeSubset(_ptr, 0, getSize()));
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -93,7 +92,7 @@ public class Data extends Managed {
             Stats.onNativeCall();
             return _nToByteBuffer(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 

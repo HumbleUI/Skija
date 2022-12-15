@@ -1,6 +1,5 @@
 package io.github.humbleui.skija;
 
-import java.lang.ref.*;
 import java.nio.*;
 import lombok.*;
 import org.jetbrains.annotations.*;
@@ -46,7 +45,7 @@ public class Bitmap extends Managed implements IHasImageInfo {
             Stats.onNativeCall();
             return new Bitmap(_nMakeClone(_ptr));
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -74,8 +73,8 @@ public class Bitmap extends Managed implements IHasImageInfo {
         Stats.onNativeCall();
         _nSwap(_ptr, Native.getPtr(other));
         _imageInfo = null;
-        Reference.reachabilityFence(this);
-        Reference.reachabilityFence(other);
+        ReferenceUtil.reachabilityFence(this);
+        ReferenceUtil.reachabilityFence(other);
     }
 
     @Override @NotNull
@@ -87,7 +86,7 @@ public class Bitmap extends Managed implements IHasImageInfo {
             }
             return _imageInfo;
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }        
     }
 
@@ -103,7 +102,7 @@ public class Bitmap extends Managed implements IHasImageInfo {
             Stats.onNativeCall();
             return _nGetRowBytesAsPixels(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -120,7 +119,7 @@ public class Bitmap extends Managed implements IHasImageInfo {
             Stats.onNativeCall();
             return _nIsNull(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -148,7 +147,7 @@ public class Bitmap extends Managed implements IHasImageInfo {
             Stats.onNativeCall();
             return _nGetRowBytes(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -189,7 +188,7 @@ public class Bitmap extends Managed implements IHasImageInfo {
             _imageInfo = null;
             return _nSetAlphaType(_ptr, alphaType.ordinal());
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -206,7 +205,7 @@ public class Bitmap extends Managed implements IHasImageInfo {
             Stats.onNativeCall();
             return _nComputeByteSize(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -224,7 +223,7 @@ public class Bitmap extends Managed implements IHasImageInfo {
             Stats.onNativeCall();
             return _nIsImmutable(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -286,7 +285,7 @@ public class Bitmap extends Managed implements IHasImageInfo {
             Stats.onNativeCall();
             return _nComputeIsOpaque(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -383,8 +382,8 @@ public class Bitmap extends Managed implements IHasImageInfo {
                 Native.getPtr(imageInfo._colorInfo._colorSpace),
                 rowBytes);
         } finally {
-            Reference.reachabilityFence(this);
-            Reference.reachabilityFence(imageInfo._colorInfo._colorSpace);
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(imageInfo._colorInfo._colorSpace);
         }
     }
 
@@ -416,8 +415,8 @@ public class Bitmap extends Managed implements IHasImageInfo {
                 Native.getPtr(imageInfo._colorInfo._colorSpace),
                 zeroPixels ? 1 : 0);
         } finally {
-            Reference.reachabilityFence(this);
-            Reference.reachabilityFence(imageInfo._colorInfo._colorSpace);
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(imageInfo._colorInfo._colorSpace);
         }
     }
 
@@ -450,8 +449,8 @@ public class Bitmap extends Managed implements IHasImageInfo {
                 Native.getPtr(info._colorInfo._colorSpace),
                 rowBytes);
         } finally {
-            Reference.reachabilityFence(this);
-            Reference.reachabilityFence(info._colorInfo._colorSpace);
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(info._colorInfo._colorSpace);
         }
     }
 
@@ -548,8 +547,8 @@ public class Bitmap extends Managed implements IHasImageInfo {
                 pixels,
                 rowBytes);
         } finally {
-            Reference.reachabilityFence(this);
-            Reference.reachabilityFence(info._colorInfo._colorSpace);
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(info._colorInfo._colorSpace);
         }
     }
 
@@ -567,7 +566,7 @@ public class Bitmap extends Managed implements IHasImageInfo {
             Stats.onNativeCall();
             return _nAllocPixels(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -586,7 +585,7 @@ public class Bitmap extends Managed implements IHasImageInfo {
             long res = _nGetPixelRef(_ptr);
             return res == 0 ? null : new PixelRef(res);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -611,7 +610,7 @@ public class Bitmap extends Managed implements IHasImageInfo {
             long res = _nGetPixelRefOrigin(_ptr);
             return new IPoint((int) (res & 0xFFFFFFFF), (int) (res >>> 32));
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -639,7 +638,7 @@ public class Bitmap extends Managed implements IHasImageInfo {
             _nSetPixelRef(_ptr, Native.getPtr(pixelRef), dx, dy);
             return this;
         } finally {
-            Reference.reachabilityFence(pixelRef);
+            ReferenceUtil.reachabilityFence(pixelRef);
         }
     }
 
@@ -653,7 +652,7 @@ public class Bitmap extends Managed implements IHasImageInfo {
             Stats.onNativeCall();
             return _nIsReadyToDraw(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -673,7 +672,7 @@ public class Bitmap extends Managed implements IHasImageInfo {
             Stats.onNativeCall();
             return _nGetGenerationId(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -690,7 +689,7 @@ public class Bitmap extends Managed implements IHasImageInfo {
             _nNotifyPixelsChanged(_ptr);
             return this;
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -714,7 +713,7 @@ public class Bitmap extends Managed implements IHasImageInfo {
             _nErase4f(_ptr, color._r, color._g, color._b, color._a, Native.getPtr(colorSpace));
             return this;
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -756,7 +755,7 @@ public class Bitmap extends Managed implements IHasImageInfo {
             _nEraseRect4f(_ptr, color._r, color._g, color._b, color._a, Native.getPtr(colorSpace), area._left, area._top, area._right, area._bottom);
             return this;
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -795,7 +794,7 @@ public class Bitmap extends Managed implements IHasImageInfo {
             _nErase(_ptr, color);
             return this;
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -820,7 +819,7 @@ public class Bitmap extends Managed implements IHasImageInfo {
             _nEraseRect(_ptr, color, area._left, area._top, area._right, area._bottom);
             return this;
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -845,7 +844,7 @@ public class Bitmap extends Managed implements IHasImageInfo {
             Stats.onNativeCall();
             return _nGetColor(_ptr, x, y);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -870,7 +869,7 @@ public class Bitmap extends Managed implements IHasImageInfo {
             Stats.onNativeCall();
             return _nGetColor4f(_ptr, x, y);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -888,7 +887,7 @@ public class Bitmap extends Managed implements IHasImageInfo {
             Stats.onNativeCall();
             return _nGetAlphaf(_ptr, x, y);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -920,8 +919,8 @@ public class Bitmap extends Managed implements IHasImageInfo {
             Stats.onNativeCall();
             return _nExtractSubset(_ptr, Native.getPtr(dst), subset._left, subset._top, subset._right, subset._bottom);
         } finally {
-            Reference.reachabilityFence(this);
-            Reference.reachabilityFence(dst);
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(dst);
         }
     }
 
@@ -974,8 +973,8 @@ public class Bitmap extends Managed implements IHasImageInfo {
                 srcX,
                 srcY);
         } finally {
-            Reference.reachabilityFence(this);
-            Reference.reachabilityFence(dstInfo._colorInfo._colorSpace);
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(dstInfo._colorInfo._colorSpace);
         }
     }
 
@@ -1008,9 +1007,9 @@ public class Bitmap extends Managed implements IHasImageInfo {
             Stats.onNativeCall();
             return _nExtractAlpha(_ptr, Native.getPtr(dst), Native.getPtr(paint));
         } finally {
-            Reference.reachabilityFence(this);
-            Reference.reachabilityFence(dst);
-            Reference.reachabilityFence(paint);
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(dst);
+            ReferenceUtil.reachabilityFence(paint);
         }
     }
 
@@ -1028,7 +1027,7 @@ public class Bitmap extends Managed implements IHasImageInfo {
             Stats.onNativeCall();
             return _nPeekPixels(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -1071,7 +1070,7 @@ public class Bitmap extends Managed implements IHasImageInfo {
             Stats.onNativeCall();
             return new Shader(_nMakeShader(_ptr, tmx.ordinal(), tmy.ordinal(), sampling._pack(), localMatrix == null ? null : localMatrix._mat));
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 

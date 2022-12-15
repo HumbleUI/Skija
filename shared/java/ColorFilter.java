@@ -1,6 +1,5 @@
 package io.github.humbleui.skija;
 
-import java.lang.ref.*;
 import org.jetbrains.annotations.*;
 import io.github.humbleui.skija.impl.*;
 
@@ -12,8 +11,8 @@ public class ColorFilter extends RefCnt {
             Stats.onNativeCall();
             return new ColorFilter(_nMakeComposed(Native.getPtr(outer), Native.getPtr(inner)));
         } finally {
-            Reference.reachabilityFence(outer);
-            Reference.reachabilityFence(inner);
+            ReferenceUtil.reachabilityFence(outer);
+            ReferenceUtil.reachabilityFence(inner);
         }
     }
 
@@ -54,8 +53,8 @@ public class ColorFilter extends RefCnt {
         try {
             return new ColorFilter(_nMakeLerp(t, Native.getPtr(dst), Native.getPtr(src)));
         } finally {
-            Reference.reachabilityFence(dst);
-            Reference.reachabilityFence(src);
+            ReferenceUtil.reachabilityFence(dst);
+            ReferenceUtil.reachabilityFence(src);
         }
     }
 

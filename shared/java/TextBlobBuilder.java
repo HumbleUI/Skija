@@ -1,6 +1,5 @@
 package io.github.humbleui.skija;
 
-import java.lang.ref.*;
 import org.jetbrains.annotations.*;
 import io.github.humbleui.skija.impl.*;
 import io.github.humbleui.types.*;
@@ -42,7 +41,7 @@ public class TextBlobBuilder extends Managed {
             long ptr = _nBuild(_ptr);
             return ptr == 0 ? null : new TextBlob(ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -100,7 +99,7 @@ public class TextBlobBuilder extends Managed {
             _nAppendRun(_ptr, Native.getPtr(font), glyphs, x, y, bounds);
             return this;
         } finally {
-            Reference.reachabilityFence(font);
+            ReferenceUtil.reachabilityFence(font);
         }
     }
 
@@ -138,7 +137,7 @@ public class TextBlobBuilder extends Managed {
             _nAppendRunPosH(_ptr, Native.getPtr(font), glyphs, xs, y, bounds);
             return this;
         } finally {
-            Reference.reachabilityFence(font);
+            ReferenceUtil.reachabilityFence(font);
         }
     }
 
@@ -179,7 +178,7 @@ public class TextBlobBuilder extends Managed {
             _nAppendRunPos(_ptr, Native.getPtr(font), glyphs, floatPos, bounds);
             return this;
         } finally {
-            Reference.reachabilityFence(font);
+            ReferenceUtil.reachabilityFence(font);
         }
     }
 
@@ -197,7 +196,7 @@ public class TextBlobBuilder extends Managed {
             _nAppendRunRSXform(_ptr, Native.getPtr(font), glyphs, floatXform);
             return this;
         } finally {
-            Reference.reachabilityFence(font);
+            ReferenceUtil.reachabilityFence(font);
         }
     }
 

@@ -1,6 +1,5 @@
 package io.github.humbleui.skija.paragraph;
 
-import java.lang.ref.*;
 import org.jetbrains.annotations.*;
 import io.github.humbleui.skija.*;
 import io.github.humbleui.skija.impl.*;
@@ -24,8 +23,8 @@ public class StrutStyle extends Managed {
             Stats.onNativeCall();
             return _nEquals(_ptr, Native.getPtr(other));
         } finally {
-            Reference.reachabilityFence(this);
-            Reference.reachabilityFence(other);
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(other);
         }
     }
 
@@ -34,7 +33,7 @@ public class StrutStyle extends Managed {
             Stats.onNativeCall();
             return _nGetFontFamilies(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -49,7 +48,7 @@ public class StrutStyle extends Managed {
             Stats.onNativeCall();
             return new FontStyle(_nGetFontStyle(_ptr));
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -64,7 +63,7 @@ public class StrutStyle extends Managed {
             Stats.onNativeCall();
             return _nGetFontSize(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -79,7 +78,7 @@ public class StrutStyle extends Managed {
             Stats.onNativeCall();
             return _nGetHeight(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -94,7 +93,7 @@ public class StrutStyle extends Managed {
             Stats.onNativeCall();
             return _nGetLeading(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -109,7 +108,7 @@ public class StrutStyle extends Managed {
             Stats.onNativeCall();
             return _nIsEnabled(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -124,7 +123,7 @@ public class StrutStyle extends Managed {
             Stats.onNativeCall();
             return _nIsHeightForced(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -139,7 +138,7 @@ public class StrutStyle extends Managed {
             Stats.onNativeCall();
             return _nIsHeightOverridden(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 

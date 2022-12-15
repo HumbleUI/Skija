@@ -1,6 +1,5 @@
 package io.github.humbleui.skija;
 
-import java.lang.ref.*;
 import org.jetbrains.annotations.*;
 import io.github.humbleui.skija.impl.*;
 import io.github.humbleui.types.*;
@@ -60,7 +59,7 @@ public class Surface extends RefCnt {
                 throw new IllegalArgumentException(String.format("Failed Surface.makeRasterDirect(%s, %s)", pixmap, surfaceProps));
             return new Surface(ptr);
         } finally {
-            Reference.reachabilityFence(pixmap);
+            ReferenceUtil.reachabilityFence(pixmap);
         }
     }
 
@@ -109,7 +108,7 @@ public class Surface extends RefCnt {
                 throw new IllegalArgumentException(String.format("Failed Surface.makeRasterDirect(%s, %d, %d, %s)", imageInfo, pixelsPtr, rowBytes, surfaceProps));
             return new Surface(ptr);
         } finally {
-            Reference.reachabilityFence(imageInfo._colorInfo._colorSpace);
+            ReferenceUtil.reachabilityFence(imageInfo._colorInfo._colorSpace);
         }
     }
 
@@ -197,7 +196,7 @@ public class Surface extends RefCnt {
                 throw new IllegalArgumentException(String.format("Failed Surface.makeRaster(%s, %d, %s)", imageInfo, rowBytes, surfaceProps));
             return new Surface(ptr);
         } finally {
-            Reference.reachabilityFence(imageInfo._colorInfo._colorSpace);
+            ReferenceUtil.reachabilityFence(imageInfo._colorInfo._colorSpace);
         }
     }
 
@@ -266,9 +265,9 @@ public class Surface extends RefCnt {
                 throw new IllegalArgumentException(String.format("Failed Surface.makeFromBackendRenderTarget(%s, %s, %s, %s, %s)", context, rt, origin, colorFormat, colorSpace));
             return new Surface(ptr, context, rt);
         } finally {
-            Reference.reachabilityFence(context);
-            Reference.reachabilityFence(rt);
-            Reference.reachabilityFence(colorSpace);
+            ReferenceUtil.reachabilityFence(context);
+            ReferenceUtil.reachabilityFence(rt);
+            ReferenceUtil.reachabilityFence(colorSpace);
         }
     }
 
@@ -290,8 +289,8 @@ public class Surface extends RefCnt {
                 throw new IllegalArgumentException(String.format("Failed Surface.makeFromMTKView(%s, %s, %s, %s, %s, %s)", context, mtkViewPtr, origin, colorFormat, colorSpace, surfaceProps));
             return new Surface(ptr, context);
         } finally {
-            Reference.reachabilityFence(context);
-            Reference.reachabilityFence(colorSpace);
+            ReferenceUtil.reachabilityFence(context);
+            ReferenceUtil.reachabilityFence(colorSpace);
         }
     }
 
@@ -454,8 +453,8 @@ public class Surface extends RefCnt {
                 throw new IllegalArgumentException(String.format("Failed Surface.makeRenderTarget(%s, %b, %s, %d, %s, %s, %b)", context, budgeted, imageInfo, sampleCount, origin, surfaceProps, shouldCreateWithMips));
             return new Surface(ptr, context);
         } finally {
-            Reference.reachabilityFence(context);
-            Reference.reachabilityFence(imageInfo._colorInfo._colorSpace);
+            ReferenceUtil.reachabilityFence(context);
+            ReferenceUtil.reachabilityFence(imageInfo._colorInfo._colorSpace);
         }
     }
 
@@ -489,7 +488,7 @@ public class Surface extends RefCnt {
             Stats.onNativeCall();
             return _nGetWidth(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -504,7 +503,7 @@ public class Surface extends RefCnt {
             Stats.onNativeCall();
             return _nGetHeight(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -519,7 +518,7 @@ public class Surface extends RefCnt {
             Stats.onNativeCall();
             return _nGetImageInfo(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -536,7 +535,7 @@ public class Surface extends RefCnt {
             Stats.onNativeCall();
             return _nGenerationId(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -552,7 +551,7 @@ public class Surface extends RefCnt {
             Stats.onNativeCall();
             _nNotifyContentWillChange(_ptr, mode.ordinal());
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -568,7 +567,7 @@ public class Surface extends RefCnt {
             long ptr = _nGetRecordingContext(_ptr);
             return ptr == 0 ? null : new DirectContext(ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -587,7 +586,7 @@ public class Surface extends RefCnt {
             long ptr = _nGetCanvas(_ptr);
             return ptr == 0 ? null : new Canvas(ptr, false, this);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -615,7 +614,7 @@ public class Surface extends RefCnt {
                     Native.getPtr(imageInfo._colorInfo._colorSpace));
             return new Surface(ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -639,7 +638,7 @@ public class Surface extends RefCnt {
             long ptr = _nMakeSurface(_ptr, width, height);
             return new Surface(ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -658,7 +657,7 @@ public class Surface extends RefCnt {
             Stats.onNativeCall();
             return new Image(_nMakeImageSnapshot(_ptr));
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -685,7 +684,7 @@ public class Surface extends RefCnt {
             long ptr = _nMakeImageSnapshotR(_ptr, area._left, area._top, area._right, area._bottom);
             return ptr == 0 ? null : new Image(ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -705,9 +704,9 @@ public class Surface extends RefCnt {
             Stats.onNativeCall();
             _nDraw(_ptr, Native.getPtr(canvas), x, y, Native.getPtr(paint));
         } finally {
-            Reference.reachabilityFence(this);
-            Reference.reachabilityFence(canvas);
-            Reference.reachabilityFence(paint);
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(canvas);
+            ReferenceUtil.reachabilityFence(paint);
         }
     }
 
@@ -716,8 +715,8 @@ public class Surface extends RefCnt {
             Stats.onNativeCall();
             return _nPeekPixels(_ptr, Native.getPtr(pixmap));
         } finally {
-            Reference.reachabilityFence(this);
-            Reference.reachabilityFence(pixmap);
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(pixmap);
         }
     }
 
@@ -726,8 +725,8 @@ public class Surface extends RefCnt {
             Stats.onNativeCall();
             return _nReadPixelsToPixmap(_ptr, Native.getPtr(pixmap), srcX, srcY);
         } finally {
-            Reference.reachabilityFence(this);
-            Reference.reachabilityFence(pixmap);
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(pixmap);
         }
     }
 
@@ -769,8 +768,8 @@ public class Surface extends RefCnt {
             Stats.onNativeCall();
             return _nReadPixels(_ptr, Native.getPtr(bitmap), srcX, srcY);
         } finally {
-            Reference.reachabilityFence(this);
-            Reference.reachabilityFence(bitmap);
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(bitmap);
         }
     }
 
@@ -779,8 +778,8 @@ public class Surface extends RefCnt {
             Stats.onNativeCall();
             _nWritePixelsFromPixmap(_ptr, Native.getPtr(pixmap), x, y);
         } finally {
-            Reference.reachabilityFence(this);
-            Reference.reachabilityFence(pixmap);
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(pixmap);
         }
     }
 
@@ -803,8 +802,8 @@ public class Surface extends RefCnt {
             Stats.onNativeCall();
             _nWritePixels(_ptr, Native.getPtr(bitmap), x, y);
         } finally {
-            Reference.reachabilityFence(this);
-            Reference.reachabilityFence(bitmap);
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(bitmap);
         }
     }
 
@@ -822,7 +821,7 @@ public class Surface extends RefCnt {
             Stats.onNativeCall();
             _nFlushAndSubmit(_ptr, false);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -842,7 +841,7 @@ public class Surface extends RefCnt {
             Stats.onNativeCall();
             _nFlushAndSubmit(_ptr, syncCpu);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -851,7 +850,7 @@ public class Surface extends RefCnt {
             Stats.onNativeCall();
             _nFlush(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -865,7 +864,7 @@ public class Surface extends RefCnt {
             Stats.onNativeCall();
             return _nUnique(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 

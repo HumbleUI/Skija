@@ -1,6 +1,5 @@
 package io.github.humbleui.skija;
 
-import java.lang.ref.*;
 import org.jetbrains.annotations.*;
 import io.github.humbleui.skija.impl.*;
 import io.github.humbleui.types.*;
@@ -62,8 +61,8 @@ public class Path extends Managed implements Iterable<PathSegment> {
         try {
             return _nEquals(_ptr, Native.getPtr(other));
         } finally {
-            Reference.reachabilityFence(this);
-            Reference.reachabilityFence(other);
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(other);
         }
     }
 
@@ -85,8 +84,8 @@ public class Path extends Managed implements Iterable<PathSegment> {
             Stats.onNativeCall();
             return _nIsInterpolatable(_ptr, Native.getPtr(compare));
         } finally {
-            Reference.reachabilityFence(this);
-            Reference.reachabilityFence(compare);
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(compare);
         }
     }
 
@@ -120,8 +119,8 @@ public class Path extends Managed implements Iterable<PathSegment> {
                 throw new IllegalArgumentException("Point array is not the same size as ending Point array");
             return new Path(ptr);
         } finally {
-            Reference.reachabilityFence(this);
-            Reference.reachabilityFence(ending);
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(ending);
         }
     }
 
@@ -130,7 +129,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
             Stats.onNativeCall();
             return PathFillMode._values[_nGetFillMode(_ptr)];
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -150,7 +149,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
             Stats.onNativeCall();
             return _nIsConvex(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -166,7 +165,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
             Stats.onNativeCall();
             return _nIsOval(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -182,7 +181,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
             Stats.onNativeCall();
             return _nIsRRect(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -233,7 +232,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
             Stats.onNativeCall();
             return _nIsEmpty(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -252,7 +251,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
             Stats.onNativeCall();
             return _nIsLastContourClosed(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -268,7 +267,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
             Stats.onNativeCall();
             return _nIsFinite(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -285,7 +284,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
             Stats.onNativeCall();
             return _nIsVolatile(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -384,7 +383,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
             Stats.onNativeCall();
             return _nMaybeGetAsLine(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -401,7 +400,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
             Stats.onNativeCall();
             return _nGetPointsCount(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -421,7 +420,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
             Stats.onNativeCall();
             return _nGetPoint(_ptr, index);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -456,7 +455,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
             Stats.onNativeCall();
             return _nGetPoints(_ptr, points, max);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -473,7 +472,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
             Stats.onNativeCall();
             return _nCountVerbs(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -503,7 +502,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
                     verbs[i] = PathVerb._values[out[i]];
             return count;
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -517,7 +516,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
             Stats.onNativeCall();
             return _nApproximateBytesUsed(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -537,7 +536,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
             _nSwap(_ptr, Native.getPtr(other));
             return this;
         } finally {
-            Reference.reachabilityFence(other);
+            ReferenceUtil.reachabilityFence(other);
         }
     }
 
@@ -557,7 +556,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
             Stats.onNativeCall();
             return _nGetBounds(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -601,7 +600,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
             Stats.onNativeCall();
             return _nComputeTightBounds(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -624,7 +623,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
             Stats.onNativeCall();
             return _nConservativelyContainsRect(_ptr, rect._left, rect._top, rect._right, rect._bottom);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -1221,7 +1220,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
             Stats.onNativeCall();
             return _nIsRect(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -1510,7 +1509,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
             _nAddPath(_ptr, Native.getPtr(src), extend);
             return this;
         } finally {
-            Reference.reachabilityFence(src);
+            ReferenceUtil.reachabilityFence(src);
         }
     }
 
@@ -1548,7 +1547,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
             _nAddPathOffset(_ptr, Native.getPtr(src), dx, dy, extend);
             return this;
         } finally {
-            Reference.reachabilityFence(src);
+            ReferenceUtil.reachabilityFence(src);
         }
     }
 
@@ -1586,7 +1585,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
             _nAddPathTransform(_ptr, Native.getPtr(src), matrix.getMat(), extend);
             return this;
         } finally {
-            Reference.reachabilityFence(src);
+            ReferenceUtil.reachabilityFence(src);
         }
     }
 
@@ -1605,7 +1604,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
             _nReverseAddPath(_ptr, Native.getPtr(src));
             return this;
         } finally {
-            Reference.reachabilityFence(src);
+            ReferenceUtil.reachabilityFence(src);
         }
     }
 
@@ -1637,7 +1636,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
             _nOffset(_ptr, dx, dy, Native.getPtr(dst));
             return this;
         } finally {
-            Reference.reachabilityFence(dst);
+            ReferenceUtil.reachabilityFence(dst);
         }
     }
 
@@ -1701,7 +1700,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
             _nTransform(_ptr, matrix.getMat(), Native.getPtr(dst), applyPerspectiveClip);
             return this;
         } finally {
-            Reference.reachabilityFence(dst);
+            ReferenceUtil.reachabilityFence(dst);
         }
     }
 
@@ -1717,7 +1716,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
             Stats.onNativeCall();
             return _nGetLastPt(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -1768,7 +1767,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
             Stats.onNativeCall();
             return _nGetSegmentMasks(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -1796,7 +1795,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
             Stats.onNativeCall();
             return _nContains(_ptr, x, y);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -1865,7 +1864,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
             Stats.onNativeCall();
             return _nSerializeToBytes(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -1887,8 +1886,8 @@ public class Path extends Managed implements Iterable<PathSegment> {
             long ptr = _nMakeCombining(Native.getPtr(one), Native.getPtr(two), op.ordinal());
             return ptr == 0 ? null : new Path(ptr);
         } finally {
-            Reference.reachabilityFence(one);
-            Reference.reachabilityFence(two);
+            ReferenceUtil.reachabilityFence(one);
+            ReferenceUtil.reachabilityFence(two);
         }
     }
 
@@ -1931,7 +1930,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
             Stats.onNativeCall();
             return _nGetGenerationId(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }    
 
@@ -1947,7 +1946,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
             Stats.onNativeCall();
             return _nIsValid(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 

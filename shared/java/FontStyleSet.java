@@ -1,6 +1,5 @@
 package io.github.humbleui.skija;
 
-import java.lang.ref.*;
 import org.jetbrains.annotations.*;
 import io.github.humbleui.skija.impl.*;
 
@@ -17,7 +16,7 @@ public class FontStyleSet extends RefCnt {
             Stats.onNativeCall();
             return _nCount(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -26,7 +25,7 @@ public class FontStyleSet extends RefCnt {
             Stats.onNativeCall();
             return new FontStyle(_nGetStyle(_ptr, index));
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }    
 
@@ -35,7 +34,7 @@ public class FontStyleSet extends RefCnt {
             Stats.onNativeCall();
             return _nGetStyleName(_ptr, index);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }        
 
@@ -45,7 +44,7 @@ public class FontStyleSet extends RefCnt {
             long ptr = _nGetTypeface(_ptr, index);
             return ptr == 0 ? null : new Typeface(ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }    
 
@@ -55,7 +54,7 @@ public class FontStyleSet extends RefCnt {
             long ptr = _nMatchStyle(_ptr, style._value);
             return ptr == 0 ? null : new Typeface(ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }    
 

@@ -1,6 +1,5 @@
 package io.github.humbleui.skija.svg;
 
-import java.lang.ref.*;
 import org.jetbrains.annotations.*;
 import io.github.humbleui.skija.*;
 import io.github.humbleui.skija.impl.*;
@@ -19,7 +18,7 @@ public abstract class SVGNode extends RefCnt {
             Stats.onNativeCall();
             return SVGTag._values[_nGetTag(_ptr)];
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 

@@ -1,6 +1,5 @@
 package io.github.humbleui.skija.shaper;
 
-import java.lang.ref.*;
 import org.jetbrains.annotations.*;
 import io.github.humbleui.skija.*;
 import io.github.humbleui.skija.impl.*;
@@ -16,7 +15,7 @@ public class TextLineRunHandler<T> extends Managed implements RunHandler {
     public TextLineRunHandler(ManagedString text, boolean manageText) {
         super(_nMake(Native.getPtr(text)), _FinalizerHolder.PTR);
         _text = manageText ? text : null;
-        Reference.reachabilityFence(text);
+        ReferenceUtil.reachabilityFence(text);
     }
 
     public TextLineRunHandler(String text) {
@@ -67,7 +66,7 @@ public class TextLineRunHandler<T> extends Managed implements RunHandler {
             long ptr = _nMakeLine(_ptr);
             return 0 == ptr ? null : new TextLine(ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 

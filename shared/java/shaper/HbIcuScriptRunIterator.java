@@ -1,6 +1,5 @@
 package io.github.humbleui.skija.shaper;
 
-import java.lang.ref.*;
 import org.jetbrains.annotations.*;
 import io.github.humbleui.skija.*;
 import io.github.humbleui.skija.impl.*;
@@ -11,7 +10,7 @@ public class HbIcuScriptRunIterator extends ManagedRunIterator<ScriptRun> {
     public HbIcuScriptRunIterator(ManagedString text, boolean manageText) {
         super(_nMake(Native.getPtr(text)), text, manageText);
         Stats.onNativeCall();
-        Reference.reachabilityFence(text);
+        ReferenceUtil.reachabilityFence(text);
     }
 
     public HbIcuScriptRunIterator(String text) {
@@ -24,7 +23,7 @@ public class HbIcuScriptRunIterator extends ManagedRunIterator<ScriptRun> {
             _nConsume(_ptr);
             return new ScriptRun(_getEndOfCurrentRun(), _nGetCurrentScriptTag(_ptr));
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 

@@ -1,6 +1,5 @@
 package io.github.humbleui.skija.impl;
 
-import java.lang.ref.*;
 import org.jetbrains.annotations.*;
 
 public abstract class RefCnt extends Managed {
@@ -17,7 +16,7 @@ public abstract class RefCnt extends Managed {
             Stats.onNativeCall();
             return _nGetRefCount(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 

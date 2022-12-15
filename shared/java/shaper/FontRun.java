@@ -1,6 +1,5 @@
 package io.github.humbleui.skija.shaper;
 
-import java.lang.ref.*;
 import lombok.*;
 import org.jetbrains.annotations.*;
 import io.github.humbleui.skija.*;
@@ -16,7 +15,7 @@ public class FontRun {
         try {
             return Native.getPtr(_font);
         } finally {
-            Reference.reachabilityFence(_font);
+            ReferenceUtil.reachabilityFence(_font);
         }
     }
 }

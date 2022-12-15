@@ -11,7 +11,7 @@ else:
 
 @functools.lru_cache(maxsize=1)
 def deps_run():
-  return [build_utils.fetch_maven('io.github.humbleui', 'types', '0.1.1')]
+  return [build_utils.fetch_maven('io.github.humbleui', 'types', '0.2.0')]
 
 @functools.lru_cache(maxsize=1)
 def deps_compile():

@@ -1,6 +1,5 @@
 package io.github.humbleui.skija.paragraph;
 
-import java.lang.ref.*;
 import org.jetbrains.annotations.*;
 import io.github.humbleui.skija.*;
 import io.github.humbleui.skija.impl.*;
@@ -14,8 +13,8 @@ public class ParagraphBuilder extends Managed {
     public ParagraphBuilder(ParagraphStyle style, FontCollection fc) {
         super(_nMake(Native.getPtr(style), Native.getPtr(fc)), _FinalizerHolder.PTR);
         Stats.onNativeCall();
-        Reference.reachabilityFence(style);
-        Reference.reachabilityFence(fc);
+        ReferenceUtil.reachabilityFence(style);
+        ReferenceUtil.reachabilityFence(fc);
     }
 
     public ParagraphBuilder pushStyle(TextStyle style) {
@@ -24,7 +23,7 @@ public class ParagraphBuilder extends Managed {
             _nPushStyle(_ptr, Native.getPtr(style));
             return this;
         } finally {
-            Reference.reachabilityFence(style);
+            ReferenceUtil.reachabilityFence(style);
         }
     }
 
@@ -57,7 +56,7 @@ public class ParagraphBuilder extends Managed {
             _text = null;
             return paragraph;
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 

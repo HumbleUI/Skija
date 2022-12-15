@@ -1,6 +1,5 @@
 package io.github.humbleui.skija;
 
-import java.lang.ref.*;
 import java.util.*;
 import org.jetbrains.annotations.*;
 import io.github.humbleui.skija.impl.*;
@@ -17,7 +16,7 @@ public class Typeface extends RefCnt {
             Stats.onNativeCall();
             return new FontStyle(_nGetFontStyle(_ptr));
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -44,7 +43,7 @@ public class Typeface extends RefCnt {
             Stats.onNativeCall();
             return _nIsFixedPitch(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -58,7 +57,7 @@ public class Typeface extends RefCnt {
             Stats.onNativeCall();
             return _nGetVariations(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -72,7 +71,7 @@ public class Typeface extends RefCnt {
             Stats.onNativeCall();
             return _nGetVariationAxes(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -84,7 +83,7 @@ public class Typeface extends RefCnt {
             Stats.onNativeCall();
             return _nGetUniqueId(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -96,8 +95,8 @@ public class Typeface extends RefCnt {
         try {
             return _nEquals(_ptr, Native.getPtr(other));
         } finally {
-            Reference.reachabilityFence(this);
-            Reference.reachabilityFence(other);
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(other);
         }
     }
 
@@ -168,7 +167,7 @@ public class Typeface extends RefCnt {
                 throw new IllegalArgumentException("Failed to create Typeface from data " + data);
             return new Typeface(ptr);
         } finally {
-            Reference.reachabilityFence(data);
+            ReferenceUtil.reachabilityFence(data);
         }
     }
 
@@ -211,7 +210,7 @@ public class Typeface extends RefCnt {
                 throw new IllegalArgumentException("Failed to clone Typeface " + this + " with " + Arrays.toString(variations));
             return new Typeface(ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -234,7 +233,7 @@ public class Typeface extends RefCnt {
             Stats.onNativeCall();
             return _nGetUTF32Glyphs(_ptr, uni);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -247,7 +246,7 @@ public class Typeface extends RefCnt {
             Stats.onNativeCall();
             return _nGetUTF32Glyph(_ptr, unichar);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -259,7 +258,7 @@ public class Typeface extends RefCnt {
             Stats.onNativeCall();
             return _nGetGlyphsCount(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -271,7 +270,7 @@ public class Typeface extends RefCnt {
             Stats.onNativeCall();
             return _nGetTablesCount(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -283,7 +282,7 @@ public class Typeface extends RefCnt {
             Stats.onNativeCall();
             return Arrays.stream(_nGetTableTags(_ptr)).mapToObj(FourByteTag::toString).toArray(String[]::new);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -295,7 +294,7 @@ public class Typeface extends RefCnt {
             Stats.onNativeCall();
             return _nGetTableSize(_ptr, FourByteTag.fromString(tag));
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -313,7 +312,7 @@ public class Typeface extends RefCnt {
             long ptr = _nGetTableData(_ptr, FourByteTag.fromString(tag));
             return ptr == 0 ? null : new Data(ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -325,7 +324,7 @@ public class Typeface extends RefCnt {
             Stats.onNativeCall();
             return _nGetUnitsPerEm(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -347,7 +346,7 @@ public class Typeface extends RefCnt {
             Stats.onNativeCall();
             return _nGetKerningPairAdjustments(_ptr, glyphs);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -359,7 +358,7 @@ public class Typeface extends RefCnt {
             Stats.onNativeCall();
             return _nGetFamilyNames(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -371,7 +370,7 @@ public class Typeface extends RefCnt {
             Stats.onNativeCall();
             return _nGetFamilyName(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -385,7 +384,7 @@ public class Typeface extends RefCnt {
             Stats.onNativeCall();
             return _nGetBounds(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 

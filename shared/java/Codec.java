@@ -1,6 +1,5 @@
 package io.github.humbleui.skija;
 
-import java.lang.ref.*;
 import lombok.*;
 import org.jetbrains.annotations.*;
 import io.github.humbleui.skija.impl.*;
@@ -29,7 +28,7 @@ public class Codec extends Managed implements IHasImageInfo {
                 throw new IllegalArgumentException("Unsupported format");
             return new Codec(ptr);
         } finally {
-            Reference.reachabilityFence(data);
+            ReferenceUtil.reachabilityFence(data);
         }
     }
 
@@ -42,7 +41,7 @@ public class Codec extends Managed implements IHasImageInfo {
             }
             return _imageInfo;
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }        
     }
 
@@ -52,7 +51,7 @@ public class Codec extends Managed implements IHasImageInfo {
             Stats.onNativeCall();
             return IPoint._makeFromLong(_nGetSize(_ptr));
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }        
     }
 
@@ -62,7 +61,7 @@ public class Codec extends Managed implements IHasImageInfo {
             Stats.onNativeCall();
             return EncodedOrigin._values[_nGetEncodedOrigin(_ptr)];
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }        
     }
 
@@ -72,7 +71,7 @@ public class Codec extends Managed implements IHasImageInfo {
             Stats.onNativeCall();
             return EncodedImageFormat._values[_nGetEncodedImageFormat(_ptr)];
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }        
     }
 
@@ -127,7 +126,7 @@ public class Codec extends Managed implements IHasImageInfo {
             _validateResult(_nReadPixels(_ptr, Native.getPtr(bitmap), 0, -1));
             return this;
         } finally {
-            Reference.reachabilityFence(bitmap);
+            ReferenceUtil.reachabilityFence(bitmap);
         }        
     }
 
@@ -170,7 +169,7 @@ public class Codec extends Managed implements IHasImageInfo {
             _validateResult(_nReadPixels(_ptr, Native.getPtr(bitmap), frame, -1));
             return this;
         } finally {
-            Reference.reachabilityFence(bitmap);
+            ReferenceUtil.reachabilityFence(bitmap);
         }        
     }
 
@@ -214,7 +213,7 @@ public class Codec extends Managed implements IHasImageInfo {
             _validateResult(_nReadPixels(_ptr, Native.getPtr(bitmap), frame, priorFrame));
             return this;
         } finally {
-            Reference.reachabilityFence(bitmap);
+            ReferenceUtil.reachabilityFence(bitmap);
         }        
     }
 
@@ -228,7 +227,7 @@ public class Codec extends Managed implements IHasImageInfo {
             Stats.onNativeCall();
             return _nGetFrameCount(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }    
 
@@ -244,7 +243,7 @@ public class Codec extends Managed implements IHasImageInfo {
             Stats.onNativeCall();
             return _nGetFrameInfo(_ptr, frame);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -263,7 +262,7 @@ public class Codec extends Managed implements IHasImageInfo {
             Stats.onNativeCall();
             return _nGetFramesInfo(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -286,7 +285,7 @@ public class Codec extends Managed implements IHasImageInfo {
             Stats.onNativeCall();
             return _nGetRepetitionCount(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 

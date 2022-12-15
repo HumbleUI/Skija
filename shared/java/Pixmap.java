@@ -1,6 +1,5 @@
 package io.github.humbleui.skija;
 
-import java.lang.ref.*;
 import java.nio.ByteBuffer;
 import org.jetbrains.annotations.*;
 import io.github.humbleui.types.IRect;
@@ -37,14 +36,14 @@ public class Pixmap extends Managed {
                 throw new IllegalArgumentException("Failed to create Pixmap.");
             return new Pixmap(ptr, true);
         } finally {
-            Reference.reachabilityFence(info._colorInfo._colorSpace);
+            ReferenceUtil.reachabilityFence(info._colorInfo._colorSpace);
         }
     }
 
     public void reset() {
         Stats.onNativeCall();
         _nReset(_ptr);
-        Reference.reachabilityFence(this);
+        ReferenceUtil.reachabilityFence(this);
     }
 
     public void reset(ImageInfo info, long addr, int rowBytes) {
@@ -54,8 +53,8 @@ public class Pixmap extends Managed {
             info._colorInfo._colorType.ordinal(),
             info._colorInfo._alphaType.ordinal(),
             Native.getPtr(info._colorInfo._colorSpace), addr, rowBytes);
-        Reference.reachabilityFence(this);
-        Reference.reachabilityFence(info._colorInfo._colorSpace);
+        ReferenceUtil.reachabilityFence(this);
+        ReferenceUtil.reachabilityFence(info._colorInfo._colorSpace);
     }
 
     public void reset(ImageInfo info, ByteBuffer buffer, int rowBytes) {
@@ -65,8 +64,8 @@ public class Pixmap extends Managed {
     public void setColorSpace(ColorSpace colorSpace) {
         Stats.onNativeCall();
         _nSetColorSpace(_ptr, Native.getPtr(colorSpace));
-        Reference.reachabilityFence(this);
-        Reference.reachabilityFence(colorSpace);
+        ReferenceUtil.reachabilityFence(this);
+        ReferenceUtil.reachabilityFence(colorSpace);
     }
 
     public boolean extractSubset(long subsetPtr, IRect area) {
@@ -74,7 +73,7 @@ public class Pixmap extends Managed {
             Stats.onNativeCall();
             return _nExtractSubset(_ptr, subsetPtr, area._left, area._top, area._right, area._bottom);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -87,7 +86,7 @@ public class Pixmap extends Managed {
         try {
             return _nGetInfo(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -96,7 +95,7 @@ public class Pixmap extends Managed {
         try {
             return _nGetRowBytes(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -105,7 +104,7 @@ public class Pixmap extends Managed {
         try {
             return _nGetAddr(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -114,7 +113,7 @@ public class Pixmap extends Managed {
         try {
             return _nGetRowBytesAsPixels(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -123,7 +122,7 @@ public class Pixmap extends Managed {
         try {
             return _nComputeByteSize(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -132,7 +131,7 @@ public class Pixmap extends Managed {
         try {
             return _nComputeIsOpaque(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -141,7 +140,7 @@ public class Pixmap extends Managed {
         try {
             return _nGetColor(_ptr, x, y);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -150,7 +149,7 @@ public class Pixmap extends Managed {
         try {
             return _nGetColor4f(_ptr, x, y);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -159,7 +158,7 @@ public class Pixmap extends Managed {
         try {
             return _nGetAlphaF(_ptr, x, y);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -168,7 +167,7 @@ public class Pixmap extends Managed {
         try {
             return _nGetAddrAt(_ptr, x, y);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -181,8 +180,8 @@ public class Pixmap extends Managed {
                 info._colorInfo._alphaType.ordinal(),
                 Native.getPtr(info._colorInfo._colorSpace), addr, rowBytes);
         } finally {
-            Reference.reachabilityFence(this);
-            Reference.reachabilityFence(info._colorInfo._colorSpace);
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(info._colorInfo._colorSpace);
         }
     }
 
@@ -196,8 +195,8 @@ public class Pixmap extends Managed {
                 Native.getPtr(info._colorInfo._colorSpace), addr, rowBytes,
                 srcX, srcY);
         } finally {
-            Reference.reachabilityFence(this);
-            Reference.reachabilityFence(info._colorInfo._colorSpace);
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(info._colorInfo._colorSpace);
         }
     }
 
@@ -206,8 +205,8 @@ public class Pixmap extends Managed {
         try {
             return _nReadPixelsToPixmap(_ptr, Native.getPtr(pixmap));
         } finally {
-            Reference.reachabilityFence(this);
-            Reference.reachabilityFence(pixmap);
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(pixmap);
         }
     }
 
@@ -216,8 +215,8 @@ public class Pixmap extends Managed {
         try {
             return _nReadPixelsToPixmapFromPoint(_ptr, Native.getPtr(pixmap), srcX, srcY);
         } finally {
-            Reference.reachabilityFence(this);
-            Reference.reachabilityFence(pixmap);
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(pixmap);
         }
     }
 
@@ -226,8 +225,8 @@ public class Pixmap extends Managed {
         try {
             return _nScalePixels(_ptr, Native.getPtr(dstPixmap), samplingMode._pack());
         } finally {
-            Reference.reachabilityFence(this);
-            Reference.reachabilityFence(dstPixmap);
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(dstPixmap);
         }
     }
 
@@ -236,7 +235,7 @@ public class Pixmap extends Managed {
         try {
             return _nErase(_ptr, color);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -245,7 +244,7 @@ public class Pixmap extends Managed {
         try {
             return _nEraseSubset(_ptr, color, subset._left, subset._top, subset._right, subset._bottom);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 

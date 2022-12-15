@@ -54,16 +54,20 @@ def main():
 
   # javac
   modulepath = []
-  sources = build_utils.files('../shared/java/**/*.java')
-  build_utils.javac(sources,
+  build_utils.javac(build_utils.files('../shared/java/**/*.java'),
                     '../shared/target/classes',
                     classpath = common.deps_compile(),
+                    release = '8')
+  build_utils.javac(build_utils.files('../shared/java9/**/*.java'),
+                    '../shared/target/classes-java9',
+                    classpath = common.deps_compile(),
                     modulepath = common.deps_compile(),
+                    opts = ['--patch-module', 'io.github.humbleui.skija.shared=../shared/target/classes'],
                     release = '9')
-  modulepath += ['../shared/target/classes']
+  modulepath += ['../shared/target/classes-java9', '../shared/target/classes']
 
-  sources = build_utils.files(f'java-{common.classifier}/**/*.java')
-  build_utils.javac(sources, 'target/classes', modulepath = modulepath, release = '9')
+  build_utils.javac([f'java-{common.classifier}/LibraryFinder.java'], 'target/classes', release = '8')
+  build_utils.javac([f'java-{common.classifier}/module-info.java'], 'target/classes', modulepath = modulepath, release = '9')
 
   # Copy files
   target = 'target/classes/io/github/humbleui/skija'

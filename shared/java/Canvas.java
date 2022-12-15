@@ -1,6 +1,5 @@
 package io.github.humbleui.skija;
 
-import java.lang.ref.*;
 import org.jetbrains.annotations.*;
 import io.github.humbleui.skija.impl.*;
 import io.github.humbleui.types.*;
@@ -52,7 +51,7 @@ public class Canvas extends Managed {
     public Canvas(@NotNull Bitmap bitmap, @NotNull SurfaceProps surfaceProps) {
         this(_nMakeFromBitmap(bitmap._ptr, surfaceProps._getFlags(), surfaceProps._pixelGeometry.ordinal()), true, bitmap);
         Stats.onNativeCall();
-        Reference.reachabilityFence(bitmap);
+        ReferenceUtil.reachabilityFence(bitmap);
     }
 
     /**
@@ -67,7 +66,7 @@ public class Canvas extends Managed {
             Stats.onNativeCall();
             return _nGetBaseProps(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -84,7 +83,7 @@ public class Canvas extends Managed {
             Stats.onNativeCall();
             return _nGetTopProps(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -95,7 +94,7 @@ public class Canvas extends Managed {
             long ptr = _nGetSurface(_ptr);
             return ptr == 0 ? null : new Surface(ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -104,7 +103,7 @@ public class Canvas extends Managed {
         assert paint != null : "Can’t drawPoint with paint == null";
         Stats.onNativeCall();
         _nDrawPoint(_ptr, x, y, Native.getPtr(paint));
-        Reference.reachabilityFence(paint);
+        ReferenceUtil.reachabilityFence(paint);
         return this;
     }
 
@@ -161,7 +160,7 @@ public class Canvas extends Managed {
         assert paint != null : "Can’t drawPoints with paint == null";
         Stats.onNativeCall();
         _nDrawPoints(_ptr, 0 /* SkCanvas::PointMode::kPoints_PointMode */, coords, Native.getPtr(paint));
-        Reference.reachabilityFence(paint);
+        ReferenceUtil.reachabilityFence(paint);
         return this;
     }
 
@@ -214,7 +213,7 @@ public class Canvas extends Managed {
         assert paint != null : "Can’t drawLines with paint == null";
         Stats.onNativeCall();
         _nDrawPoints(_ptr, 1 /* SkCanvas::PointMode::kLines_PointMode */, coords, Native.getPtr(paint));
-        Reference.reachabilityFence(paint);
+        ReferenceUtil.reachabilityFence(paint);
         return this;
     }
 
@@ -265,7 +264,7 @@ public class Canvas extends Managed {
         assert paint != null : "Can’t drawPolygon with paint == null";
         Stats.onNativeCall();
         _nDrawPoints(_ptr, 2 /* SkCanvas::PointMode::kPolygon_PointMode */, coords, Native.getPtr(paint));
-        Reference.reachabilityFence(paint);
+        ReferenceUtil.reachabilityFence(paint);
         return this;
     }
 
@@ -274,7 +273,7 @@ public class Canvas extends Managed {
         assert paint != null : "Can’t drawLine with paint == null";
         Stats.onNativeCall();
         _nDrawLine(_ptr, x0, y0, x1, y1, Native.getPtr(paint));
-        Reference.reachabilityFence(paint);
+        ReferenceUtil.reachabilityFence(paint);
         return this;
     }
 
@@ -283,7 +282,7 @@ public class Canvas extends Managed {
         assert paint != null : "Can’t drawArc with paint == null";
         Stats.onNativeCall();
         _nDrawArc(_ptr, left, top, right, bottom, startAngle, sweepAngle, includeCenter, Native.getPtr(paint));
-        Reference.reachabilityFence(paint);
+        ReferenceUtil.reachabilityFence(paint);
         return this;
     }
 
@@ -293,7 +292,7 @@ public class Canvas extends Managed {
         assert paint != null : "Can’t drawRect with paint == null";
         Stats.onNativeCall();
         _nDrawRect(_ptr, r._left, r._top, r._right, r._bottom, Native.getPtr(paint));
-        Reference.reachabilityFence(paint);
+        ReferenceUtil.reachabilityFence(paint);
         return this;
     }
 
@@ -303,7 +302,7 @@ public class Canvas extends Managed {
         assert paint != null : "Can’t drawOval with paint == null";
         Stats.onNativeCall();
         _nDrawOval(_ptr, r._left, r._top, r._right, r._bottom, Native.getPtr(paint));
-        Reference.reachabilityFence(paint);
+        ReferenceUtil.reachabilityFence(paint);
         return this;
     }
 
@@ -312,7 +311,7 @@ public class Canvas extends Managed {
         assert paint != null : "Can’t drawCircle with paint == null";
         Stats.onNativeCall();
         _nDrawOval(_ptr, x - radius, y - radius, x + radius, y + radius, Native.getPtr(paint));
-        Reference.reachabilityFence(paint);
+        ReferenceUtil.reachabilityFence(paint);
         return this;
     }
 
@@ -322,7 +321,7 @@ public class Canvas extends Managed {
         assert paint != null : "Can’t drawRRect with paint == null";
         Stats.onNativeCall();
         _nDrawRRect(_ptr, r._left, r._top, r._right, r._bottom, r._radii, Native.getPtr(paint));
-        Reference.reachabilityFence(paint);
+        ReferenceUtil.reachabilityFence(paint);
         return this;
     }
 
@@ -333,7 +332,7 @@ public class Canvas extends Managed {
         assert paint != null : "Can’t drawDRRect with paint == null";
         Stats.onNativeCall();
         _nDrawDRRect(_ptr, outer._left, outer._top, outer._right, outer._bottom, outer._radii, inner._left, inner._top, inner._right, inner._bottom, inner._radii, Native.getPtr(paint));
-        Reference.reachabilityFence(paint);
+        ReferenceUtil.reachabilityFence(paint);
         return this;
     }
 
@@ -380,8 +379,8 @@ public class Canvas extends Managed {
         assert paint != null : "Can’t drawPath with paint == null";
         Stats.onNativeCall();
         _nDrawPath(_ptr, Native.getPtr(path), Native.getPtr(paint));
-        Reference.reachabilityFence(path);
-        Reference.reachabilityFence(paint);
+        ReferenceUtil.reachabilityFence(path);
+        ReferenceUtil.reachabilityFence(paint);
         return this;
     }
 
@@ -428,8 +427,8 @@ public class Canvas extends Managed {
         assert samplingMode != null : "Can’t drawImageRect with samplingMode == null";
         Stats.onNativeCall();
         _nDrawImageRect(_ptr, Native.getPtr(image), src._left, src._top, src._right, src._bottom, dst._left, dst._top, dst._right, dst._bottom, samplingMode._pack(), Native.getPtr(paint), strict);
-        Reference.reachabilityFence(image);
-        Reference.reachabilityFence(paint);
+        ReferenceUtil.reachabilityFence(image);
+        ReferenceUtil.reachabilityFence(paint);
         return this;
     }
 
@@ -441,8 +440,8 @@ public class Canvas extends Managed {
         assert filterMode != null : "Can’t drawImageNine with filterMode == null";
         Stats.onNativeCall();
         _nDrawImageNine(_ptr, Native.getPtr(image), center._left, center._top, center._right, center._bottom, dst._left, dst._top, dst._right, dst._bottom, filterMode.ordinal(), Native.getPtr(paint));
-        Reference.reachabilityFence(image);
-        Reference.reachabilityFence(paint);
+        ReferenceUtil.reachabilityFence(image);
+        ReferenceUtil.reachabilityFence(paint);
         return this;
     }
 
@@ -452,8 +451,8 @@ public class Canvas extends Managed {
         assert paint != null : "Can’t drawRegion with paint == null";
         Stats.onNativeCall();
         _nDrawRegion(_ptr, Native.getPtr(r), Native.getPtr(paint));
-        Reference.reachabilityFence(r);
-        Reference.reachabilityFence(paint);
+        ReferenceUtil.reachabilityFence(r);
+        ReferenceUtil.reachabilityFence(paint);
         return this;
     }
 
@@ -463,8 +462,8 @@ public class Canvas extends Managed {
         assert paint != null : "Can’t drawString with paint == null";
         Stats.onNativeCall();
         _nDrawString(_ptr, s, x, y, Native.getPtr(font), Native.getPtr(paint));
-        Reference.reachabilityFence(font);
-        Reference.reachabilityFence(paint);
+        ReferenceUtil.reachabilityFence(font);
+        ReferenceUtil.reachabilityFence(paint);
         return this;
     }
 
@@ -474,8 +473,8 @@ public class Canvas extends Managed {
         assert paint != null : "Can’t drawTextBlob with paint == null";
         Stats.onNativeCall();
         _nDrawTextBlob(_ptr, Native.getPtr(blob), x, y, Native.getPtr(paint));
-        Reference.reachabilityFence(blob);
-        Reference.reachabilityFence(paint);
+        ReferenceUtil.reachabilityFence(blob);
+        ReferenceUtil.reachabilityFence(paint);
         return this;
     }
 
@@ -500,8 +499,8 @@ public class Canvas extends Managed {
         assert picture != null : "Can’t drawPicture with picture == null";
         Stats.onNativeCall();
         _nDrawPicture(_ptr, Native.getPtr(picture), matrix == null ? null : matrix._mat, Native.getPtr(paint));
-        Reference.reachabilityFence(picture);
-        Reference.reachabilityFence(paint);
+        ReferenceUtil.reachabilityFence(picture);
+        ReferenceUtil.reachabilityFence(paint);
         return this;
     }   
 
@@ -576,7 +575,7 @@ public class Canvas extends Managed {
         assert paint != null : "Can’t drawTriangles with paint == null";
         Stats.onNativeCall();
         _nDrawVertices(_ptr, 0 /* kTriangles_VertexMode */, Point.flattenArray(positions), colors, Point.flattenArray(texCoords), indices, mode.ordinal(), Native.getPtr(paint));
-        Reference.reachabilityFence(paint);
+        ReferenceUtil.reachabilityFence(paint);
         return this;
     }
 
@@ -651,7 +650,7 @@ public class Canvas extends Managed {
         assert paint != null : "Can’t drawTriangles with paint == null";
         Stats.onNativeCall();
         _nDrawVertices(_ptr, 1 /* kTriangleStrip_VertexMode */, Point.flattenArray(positions), colors, Point.flattenArray(texCoords), indices, mode.ordinal(), Native.getPtr(paint));
-        Reference.reachabilityFence(paint);
+        ReferenceUtil.reachabilityFence(paint);
         return this;
     }
 
@@ -726,7 +725,7 @@ public class Canvas extends Managed {
         assert paint != null : "Can’t drawTriangleFan with paint == null";
         Stats.onNativeCall();
         _nDrawVertices(_ptr, 2 /* kTriangleFan_VertexMode */, Point.flattenArray(positions), colors, Point.flattenArray(texCoords), indices, mode.ordinal(), Native.getPtr(paint));
-        Reference.reachabilityFence(paint);
+        ReferenceUtil.reachabilityFence(paint);
         return this;
     }
 
@@ -832,7 +831,7 @@ public class Canvas extends Managed {
         assert paint != null : "Can’t drawPatch with paint == null";
         Stats.onNativeCall();
         _nDrawPatch(_ptr, Point.flattenArray(cubics), colors, Point.flattenArray(texCoords), mode.ordinal(), Native.getPtr(paint));
-        Reference.reachabilityFence(paint);
+        ReferenceUtil.reachabilityFence(paint);
         return this;
     }
 
@@ -892,7 +891,7 @@ public class Canvas extends Managed {
         assert drawable != null : "Can’t drawDrawable with drawable == null";
         Stats.onNativeCall();
         _nDrawDrawable(_ptr, Native.getPtr(drawable), matrix == null ? null : matrix._mat);
-        Reference.reachabilityFence(drawable);
+        ReferenceUtil.reachabilityFence(drawable);
         return this;
     }
 
@@ -933,7 +932,7 @@ public class Canvas extends Managed {
         assert paint != null : "Can’t drawPaint with paint == null";
         Stats.onNativeCall();
         _nDrawPaint(_ptr, Native.getPtr(paint));
-        Reference.reachabilityFence(paint);
+        ReferenceUtil.reachabilityFence(paint);
         return this;
     }
 
@@ -992,7 +991,7 @@ public class Canvas extends Managed {
             float[] mat = _nGetLocalToDevice(_ptr);
             return new Matrix44(mat);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -1055,7 +1054,7 @@ public class Canvas extends Managed {
         assert mode != null : "Can’t clipPath with mode == null";
         Stats.onNativeCall();
         _nClipPath(_ptr, Native.getPtr(p), mode.ordinal(), antiAlias);
-        Reference.reachabilityFence(p);
+        ReferenceUtil.reachabilityFence(p);
         return this;
     }
 
@@ -1080,7 +1079,7 @@ public class Canvas extends Managed {
         assert mode != null : "Can’t clipRegion with mode == null";
         Stats.onNativeCall();
         _nClipRegion(_ptr, Native.getPtr(r), mode.ordinal());
-        Reference.reachabilityFence(r);
+        ReferenceUtil.reachabilityFence(r);
         return this;
     }
 
@@ -1173,8 +1172,8 @@ public class Canvas extends Managed {
             Stats.onNativeCall();
             return _nReadPixels(_ptr, Native.getPtr(bitmap), srcX, srcY);
         } finally {
-            Reference.reachabilityFence(this);
-            Reference.reachabilityFence(bitmap);
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(bitmap);
         }
     }
 
@@ -1225,8 +1224,8 @@ public class Canvas extends Managed {
             Stats.onNativeCall();
             return _nWritePixels(_ptr, Native.getPtr(bitmap), x, y);
         } finally {
-            Reference.reachabilityFence(this);
-            Reference.reachabilityFence(bitmap);
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(bitmap);
         }
     }    
 
@@ -1235,7 +1234,7 @@ public class Canvas extends Managed {
             Stats.onNativeCall();
             return _nSave(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -1244,8 +1243,8 @@ public class Canvas extends Managed {
             Stats.onNativeCall();
             return _nSaveLayerRect(_ptr, left, top, right, bottom, Native.getPtr(paint));
         } finally {
-            Reference.reachabilityFence(this);
-            Reference.reachabilityFence(paint);
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(paint);
         }
     }
 
@@ -1280,8 +1279,8 @@ public class Canvas extends Managed {
             else
                 return _nSaveLayerRect(_ptr, bounds._left, bounds._top, bounds._right, bounds._bottom, Native.getPtr(paint));
         } finally {
-            Reference.reachabilityFence(this);
-            Reference.reachabilityFence(paint);
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(paint);
         }
     }
 
@@ -1314,7 +1313,7 @@ public class Canvas extends Managed {
             else
                 return _nSaveLayerAlphaRect(_ptr, bounds._left, bounds._top, bounds._right, bounds._bottom, alpha);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
@@ -1346,8 +1345,8 @@ public class Canvas extends Managed {
             else
                 return _nSaveLayerRecRect(_ptr, bounds._left, bounds._top, bounds._right, bounds._bottom, Native.getPtr(layerRec._paint), Native.getPtr(layerRec._backdrop), layerRec._flags);
         } finally {
-            Reference.reachabilityFence(this);
-            Reference.reachabilityFence(layerRec);
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(layerRec);
         }
     }
 
@@ -1356,7 +1355,7 @@ public class Canvas extends Managed {
             Stats.onNativeCall();
             return _nGetSaveCount(_ptr);
         } finally {
-            Reference.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(this);
         }
     }
 
