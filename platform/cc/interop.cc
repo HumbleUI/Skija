@@ -972,8 +972,8 @@ SkString skString(JNIEnv* env, jstring s) {
         jsize utfUnits = env->GetStringUTFLength(s);
         jsize utf16Units = env->GetStringLength(s);
         SkString res(utfUnits);
-        env->GetStringUTFRegion(s, 0, utf16Units, res.writable_str());
-        size_t utf8Units = utfToUtf8((unsigned char *) res.writable_str(), utfUnits);
+        env->GetStringUTFRegion(s, 0, utf16Units, res.data());
+        size_t utf8Units = utfToUtf8((unsigned char *) res.data(), utfUnits);
         res.resize(utf8Units);
         return res;
     }
