@@ -28,7 +28,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_BreakIterator__
       return reinterpret_cast<jlong>(instance);
 }
 
-extern "C" JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_BreakIterator__1nClone
+extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_BreakIterator__1nClone
   (JNIEnv* env, jclass jclass, jlong ptr) {
     UBreakIterator* instance = reinterpret_cast<UBreakIterator*>(static_cast<uintptr_t>(ptr));
     UErrorCode status = U_ZERO_ERROR;
@@ -37,7 +37,7 @@ extern "C" JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_BreakIterator__1
       env->ThrowNew(java::lang::RuntimeException::cls, u_errorName(status));
       return 0;
     } else
-      return reinterpret_cast<jlong>(clone);
+    return reinterpret_cast<jlong>(clone);
 }
 
 extern "C" JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_BreakIterator__1nCurrent
@@ -113,7 +113,7 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_BreakIterator__1
     UBreakIterator* instance = reinterpret_cast<UBreakIterator*>(static_cast<uintptr_t>(ptr));
     std::vector<jchar>* text = reinterpret_cast<std::vector<jchar>*>(static_cast<uintptr_t>(textPtr));
     UErrorCode status = U_ZERO_ERROR;
-    ubrk_setText(instance, reinterpret_cast<UChar *>(text->data()), text->size(), &status);
+    ubrk_setText(instance, reinterpret_cast<UChar *>(text->data()), (int32_t) text->size(), &status);
     if (U_FAILURE(status))
       env->ThrowNew(java::lang::RuntimeException::cls, u_errorName(status));
 }

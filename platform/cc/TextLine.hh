@@ -15,7 +15,7 @@ public:
         const uint16_t* fGlyphs;
         const SkPoint*  fPos;
         std::vector<SkScalar> fBreakPositions;
-        std::vector<SkScalar> fBreakOffsets;
+        std::vector<uint32_t> fBreakOffsets;
 
         Run(const SkFont& font,
             uint8_t bidiLevel,

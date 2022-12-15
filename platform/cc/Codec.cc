@@ -72,9 +72,8 @@ extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_Codec__1nGetF
 extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_Codec__1nGetFramesInfo
   (JNIEnv* env, jclass jclass, jlong ptr, jint frame) {
     SkCodec* instance = reinterpret_cast<SkCodec*>(static_cast<uintptr_t>(ptr));
-    SkCodec::FrameInfo info;
     std::vector<SkCodec::FrameInfo> frames = instance->getFrameInfo();
-    jobjectArray res = env->NewObjectArray(frames.size(), skija::AnimationFrameInfo::cls, nullptr);
+    jobjectArray res = env->NewObjectArray((jsize) frames.size(), skija::AnimationFrameInfo::cls, nullptr);
     if (java::lang::Throwable::exceptionThrown(env))
         return nullptr;
     for (int i = 0; i < frames.size(); ++i) {
