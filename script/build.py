@@ -7,6 +7,7 @@ def main():
   parser.add_argument('--arch', default=build_utils.arch)
   parser.add_argument('--skia-dir')
   parser.add_argument('--skia-release', default='m106-ba6bc7d02d')
+  parser.add_argument('--cmake-toolchain-file')
   (args, _) = parser.parse_known_args()
 
   # Fetch Skia
@@ -37,7 +38,8 @@ def main():
     '-DSKIA_DIR=' + skia_dir,
     '-DSKIA_ARCH=' + build_utils.arch]
     + (['-DCMAKE_OSX_ARCHITECTURES=' + {'x64': 'x86_64', 'arm64': 'arm64'}[build_utils.arch]] if build_utils.system == 'macos' else [])
-    + [os.path.abspath('.')],
+    + [os.path.abspath('.')]
+    + (['-DCMAKE_TOOLCHAIN_FILE=' + args.cmake_toolchain_file] if args.cmake_toolchain_file else []),
     cwd=os.path.abspath(native_build_dir))
 
   # Ninja
