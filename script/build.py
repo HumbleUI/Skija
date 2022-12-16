@@ -28,32 +28,31 @@ def main():
   print("Using Skia from", skia_dir)
 
   # CMake
-  build_utils.makedirs("build")
+  native_build_dir = f'target/{common.classifier}/native'
+  build_utils.makedirs(native_build_dir)
   subprocess.check_call([
-    "cmake",
-    "-G", "Ninja",
-    "-DCMAKE_BUILD_TYPE=" + build_type,
-    "-DSKIA_DIR=" + skia_dir,
-    "-DSKIA_ARCH=" + build_utils.arch]
-    + (["-DCMAKE_OSX_ARCHITECTURES=" + {"x64": "x86_64", "arm64": "arm64"}[build_utils.arch]] if build_utils.system == "macos" else [])
-    + [".."],
-    cwd=os.path.abspath('build'))
+    'cmake',
+    '-G', 'Ninja',
+    '-DCMAKE_BUILD_TYPE=' + build_type,
+    '-DSKIA_DIR=' + skia_dir,
+    '-DSKIA_ARCH=' + build_utils.arch]
+    + (['-DCMAKE_OSX_ARCHITECTURES=' + {'x64': 'x86_64', 'arm64': 'arm64'}[build_utils.arch]] if build_utils.system == 'macos' else [])
+    + [os.path.abspath('.')],
+    cwd=os.path.abspath(native_build_dir))
 
   # Ninja
-  subprocess.check_call(["ninja"], cwd=os.path.abspath('build'))
+  subprocess.check_call(['ninja'], cwd=os.path.abspath(native_build_dir))
 
   # Codesign
-  if build_utils.system == "macos" and os.getenv("APPLE_CODESIGN_IDENTITY"):
-    subprocess.call(["codesign",
-                     # "--force",
-                     # "-vvvvvv",
-                     "--deep",
-                     "--sign",
-                     os.getenv("APPLE_CODESIGN_IDENTITY"),
-                     "build/libskija_" + build_utils.arch + ".dylib"])
-
+  if build_utils.system == 'macos' and os.getenv('APPLE_CODESIGN_IDENTITY'):
+    subprocess.call(['codesign',
+                     # '--force',
+                     # '-vvvvvv',
+                     '--deep',
+                     '--sign',
+                     os.getenv('APPLE_CODESIGN_IDENTITY'),
+                     f'{native_build_dir}/libskija.dylib'])
   # javac
-  modulepath = []
   build_utils.javac(build_utils.files('../shared/java/**/*.java'),
                     '../shared/target/classes',
                     classpath = common.deps_compile(),
@@ -64,23 +63,29 @@ def main():
                     modulepath = common.deps_compile(),
                     opts = ['--patch-module', 'io.github.humbleui.skija.shared=../shared/target/classes'],
                     release = '9')
-  modulepath += ['../shared/target/classes-java9', '../shared/target/classes']
 
-  build_utils.javac([f'java-{common.classifier}/LibraryFinder.java'], 'target/classes', release = '8')
-  build_utils.javac([f'java-{common.classifier}/module-info.java'], 'target/classes', modulepath = modulepath, release = '9')
+  build_utils.copy_replace(
+      'java/module-info.java',
+      f'target/{common.classifier}/java/module-info.java',
+      {'${system}': build_utils.system, '${arch}': build_utils.arch}
+  )
+  build_utils.javac(
+      [f'target/{common.classifier}/java/module-info.java'],
+      f'target/{common.classifier}/classes',
+      release = '9',
+      opts = ['-nowarn']
+  )
 
   # Copy files
-  target = 'target/classes/io/github/humbleui/skija'
-  if common.classifier == 'macos-x64':
-    build_utils.copy_newer('build/libskija_x64.dylib', target + '/macos/x64/libskija_x64.dylib')
-  elif common.classifier == 'macos-arm64':
-    build_utils.copy_newer('build/libskija_arm64.dylib', target + '/macos/arm64/libskija_arm64.dylib')
-  elif common.classifier == 'linux':
-    build_utils.copy_newer('build/libskija.so', target + '/linux/libskija.so')
-  elif common.classifier == 'windows':
-    build_utils.copy_newer('build/skija.dll', target + '/windows/skija.dll')
-    build_utils.copy_newer(skia_dir + '/out/' + build_type + '-' + build_utils.arch + '/icudtl.dat',
-                           target + '/windows/icudtl.dat')
+  target = f'target/{common.classifier}/classes/io/github/humbleui/skija/{build_utils.system}/{build_utils.arch}'
+
+  if build_utils.system == 'macos':
+    build_utils.copy_newer(f'{native_build_dir}/libskija.dylib', f'{target}/libskija.dylib')
+  elif build_utils.system == 'linux':
+    build_utils.copy_newer(f'{native_build_dir}/libskija.so', f'{target}/libskija.so')
+  elif build_utils.system == 'windows':
+    build_utils.copy_newer(f'{native_build_dir}/skija.dll', f'{target}/skija.dll')
+    build_utils.copy_newer(f'{skia_dir}/out/{build_type}-{build_utils.arch}/icudtl.dat', f'{target}/icudtl.dat')
 
   return 0
 

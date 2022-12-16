@@ -3,11 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.github.humbleui</groupId>
-    <artifactId>skija-macos-arm64</artifactId>
+    <artifactId>${artifact}</artifactId>
     <version>${version}</version>
     <packaging>jar</packaging>
 
-    <name>io.github.humbleui:skija-macos-arm64</name>
+    <name>io.github.humbleui:${artifact}</name>
     <description>Java bindings for Skia</description>
     <url>https://github.com/humbleui/skija</url>
     
@@ -33,8 +33,8 @@
     </scm>
 
     <properties>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
+        <maven.compiler.source>9</maven.compiler.source>
+        <maven.compiler.target>9</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
