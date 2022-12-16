@@ -20,11 +20,7 @@ public class Library {
             load();
     }
 
-    public static String readResource(String path) {
-        URL url = Library.class.getClassLoader().getResource(path);
-        if (url == null)
-            return null;
-
+    public static String readResource(URL url) {
         try (Reader reader = new InputStreamReader(url.openStream(), StandardCharsets.UTF_8)) {
             StringBuilder builder = new StringBuilder();
 
@@ -55,6 +51,8 @@ public class Library {
             return;
         }
 
+        boolean failedLoadFromLibraryPath = false;
+
         // If skija is bundled in JRE, try to load the bundled native library
         // User can disable this behavior by set `skija.loadFromLibraryPath` to false
         if (loadFromLibraryPath == null) {
@@ -64,16 +62,30 @@ public class Library {
                     _loadFromLibraryPath();
                     return;
                 } catch (UnsatisfiedLinkError e) {
-                    Log.warn("Please use the jmod file of skija when using jlink");
+                    failedLoadFromLibraryPath = true;
+                    Log.warn("Please use skija platform jmod when using jlink");
                 }
             }
         }
 
-        // Finally, try to load the bundled native library
         String osName = Platform.CURRENT.getOperatingSystem().name().toLowerCase(Locale.ROOT);
         String archName = Platform.CURRENT.getArchitecture().name().toLowerCase(Locale.ROOT);
         String basePath = "io/github/humbleui/skija/" + osName + "/" + archName + "/";
-        String version = readResource(basePath + "skija.version");
+        URL versionFile = Library.class.getClassLoader().getResource(basePath + "skija.version");
+
+        // The platform library is bundled in the JRE, but the skija shared is not bundled.
+        // Platforms without official support can provide native libraries in this way.
+        if (loadFromLibraryPath == null && versionFile != null && "jrt".equals(versionFile.getProtocol()) && !failedLoadFromLibraryPath) {
+            try {
+                _loadFromLibraryPath();
+                return;
+            } catch (UnsatisfiedLinkError e) {
+                failedLoadFromLibraryPath = true;
+            }
+        }
+
+        // Finally, try to load the bundled native library
+        String version = versionFile != null ? readResource(versionFile) : null;
         File tempDir = new File(System.getProperty("java.io.tmpdir"),
                 "skija_" + (version == null || version.endsWith("SNAPSHOT") ? String.valueOf(System.nanoTime()) : version));
 
