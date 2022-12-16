@@ -6,7 +6,7 @@ def main():
   parser.add_argument('--debug', action='store_true')
   parser.add_argument('--arch', default=build_utils.arch)
   parser.add_argument('--skia-dir')
-  parser.add_argument('--skia-release', default='m106-ba6bc7d02d')
+  parser.add_argument('--skia-release', default='m109-664500fa93')
   parser.add_argument('--cmake-toolchain-file')
   (args, _) = parser.parse_known_args()
 

@@ -1,8 +1,21 @@
-# WIP
+# 0.109.0 - Dec 15, 2022
+
+Added:
+
+- Canvas::quickReject(Rect), Canvas::quickReject(Path) #33 via @Algeseven
+
+Changed:
+
+- Skia version m106-ba6bc7d02d -> m109-664500fa93
+- Ubuntu bumped to 20.04
+- Java 8 is now supported #30 via @Glavo
 
 Fixed:
 
 - Added `Library.staticLoad()` to `BufferUtil`, `Pixmap`, `ColorType` #29
+- Don’t accept null font in shaper
+- Implicit long to int conversion in BreakIterator::clone
+- TextLine fBreakOffsets use uint32_t instead of floats
 
 # 0.106.0 - Sep 14, 2022
 
