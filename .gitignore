@@ -7,3 +7,6 @@ target
 *.zip
 examples/bitmap/output.png
 __pycache__
+
+/.idea
+*.iml
