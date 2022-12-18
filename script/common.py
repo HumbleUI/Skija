@@ -9,15 +9,21 @@ else:
   classifier = build_utils.system
   module = 'io.github.humbleui.skija.' + build_utils.system
 
+runtime_deps = [
+  {'group': 'io.github.humbleui', 'name': 'types', 'version': '0.2.0'},
+]
+
+compile_deps = [
+  {'group': 'org.jetbrains', 'name': 'annotations', 'version': '20.1.0'},
+  {'group': 'org.projectlombok', 'name': 'lombok', 'version': '1.18.22'},
+]
+
 @functools.lru_cache(maxsize=1)
 def deps_run():
-  return [build_utils.fetch_maven('io.github.humbleui', 'types', '0.2.0')]
+  return build_utils.fetch_all_maven(runtime_deps)
 
 @functools.lru_cache(maxsize=1)
 def deps_compile():
-  return [
-    build_utils.fetch_maven('org.projectlombok', 'lombok', '1.18.22'),
-    build_utils.fetch_maven('org.jetbrains', 'annotations', '20.1.0')
-  ] + deps_run()
+  return build_utils.fetch_all_maven(compile_deps) + deps_run()
 
 version = build_utils.get_arg("version") or build_utils.parse_ref() or build_utils.parse_sha() or "0.0.0-SNAPSHOT"

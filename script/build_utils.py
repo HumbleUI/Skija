@@ -91,6 +91,9 @@ def fetch_maven(group, name, version, classifier=None, repo='https://repo1.maven
   fetch(repo + '/' + path, file)
   return file
 
+def fetch_all_maven(deps, repo='https://repo1.maven.org/maven2'):
+  return [fetch_maven(dep['group'], dep['name'], dep['version'], repo=repo) for dep in deps]
+
 def javac(sources, target, classpath = [], modulepath = [], add_modules = [], release = '11', opts=[]):
   makedirs(target)
   classes = {path.stem: path.stat().st_mtime for path in pathlib.Path(target).rglob('*.class') if '$' not in path.stem}
