@@ -1,3 +1,4 @@
+#! /usr/bin/env python3
 import build_utils, common, os, sys
 import xml.etree.ElementTree as et
 
@@ -73,8 +74,6 @@ def main():
 
   module_shared()
   module_script()
-
-
 
 if __name__ == "__main__":
   sys.exit(main())

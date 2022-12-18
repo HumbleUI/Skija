@@ -229,6 +229,12 @@ See [examples/](examples/).
 
 Contributions are welcome!
 
+To open the project in IntelliJ IDEA,  please use the script to generate the IntelliJ IDEA project files first:
+
+```sh
+./script/idea.py
+```
+
 Make sure to read [Code Conventions](docs/Conventions.md).
 
 Remember: the goal of Skija is to map Skia API as close as possible.
