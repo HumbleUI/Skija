@@ -94,17 +94,16 @@ public class Library {
 
             // Finally, try to load the bundled native library
             String version = versionFile != null ? readResource(versionFile) : null;
+            boolean isSnapshot = version == null || version.endsWith("SNAPSHOT");
             File tempDir = new File(System.getProperty("java.io.tmpdir"),
-                    "skija_" + (version == null || version.endsWith("SNAPSHOT")
-                            ? String.valueOf(System.nanoTime())
-                            : version + "_" + archName));
+                    "skija_" + (isSnapshot ? String.valueOf(System.nanoTime()) : version + "_" + archName));
 
             File libFile = _extract(finder, basePath, System.mapLibraryName(LIBRARY_NAME), tempDir);
             if (OperatingSystem.CURRENT == OperatingSystem.WINDOWS) {
                 _extract(finder, basePath, "icudtl.dat", tempDir);
             }
 
-            if (tempDir.exists() && version == null) {
+            if (isSnapshot && tempDir.exists()) {
                 Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                     try {
                         Files.walk(tempDir.toPath())
