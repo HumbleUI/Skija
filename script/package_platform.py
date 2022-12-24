@@ -1,5 +1,5 @@
 #! /usr/bin/env python3
-import build_utils, common, os, sys, subprocess, zipfile
+import build_utils, common, os, sys, zipfile
 
 def package():
   os.chdir(common.basedir)
@@ -33,18 +33,9 @@ def package():
                   (f'{platform_target}/maven', 'META-INF'))
 
   jmod_file = f'target/{artifact}-{common.version}.jmod'
+  print(f"Packaging {os.path.basename(jmod_file)}")
 
-  if os.path.exists(jmod_file):
-    os.remove(jmod_file)
-
-  subprocess.check_call([
-    'jmod', 'create',
-    '--exclude', 'io/github/humbleui/skija/**/*.{dll,so,dylib,dat}',
-    '--class-path', f'{platform_target}/classes',
-    jmod_file
-  ])
-
-  native_libs_dir = f'{platform_target}/classes/io/github/humbleui/skija/{build_utils.system}/{build_utils.arch}'
+  platform_package_dir = f'io/github/humbleui/skija/{build_utils.system}/{build_utils.arch}'
   if build_utils.system == 'macos':
     lib_file = 'libskija.dylib'
   elif build_utils.system == 'linux':
@@ -52,10 +43,16 @@ def package():
   elif build_utils.system == 'windows':
     lib_file = 'skija.dll'
 
-  with zipfile.ZipFile(jmod_file, 'a') as zf:
-    zf.write(f'{native_libs_dir}/{lib_file}', f'lib/{lib_file}')
+  with open(jmod_file, mode='wb') as f:
+    # Create empty jmod file with magic number
+    f.write(b'JM\x01\x00PK\x05\x06\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00')
+
+  with zipfile.ZipFile(jmod_file, 'a', compression=zipfile.ZIP_DEFLATED) as zf:
+    zf.write(f'{platform_target}/classes/module-info.class', 'classes/module-info.class')
+    zf.write(f'{platform_target}/classes/{platform_package_dir}/skija.version', f'classes/{platform_package_dir}/skija.version')
+    zf.write(f'{platform_target}/classes/{platform_package_dir}/{lib_file}', f'lib/{lib_file}')
     if build_utils.system == 'windows':
-      zf.write(f'{native_libs_dir}/icudtl.dat', 'bin/icudtl.dat')
+      zf.write(f'{platform_target}/classes/{platform_package_dir}/icudtl.dat', 'bin/icudtl.dat')
 
   return 0
 
