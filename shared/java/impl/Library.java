@@ -34,6 +34,7 @@ public class Library {
         }
     }
 
+    @SneakyThrows
     public static synchronized void load() {
         if (_loaded) return;
 
@@ -70,46 +71,56 @@ public class Library {
 
         String osName = Platform.CURRENT.getOperatingSystem().name().toLowerCase(Locale.ROOT);
         String archName = Platform.CURRENT.getArchitecture().name().toLowerCase(Locale.ROOT);
-        String basePath = "io/github/humbleui/skija/" + osName + "/" + archName + "/";
-        URL versionFile = Library.class.getClassLoader().getResource(basePath + "skija.version");
+        String moduleName = "io.github.humbleui.skija." + osName + "." + archName;
+        String basePath = moduleName.replace('.', '/') + "/";
 
-        // The platform library is bundled in the JRE, but the skija shared is not bundled.
-        // Platforms without official support can provide native libraries in this way.
-        if (loadFromLibraryPath == null && versionFile != null && "jrt".equals(versionFile.getProtocol()) && !failedLoadFromLibraryPath) {
-            try {
-                _loadFromLibraryPath();
-                return;
-            } catch (UnsatisfiedLinkError e) {
-                failedLoadFromLibraryPath = true;
-            }
-        }
+        try (ResourceFinder finder = new ResourceFinder(moduleName)) {
+            URL versionFile = finder.findResource(basePath + "skija.version");
 
-        // Finally, try to load the bundled native library
-        String version = versionFile != null ? readResource(versionFile) : null;
-        File tempDir = new File(System.getProperty("java.io.tmpdir"),
-                "skija_" + (version == null || version.endsWith("SNAPSHOT") ? String.valueOf(System.nanoTime()) : version));
-
-        File libFile = _extract(basePath, System.mapLibraryName(LIBRARY_NAME), tempDir);
-        if (Platform.CURRENT.getOperatingSystem() == Platform.OperatingSystem.WINDOWS)
-            _extract(basePath, "icudtl.dat", tempDir);
-
-        if (tempDir.exists() && version == null) {
-            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            // The platform library is bundled in the JRE, but the skija shared is not bundled.
+            // Platforms without official support can provide native libraries in this way.
+            if (loadFromLibraryPath == null
+                    && !failedLoadFromLibraryPath
+                    && versionFile != null
+                    && "jrt".equals(versionFile.getProtocol())) {
                 try {
-                    Files.walk(tempDir.toPath())
-                         .map(Path::toFile)
-                         .sorted(Comparator.reverseOrder())
-                         .forEach((f) -> {
-                            Log.debug("Deleting " + f);
-                            f.delete();
-                         });
-                } catch (IOException ex) {
-                    ex.printStackTrace();
+                    _loadFromLibraryPath();
+                    return;
+                } catch (UnsatisfiedLinkError e) {
+                    failedLoadFromLibraryPath = true;
+                    Log.warn("Please use skija platform jmod when using jlink");
                 }
-            }));
-        }
+            }
 
-        _loadFromFile(libFile);
+            // Finally, try to load the bundled native library
+            String version = versionFile != null ? readResource(versionFile) : null;
+            File tempDir = new File(System.getProperty("java.io.tmpdir"),
+                    "skija_" + (version == null || version.endsWith("SNAPSHOT")
+                            ? String.valueOf(System.nanoTime())
+                            : version + "_" + archName));
+
+            File libFile = _extract(finder, basePath, System.mapLibraryName(LIBRARY_NAME), tempDir);
+            if (Platform.CURRENT.getOperatingSystem() == Platform.OperatingSystem.WINDOWS)
+                _extract(finder, basePath, "icudtl.dat", tempDir);
+
+            if (tempDir.exists() && version == null) {
+                Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                    try {
+                        Files.walk(tempDir.toPath())
+                                .map(Path::toFile)
+                                .sorted(Comparator.reverseOrder())
+                                .forEach((f) -> {
+                                    Log.debug("Deleting " + f);
+                                    f.delete();
+                                });
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                }));
+            }
+
+            _loadFromFile(libFile);
+        }
     }
 
     @ApiStatus.Internal
@@ -140,9 +151,9 @@ public class Library {
 
     @ApiStatus.Internal
     @SneakyThrows
-    public static File _extract(String resourcePath, String fileName, File tempDir) {
+    public static File _extract(ResourceFinder finder, String resourcePath, String fileName, File tempDir) {
         File file;
-        URL url = Library.class.getClassLoader().getResource(resourcePath + fileName);
+        URL url = finder.findResource(resourcePath + fileName);
         if (url == null) {
             file = new File(fileName);
             if (!file.exists())
