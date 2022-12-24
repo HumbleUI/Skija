@@ -24,13 +24,13 @@ public final class ResourceFinder implements Closeable {
     }
 
     public URL findResource(String path) throws IOException {
-        if (_moduleReader != null) {
-            return _moduleReader.map(reader -> _findResource(reader, path)).orElse(null);
-        }
-
         URL url = ResourceFinder.class.getClassLoader().getResource(path);
         if (url != null) {
             return url;
+        }
+
+        if (_moduleReader != null) {
+            return _moduleReader.map(reader -> _findResource(reader, path)).orElse(null);
         }
 
         Optional<ModuleReference> moduleReference = ModuleFinder.ofSystem().find(_moduleName);
