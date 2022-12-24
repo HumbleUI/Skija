@@ -69,8 +69,8 @@ public class Library {
             }
         }
 
-        String osName = Platform.CURRENT.getOperatingSystem().name().toLowerCase(Locale.ROOT);
-        String archName = Platform.CURRENT.getArchitecture().name().toLowerCase(Locale.ROOT);
+        String osName = OperatingSystem.CURRENT.name().toLowerCase(Locale.ROOT);
+        String archName = Architecture.CURRENT.name().toLowerCase(Locale.ROOT);
         String moduleName = "io.github.humbleui.skija." + osName + "." + archName;
         String basePath = moduleName.replace('.', '/') + "/";
 
@@ -100,8 +100,9 @@ public class Library {
                             : version + "_" + archName));
 
             File libFile = _extract(finder, basePath, System.mapLibraryName(LIBRARY_NAME), tempDir);
-            if (Platform.CURRENT.getOperatingSystem() == Platform.OperatingSystem.WINDOWS)
+            if (OperatingSystem.CURRENT == OperatingSystem.WINDOWS) {
                 _extract(finder, basePath, "icudtl.dat", tempDir);
+            }
 
             if (tempDir.exists() && version == null) {
                 Runtime.getRuntime().addShutdownHook(new Thread(() -> {

@@ -22,7 +22,7 @@ public class Main implements Consumer<Event> {
     public Main() {
         Stats.enabled = true;
 
-        switch (io.github.humbleui.skija.impl.Platform.CURRENT.getOperatingSystem()) {
+        switch (io.github.humbleui.skija.impl.OperatingSystem.CURRENT) {
             case MACOS:
                 _layers = new String[] { "Metal", "GL" };
                 break;

@@ -33,7 +33,7 @@ public class TypefaceTest implements Executable {
         var axes = new FontVariationAxis[] { new FontVariationAxis("wght", 100f, 400f, 900f),
                                              new FontVariationAxis("slnt", -10f, 0f, 0f) };
         assertArrayEquals(axes, interV.getVariationAxes());
-        if (Platform.CURRENT.getOperatingSystem() != Platform.OperatingSystem.LINUX)
+        if (OperatingSystem.CURRENT != OperatingSystem.LINUX)
             assertArrayEquals(FontVariation.parse("wght=400 slnt=0"), interV.getVariations());
         
         Typeface inter500 = interV.makeClone(new FontVariation("wght", 500));
@@ -48,7 +48,7 @@ public class TypefaceTest implements Executable {
         
         assertNotEquals(null, Typeface.makeDefault());
 
-        if (Platform.CURRENT.getOperatingSystem() != Platform.OperatingSystem.LINUX)
+        if (OperatingSystem.CURRENT != OperatingSystem.LINUX)
             assertEquals("Arial", Typeface.makeFromName("Arial", FontStyle.NORMAL).getFamilyName());
 
         int[] Skia = new int[] { 83, 107, 105, 97 };
@@ -73,7 +73,7 @@ public class TypefaceTest implements Executable {
 
         assertArrayEquals(new FontFamilyName[] { new FontFamilyName("Inter", "en-US") }, interV.getFamilyNames());
         assertEquals("Inter", interV.getFamilyName());
-        // if (Platform.CURRENT != Platform.LINUX)
+        // if (OperatingSystem.CURRENT != OperatingSystem.LINUX)
         //     assertEquals(Rect.makeLTRB(-0.7386364f, -1.0909119f, 2.5830965f, 0.31959534f), interV.getBounds());
     }
 }
