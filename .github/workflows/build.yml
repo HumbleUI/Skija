@@ -32,14 +32,14 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: macos-x64-jars
-          path: target/skija-macos-x64-*.jar
+          path: target/skija-macos-x64-*
       - run: python3 script/clean.py
       - run: python3 script/build.py --arch arm64
       - run: python3 script/package_platform.py --arch arm64
       - uses: actions/upload-artifact@v2
         with:
           name: macos-arm64-jars
-          path: target/skija-macos-arm64-*.jar
+          path: target/skija-macos-arm64-*
 
   build_linux:
     runs-on: ubuntu-20.04
@@ -64,7 +64,7 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: linux-x64-jars
-          path: target/skija-linux-x64-*.jar
+          path: target/skija-linux-x64-*
 
   build_windows:
     runs-on: windows-2019
@@ -84,7 +84,7 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: windows-x64-jars
-          path: target/skija-windows-x64-*.jar
+          path: target/skija-windows-x64-*
 
   release:
     if: startsWith(github.ref, 'refs/tags/')
@@ -123,3 +123,6 @@ jobs:
           GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+      - uses: softprops/action-gh-release@v1
+        with:
+          files: target/*.jmod
