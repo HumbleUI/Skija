@@ -41,7 +41,7 @@ def main():
   # if 'windows' == build_utils.system:
   #   env['KWINIT_ANGLE'] = '1'
 
-  common.check_call([
+  subprocess.check_call([
     'java',
     '--class-path', build_utils.classpath_join(['target/classes'] + classpath)]
     + (['-XstartOnFirstThread'] if 'macos' == build_utils.system else [])

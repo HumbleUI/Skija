@@ -1,7 +1,5 @@
 package io.github.humbleui.skija.impl;
 
-import lombok.SneakyThrows;
-
 import java.io.*;
 import java.lang.module.*;
 import java.net.*;
