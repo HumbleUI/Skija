@@ -1,34 +1,56 @@
 {
   :deps {
     org.clojure/clojure      {:mvn/version "1.11.1"}
-    org.lwjgl/lwjgl          {:mvn/version "3.2.3"}
-    org.lwjgl/lwjgl-glfw     {:mvn/version "3.2.3"}
-    org.lwjgl/lwjgl-opengl   {:mvn/version "3.2.3"}
+    org.lwjgl/lwjgl          {:mvn/version "3.3.1"}
+    org.lwjgl/lwjgl-glfw     {:mvn/version "3.3.1"}
+    org.lwjgl/lwjgl-opengl   {:mvn/version "3.3.1"}
     nrepl/nrepl              {:mvn/version "0.8.3"}
     io.github.humbleui/types {:mvn/version "0.1.2"}
   }
   :paths ["src" "../../shared/target/classes-java9" "../../shared/target/classes" ]
   :aliases {
-    :macos {
+    :macos-x64 {
       :extra-deps {
-        org.lwjgl/lwjgl$natives-macos        {:mvn/version "3.2.3"}
-        org.lwjgl/lwjgl-glfw$natives-macos   {:mvn/version "3.2.3"}
-        org.lwjgl/lwjgl-opengl$natives-macos {:mvn/version "3.2.3"}
+        org.lwjgl/lwjgl$natives-macos        {:mvn/version "3.3.1"}
+        org.lwjgl/lwjgl-glfw$natives-macos   {:mvn/version "3.3.1"}
+        org.lwjgl/lwjgl-opengl$natives-macos {:mvn/version "3.3.1"}
       }
       :jvm-opts ["-XstartOnFirstThread"]
     }
-    :windows {
+    :macos-arm64 {
       :extra-deps {
-        org.lwjgl/lwjgl$natives-windows        {:mvn/version "3.2.3"}
-        org.lwjgl/lwjgl-glfw$natives-windows   {:mvn/version "3.2.3"}
-        org.lwjgl/lwjgl-opengl$natives-windows {:mvn/version "3.2.3"}
+        org.lwjgl/lwjgl$natives-macos-arm64        {:mvn/version "3.3.1"}
+        org.lwjgl/lwjgl-glfw$natives-macos-arm64   {:mvn/version "3.3.1"}
+        org.lwjgl/lwjgl-opengl$natives-macos-arm64 {:mvn/version "3.3.1"}
+      }
+      :jvm-opts ["-XstartOnFirstThread"]
+    }
+    :windows-x64 {
+      :extra-deps {
+        org.lwjgl/lwjgl$natives-windows        {:mvn/version "3.3.1"}
+        org.lwjgl/lwjgl-glfw$natives-windows   {:mvn/version "3.3.1"}
+        org.lwjgl/lwjgl-opengl$natives-windows {:mvn/version "3.3.1"}
       }
     }
-    :linux {
+    :windows-arm64 {
       :extra-deps {
-        org.lwjgl/lwjgl$natives-linux        {:mvn/version "3.2.3"}
-        org.lwjgl/lwjgl-glfw$natives-linux   {:mvn/version "3.2.3"}
-        org.lwjgl/lwjgl-opengl$natives-linux {:mvn/version "3.2.3"}
+        org.lwjgl/lwjgl$natives-windows-arm64        {:mvn/version "3.3.1"}
+        org.lwjgl/lwjgl-glfw$natives-windows-arm64   {:mvn/version "3.3.1"}
+        org.lwjgl/lwjgl-opengl$natives-windows-arm64 {:mvn/version "3.3.1"}
+      }
+    }
+    :linux-x64 {
+      :extra-deps {
+        org.lwjgl/lwjgl$natives-linux        {:mvn/version "3.3.1"}
+        org.lwjgl/lwjgl-glfw$natives-linux   {:mvn/version "3.3.1"}
+        org.lwjgl/lwjgl-opengl$natives-linux {:mvn/version "3.3.1"}
+      }
+    }
+    :linux-arm64 {
+      :extra-deps {
+        org.lwjgl/lwjgl$natives-linux-arm64        {:mvn/version "3.3.1"}
+        org.lwjgl/lwjgl-glfw$natives-linux-arm64   {:mvn/version "3.3.1"}
+        org.lwjgl/lwjgl-opengl$natives-linux-arm64 {:mvn/version "3.3.1"}
       }
     }
   }

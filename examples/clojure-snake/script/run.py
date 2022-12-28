@@ -8,7 +8,7 @@ def main():
   subprocess.check_call([
     "clj",
     "-J--module-path=" + os.path.join('..', '..', 'platform', 'target', common.classifier, 'classes'),
-    "-M:" + build_utils.system,
+    "-M:" + common.classifier,
     "-m", "snake.main"])
   return 0
 
