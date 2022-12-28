@@ -14,7 +14,11 @@ def main():
     ]
   else:
     build.main()
-    classpath += ['../shared/target/classes-java9', '../shared/target/classes', '../platform/target/classes']
+    classpath += [
+      '../shared/target/classes-java9',
+      '../shared/target/classes',
+      f'../platform/target/{common.classifier}/classes'
+    ]
 
   os.chdir(common.basedir + '/tests')
   sources = build_utils.files('java/**/*.java')

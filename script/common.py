@@ -2,12 +2,9 @@
 import argparse, build_utils, contextlib, functools, os, pathlib, platform, re, shutil, subprocess, sys, time, urllib.request, zipfile
 
 basedir = os.path.abspath(os.path.dirname(__file__) + '/..')
-if build_utils.system == 'macos':
-  classifier = 'macos-' + build_utils.arch
-  module = 'io.github.humbleui.skija.macos.' + build_utils.arch
-else:
-  classifier = build_utils.system
-  module = 'io.github.humbleui.skija.' + build_utils.system
+
+classifier = build_utils.system + '-' + build_utils.arch
+module = 'io.github.humbleui.skija.' + build_utils.system + '.' + build_utils.arch
 
 runtime_deps = [
   {'group': 'io.github.humbleui', 'name': 'types', 'version': '0.2.0'},

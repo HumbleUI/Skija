@@ -5,6 +5,7 @@ import java.net.*;
 import java.nio.charset.*;
 import java.nio.file.*;
 import java.util.*;
+
 import lombok.*;
 import org.jetbrains.annotations.*;
 
@@ -12,47 +13,14 @@ public class Library {
     @ApiStatus.Internal
     public static volatile boolean _loaded = false;
 
-    @ApiStatus.Internal
-    public static Class<?> _nativeLibraryClass = null;
-
-    @ApiStatus.Internal
-    public static String _resourcePath = null;    
-
-    static {
-        try {
-            switch (Platform.CURRENT) {
-            case WINDOWS:
-                _nativeLibraryClass = Class.forName("io.github.humbleui.skija.windows.LibraryFinder");
-                _resourcePath = "/io/github/humbleui/skija/windows/";
-                break;
-            case LINUX:
-                _nativeLibraryClass = Class.forName("io.github.humbleui.skija.linux.LibraryFinder");
-                _resourcePath = "/io/github/humbleui/skija/linux/";
-                break;
-            case MACOS_X64:
-                _nativeLibraryClass = Class.forName("io.github.humbleui.skija.macos.x64.LibraryFinder");
-                _resourcePath = "/io/github/humbleui/skija/macos/x64/";
-                break;
-            case MACOS_ARM64:
-                _nativeLibraryClass = Class.forName("io.github.humbleui.skija.macos.arm64.LibraryFinder");
-                _resourcePath = "/io/github/humbleui/skija/macos/arm64/";
-                break;
-            }
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    public static final String LIBRARY_NAME = "skija";
 
     public static void staticLoad() {
         if (!_loaded && !"false".equals(System.getProperty("skija.staticLoad")))
             load();
     }
 
-    public static String readResource(String path) {
-        URL url = _nativeLibraryClass.getResource(path);
-        if (url == null)
-            return null;
-
+    public static String readResource(URL url) {
         try (Reader reader = new InputStreamReader(url.openStream(), StandardCharsets.UTF_8)) {
             StringBuilder builder = new StringBuilder();
 
@@ -66,79 +34,150 @@ public class Library {
         }
     }
 
+    @SneakyThrows
     public static synchronized void load() {
         if (_loaded) return;
 
-        String version = readResource(_resourcePath + "skija.version");
-        File tempDir = new File(System.getProperty("java.io.tmpdir"), "skija_" + (version == null ? "" + System.nanoTime() : version));
-        File library;
-        
-        switch (Platform.CURRENT) {
-        case WINDOWS:
-            _extract(_resourcePath, "icudtl.dat", tempDir);
-            library = _extract(_resourcePath, "skija.dll", tempDir);
-            System.load(library.getAbsolutePath());
-            break;
-        case LINUX:
-            library = _extract(_resourcePath, "libskija.so", tempDir);
-            System.load(library.getAbsolutePath());
-            break;
-        case MACOS_X64:
-            library = _extract(_resourcePath, "libskija_x64.dylib", tempDir);
-            System.load(library.getAbsolutePath());
-            break;
-        case MACOS_ARM64:
-            library = _extract(_resourcePath, "libskija_arm64.dylib", tempDir);
-            System.load(library.getAbsolutePath());
-            break;
-        default:
-            throw new RuntimeException("Unexpected Platform.CURRENT = " + Platform.CURRENT);
+        // If `skija.loadFromLibraryPath` is set to true, use System.loadLibrary to load the native library
+        String loadFromLibraryPath = System.getProperty("skija.loadFromLibraryPath");
+        if ("true".equals(loadFromLibraryPath)) {
+            _loadFromLibraryPath();
+            return;
         }
 
-        if (tempDir.exists() && version == null) {
-            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-                try {
-                    Files.walk(tempDir.toPath())
-                         .map(Path::toFile)
-                         .sorted(Comparator.reverseOrder())
-                         .forEach((f) -> {
-                            Log.debug("Deleting " + f);
-                            f.delete();
-                         });
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-            }));
+        // If `skija.library.path` is set, load the native library from this path
+        String libraryPath = System.getProperty("skija.library.path");
+        if (libraryPath != null) {
+            _loadFromDir(new File(libraryPath));
+            return;
         }
-        
+
+        boolean failedLoadFromLibraryPath = false;
+
+        // If skija is bundled in JRE, try to load the bundled native library
+        // User can disable this behavior by set `skija.loadFromLibraryPath` to false
+        if (loadFromLibraryPath == null) {
+            URL theClassFile = Library.class.getResource("Library.class");
+            if (theClassFile != null && "jrt".equals(theClassFile.getProtocol())) {
+                try {
+                    _loadFromLibraryPath();
+                    return;
+                } catch (UnsatisfiedLinkError e) {
+                    failedLoadFromLibraryPath = true;
+                    Log.warn("Please use skija platform jmod when using jlink");
+                }
+            }
+        }
+
+        String osName = OperatingSystem.CURRENT.name().toLowerCase(Locale.ROOT);
+        String archName = Architecture.CURRENT.name().toLowerCase(Locale.ROOT);
+        String moduleName = "io.github.humbleui.skija." + osName + "." + archName;
+        String basePath = moduleName.replace('.', '/') + "/";
+
+        try (ResourceFinder finder = new ResourceFinder(moduleName)) {
+            URL versionFile = finder.findResource(basePath + "skija.version");
+
+            // The platform library is bundled in the JRE, but the skija shared is not bundled.
+            // Platforms without official support can provide native libraries in this way.
+            if (loadFromLibraryPath == null
+                    && !failedLoadFromLibraryPath
+                    && versionFile != null
+                    && "jrt".equals(versionFile.getProtocol())) {
+                try {
+                    _loadFromLibraryPath();
+                    return;
+                } catch (UnsatisfiedLinkError e) {
+                    failedLoadFromLibraryPath = true;
+                    Log.warn("Please use skija platform jmod when using jlink");
+                }
+            }
+
+            // Finally, try to load the bundled native library
+            String version = versionFile != null ? readResource(versionFile) : null;
+            boolean isSnapshot = version == null || version.endsWith("SNAPSHOT");
+            File tempDir = new File(System.getProperty("java.io.tmpdir"),
+                    "skija_" + (isSnapshot ? String.valueOf(System.nanoTime()) : version + "_" + archName));
+
+            File libFile = _extract(finder, basePath, System.mapLibraryName(LIBRARY_NAME), tempDir);
+            if (OperatingSystem.CURRENT == OperatingSystem.WINDOWS) {
+                _extract(finder, basePath, "icudtl.dat", tempDir);
+            }
+
+            if (isSnapshot && tempDir.exists()) {
+                Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                    try {
+                        Files.walk(tempDir.toPath())
+                                .map(Path::toFile)
+                                .sorted(Comparator.reverseOrder())
+                                .forEach((f) -> {
+                                    Log.debug("Deleting " + f);
+                                    f.delete();
+                                });
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                }));
+            }
+
+            _loadFromFile(libFile);
+        }
+    }
+
+    @ApiStatus.Internal
+    public static void _loadFromLibraryPath() {
+        Log.debug("Loading skija native library from library path");
+        System.loadLibrary(LIBRARY_NAME);
+        _loaded = true;
+        _nAfterLoad();
+    }
+
+    @ApiStatus.Internal
+    public static void _loadFromDir(File dir) {
+        String libPath = new File(dir, System.mapLibraryName(LIBRARY_NAME)).getAbsolutePath();
+        Log.debug("Loading " + libPath);
+        System.load(libPath);
+        _loaded = true;
+        _nAfterLoad();
+    }
+
+    @ApiStatus.Internal
+    public static void _loadFromFile(File file) {
+        String libPath = file.getAbsolutePath();
+        Log.debug("Loading " + libPath);
+        System.load(libPath);
         _loaded = true;
         _nAfterLoad();
     }
 
     @ApiStatus.Internal
     @SneakyThrows
-    public static File _extract(String resourcePath, String fileName, File tempDir) {
+    public static File _extract(ResourceFinder finder, String resourcePath, String fileName, File tempDir) {
         File file;
-        URL url = _nativeLibraryClass.getResource(resourcePath + fileName);
+        URL url = finder.findResource(resourcePath + fileName);
         if (url == null) {
             file = new File(fileName);
             if (!file.exists())
-                throw new IllegalArgumentException("Library file " + fileName + " not found in " + resourcePath);
+                throw new UnsatisfiedLinkError("Library file " + fileName + " not found in " + resourcePath);
         } else if ("file".equals(url.getProtocol())) {
             file = new File(url.toURI());
         } else {
             file = new File(tempDir, fileName);
-            if (!file.exists()) {
-                if (!tempDir.exists())
-                    tempDir.mkdirs();
-                try (InputStream is = url.openStream()) {
+            Log.debug("Extracting " + fileName + " to " + file);
+            try (InputStream is = url.openStream()) {
+                if (file.exists() && file.length() != is.available()) {
+                    file.delete();
+                }
+                if (!file.exists()) {
+                    if (!tempDir.exists()) {
+                        tempDir.mkdirs();
+                    }
                     Files.copy(is, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 }
             }
         }
-        Log.debug("Loading " + file);
         return file;
     }
 
-    @ApiStatus.Internal public static native void _nAfterLoad();
+    @ApiStatus.Internal
+    public static native void _nAfterLoad();
 }

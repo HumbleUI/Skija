@@ -5,7 +5,6 @@ def main():
   os.chdir(common.basedir)
   build_utils.rmdir("target")
   build_utils.rmdir("shared/target")
-  build_utils.rmdir("platform/build")
   build_utils.rmdir("platform/target")
   build_utils.rmdir("tests/target")
   build_utils.rmdir("examples/lwjgl/target")

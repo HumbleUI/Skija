@@ -53,7 +53,6 @@ if(APPLE)
     add_definitions(-DSK_ENABLE_API_AVAILABLE
         -DSK_METAL
         -DSK_SHAPER_CORETEXT_AVAILABLE)
-    set_target_properties(skija PROPERTIES OUTPUT_NAME "skija_${SKIA_ARCH}")
 
 elseif(UNIX)
     target_include_directories(skija PRIVATE $ENV{JAVA_HOME}/include $ENV{JAVA_HOME}/include/linux)

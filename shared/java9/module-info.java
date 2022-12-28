@@ -6,6 +6,7 @@ module io.github.humbleui.skija.shared {
     exports io.github.humbleui.skija.sksg;
     exports io.github.humbleui.skija.svg;
     exports io.github.humbleui.skija.paragraph;
+    exports io.github.humbleui.skija.resources;
 
     requires static lombok;
     requires static org.jetbrains.annotations;
