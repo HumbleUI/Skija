@@ -5,8 +5,8 @@
 Add ONE of these dependencies to your ant/maven/gradle/bazel:
 
 ```
-io.github.humbleui:skija-windows:${version}
-io.github.humbleui:skija-linux:${version}
+io.github.humbleui:skija-windows-x64:${version}
+io.github.humbleui:skija-linux-x64:${version}
 io.github.humbleui:skija-macos-x64:${version}
 io.github.humbleui:skija-macos-arm64:${version}
 ```

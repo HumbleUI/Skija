@@ -174,8 +174,8 @@ Platform    | `${artifact}`       | `${version}`
 ------------|---------------------|-------------
 macOS Intel | `skija-macos-x64`   | ![version](https://img.shields.io/maven-central/v/io.github.humbleui/skija-macos-x64)
 macOS M1    | `skija-macos-arm64` | ![version](https://img.shields.io/maven-central/v/io.github.humbleui/skija-macos-arm64)
-Linux       | `skija-linux`       | ![version](https://img.shields.io/maven-central/v/io.github.humbleui/skija-linux)
-Windows     | `skija-windows`     | ![version](https://img.shields.io/maven-central/v/io.github.humbleui/skija-windows)
+Linux       | `skija-linux-x64`   | ![version](https://img.shields.io/maven-central/v/io.github.humbleui/skija-linux-x64)
+Windows     | `skija-windows-x64` | ![version](https://img.shields.io/maven-central/v/io.github.humbleui/skija-windows-x64)
 
 For simplicity or if your build system is not smart enough to select artifact based on OS, you can add all four as dependencies—they will not conflict.
 

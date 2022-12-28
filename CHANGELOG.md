@@ -1,3 +1,16 @@
+# 0.109.1 - Dec 28, 2022
+
+Changed:
+
+- [ BREAKING ] Windows and Linux platform artifacts now have architecture classifiers, consistent with macOS (skija-windows -> skija-windows-x64, skija-linux -> skija-linux-x64) #34 via @Glavo
+- [ BREAKING ] Platform was split into Architecture and OperatingSystem #34 via @Glavo
+
+Added:
+
+- jmods are now built and uploaded to Github Releases #34 via @Glavo
+- `skija.loadFromLibraryPath` system property to load native libraries from system locations #34 via @Glavo
+- `skija.library.path` system property to load native libraries from custom location #34 via @Glavo
+
 # 0.109.0 - Dec 15, 2022
 
 Added:
