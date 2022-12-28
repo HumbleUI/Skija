@@ -125,4 +125,6 @@ jobs:
           OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
       - uses: softprops/action-gh-release@v1
         with:
-          files: target/*.(jar|jmod)
+          files: |
+            target/*.jmod
+            target/*.jar
