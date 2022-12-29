@@ -6,11 +6,15 @@ import common, build, build_utils
 def main():
   parser = argparse.ArgumentParser()
   parser.add_argument('--skija-version')
-  parser.add_argument('--lwjgl-version', default='3.2.3')
+  parser.add_argument('--lwjgl-version', default='3.3.1')
   (args, _) = parser.parse_known_args()
 
   # Javac
-  lwjgl_classifier = "natives-" + build_utils.system
+  if (build_utils.arch == 'x64'):
+    lwjgl_classifier = "natives-" + build_utils.system
+  else:
+    lwjgl_classifier = "natives-" + common.classifier
+
   classpath = common.deps_compile() + [
     build_utils.fetch_maven('org.lwjgl', 'lwjgl', args.lwjgl_version),
     build_utils.fetch_maven('org.lwjgl', 'lwjgl-glfw', args.lwjgl_version),
