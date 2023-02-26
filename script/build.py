@@ -1,5 +1,5 @@
 #! /usr/bin/env python3
-import argparse, build_utils, common, glob, os, subprocess, sys, zipfile
+import argparse, build_utils, common, cross_compile, os, subprocess, sys, zipfile
 
 def main():
   parser = argparse.ArgumentParser()
@@ -31,16 +31,25 @@ def main():
   # CMake
   native_build_dir = f'target/{common.classifier}/native'
   build_utils.makedirs(native_build_dir)
-  subprocess.check_call([
+  cmake_args = [
     'cmake',
     '-G', 'Ninja',
     '-DCMAKE_BUILD_TYPE=' + build_type,
     '-DSKIA_DIR=' + skia_dir,
     '-DSKIA_ARCH=' + build_utils.arch]
-    + (['-DCMAKE_OSX_ARCHITECTURES=' + {'x64': 'x86_64', 'arm64': 'arm64'}[build_utils.arch]] if build_utils.system == 'macos' else [])
-    + [os.path.abspath('.')]
-    + (['-DCMAKE_TOOLCHAIN_FILE=' + args.cmake_toolchain_file] if args.cmake_toolchain_file else []),
-    cwd=os.path.abspath(native_build_dir))
+
+  if build_utils.system == 'macos':
+    cmake_args += ['-DCMAKE_OSX_ARCHITECTURES=' + {'x64': 'x86_64', 'arm64': 'arm64'}[build_utils.arch]]
+
+  cmake_args += [os.path.abspath('.')]
+
+  if args.cmake_toolchain_file:
+    cmake_args += ['-DCMAKE_TOOLCHAIN_FILE=' + args.cmake_toolchain_file]
+  elif (build_utils.system == 'linux') and (build_utils.arch != build_utils.native_arch):
+    if build_utils.arch == 'arm64':
+      cross_compile.setup_linux_arm64(native_build_dir, cmake_args)
+
+  subprocess.check_call(cmake_args, cwd=os.path.abspath(native_build_dir))
 
   # Ninja
   subprocess.check_call(['ninja'], cwd=os.path.abspath(native_build_dir))
