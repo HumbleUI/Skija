@@ -32,14 +32,20 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: macos-x64-jars
-          path: target/skija-macos-x64-*
+          path: |
+            target/skija-macos-x64-*
+            !target/*-sources.jar
+            !target/*-javadoc.jar
       - run: python3 script/clean.py
       - run: python3 script/build.py --arch arm64
       - run: python3 script/package_platform.py --arch arm64
       - uses: actions/upload-artifact@v3
         with:
           name: macos-arm64-jars
-          path: target/skija-macos-arm64-*
+          path: |
+            target/skija-macos-arm64-*
+            !target/*-sources.jar
+            !target/*-javadoc.jar
 
   build_linux:
     runs-on: ubuntu-20.04
@@ -58,13 +64,19 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: shared-jars
-          path: target/skija-shared-*.jar
+          path: |
+            target/skija-shared-*.jar
+            !target/*-sources.jar
+            !target/*-javadoc.jar
       - run: python3 script/test.py
       - run: python3 script/package_platform.py
       - uses: actions/upload-artifact@v3
         with:
           name: linux-x64-jars
-          path: target/skija-linux-x64-*
+          path: |
+            target/skija-linux-x64-*
+            !target/*-sources.jar
+            !target/*-javadoc.jar
 
   build_windows:
     runs-on: windows-2019
@@ -84,7 +96,10 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: windows-x64-jars
-          path: target/skija-windows-x64-*
+          path: |
+            target/skija-windows-x64-*
+            !target/*-sources.jar
+            !target/*-javadoc.jar
 
   release:
     if: startsWith(github.ref, 'refs/tags/')
