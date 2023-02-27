@@ -47,7 +47,7 @@ jobs:
       - run: |
           echo "JAVA_HOME=$JAVA_HOME_11_X64" >> $GITHUB_ENV
           echo "$JAVA_HOME_11_X64/bin" >> $GITHUB_PATH
-          sudo apt-get --quiet --yes install ninja-build libglu1-mesa-dev
+          sudo apt-get --quiet --yes install ninja-build libglu1-mesa-dev g++-9-aarch64-linux-gnu
           sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 60 --slave /usr/bin/g++ g++ /usr/bin/g++-9
           sudo update-alternatives --config gcc
       - uses: actions/checkout@v3
@@ -65,6 +65,13 @@ jobs:
         with:
           name: linux-x64-jars
           path: target/skija-linux-x64-*
+      - run: python3 script/clean.py
+      - run: python3 script/build.py --arch arm64
+      - run: python3 script/package_platform.py --arch arm64
+      - uses: actions/upload-artifact@v3
+        with:
+          name: linux-arm64-jars
+          path: target/skija-linux-arm64-*
 
   build_windows:
     runs-on: windows-2019
@@ -110,6 +117,10 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: linux-x64-jars
+          path: target
+      - uses: actions/download-artifact@v2
+        with:
+          name: linux-arm64-jars
           path: target
       - uses: actions/download-artifact@v2
         with:

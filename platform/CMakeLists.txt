@@ -13,6 +13,10 @@ if(NOT SKIA_ARCH)
     endif()
 endif()
 
+if(DEPS_DIR)
+    list(APPEND CMAKE_PREFIX_PATH "${DEPS_DIR}")
+endif()
+
 # Sources
 
 file(GLOB SOURCES ${CMAKE_SOURCE_DIR}/cc/*.cc)
