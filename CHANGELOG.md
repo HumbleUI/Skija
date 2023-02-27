@@ -1,3 +1,8 @@
+# 0.109.2 - Feb 27, 2022
+
+- Lombok version updated 1.18.22 -> 1.18.26 #43 via @Glavo
+- Basic linux arm64 support #44 via @Glavo
+
 # 0.109.1 - Dec 28, 2022
 
 Changed:
