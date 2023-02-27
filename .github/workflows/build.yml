@@ -65,6 +65,13 @@ jobs:
         with:
           name: linux-x64-jars
           path: target/skija-linux-x64-*
+      - run: python3 script/clean.py
+      - run: python3 script/build.py --arch arm64
+      - run: python3 script/package_platform.py --arch arm64
+      - uses: actions/upload-artifact@v3
+        with:
+          name: linux-arm64-jars
+          path: target/skija-linux-arm64-*
 
   build_windows:
     runs-on: windows-2019
