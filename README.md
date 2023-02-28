@@ -86,9 +86,16 @@ Please note that Skia is known to change its API quite often (monthly). Skija wi
 
 Platforms:
 
-- [x] Windows
-- [x] Linux
-- [x] macOS
+- Windows:
+  - [x] x64
+  - [ ] arm64
+- Linux:
+  - [x] x64
+  - [x] arm64 (Experimental)
+  - [ ] riscv64
+- macOS:
+  - [x] x64
+  - [x] arm64
 
 Backends:
 
@@ -164,20 +171,21 @@ Gradle:
 
 ```gradle
 dependencies {
-  api "io.github.humbleui:${artifact}:${version}"
+  implementation("io.github.humbleui:${artifact}:${version}")
 }
 ```
 
 Replace `${artifact}` and `${version}` with:
 
-Platform    | `${artifact}`       | `${version}`
-------------|---------------------|-------------
-macOS Intel | `skija-macos-x64`   | ![version](https://img.shields.io/maven-central/v/io.github.humbleui/skija-macos-x64)
-macOS M1    | `skija-macos-arm64` | ![version](https://img.shields.io/maven-central/v/io.github.humbleui/skija-macos-arm64)
-Linux       | `skija-linux-x64`   | ![version](https://img.shields.io/maven-central/v/io.github.humbleui/skija-linux-x64)
-Windows     | `skija-windows-x64` | ![version](https://img.shields.io/maven-central/v/io.github.humbleui/skija-windows-x64)
+| Platform      | `${artifact}`       | `${version}`                                                                                                                                                |
+|---------------|---------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Windows (x64) | `skija-windows-x64` | [![](https://img.shields.io/maven-central/v/io.github.humbleui/skija-windows-x64)](https://mvnrepository.com/artifact/io.github.humbleui/skija-windows-x64) |
+| Linux (x64)   | `skija-linux-x64`   | [![](https://img.shields.io/maven-central/v/io.github.humbleui/skija-linux-x64)](https://mvnrepository.com/artifact/io.github.humbleui/skija-linux-x64)     |
+| Linux (arm64) | `skija-linux-arm64` | [![](https://img.shields.io/maven-central/v/io.github.humbleui/skija-linux-arm64)](https://mvnrepository.com/artifact/io.github.humbleui/skija-linux-arm64) |
+| macOS (x64)   | `skija-macos-x64`   | [![](https://img.shields.io/maven-central/v/io.github.humbleui/skija-macos-x64)](https://mvnrepository.com/artifact/io.github.humbleui/skija-macos-x64)     |
+| macOS (arm64) | `skija-macos-arm64` | [![](https://img.shields.io/maven-central/v/io.github.humbleui/skija-macos-arm64)](https://mvnrepository.com/artifact/io.github.humbleui/skija-macos-arm64) |
 
-For simplicity or if your build system is not smart enough to select artifact based on OS, you can add all four as dependencies—they will not conflict.
+For simplicity or if your build system is not smart enough to select artifact based on OS, you can add all you need as dependencies—they will not conflict.
 
 ## Documentation
 
