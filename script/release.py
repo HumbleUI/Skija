@@ -7,7 +7,7 @@ def main():
   for classifier in ["", "-sources", "-javadoc"]:
       build_utils.deploy(f"target/skija-shared-{common.version}{classifier}.jar", tempdir = "shared/target/deploy")
 
-  for system in ['windows-x64', 'linux-x64', 'macos-x64', 'macos-arm64']:
+  for system in ['windows-x64', 'linux-x64', 'linux-arm64', 'macos-x64', 'macos-arm64']:
     for classifier in ["", "-sources", "-javadoc"]:
       build_utils.deploy(f"target/skija-{system}-{common.version}{classifier}.jar", tempdir = "platform/target/deploy")
 
