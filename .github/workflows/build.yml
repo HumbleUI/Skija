@@ -134,6 +134,14 @@ jobs:
           GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+      - name: Delete useless jars
+        run: |
+          rm target/skija-macos-*-sources.jar
+          rm target/skija-macos-*-javadoc.jar
+          rm target/skija-linux-*-sources.jar
+          rm target/skija-linux-*-javadoc.jar
+          rm target/skija-windows-*-sources.jar
+          rm target/skija-windows-*-javadoc.jar
       - uses: softprops/action-gh-release@v1
         with:
           files: |
