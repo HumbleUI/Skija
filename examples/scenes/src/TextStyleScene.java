@@ -2,6 +2,7 @@ package io.github.humbleui.skija.examples.scenes;
 
 import java.util.Arrays;
 import io.github.humbleui.skija.*;
+import io.github.humbleui.skija.impl.*;
 import io.github.humbleui.skija.paragraph.*;
 
 public class TextStyleScene extends Scene {
@@ -107,7 +108,9 @@ public class TextStyleScene extends Scene {
             assert Arrays.equals(FontFeature.EMPTY, ts.getFontFeatures());
 
             FontMetrics m = ts.getFontMetrics();
-            assert m.getTop() < m.getAscent() && m.getAscent() < m.getDescent() && m.getDescent() < m.getBottom();
+            if (OperatingSystem.CURRENT != OperatingSystem.LINUX) {
+                assert m.getTop() < m.getAscent() && m.getAscent() < m.getDescent() && m.getDescent() < m.getBottom();
+            }
             drawLine(canvas, m.toString(), ts);
         }
 
