@@ -120,7 +120,8 @@ public class Typeface extends RefCnt {
     @NotNull
     public static Typeface makeFromName(String name, FontStyle style) {
         Stats.onNativeCall();
-        return new Typeface(_nMakeFromName(name, style._value));
+        long ptr = _nMakeFromName(name, style._value);
+        return 0 == ptr ? makeDefault() : new Typeface(ptr);
     }
 
     /**
