@@ -22,7 +22,7 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - uses: seanmiddleditch/gha-setup-ninja@master
+      - uses: abdes/gha-setup-ninja@660f330a40aefa8d11632b3f901e92a4adb33d65
       - run: |
           echo "JAVA_HOME=$JAVA_HOME_11_X64" >> $GITHUB_ENV
           echo "$JAVA_HOME_11_X64/bin" >> $GITHUB_PATH
@@ -79,7 +79,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: microsoft/setup-msbuild@v1
       - uses: ilammy/msvc-dev-cmd@v1
-      - uses: seanmiddleditch/gha-setup-ninja@master
+      - uses: abdes/gha-setup-ninja@660f330a40aefa8d11632b3f901e92a4adb33d65
       - shell: bash
         run: |
           echo "JAVA_HOME=$JAVA_HOME_11_X64" >> $GITHUB_ENV
@@ -102,27 +102,27 @@ jobs:
       - run: |
           echo "JAVA_HOME=$JAVA_HOME_11_X64" >> $GITHUB_ENV
           echo "$JAVA_HOME_11_X64/bin" >> $GITHUB_PATH
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v3
         with:
           name: shared-jars
           path: target
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v3
         with:
           name: macos-x64-jars
           path: target
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v3
         with:
           name: macos-arm64-jars
           path: target
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v3
         with:
           name: linux-x64-jars
           path: target
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v3
         with:
           name: linux-arm64-jars
           path: target
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v3
         with:
           name: windows-x64-jars
           path: target
