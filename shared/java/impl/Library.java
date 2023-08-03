@@ -162,7 +162,8 @@ public class Library {
             file = new File(url.toURI());
         } else {
             file = new File(tempDir, fileName);
-            Log.debug("Extracting " + fileName + " to " + file);
+            File fileTmp = new File(tempDir, "tmp" + System.nanoTime() + "-" + fileName);
+            Log.debug("Extracting " + fileName + " to " + file + " via " + fileTmp);
             try (InputStream is = url.openStream()) {
                 if (file.exists() && file.length() != is.available()) {
                     file.delete();
@@ -171,7 +172,20 @@ public class Library {
                     if (!tempDir.exists()) {
                         tempDir.mkdirs();
                     }
-                    Files.copy(is, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                    
+                    Files.copy(is, fileTmp.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                    
+                    try {
+                        Files.move(fileTmp.toPath(), file.toPath(), StandardCopyOption.ATOMIC_MOVE);
+                    } catch (IOException e) {
+                        // IOException can occur if ATOMIC_MOVE failed because the destination already existed, which'd happen if another process just wrote it, which is fine.
+                        if (!file.exists()) {
+                            Log.debug("Failed to atomically move library file, using regular copy: " + e);
+                            Files.move(fileTmp.toPath(), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                        }
+                        Files.deleteIfExists(fileTmp.toPath());
+                    }
+                    
                 }
             }
         }
