@@ -26,7 +26,7 @@ public class SVGDOM extends RefCnt {
     }
 
     /**
-     * Deprecated. Use getRoot().intrinsicSize() instead
+     * Deprecated. Use getRoot().getIntrinsicSize() instead
      */
     @NotNull @Deprecated
     public Point getContainerSize() {

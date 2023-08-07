@@ -6,7 +6,7 @@ import io.github.humbleui.skija.*;
 
 public class Scenes {
     public static TreeMap<String, Scene> scenes;
-    public static String currentScene = "Font Size";
+    public static String currentScene = "SVG Scaling";
     public static HUD hud = new HUD();
     public static boolean stats = true;
 
@@ -70,7 +70,7 @@ public class Scenes {
     public static Scene newScene(String name) {
         String className = "io.github.humbleui.skija.examples.scenes." + name.replaceAll(" ", "") + "Scene";
         Class<Scene> cls = (Class<Scene>) Scenes.class.forName(className);
-        return cls.newInstance();
+        return cls.getDeclaredConstructor().newInstance();
     }
 
     public static Scene nextScene() {

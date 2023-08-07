@@ -27,7 +27,7 @@ public class SVGScalingScene extends Scene {
             try (var data = Data.makeFromFileName(file(img));
                  var svg = new SVGDOM(data);)
             {
-                var containerSize = svg.getContainerSize();
+                var containerSize = svg.getRoot().getIntrinsicSize(new SVGLengthContext(width, height));
                 if (!containerSize.isEmpty())
                     drawIcon(canvas, containerSize, svg);
                 drawIcon(canvas, new Point(8, 8),   svg);
