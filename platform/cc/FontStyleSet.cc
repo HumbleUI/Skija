@@ -6,8 +6,8 @@
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_FontStyleSet__1nMakeEmpty
   (JNIEnv* env, jclass jclass) {
-    SkFontStyleSet* instance = SkFontStyleSet::CreateEmpty();
-    return reinterpret_cast<jlong>(instance);
+    sk_sp<SkFontStyleSet> instance = SkFontStyleSet::CreateEmpty();
+    return reinterpret_cast<jlong>(instance.release());
 }
 
 extern "C" JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_FontStyleSet__1nCount
@@ -35,13 +35,13 @@ extern "C" JNIEXPORT jstring JNICALL Java_io_github_humbleui_skija_FontStyleSet_
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_FontStyleSet__1nGetTypeface
   (JNIEnv* env, jclass jclass, jlong ptr, jint index) {
     SkFontStyleSet* instance = reinterpret_cast<SkFontStyleSet*>(static_cast<uintptr_t>(ptr));
-    SkTypeface* typeface = instance->createTypeface(index);
-    return reinterpret_cast<jlong>(typeface);
+    sk_sp<SkTypeface> typeface = instance->createTypeface(index);
+    return reinterpret_cast<jlong>(typeface.release());
 }
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_FontStyleSet__1nMatchStyle
   (JNIEnv* env, jclass jclass, jlong ptr, jint fontStyle) {
     SkFontStyleSet* instance = reinterpret_cast<SkFontStyleSet*>(static_cast<uintptr_t>(ptr));
-    SkTypeface* typeface = instance->matchStyle(skija::FontStyle::fromJava(fontStyle));
-    return reinterpret_cast<jlong>(typeface);
+    sk_sp<SkTypeface> typeface = instance->matchStyle(skija::FontStyle::fromJava(fontStyle));
+    return reinterpret_cast<jlong>(typeface.release());
 }

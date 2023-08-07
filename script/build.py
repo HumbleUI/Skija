@@ -5,8 +5,8 @@ def main():
   parser = argparse.ArgumentParser()
   parser.add_argument('--debug', action='store_true')
   parser.add_argument('--arch', default=build_utils.arch)
-  parser.add_argument('--skia-dir')
-  parser.add_argument('--skia-release', default='m109-664500fa93')
+  parser.add_argument('--skia-dir') # , default='/Users/tonsky/ws/skia-build/skia')
+  parser.add_argument('--skia-release', default='m116-f44dbc40d8')
   parser.add_argument('--cmake-toolchain-file')
   (args, _) = parser.parse_known_args()
 
@@ -22,11 +22,11 @@ def main():
       zip = skia_dir + '.zip'
       build_utils.fetch('https://github.com/HumbleUI/SkiaBuild/releases/download/' + args.skia_release + '/' + zip, zip)
       with zipfile.ZipFile(zip, 'r') as f:
-        print("Extracting", zip)
+        print("Extracting", zip, flush=True)
         f.extractall(skia_dir)
       os.remove(zip)
     skia_dir = os.path.abspath(skia_dir)
-  print("Using Skia from", skia_dir)
+  print("Using Skia from", skia_dir, flush=True)
 
   # CMake
   native_build_dir = f'target/{common.classifier}/native'
@@ -67,7 +67,8 @@ def main():
   build_utils.javac(build_utils.files('../shared/java/**/*.java'),
                     '../shared/target/classes',
                     classpath = common.deps_compile(),
-                    release = '8')
+                    release = '8',
+                    opts = ['-Xlint:-options'])
   build_utils.javac(build_utils.files('../shared/java9/**/*.java'),
                     '../shared/target/classes-java9',
                     classpath = common.deps_compile(),

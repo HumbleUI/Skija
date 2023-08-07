@@ -26,7 +26,7 @@ public class TestRunner {
         var st = Thread.currentThread().getStackTrace();
         var ste = st[1];
         for (int i = 1; i < st.length; ++i) {
-            if (st[i].getClassName() != "io.github.humbleui.skija.test.TestRunner") {
+            if (st[i].getClassName() != "io.github.humbleui.skija.test.runner.TestRunner") {
                 ste = st[i];
                 break;
             }

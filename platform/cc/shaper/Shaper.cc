@@ -4,10 +4,11 @@
 #include "interop.hh"
 #include "FontRunIterator.hh"
 #include "SkShaper.h"
-#include "src/utils/SkUTF.h"
+#include "src/base/SkUTF.h"
 #include "TextLineRunHandler.hh"
 #include "RunIterators.hh"
 #include "unicode/ubidi.h"
+#include "SkUnicode.h"
 
 static void deleteShaper(SkShaper* instance) {
     // std::cout << "Deleting [SkShaper " << instance << "]" << std::endl;
@@ -38,7 +39,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_shaper_Shaper__
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_shaper_Shaper__1nMakeShapeDontWrapOrReorder
   (JNIEnv* env, jclass jclass, jlong fontMgrPtr) {
     SkFontMgr* fontMgr = reinterpret_cast<SkFontMgr*>(static_cast<uintptr_t>(fontMgrPtr));
-    return reinterpret_cast<jlong>(SkShaper::MakeShapeDontWrapOrReorder(sk_ref_sp(fontMgr)).release());
+    return reinterpret_cast<jlong>(SkShaper::MakeShapeDontWrapOrReorder(SkUnicode::MakeIcuBasedUnicode(), sk_ref_sp(fontMgr)).release());
 }
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_shaper_Shaper__1nMakeCoreText

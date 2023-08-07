@@ -191,17 +191,15 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Bitmap__1nNotify
 }
 
 extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Bitmap__1nErase4f
-  (JNIEnv* env, jclass jclass, jlong ptr, jfloat r, jfloat g, jfloat b, jfloat a, jlong colorSpacePtr) {
+  (JNIEnv* env, jclass jclass, jlong ptr, jfloat r, jfloat g, jfloat b, jfloat a) {
     SkBitmap* instance = reinterpret_cast<SkBitmap*>(static_cast<uintptr_t>(ptr));
-    SkColorSpace* colorSpace = reinterpret_cast<SkColorSpace*>(static_cast<uintptr_t>(colorSpacePtr));
-    instance->eraseColor({r, g, b, a}, colorSpace);
+    instance->eraseColor({r, g, b, a});
 }
 
 extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Bitmap__1nEraseRect4f
-  (JNIEnv* env, jclass jclass, jlong ptr, jfloat r, jfloat g, jfloat b, jfloat a, jlong colorSpacePtr, jint left, jint top, jint right, jint bottom) {
+  (JNIEnv* env, jclass jclass, jlong ptr, jfloat r, jfloat g, jfloat b, jfloat a, jint left, jint top, jint right, jint bottom) {
     SkBitmap* instance = reinterpret_cast<SkBitmap*>(static_cast<uintptr_t>(ptr));
-    SkColorSpace* colorSpace = reinterpret_cast<SkColorSpace*>(static_cast<uintptr_t>(colorSpacePtr));
-    instance->erase({r, g, b, a}, colorSpace, {left, top, right, bottom});
+    instance->erase({r, g, b, a}, {left, top, right, bottom});
 }
 
 extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Bitmap__1nErase

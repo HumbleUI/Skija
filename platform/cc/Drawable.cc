@@ -1,6 +1,7 @@
 #include <iostream>
 #include <jni.h>
 #include "SkDrawable.h"
+#include "SkPicture.h"
 #include "interop.hh"
 
 class SkijaDrawableImpl: public SkDrawable {
@@ -61,7 +62,8 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Drawable__1nDraw
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Drawable__1nMakePictureSnapshot
   (JNIEnv* env, jclass jclass, jlong ptr) {
     SkijaDrawableImpl* instance = reinterpret_cast<SkijaDrawableImpl*>(static_cast<uintptr_t>(ptr));
-    return reinterpret_cast<jlong>(instance->newPictureSnapshot());
+    sk_sp<SkPicture> pic = instance->makePictureSnapshot();
+    return reinterpret_cast<jlong>(pic.release());
 }
 
 extern "C" JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_Drawable__1nGetGenerationId

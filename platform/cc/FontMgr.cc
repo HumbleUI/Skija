@@ -22,24 +22,24 @@ extern "C" JNIEXPORT jstring JNICALL Java_io_github_humbleui_skija_FontMgr__1nGe
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_FontMgr__1nMakeStyleSet
   (JNIEnv* env, jclass jclass, jlong ptr, jint index) {
     SkFontMgr* instance = reinterpret_cast<SkFontMgr*>(static_cast<uintptr_t>(ptr));
-    SkFontStyleSet* styleSet = instance->createStyleSet(index);
-    return reinterpret_cast<jlong>(styleSet);
+    sk_sp<SkFontStyleSet> styleSet = instance->createStyleSet(index);
+    return reinterpret_cast<jlong>(styleSet.release());
 }
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_FontMgr__1nMatchFamily
   (JNIEnv* env, jclass jclass, jlong ptr, jstring familyNameStr) {
     SkFontMgr* instance = reinterpret_cast<SkFontMgr*>(static_cast<uintptr_t>(ptr));
     SkString familyName = skString(env, familyNameStr);
-    SkFontStyleSet* styleSet = instance->matchFamily(familyName.c_str());
-    return reinterpret_cast<jlong>(styleSet);
+    sk_sp<SkFontStyleSet> styleSet = instance->matchFamily(familyName.c_str());
+    return reinterpret_cast<jlong>(styleSet.release());
 }
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_FontMgr__1nMatchFamilyStyle
   (JNIEnv* env, jclass jclass, jlong ptr, jstring familyNameStr, jint fontStyle) {
     SkFontMgr* instance = reinterpret_cast<SkFontMgr*>(static_cast<uintptr_t>(ptr));
     SkString familyName = skString(env, familyNameStr);
-    SkTypeface* typeface = instance->matchFamilyStyle(familyName.c_str(), skija::FontStyle::fromJava(fontStyle));
-    return reinterpret_cast<jlong>(typeface);
+    sk_sp<SkTypeface> typeface = instance->matchFamilyStyle(familyName.c_str(), skija::FontStyle::fromJava(fontStyle));
+    return reinterpret_cast<jlong>(typeface.release());
 }
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_FontMgr__1nMatchFamilyStyleCharacter
@@ -53,9 +53,9 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_FontMgr__1nMatc
     for (int i = 0; i < bcp47.size(); ++i)
         bcp47[i] = bcp47Strings[i].c_str();
     
-    SkTypeface* typeface = instance->matchFamilyStyleCharacter(familyName.c_str(), skija::FontStyle::fromJava(fontStyle), bcp47.data(), (int) bcp47.size(), character);
+    sk_sp<SkTypeface> typeface = instance->matchFamilyStyleCharacter(familyName.c_str(), skija::FontStyle::fromJava(fontStyle), bcp47.data(), (int) bcp47.size(), character);
     
-    return reinterpret_cast<jlong>(typeface);
+    return reinterpret_cast<jlong>(typeface.release());
 }
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_FontMgr__1nMakeFromData

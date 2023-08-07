@@ -9,16 +9,6 @@ import java.util.Arrays;
 public class ImageFilter extends RefCnt {
     static { Library.staticLoad(); }
     
-    public static ImageFilter makeAlphaThreshold(Region r, float innerMin, float outerMax, ImageFilter input, IRect crop) {
-        try {
-            Stats.onNativeCall();
-            return new ImageFilter(_nMakeAlphaThreshold(Native.getPtr(r), innerMin, outerMax, Native.getPtr(input), crop));
-        } finally {
-            ReferenceUtil.reachabilityFence(r);
-            ReferenceUtil.reachabilityFence(input);
-        }
-    }
-
     public static ImageFilter makeArithmetic(float k1, float k2, float k3, float k4, boolean enforcePMColor, ImageFilter bg, ImageFilter fg, IRect crop) {
         try {
             Stats.onNativeCall();
@@ -122,10 +112,10 @@ public class ImageFilter extends RefCnt {
         }
     }
 
-    public static ImageFilter makeMagnifier(Rect r, float inset, ImageFilter input, IRect crop) {
+    public static ImageFilter makeMagnifier(Rect r, float zoomAmount, float inset, SamplingMode mode, ImageFilter input, IRect crop) {
         try {
             Stats.onNativeCall();
-            return new ImageFilter(_nMakeMagnifier(r._left, r._top, r._right, r._bottom, inset, Native.getPtr(input), crop));
+            return new ImageFilter(_nMakeMagnifier(r._left, r._top, r._right, r._bottom, zoomAmount, inset, mode._pack(), Native.getPtr(input), crop));
         } finally {
             ReferenceUtil.reachabilityFence(input);
         }
@@ -166,15 +156,6 @@ public class ImageFilter extends RefCnt {
             return new ImageFilter(_nMakeOffset(dx, dy, Native.getPtr(input), crop));
         } finally {
             ReferenceUtil.reachabilityFence(input);
-        }
-    }
-
-    public static ImageFilter makePaint(Paint paint, IRect crop) {
-        try {
-            Stats.onNativeCall();
-            return new ImageFilter(_nMakePaint(Native.getPtr(paint), crop));
-        } finally {
-            ReferenceUtil.reachabilityFence(paint);
         }
     }
 
@@ -269,7 +250,6 @@ public class ImageFilter extends RefCnt {
         super(ptr);
     }
     
-    public static native long _nMakeAlphaThreshold(long regionPtr, float innerMin, float outerMax, long input, IRect crop);
     public static native long _nMakeArithmetic(float k1, float k2, float k3, float k4, boolean enforcePMColor, long bg, long fg, IRect crop);
     public static native long _nMakeBlend(int blendMode, long bg, long fg, IRect crop);
     public static native long _nMakeBlur(float sigmaX, float sigmaY, int tileMode, long input, IRect crop);
@@ -279,12 +259,11 @@ public class ImageFilter extends RefCnt {
     public static native long _nMakeDropShadow(float dx, float dy, float sigmaX, float sigmaY, int color, long input, IRect crop);
     public static native long _nMakeDropShadowOnly(float dx, float dy, float sigmaX, float sigmaY, int color, long input, IRect crop);
     public static native long _nMakeImage(long image, float l0, float t0, float r0, float b0, float l1, float t1, float r1, float b1, long samplingMode);
-    public static native long _nMakeMagnifier(float l, float t, float r, float b, float inset, long input, IRect crop);
+    public static native long _nMakeMagnifier(float l, float t, float r, float b, float zoomAmount, float inset, long samplingMode, long input, IRect crop);
     public static native long _nMakeMatrixConvolution(int kernelW, int kernelH, float[] kernel, float gain, float bias, int offsetX, int offsetY, int tileMode, boolean convolveAlpha, long input, IRect crop);
     public static native long _nMakeMatrixTransform(float[] matrix, long samplingMode, long input);
     public static native long _nMakeMerge(long[] filters, IRect crop);
     public static native long _nMakeOffset(float dx, float dy, long input, IRect crop);
-    public static native long _nMakePaint(long paint, IRect crop);
     public static native long _nMakePicture(long picture, float l, float t, float r, float b);
     public static native long _nMakeTile(float l0, float t0, float r0, float b0, float l1, float t1, float r1, float b1, long input);
     public static native long _nMakeDilate(float rx, float ry, long input, IRect crop);

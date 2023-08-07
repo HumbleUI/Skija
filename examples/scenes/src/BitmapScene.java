@@ -232,10 +232,10 @@ public class BitmapScene extends Scene {
         var w = target.getWidth() / 2;
         var h = target.getHeight() / 2;
         var srcInfo = ImageInfo.makeS32((int) (w * dpi), (int) (h * dpi), ColorAlphaType.UNPREMUL);
-        var red = new Color4f(0.93725497f, 0, 0);
+        var red = new Color4f(1f, 0, 0);
         try (var src = new Bitmap();) {
             src.allocPixels(srcInfo);
-            src.erase(red, ColorSpace.getDisplayP3());
+            src.erase(red);
             var color = src.getColor4f((int) (w / 2 * dpi), (int) (h / 2 * dpi));
             assert new Color4f(1, 0, 0).equals(color) : "Expected " + new Color4f(1, 0, 0) + ", got " + color;
             try (var image = Image.makeFromBitmap(src.setImmutable());) {
@@ -255,7 +255,7 @@ public class BitmapScene extends Scene {
 
         try (var src = new Bitmap();) {
             src.allocPixels(srcInfo);
-            src.erase(red, ColorSpace.getDisplayP3(), IRect.makeXYWH((int) (w / 4 * dpi), (int) (h / 4 * dpi), (int) (w / 2 * dpi), (int) (h / 2 * dpi)));
+            src.erase(red, IRect.makeXYWH((int) (w / 4 * dpi), (int) (h / 4 * dpi), (int) (w / 2 * dpi), (int) (h / 2 * dpi)));
             var color = src.getColor4f((int) (w / 2 * dpi), (int) (h / 2 * dpi));
             assert new Color4f(1, 0, 0).equals(color) : "Expected " + new Color4f(1, 0, 0) + ", got " + color;
             try (var image = Image.makeFromBitmap(src.setImmutable());) {
@@ -265,7 +265,7 @@ public class BitmapScene extends Scene {
 
         try (var src = new Bitmap();) {
             src.allocPixels(srcInfo);
-            src.erase(red, null, IRect.makeXYWH((int) (w / 4 * dpi), (int) (h / 4 * dpi), (int) (w / 2 * dpi), (int) (h / 2 * dpi)));
+            src.erase(red, IRect.makeXYWH((int) (w / 4 * dpi), (int) (h / 4 * dpi), (int) (w / 2 * dpi), (int) (h / 2 * dpi)));
             var color = src.getColor4f((int) (w / 2 * dpi), (int) (h / 2 * dpi));
             assert red.equals(color) : "Expected " + red + ", got " + color;
             try (var image = Image.makeFromBitmap(src.setImmutable());) {

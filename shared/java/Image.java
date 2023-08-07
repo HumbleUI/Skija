@@ -168,50 +168,130 @@ public class Image extends RefCnt implements IHasImageInfo {
     }
 
     /**
-     * <p>Encodes Image pixels, returning result as Data. Returns existing encoded data
-     * if present; otherwise, Image is encoded with {@link EncodedImageFormat#PNG}.</p>
+     * Encode the provided image and return the resulting bytes.
      *
-     * <p>Returns null if existing encoded data is missing or invalid, and encoding fails.</p>
-     *
-     * @return  encoded Image, or null
-     *
-     * @see <a href="https://fiddle.skia.org/c/@Image_encodeToData_2">https://fiddle.skia.org/c/@Image_encodeToData_2</a>
+     * @return      nullptr if the pixels could not be read or encoding otherwise fails.
      */
     @Nullable
-    public Data encodeToData() {
-        return encodeToData(EncodedImageFormat.PNG, 100);
-    }
-
-    @Nullable
-    public Data encodeToData(EncodedImageFormat format) {
-        return encodeToData(format, 100);
+    public Data encodePNG() {
+        return encodePNG(null, EncodePNGOptions.DEFAULT);
     }
 
     /**
-     * Encodes Image pixels, returning result as Data.
+     * Encode the provided image and return the resulting bytes.
      *
-     * Returns null if encoding fails, or if format is not supported.
-     *
-     * On a macOS, encodedImageFormat can additionally be one of:
-     * {@link EncodedImageFormat#ICO}, {@link EncodedImageFormat#BMP} or {@link EncodedImageFormat#GIF}.
-     *
-     * quality is a platform and format specific metric trading off size and encoding
-     * error. When used, quality equaling 100 encodes with the least error. quality may
-     * be ignored by the encoder.
-     *
-     * @param format   one of: {@link EncodedImageFormat#JPEG}, {@link EncodedImageFormat#PNG}, {@link EncodedImageFormat#WEBP}
-     * @param quality  encoder specific metric with 100 equaling best
-     * @return         encoded Image, or null
-     *
-     * @see <a href="https://fiddle.skia.org/c/@Image_encodeToData">https://fiddle.skia.org/c/@Image_encodeToData</a>
+     * @param opts  may be used to control the encoding behavior
+     * @return      nullptr if the pixels could not be read or encoding otherwise fails.
      */
     @Nullable
-    public Data encodeToData(EncodedImageFormat format, int quality) {
+    public Data encodePNG(@NotNull EncodePNGOptions opts) {
+        return encodePNG(null, opts);
+    }
+
+    /**
+     * Encode the provided image and return the resulting Data.
+     *
+     * @param ctx   If the image was created as a texture-backed image on a GPU context, 
+     *              that ctx must be provided so the pixels can be read before being encoded.
+     *              For raster-backed images, ctx can be null.
+     * @param opts  may be used to control the encoding behavior
+     * @return      nullptr if the pixels could not be read or encoding otherwise fails.
+     */
+    @Nullable
+    public Data encodePNG(@Nullable DirectContext ctx, @NotNull EncodePNGOptions opts) {
         try {
+            assert opts != null : "Can’t encodePNG with opts == null";
             Stats.onNativeCall();
-            long ptr = _nEncodeToData(_ptr, format.ordinal(), quality);
+            long ptr = _nEncodePNG(_ptr, Native.getPtr(ctx), opts._flags, opts._zlibLevel);
             return ptr == 0 ? null : new Data(ptr);
         } finally {
+            ReferenceUtil.reachabilityFence(ctx);
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    /**
+     * Encode the provided image and return the resulting bytes.
+     *
+     * @return      nullptr if the pixels could not be read or encoding otherwise fails.
+     */
+    @Nullable
+    public Data encodeJPEG() {
+        return encodeJPEG(null, EncodeJPEGOptions.DEFAULT);
+    }
+
+    /**
+     * Encode the provided image and return the resulting bytes.
+     *
+     * @param opts  may be used to control the encoding behavior
+     * @return      nullptr if the pixels could not be read or encoding otherwise fails.
+     */
+    @Nullable
+    public Data encodeJPEG(@NotNull EncodeJPEGOptions opts) {
+        return encodeJPEG(null, opts);
+    }
+
+    /**
+     * Encode the provided image and return the resulting Data.
+     *
+     * @param ctx   If the image was created as a texture-backed image on a GPU context, 
+     *              that ctx must be provided so the pixels can be read before being encoded.
+     *              For raster-backed images, ctx can be null.
+     * @param opts  may be used to control the encoding behavior
+     * @return      nullptr if the pixels could not be read or encoding otherwise fails.
+     */
+    @Nullable
+    public Data encodeJPEG(@Nullable DirectContext ctx, @NotNull EncodeJPEGOptions opts) {
+        try {
+            assert opts != null : "Can’t encodeJPEG with opts == null";
+            Stats.onNativeCall();
+            long ptr = _nEncodeJPEG(_ptr, Native.getPtr(ctx), opts._quality, opts._downsampleMode.ordinal(), opts._alphaMode.ordinal());
+            return ptr == 0 ? null : new Data(ptr);
+        } finally {
+            ReferenceUtil.reachabilityFence(ctx);
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    /**
+     * Encode the provided image and return the resulting bytes.
+     *
+     * @return      nullptr if the pixels could not be read or encoding otherwise fails.
+     */
+    @Nullable
+    public Data encodeWEBP() {
+        return encodeWEBP(null, EncodeWEBPOptions.DEFAULT);
+    }
+
+    /**
+     * Encode the provided image and return the resulting bytes.
+     *
+     * @param opts  may be used to control the encoding behavior
+     * @return      nullptr if the pixels could not be read or encoding otherwise fails.
+     */
+    @Nullable
+    public Data encodeWEBP(@NotNull EncodeWEBPOptions opts) {
+        return encodeWEBP(null, opts);
+    }
+
+    /**
+     * Encode the provided image and return the resulting Data.
+     *
+     * @param ctx   If the image was created as a texture-backed image on a GPU context, 
+     *              that ctx must be provided so the pixels can be read before being encoded.
+     *              For raster-backed images, ctx can be null.
+     * @param opts  may be used to control the encoding behavior
+     * @return      nullptr if the pixels could not be read or encoding otherwise fails.
+     */
+    @Nullable
+    public Data encodeWEBP(@Nullable DirectContext ctx, @NotNull EncodeWEBPOptions opts) {
+        try {
+            assert opts != null : "Can’t encodeWEBP with opts == null";
+            Stats.onNativeCall();
+            long ptr = _nEncodeWEBP(_ptr, Native.getPtr(ctx), opts._compressionMode.ordinal(), opts._quality);
+            return ptr == 0 ? null : new Data(ptr);
+        } finally {
+            ReferenceUtil.reachabilityFence(ctx);
             ReferenceUtil.reachabilityFence(this);
         }
     }
@@ -364,7 +444,9 @@ public class Image extends RefCnt implements IHasImageInfo {
     @ApiStatus.Internal public static native long _nMakeFromPixmap(long pixmapPtr);
     @ApiStatus.Internal public static native long _nMakeFromEncoded(byte[] bytes);
     @ApiStatus.Internal public static native ImageInfo _nGetImageInfo(long ptr);
-    @ApiStatus.Internal public static native long _nEncodeToData(long ptr, int format, int quality);
+    @ApiStatus.Internal public static native long    _nEncodePNG(long ptr, long ctxPtr, int flags, int zlibLevel);
+    @ApiStatus.Internal public static native long    _nEncodeJPEG(long ptr, long ctxPtr, int quality, int downsampleMode, int alphaMode);
+    @ApiStatus.Internal public static native long    _nEncodeWEBP(long ptr, long ctxPtr, int compressionMode, float quality);
     @ApiStatus.Internal public static native long    _nMakeShader(long ptr, int tmx, int tmy, long samplingMode, float[] localMatrix);
     @ApiStatus.Internal public static native ByteBuffer _nPeekPixels(long ptr);
     @ApiStatus.Internal public static native boolean _nPeekPixelsToPixmap(long ptr, long pixmapPtr);

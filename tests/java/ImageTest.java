@@ -5,7 +5,9 @@ import static io.github.humbleui.skija.test.runner.TestRunner.*;
 import java.io.*;
 import java.nio.file.*;
 
-import io.github.humbleui.skija.EncodedImageFormat;
+import io.github.humbleui.skija.EncodeJPEGOptions;
+import io.github.humbleui.skija.EncodePNGOptions;
+import io.github.humbleui.skija.EncodeWEBPOptions;
 import io.github.humbleui.skija.Paint;
 import io.github.humbleui.skija.Surface;
 import io.github.humbleui.skija.Path;
@@ -22,13 +24,13 @@ public class ImageTest implements Executable {
             canvas.drawPath(path, paint);
             try (var image = surface.makeImageSnapshot()) {
                 new File("target/tests/ImageTest/").mkdirs();
-                Files.write(java.nio.file.Path.of("target/tests/ImageTest/polygon_default.png"), image.encodeToData().getBytes());
-                Files.write(java.nio.file.Path.of("target/tests/ImageTest/polygon_jpeg_default.jpeg"), image.encodeToData(EncodedImageFormat.JPEG).getBytes());
-                Files.write(java.nio.file.Path.of("target/tests/ImageTest/polygon_jpeg_50.jpeg"), image.encodeToData(EncodedImageFormat.JPEG, 50).getBytes());
-                Files.write(java.nio.file.Path.of("target/tests/ImageTest/polygon_webp_default.webp"), image.encodeToData(EncodedImageFormat.WEBP).getBytes());
-                Files.write(java.nio.file.Path.of("target/tests/ImageTest/polygon_webp_50.webp"), image.encodeToData(EncodedImageFormat.WEBP, 50).getBytes());
-                // Files.write(java.nio.file.Path.of("target/tests/ImageTest/polygon_heif_default.heif"), image.encodeToData(EncodedImageFormat.HEIF).getBytes());
-                // Files.write(java.nio.file.Path.of("target/tests/ImageTest/polygon_heif_50.heif"), image.encodeToData(EncodedImageFormat.HEIF, 50).getBytes());
+                Files.write(java.nio.file.Path.of("target/tests/ImageTest/polygon_default.png"), image.encodePNG().getBytes());
+                Files.write(java.nio.file.Path.of("target/tests/ImageTest/polygon_default_none_1.png"), image.encodePNG(EncodePNGOptions.DEFAULT.withFlags(EncodePNGOptions.FilterFlag.NONE).withZlibLevel(1)).getBytes());
+                Files.write(java.nio.file.Path.of("target/tests/ImageTest/polygon_jpeg_default.jpeg"), image.encodeJPEG().getBytes());
+                Files.write(java.nio.file.Path.of("target/tests/ImageTest/polygon_jpeg_50.jpeg"), image.encodeJPEG(EncodeJPEGOptions.DEFAULT.withQuality(50)).getBytes());
+                Files.write(java.nio.file.Path.of("target/tests/ImageTest/polygon_webp_default.webp"), image.encodeWEBP().getBytes());
+                Files.write(java.nio.file.Path.of("target/tests/ImageTest/polygon_webp_50.webp"), image.encodeWEBP(EncodeWEBPOptions.DEFAULT.withQuality(50)).getBytes());
+                Files.write(java.nio.file.Path.of("target/tests/ImageTest/polygon_webp_lossless.webp"), image.encodeWEBP(EncodeWEBPOptions.DEFAULT.withCompressionMode(EncodeWEBPOptions.CompressionMode.LOSSLESS)).getBytes());
             }
         }
     }

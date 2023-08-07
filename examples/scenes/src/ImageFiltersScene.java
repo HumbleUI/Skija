@@ -69,11 +69,10 @@ public class ImageFiltersScene extends Scene {
             IRect bb = IRect.makeXYWH(0, 0, 60, 60);
             ImageFilter[] filters = new ImageFilter[] {
                 ImageFilter.makeOffset(0, 0, null, bb),
-                ImageFilter.makeMagnifier(Rect.makeXYWH(0 * dpi, 0 * dpi, 60 * dpi, 60 * dpi), 5f, null, bb),
-                ImageFilter.makeMagnifier(Rect.makeXYWH(0 * dpi, 0 * dpi, 60 * dpi, 60 * dpi), 10f, null, bb),
-                ImageFilter.makeMagnifier(Rect.makeXYWH(0 * dpi, 0 * dpi, 60 * dpi, 60 * dpi), 20f, null, bb),
+                ImageFilter.makeMagnifier(Rect.makeXYWH(0 * dpi, 0 * dpi, 60 * dpi, 60 * dpi),  5f,  5f, SamplingMode.MITCHELL, null, bb),
+                ImageFilter.makeMagnifier(Rect.makeXYWH(0 * dpi, 0 * dpi, 60 * dpi, 60 * dpi), 10f, 10f, SamplingMode.MITCHELL, null, bb),
+                ImageFilter.makeMagnifier(Rect.makeXYWH(0 * dpi, 0 * dpi, 60 * dpi, 60 * dpi), 20f, 20f, SamplingMode.MITCHELL, null, bb),
                 ImageFilter.makeOffset(10, 10, null, bb),
-                ImageFilter.makePaint(fill, bb),
                 ImageFilter.makeTile(Rect.makeXYWH(10, 10, 40, 40), Rect.makeXYWH(0, 0, 60, 60), null),
                 ImageFilter.makeDilate(2, 2, null, bb),
                 ImageFilter.makeErode(2, 2, null, bb),

@@ -4,8 +4,10 @@
 #include <iostream>
 #include <jni.h>
 #include <memory>
+#include "SkBlendMode.h"
+#include "SkCodecAnimation.h"
 #include "shaper/interop.hh"
-#include "src/utils/SkUTF.h"
+#include "src/base/SkUTF.h"
 #include "paragraph/interop.hh"
 
 namespace java {

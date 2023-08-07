@@ -300,7 +300,7 @@ public class PathTest implements Executable {
 
         assertArrayEquals(new Point[] {new Point(0, 20), new Point(6.666667f, 13.333334f)},
             Path.convertConicToQuads(new Point(0, 20), new Point(20, 0), new Point(40, 20), 0.5f, 1));
-        assertArrayEquals(new Point[] {new Point(0, 20), new Point(3.0940108f, 16.905989f), new Point(8.452994f, 15.119661f), new Point(13.811978f, 13.333334f)},
+        assertArrayEquals(new Point[] {new Point(0, 20), new Point(3.0940108f, 16.90599f), new Point(8.452995f, 15.119661f), new Point(13.811979f, 13.333334f)},
             Path.convertConicToQuads(new Point(0, 20), new Point(20, 0), new Point(40, 20), 0.5f, 2));
 
         try (Path p = new Path().lineTo(40, 40)) {

@@ -57,7 +57,7 @@ public class BitmapImageScene extends Scene {
         
         // Bitmap + Image.readPixels(50, 50)
         try (var bitmap = new Bitmap();) {
-            bitmap.allocPixels(new ImageInfo(300, 300, ColorType.GRAY_8, ColorAlphaType.OPAQUE));
+            bitmap.allocPixels(new ImageInfo(300, 300, ColorType.RGBA_8888, ColorAlphaType.OPAQUE));
             image.readPixels(bitmap, 50, 50);
             try (var image = Image.makeFromBitmap(bitmap.setImmutable());) {
                 canvas.drawImageRect(image, Rect.makeXYWH(25, 25, 150, 150));

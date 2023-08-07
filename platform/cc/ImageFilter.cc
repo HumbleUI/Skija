@@ -8,15 +8,6 @@
 #include "SkRect.h"
 #include "interop.hh"
 
-extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_ImageFilter__1nMakeAlphaThreshold
-  (JNIEnv* env, jclass jclass, jlong regionPtr, jfloat innerMin, jfloat outerMax, jlong inputPtr, jobject cropObj) {
-    SkRegion* region = reinterpret_cast<SkRegion*>(static_cast<uintptr_t>(regionPtr));
-    SkImageFilter* input = reinterpret_cast<SkImageFilter*>(static_cast<uintptr_t>(inputPtr));
-    std::unique_ptr<SkIRect> crop = types::IRect::toSkIRect(env, cropObj);
-    SkImageFilter* ptr = SkImageFilters::AlphaThreshold(*region, innerMin, outerMax, sk_ref_sp(input), crop.get()).release();
-    return reinterpret_cast<jlong>(ptr);
-}
-
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_ImageFilter__1nMakeArithmetic
   (JNIEnv* env, jclass jclass, jfloat k1, jfloat k2, jfloat k3, jfloat k4, jboolean enforcePMColor, jlong bgPtr, jlong fgPtr, jobject cropObj) {
     SkImageFilter* bg = reinterpret_cast<SkImageFilter*>(static_cast<uintptr_t>(bgPtr));
@@ -97,11 +88,12 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_ImageFilter__1n
 }
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_ImageFilter__1nMakeMagnifier
-  (JNIEnv* env, jclass jclass, jfloat l, jfloat t, jfloat r, jfloat b, jfloat inset, jlong inputPtr, jobject cropObj) {
+  (JNIEnv* env, jclass jclass, jfloat l, jfloat t, jfloat r, jfloat b, jfloat zoomAmount, jfloat inset, jlong samplingMode, jlong inputPtr, jobject cropObj) {
+    SkSamplingOptions opts = skija::SamplingMode::unpack(samplingMode);
     SkImageFilter* input = reinterpret_cast<SkImageFilter*>(static_cast<uintptr_t>(inputPtr));
     std::unique_ptr<SkIRect> crop = types::IRect::toSkIRect(env, cropObj);
-    SkImageFilter* ptr = SkImageFilters::Magnifier(SkRect{l, t, r, b}, inset, sk_ref_sp(input), crop.get()).release();
-    return reinterpret_cast<jlong>(ptr);
+    sk_sp<SkImageFilter> ptr = SkImageFilters::Magnifier(SkRect{l, t, r, b}, zoomAmount, inset, opts, sk_ref_sp(input), crop.get());
+    return reinterpret_cast<jlong>(ptr.release());
 }
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_ImageFilter__1nMakeMatrixConvolution
@@ -143,14 +135,6 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_ImageFilter__1n
     SkImageFilter* input = reinterpret_cast<SkImageFilter*>(static_cast<uintptr_t>(inputPtr));
     std::unique_ptr<SkIRect> crop = types::IRect::toSkIRect(env, cropObj);
     SkImageFilter* ptr = SkImageFilters::Offset(dx, dy, sk_ref_sp(input), crop.get()).release();
-    return reinterpret_cast<jlong>(ptr);
-}
-
-extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_ImageFilter__1nMakePaint
-  (JNIEnv* env, jclass jclass, jlong paintPtr, jobject cropObj) {
-    SkPaint* paint = reinterpret_cast<SkPaint*>(static_cast<uintptr_t>(paintPtr));
-    std::unique_ptr<SkIRect> crop = types::IRect::toSkIRect(env, cropObj);
-    SkImageFilter* ptr = SkImageFilters::Paint(*paint, crop.get()).release();
     return reinterpret_cast<jlong>(ptr);
 }
 

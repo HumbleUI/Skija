@@ -694,65 +694,22 @@ public class Bitmap extends Managed implements IHasImageInfo {
     }
 
     /**
-     * Replaces pixel values with color, interpreted as being in the colorSpace.
+     * Replaces pixel values with color, interpreted as being in the sRGB.
      * All pixels contained by getBounds() are affected. If the getColorType() is
      * {@link ColorType#GRAY_8} or {@link ColorType#RGB_565}, then alpha is ignored; RGB is
      * treated as opaque. If getColorType() is {@link ColorType#ALPHA_8}, then RGB is ignored.
      *
      * @param color      unpremultiplied color
-     * @param colorSpace SkColorSpace describing the encoding of color
      * @return           this
-     *
-     * @see <a href="https://fiddle.skia.org/c/@Bitmap_eraseColor">https://fiddle.skia.org/c/@Bitmap_eraseColor</a>
-     */
-    @NotNull @Contract("_, _ -> this")
-    public Bitmap erase(@NotNull Color4f color, @Nullable ColorSpace colorSpace) {
-        try {
-            assert color != null : "Bitmap::erase expected color != null";
-            Stats.onNativeCall();
-            _nErase4f(_ptr, color._r, color._g, color._b, color._a, Native.getPtr(colorSpace));
-            return this;
-        } finally {
-            ReferenceUtil.reachabilityFence(this);
-        }
-    }
-
-    /**
-     * Replaces pixel values with color.
-     * All pixels contained by getBounds() are affected. If the getColorType() is
-     * {@link ColorType#GRAY_8} or {@link ColorType#RGB_565}, then alpha is ignored; RGB is
-     * treated as opaque. If getColorType() is {@link ColorType#ALPHA_8}, then RGB is ignored.
-     *
-     * @param color  unpremultiplied color
-     * @return       this
      *
      * @see <a href="https://fiddle.skia.org/c/@Bitmap_eraseColor">https://fiddle.skia.org/c/@Bitmap_eraseColor</a>
      */
     @NotNull @Contract("_ -> this")
     public Bitmap erase(@NotNull Color4f color) {
-        return erase(color, (ColorSpace) null);
-    }
-
-    /**
-     * Replaces pixel values with color, interpreted as being in the colorSpace.
-     * All pixels contained by getBounds() are affected. If the getColorType() is
-     * {@link ColorType#GRAY_8} or {@link ColorType#RGB_565}, then alpha is ignored; RGB is
-     * treated as opaque. If getColorType() is {@link ColorType#ALPHA_8}, then RGB is ignored.
-     *
-     * @param color      unpremultiplied color
-     * @param colorSpace SkColorSpace describing the encoding of color
-     * @param area       rectangle to fill
-     * @return           this
-     *
-     * @see <a href="https://fiddle.skia.org/c/@Bitmap_erase">https://fiddle.skia.org/c/@Bitmap_erase</a>
-     */
-    @NotNull @Contract("_, _, _ -> this")
-    public Bitmap erase(@NotNull Color4f color, @Nullable ColorSpace colorSpace, @NotNull IRect area) {
         try {
             assert color != null : "Bitmap::erase expected color != null";
-            assert area != null : "Bitmap::erase expected area != null";
             Stats.onNativeCall();
-            _nEraseRect4f(_ptr, color._r, color._g, color._b, color._a, Native.getPtr(colorSpace), area._left, area._top, area._right, area._bottom);
+            _nErase4f(_ptr, color._r, color._g, color._b, color._a);
             return this;
         } finally {
             ReferenceUtil.reachabilityFence(this);
@@ -760,20 +717,28 @@ public class Bitmap extends Managed implements IHasImageInfo {
     }
 
     /**
-     * Replaces pixel values with color.
+     * Replaces pixel values with color, interpreted as being in the sRGB.
      * All pixels contained by getBounds() are affected. If the getColorType() is
      * {@link ColorType#GRAY_8} or {@link ColorType#RGB_565}, then alpha is ignored; RGB is
      * treated as opaque. If getColorType() is {@link ColorType#ALPHA_8}, then RGB is ignored.
      *
-     * @param color  unpremultiplied color
-     * @param area   rectangle to fill
-     * @return       this
+     * @param color      unpremultiplied color
+     * @param area       rectangle to fill
+     * @return           this
      *
-     * @see <a href="https://fiddle.skia.org/c/@Bitmap_eraseColor">https://fiddle.skia.org/c/@Bitmap_eraseColor</a>
+     * @see <a href="https://fiddle.skia.org/c/@Bitmap_erase">https://fiddle.skia.org/c/@Bitmap_erase</a>
      */
     @NotNull @Contract("_, _ -> this")
     public Bitmap erase(@NotNull Color4f color, @NotNull IRect area) {
-        return erase(color, null, area);
+        try {
+            assert color != null : "Bitmap::erase expected color != null";
+            assert area != null : "Bitmap::erase expected area != null";
+            Stats.onNativeCall();
+            _nEraseRect4f(_ptr, color._r, color._g, color._b, color._a, area._left, area._top, area._right, area._bottom);
+            return this;
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
     }
 
     /**
@@ -1107,8 +1072,8 @@ public class Bitmap extends Managed implements IHasImageInfo {
     @ApiStatus.Internal public static native boolean _nIsReadyToDraw(long ptr);
     @ApiStatus.Internal public static native int     _nGetGenerationId(long ptr);
     @ApiStatus.Internal public static native void    _nNotifyPixelsChanged(long ptr);
-    @ApiStatus.Internal public static native void    _nErase4f(long ptr, float r, float g, float b, float a, long colorSpacePtr);
-    @ApiStatus.Internal public static native void    _nEraseRect4f(long ptr, float r, float g, float b, float a, long colorSpacePtr, int left, int top, int right, int bottom);
+    @ApiStatus.Internal public static native void    _nErase4f(long ptr, float r, float g, float b, float a);
+    @ApiStatus.Internal public static native void    _nEraseRect4f(long ptr, float r, float g, float b, float a, int left, int top, int right, int bottom);
     @ApiStatus.Internal public static native void    _nErase(long ptr, int color);
     @ApiStatus.Internal public static native void    _nEraseRect(long ptr, int color, int left, int top, int right, int bottom);
     @ApiStatus.Internal public static native int     _nGetColor(long ptr, int x, int y);

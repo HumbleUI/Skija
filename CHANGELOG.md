@@ -1,3 +1,26 @@
+# 0.116.0 - Aug 8, 2023
+
+Added:
+
+- ARM64 jars thx @Glavo
+
+Fixed:
+
+- Race condition in shared library unpacking #54 #56 thx @dzaima
+- NPE in Typeface::makeFromName #49
+
+Changed:
+
+- Skia version m109-664500fa93 -> m116-f44dbc40d8
+- [ BREAKING ] `Bitmap::erase(Color4f)` no longer takes ColorSpace
+- [ BREAKING ] `Image::encodeToData` has been replaced with `::encodeJPEG`, `::encodePNG`, `::encodeWEBP`, plus the encoding options
+- [ BREAKING ] `ImageFilter::MakeMagnifier` required two more arguments: `zoomAmount` and `SamplingMode`
+
+Removed:
+
+- [ BREAKING ] `ImageFilter::MakeAlphaThreshold`
+- [ BREAKING ] `ImageFilter::MakePaint`
+
 # 0.109.2 - Feb 27, 2022
 
 - Lombok version updated 1.18.22 -> 1.18.26 #43 via @Glavo

@@ -1,10 +1,12 @@
 #include <iostream>
 #include <jni.h>
+#include "SkBlendMode.h"
 #include "SkColorFilter.h"
 #include "SkImageFilter.h"
 #include "SkMaskFilter.h"
 #include "SkPaint.h"
 #include "SkPathEffect.h"
+#include "SkPathUtils.h"
 #include "SkShader.h"
 #include "interop.hh"
 
@@ -160,8 +162,11 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Paint__1nGetFil
     SkPaint* instance = reinterpret_cast<SkPaint*>(static_cast<uintptr_t>(ptr));
     SkPath* src = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(srcPtr));
     SkPath* dst = new SkPath();
-    instance->getFillPath(*src, dst, nullptr, resScale);
-    return reinterpret_cast<jlong>(dst);
+    if (skpathutils::FillPathWithPaint(*src, *instance, dst, nullptr, resScale)) {
+      return reinterpret_cast<jlong>(dst);
+    } else {
+      return 0;
+    }
 }
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Paint__1nGetFillPathCull
@@ -170,8 +175,11 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Paint__1nGetFil
     SkPath* src = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(srcPtr));
     SkPath* dst = new SkPath();
     SkRect cull {left, top, right, bottom};
-    instance->getFillPath(*src, dst, &cull, resScale);
-    return reinterpret_cast<jlong>(dst);
+    if (skpathutils::FillPathWithPaint(*src, *instance, dst, &cull, resScale)) {
+      return reinterpret_cast<jlong>(dst);
+    } else {
+      return 0;
+    }
 }
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Paint__1nGetMaskFilter

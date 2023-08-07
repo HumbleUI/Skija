@@ -5,7 +5,6 @@
 #include "SkHighContrastFilter.h"
 #include "SkLumaColorFilter.h"
 #include "SkOverdrawColorFilter.h"
-#include "SkTableColorFilter.h"
 #include "interop.hh"
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_ColorFilter__1nMakeComposed
@@ -76,9 +75,9 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_ColorFilter__1n
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_ColorFilter__1nMakeTable
   (JNIEnv* env, jclass jclass, jbyteArray tableArray) {
     jbyte* table = env->GetByteArrayElements(tableArray, 0);
-    SkColorFilter* ptr = SkTableColorFilter::Make(reinterpret_cast<uint8_t*>(table)).release();
+    sk_sp<SkColorFilter> ptr = SkColorFilters::Table(reinterpret_cast<uint8_t*>(table));
     env->ReleaseByteArrayElements(tableArray, table, 0);
-    return reinterpret_cast<jlong>(ptr);
+    return reinterpret_cast<jlong>(ptr.release());
 }
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_ColorFilter__1nMakeTableARGB
@@ -88,14 +87,14 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_ColorFilter__1n
     jbyte* g = arrayG ? env->GetByteArrayElements(arrayG, 0) : nullptr;
     jbyte* b = arrayB ? env->GetByteArrayElements(arrayB, 0) : nullptr;
 
-    SkColorFilter* ptr = SkTableColorFilter::MakeARGB(reinterpret_cast<uint8_t*>(a), reinterpret_cast<uint8_t*>(r), reinterpret_cast<uint8_t*>(g), reinterpret_cast<uint8_t*>(b)).release();
+    sk_sp<SkColorFilter> ptr = SkColorFilters::TableARGB(reinterpret_cast<uint8_t*>(a), reinterpret_cast<uint8_t*>(r), reinterpret_cast<uint8_t*>(g), reinterpret_cast<uint8_t*>(b));
     
     if (arrayA) env->ReleaseByteArrayElements(arrayA, a, 0);
     if (arrayR) env->ReleaseByteArrayElements(arrayR, r, 0);
     if (arrayG) env->ReleaseByteArrayElements(arrayG, g, 0);
     if (arrayB) env->ReleaseByteArrayElements(arrayB, b, 0);
     
-    return reinterpret_cast<jlong>(ptr);
+    return reinterpret_cast<jlong>(ptr.release());
 }
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_ColorFilter__1nMakeOverdraw

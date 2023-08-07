@@ -108,7 +108,7 @@ namespace skija {
         void onLoad(JNIEnv* env);
         void onUnload(JNIEnv* env);        
 
-        using ICUUText = std::unique_ptr<UText, SkFunctionWrapper<decltype(utext_close), utext_close>>;
+        using ICUUText = std::unique_ptr<UText, SkOverloadedFunctionObject<decltype(utext_close), utext_close>>;
         std::shared_ptr<UBreakIterator> graphemeBreakIterator(SkString& text);
     }
 }
