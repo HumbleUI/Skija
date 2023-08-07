@@ -47,7 +47,8 @@ jobs:
       - run: |
           echo "JAVA_HOME=$JAVA_HOME_11_X64" >> $GITHUB_ENV
           echo "$JAVA_HOME_11_X64/bin" >> $GITHUB_PATH
-          sudo apt-get --quiet --yes install ninja-build libglu1-mesa-dev g++-9-aarch64-linux-gnu
+          sudo apt-get update
+          sudo apt-get --quiet --yes install ninja-build libglu1-mesa-dev g\+\+-9-aarch64-linux-gnu
           sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 60 --slave /usr/bin/g++ g++ /usr/bin/g++-9
           sudo update-alternatives --config gcc
       - uses: actions/checkout@v3
