@@ -162,8 +162,6 @@ public class Library {
             file = new File(url.toURI());
         } else {
             file = new File(tempDir, fileName);
-            File fileTmp = File.createTempFile(fileName, "tmp", tempDir);
-            Log.debug("Extracting " + fileName + " to " + file + " via " + fileTmp);
             try (InputStream is = url.openStream()) {
                 if (file.exists() && file.length() != is.available()) {
                     file.delete();
@@ -172,6 +170,8 @@ public class Library {
                     if (!tempDir.exists()) {
                         tempDir.mkdirs();
                     }
+                    File fileTmp = File.createTempFile(fileName, "tmp", tempDir);
+                    Log.debug("Extracting " + fileName + " to " + file + " via " + fileTmp);
                     Files.copy(is, fileTmp.toPath());
                     Files.move(fileTmp.toPath(), file.toPath(), StandardCopyOption.ATOMIC_MOVE, StandardCopyOption.REPLACE_EXISTING);
                 }
