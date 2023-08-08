@@ -66,13 +66,14 @@ jobs:
         with:
           name: linux-x64-jars
           path: target/skija-linux-x64-*
-      - run: python3 script/clean.py
-      - run: python3 script/build.py --arch arm64
-      - run: python3 script/package_platform.py --arch arm64
-      - uses: actions/upload-artifact@v3
-        with:
-          name: linux-arm64-jars
-          path: target/skija-linux-arm64-*
+      # Disabled until https://github.com/HumbleUI/SkiaBuild/issues/8
+      # - run: python3 script/clean.py
+      # - run: python3 script/build.py --arch arm64
+      # - run: python3 script/package_platform.py --arch arm64
+      # - uses: actions/upload-artifact@v3
+      #   with:
+      #     name: linux-arm64-jars
+      #     path: target/skija-linux-arm64-*
 
   build_windows:
     runs-on: windows-2022
@@ -119,10 +120,10 @@ jobs:
         with:
           name: linux-x64-jars
           path: target
-      - uses: actions/download-artifact@v3
-        with:
-          name: linux-arm64-jars
-          path: target
+      # - uses: actions/download-artifact@v3
+      #   with:
+      #     name: linux-arm64-jars
+      #     path: target
       - uses: actions/download-artifact@v3
         with:
           name: windows-x64-jars

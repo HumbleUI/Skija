@@ -29,6 +29,7 @@ Removed:
 
 - [ BREAKING ] `ImageFilter::MakeAlphaThreshold`
 - [ BREAKING ] `ImageFilter::MakePaint`
+- Disabled Linux ARM64 builds until https://github.com/HumbleUI/SkiaBuild/issues/8
 
 # 0.109.2 - Feb 27, 2022
 
