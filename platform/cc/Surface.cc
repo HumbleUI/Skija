@@ -3,7 +3,6 @@
 #include "GrDirectContext.h"
 #include "SkSurface.h"
 #include "ganesh/SkSurfaceGanesh.h"
-#include "ganesh/mtl/SkSurfaceMetal.h"
 #include "interop.hh"
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Surface__1nMakeRasterDirect
@@ -93,6 +92,8 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Surface__1nMake
 }
 
 #ifdef SK_METAL
+#include "ganesh/mtl/SkSurfaceMetal.h"
+
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Surface__1nMakeFromMTKView
   (JNIEnv* env, jclass jclass, jlong contextPtr, jlong mtkViewPtr, jint surfaceOrigin, jint sampleCount, jint colorType, jlong colorSpacePtr, jobject surfacePropsObj) {
     GrDirectContext* context = reinterpret_cast<GrDirectContext*>(static_cast<uintptr_t>(contextPtr));

@@ -93,7 +93,7 @@ def fetch_maven(group, name, version, classifier=None, repo='https://repo1.maven
   return file
 
 def fetch_all_maven(deps, repo='https://repo1.maven.org/maven2'):
-  return [fetch_maven(dep['group'], dep['name'], dep['version'], repo=repo) for dep in deps]
+  return [fetch_maven(dep['group'], dep['name'], dep['version'], repo=dep.get('repo', repo)) for dep in deps]
 
 def javac(sources, target, classpath = [], modulepath = [], add_modules = [], release = '11', opts=[]):
   makedirs(target)
@@ -125,7 +125,7 @@ def jar(target: str, *content: List[Tuple[str, str]], opts=[]) -> str:
 
 @functools.lru_cache(maxsize=1)
 def lombok():
-  return fetch_maven('org.projectlombok', 'lombok', '1.18.26')
+  return fetch_maven('org.projectlombok', 'lombok', '1.18.28')
 
 def delombok(dirs: List[str], target: str, classpath: List[str] = [], modulepath: List[str] = []):
   sources = files(*[dir + "/**/*.java" for dir in dirs])

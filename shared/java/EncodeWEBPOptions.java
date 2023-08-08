@@ -6,21 +6,16 @@ import lombok.*;
 
 @lombok.Data @With
 public class EncodeWEBPOptions {
-    public enum CompressionMode {
-        LOSSY,
-        LOSSLESS
-    }
-    
-    public static final EncodeWEBPOptions DEFAULT = new EncodeWEBPOptions(CompressionMode.LOSSY, 100f);
+    public static final EncodeWEBPOptions DEFAULT = new EncodeWEBPOptions(EncodeWEBPCompressionMode.LOSSY, 100f);
 
     @ApiStatus.Internal 
-    public final CompressionMode _compressionMode;
+    public final EncodeWEBPCompressionMode _compressionMode;
 
     @ApiStatus.Internal
     public final float _quality;
 
     @ApiStatus.Internal
-    public EncodeWEBPOptions(CompressionMode compression, float quality) {
+    public EncodeWEBPOptions(EncodeWEBPCompressionMode compression, float quality) {
         _compressionMode = compression;
         _quality = quality;
     }

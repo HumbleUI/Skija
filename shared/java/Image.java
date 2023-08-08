@@ -16,6 +16,14 @@ public class Image extends RefCnt implements IHasImageInfo {
     }
 
     /**
+     * @deprecated - use {@link #makeRasterFromBytes(ImageInfo, byte[], long)}
+     */
+    @Deprecated
+    public static Image makeRaster(ImageInfo imageInfo, byte[] bytes, long rowBytes) {
+        return makeRasterFromBytes(imageInfo, bytes, rowBytes);
+    }
+
+    /**
      * <p>Creates Image from pixels.</p>
      *
      * <p>Image is returned if pixels are valid. Valid Pixmap parameters include:</p>
@@ -34,22 +42,30 @@ public class Image extends RefCnt implements IHasImageInfo {
      *
      * @see <a href="https://fiddle.skia.org/c/@Image_MakeRasterCopy">https://fiddle.skia.org/c/@Image_MakeRasterCopy</a>
      */
-    public static Image makeRaster(ImageInfo imageInfo, byte[] bytes, long rowBytes) {
+    public static Image makeRasterFromBytes(ImageInfo imageInfo, byte[] bytes, long rowBytes) {
         try {
             Stats.onNativeCall();
-            long ptr = _nMakeRaster(imageInfo._width,
-                                    imageInfo._height,
-                                    imageInfo._colorInfo._colorType.ordinal(),
-                                    imageInfo._colorInfo._alphaType.ordinal(),
-                                    Native.getPtr(imageInfo._colorInfo._colorSpace),
-                                    bytes,
-                                    rowBytes);
+            long ptr = _nMakeRasterFromBytes(imageInfo._width,
+                                             imageInfo._height,
+                                             imageInfo._colorInfo._colorType.ordinal(),
+                                             imageInfo._colorInfo._alphaType.ordinal(),
+                                             Native.getPtr(imageInfo._colorInfo._colorSpace),
+                                             bytes,
+                                             rowBytes);
             if (ptr == 0)
                 throw new RuntimeException("Failed to makeRaster " + imageInfo + " " + bytes + " " + rowBytes);
             return new Image(ptr);
         } finally {
             ReferenceUtil.reachabilityFence(imageInfo._colorInfo._colorSpace);
         }
+    }
+
+    /**
+     * @deprecated - use {@link #makeRasterFromData(ImageInfo, Data, long)}
+     */
+    @Deprecated
+    public static Image makeRaster(ImageInfo imageInfo, Data data, long rowBytes) {
+        return makeRasterFromData(imageInfo, data, rowBytes);
     }
 
     /**
@@ -69,16 +85,16 @@ public class Image extends RefCnt implements IHasImageInfo {
      * @param rowBytes   how many bytes in a row
      * @return           Image
      */
-    public static Image makeRaster(ImageInfo imageInfo, Data data, long rowBytes) {
+    public static Image makeRasterFromData(ImageInfo imageInfo, Data data, long rowBytes) {
         try {
             Stats.onNativeCall();
-            long ptr = _nMakeRasterData(imageInfo._width,
-                                        imageInfo._height,
-                                        imageInfo._colorInfo._colorType.ordinal(),
-                                        imageInfo._colorInfo._alphaType.ordinal(),
-                                        Native.getPtr(imageInfo._colorInfo._colorSpace),
-                                        Native.getPtr(data),
-                                        rowBytes);
+            long ptr = _nMakeRasterFromData(imageInfo._width,
+                                            imageInfo._height,
+                                            imageInfo._colorInfo._colorType.ordinal(),
+                                            imageInfo._colorInfo._alphaType.ordinal(),
+                                            Native.getPtr(imageInfo._colorInfo._colorSpace),
+                                            Native.getPtr(data),
+                                            rowBytes);
             if (ptr == 0)
                 throw new RuntimeException("Failed to makeRaster " + imageInfo + " " + data + " " + rowBytes);
             return new Image(ptr);
@@ -86,6 +102,14 @@ public class Image extends RefCnt implements IHasImageInfo {
             ReferenceUtil.reachabilityFence(imageInfo._colorInfo._colorSpace);
             ReferenceUtil.reachabilityFence(data);
         }
+    }
+
+    /**
+     * @deprecated - use {@link #makeRasterFromBitmap(Bitmap)}
+     */
+    @Deprecated
+    public static Image makeFromBitmap(@NotNull Bitmap bitmap) {
+        return makeRasterFromBitmap(bitmap);
     }
 
     /**
@@ -108,11 +132,11 @@ public class Image extends RefCnt implements IHasImageInfo {
      * @see <a href="https://fiddle.skia.org/c/@Image_MakeFromBitmap">https://fiddle.skia.org/c/@Image_MakeFromBitmap</a>
      */
     @NotNull @Contract("_ -> new")
-    public static Image makeFromBitmap(@NotNull Bitmap bitmap) {
+    public static Image makeRasterFromBitmap(@NotNull Bitmap bitmap) {
         try {
             assert bitmap != null : "Can’t makeFromBitmap with bitmap == null";
             Stats.onNativeCall();
-            long ptr = _nMakeFromBitmap(Native.getPtr(bitmap));
+            long ptr = _nMakeRasterFromBitmap(Native.getPtr(bitmap));
             if (ptr == 0)
                 throw new RuntimeException("Failed to Image::makeFromBitmap " + bitmap);
             return new Image(ptr);
@@ -121,12 +145,20 @@ public class Image extends RefCnt implements IHasImageInfo {
         }
     }
 
-    @NotNull @Contract("_ -> new")
+    /**
+     * @deprecated - use {@link #makeRasterFromPixmap(Pixmap)}
+     */
+    @Deprecated
     public static Image makeFromPixmap(@NotNull Pixmap pixmap) {
+        return makeRasterFromPixmap(pixmap);
+    }
+
+    @NotNull @Contract("_ -> new")
+    public static Image makeRasterFromPixmap(@NotNull Pixmap pixmap) {
         try {
             assert pixmap != null : "Can’t makeFromPixmap with pixmap == null";
             Stats.onNativeCall();
-            long ptr = _nMakeFromPixmap(Native.getPtr(pixmap));
+            long ptr = _nMakeRasterFromPixmap(Native.getPtr(pixmap));
             if (ptr == 0)
                 throw new RuntimeException("Failed to Image::makeFromRaster " + pixmap);
             return new Image(ptr);
@@ -135,10 +167,18 @@ public class Image extends RefCnt implements IHasImageInfo {
         }
     }
 
-    @NotNull @Contract("_ -> new")
+    /**
+     * @deprecated - use {@link #makeDeferredFromEncodedBytes(byte[])}
+     */
+    @Deprecated
     public static Image makeFromEncoded(byte[] bytes) {
+        return makeDeferredFromEncodedBytes(bytes);
+    }
+
+    @NotNull @Contract("_ -> new")
+    public static Image makeDeferredFromEncodedBytes(byte[] bytes) {
         Stats.onNativeCall();
-        long ptr = _nMakeFromEncoded(bytes);
+        long ptr = _nMakeDeferredFromEncodedBytes(bytes);
         if (ptr == 0)
             throw new IllegalArgumentException("Failed to Image::makeFromEncoded");
         return new Image(ptr);
@@ -168,131 +208,35 @@ public class Image extends RefCnt implements IHasImageInfo {
     }
 
     /**
-     * Encode the provided image and return the resulting bytes.
-     *
-     * @return      nullptr if the pixels could not be read or encoding otherwise fails.
+     * @deprecated - use {@link EncoderPNG#encode(Image)}, {@link EncoderJPEG#encode(Image)} or {@link EncoderWEBP#encode(Image)}
      */
-    @Nullable
-    public Data encodePNG() {
-        return encodePNG(null, EncodePNGOptions.DEFAULT);
+    @Deprecated
+    public Data encodeToData() {
+        return encodeToData(EncodedImageFormat.PNG, 100);
     }
 
     /**
-     * Encode the provided image and return the resulting bytes.
-     *
-     * @param opts  may be used to control the encoding behavior
-     * @return      nullptr if the pixels could not be read or encoding otherwise fails.
+     * @deprecated - use {@link EncoderPNG#encode(Image)}, {@link EncoderJPEG#encode(Image)} or {@link EncoderWEBP#encode(Image)}
      */
-    @Nullable
-    public Data encodePNG(@NotNull EncodePNGOptions opts) {
-        return encodePNG(null, opts);
+    @Deprecated
+    public Data encodeToData(EncodedImageFormat format) {
+        return encodeToData(format, 100);
     }
 
     /**
-     * Encode the provided image and return the resulting Data.
-     *
-     * @param ctx   If the image was created as a texture-backed image on a GPU context, 
-     *              that ctx must be provided so the pixels can be read before being encoded.
-     *              For raster-backed images, ctx can be null.
-     * @param opts  may be used to control the encoding behavior
-     * @return      nullptr if the pixels could not be read or encoding otherwise fails.
+     * @deprecated - use {@link EncoderPNG#encode(Image, EncodePNGOptions)}, {@link EncoderJPEG#encode(Image, EncodeJPEGOptions)} or {@link EncoderWEBP#encode(Image, EncodeWEBPOptions)}
      */
-    @Nullable
-    public Data encodePNG(@Nullable DirectContext ctx, @NotNull EncodePNGOptions opts) {
-        try {
-            assert opts != null : "Can’t encodePNG with opts == null";
-            Stats.onNativeCall();
-            long ptr = _nEncodePNG(_ptr, Native.getPtr(ctx), opts._flags, opts._zlibLevel);
-            return ptr == 0 ? null : new Data(ptr);
-        } finally {
-            ReferenceUtil.reachabilityFence(ctx);
-            ReferenceUtil.reachabilityFence(this);
-        }
-    }
-
-    /**
-     * Encode the provided image and return the resulting bytes.
-     *
-     * @return      nullptr if the pixels could not be read or encoding otherwise fails.
-     */
-    @Nullable
-    public Data encodeJPEG() {
-        return encodeJPEG(null, EncodeJPEGOptions.DEFAULT);
-    }
-
-    /**
-     * Encode the provided image and return the resulting bytes.
-     *
-     * @param opts  may be used to control the encoding behavior
-     * @return      nullptr if the pixels could not be read or encoding otherwise fails.
-     */
-    @Nullable
-    public Data encodeJPEG(@NotNull EncodeJPEGOptions opts) {
-        return encodeJPEG(null, opts);
-    }
-
-    /**
-     * Encode the provided image and return the resulting Data.
-     *
-     * @param ctx   If the image was created as a texture-backed image on a GPU context, 
-     *              that ctx must be provided so the pixels can be read before being encoded.
-     *              For raster-backed images, ctx can be null.
-     * @param opts  may be used to control the encoding behavior
-     * @return      nullptr if the pixels could not be read or encoding otherwise fails.
-     */
-    @Nullable
-    public Data encodeJPEG(@Nullable DirectContext ctx, @NotNull EncodeJPEGOptions opts) {
-        try {
-            assert opts != null : "Can’t encodeJPEG with opts == null";
-            Stats.onNativeCall();
-            long ptr = _nEncodeJPEG(_ptr, Native.getPtr(ctx), opts._quality, opts._downsampleMode.ordinal(), opts._alphaMode.ordinal());
-            return ptr == 0 ? null : new Data(ptr);
-        } finally {
-            ReferenceUtil.reachabilityFence(ctx);
-            ReferenceUtil.reachabilityFence(this);
-        }
-    }
-
-    /**
-     * Encode the provided image and return the resulting bytes.
-     *
-     * @return      nullptr if the pixels could not be read or encoding otherwise fails.
-     */
-    @Nullable
-    public Data encodeWEBP() {
-        return encodeWEBP(null, EncodeWEBPOptions.DEFAULT);
-    }
-
-    /**
-     * Encode the provided image and return the resulting bytes.
-     *
-     * @param opts  may be used to control the encoding behavior
-     * @return      nullptr if the pixels could not be read or encoding otherwise fails.
-     */
-    @Nullable
-    public Data encodeWEBP(@NotNull EncodeWEBPOptions opts) {
-        return encodeWEBP(null, opts);
-    }
-
-    /**
-     * Encode the provided image and return the resulting Data.
-     *
-     * @param ctx   If the image was created as a texture-backed image on a GPU context, 
-     *              that ctx must be provided so the pixels can be read before being encoded.
-     *              For raster-backed images, ctx can be null.
-     * @param opts  may be used to control the encoding behavior
-     * @return      nullptr if the pixels could not be read or encoding otherwise fails.
-     */
-    @Nullable
-    public Data encodeWEBP(@Nullable DirectContext ctx, @NotNull EncodeWEBPOptions opts) {
-        try {
-            assert opts != null : "Can’t encodeWEBP with opts == null";
-            Stats.onNativeCall();
-            long ptr = _nEncodeWEBP(_ptr, Native.getPtr(ctx), opts._compressionMode.ordinal(), opts._quality);
-            return ptr == 0 ? null : new Data(ptr);
-        } finally {
-            ReferenceUtil.reachabilityFence(ctx);
-            ReferenceUtil.reachabilityFence(this);
+    @Deprecated
+    public Data encodeToData(EncodedImageFormat format, int quality) {
+        switch(format) {
+        case PNG:
+            return EncoderPNG.encode(this);
+        case JPEG:
+            return EncoderJPEG.encode(this, EncodeJPEGOptions.DEFAULT.withQuality(quality));
+        case WEBP:
+            return EncoderWEBP.encode(this, EncodeWEBPOptions.DEFAULT.withQuality(quality));
+        default:
+            throw new IllegalArgumentException("Format " + format + " is not supported");
         }
     }
 
@@ -438,15 +382,12 @@ public class Image extends RefCnt implements IHasImageInfo {
         }
     }
 
-    @ApiStatus.Internal public static native long _nMakeRaster(int width, int height, int colorType, int alphaType, long colorSpacePtr, byte[] pixels, long rowBytes);
-    @ApiStatus.Internal public static native long _nMakeRasterData(int width, int height, int colorType, int alphaType, long colorSpacePtr, long dataPtr, long rowBytes);
-    @ApiStatus.Internal public static native long _nMakeFromBitmap(long bitmapPtr);
-    @ApiStatus.Internal public static native long _nMakeFromPixmap(long pixmapPtr);
-    @ApiStatus.Internal public static native long _nMakeFromEncoded(byte[] bytes);
+    @ApiStatus.Internal public static native long _nMakeRasterFromBytes(int width, int height, int colorType, int alphaType, long colorSpacePtr, byte[] pixels, long rowBytes);
+    @ApiStatus.Internal public static native long _nMakeRasterFromData(int width, int height, int colorType, int alphaType, long colorSpacePtr, long dataPtr, long rowBytes);
+    @ApiStatus.Internal public static native long _nMakeRasterFromBitmap(long bitmapPtr);
+    @ApiStatus.Internal public static native long _nMakeRasterFromPixmap(long pixmapPtr);
+    @ApiStatus.Internal public static native long _nMakeDeferredFromEncodedBytes(byte[] bytes);
     @ApiStatus.Internal public static native ImageInfo _nGetImageInfo(long ptr);
-    @ApiStatus.Internal public static native long    _nEncodePNG(long ptr, long ctxPtr, int flags, int zlibLevel);
-    @ApiStatus.Internal public static native long    _nEncodeJPEG(long ptr, long ctxPtr, int quality, int downsampleMode, int alphaMode);
-    @ApiStatus.Internal public static native long    _nEncodeWEBP(long ptr, long ctxPtr, int compressionMode, float quality);
     @ApiStatus.Internal public static native long    _nMakeShader(long ptr, int tmx, int tmy, long samplingMode, float[] localMatrix);
     @ApiStatus.Internal public static native ByteBuffer _nPeekPixels(long ptr);
     @ApiStatus.Internal public static native boolean _nPeekPixelsToPixmap(long ptr, long pixmapPtr);

@@ -3,13 +3,10 @@
 #include "SkBitmap.h"
 #include "SkData.h"
 #include "SkImage.h"
-#include "SkJpegEncoder.h"
-#include "SkPngEncoder.h"
-#include "SkWebpEncoder.h"
 #include "SkShader.h"
 #include "interop.hh"
 
-extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Image__1nMakeRaster
+extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Image__1nMakeRasterFromBytes
   (JNIEnv* env, jclass jclass, jint width, jint height, jint colorType, jint alphaType, jlong colorSpacePtr, jbyteArray bytesArr, jlong rowBytes) {
     SkColorSpace* colorSpace = reinterpret_cast<SkColorSpace*>(static_cast<uintptr_t>(colorSpacePtr));
     SkImageInfo imageInfo = SkImageInfo::Make(width,
@@ -23,7 +20,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Image__1nMakeRa
     return reinterpret_cast<jlong>(image.release());
 }
 
-extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Image__1nMakeRasterData
+extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Image__1nMakeRasterFromData
   (JNIEnv* env, jclass jclass, jint width, jint height, jint colorType, jint alphaType, jlong colorSpacePtr, jlong dataPtr, jlong rowBytes) {
     SkColorSpace* colorSpace = reinterpret_cast<SkColorSpace*>(static_cast<uintptr_t>(colorSpacePtr));
     SkImageInfo imageInfo = SkImageInfo::Make(width,
@@ -36,21 +33,21 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Image__1nMakeRa
     return reinterpret_cast<jlong>(image.release());
 }
 
-extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Image__1nMakeFromBitmap
+extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Image__1nMakeRasterFromBitmap
   (JNIEnv* env, jclass jclass, jlong bitmapPtr) {
     SkBitmap* bitmap = reinterpret_cast<SkBitmap*>(static_cast<uintptr_t>(bitmapPtr));
     sk_sp<SkImage> image = SkImages::RasterFromBitmap(*bitmap);
     return reinterpret_cast<jlong>(image.release());
 }
 
-extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Image__1nMakeFromPixmap
+extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Image__1nMakeRasterFromPixmap
   (JNIEnv* env, jclass jclass, jlong pixmapPtr) {
     SkPixmap* pixmap = reinterpret_cast<SkPixmap*>(static_cast<uintptr_t>(pixmapPtr));
     sk_sp<SkImage> image = SkImages::RasterFromPixmap(*pixmap, nullptr, nullptr);
     return reinterpret_cast<jlong>(image.release());
 }
 
-extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Image__1nMakeFromEncoded
+extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Image__1nMakeDeferredFromEncodedBytes
   (JNIEnv* env, jclass jclass, jbyteArray encodedArray) {
     jsize encodedLen = env->GetArrayLength(encodedArray);
     jbyte* encoded = env->GetByteArrayElements(encodedArray, 0);
@@ -66,34 +63,6 @@ extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_Image__1nGetI
   (JNIEnv* env, jclass jclass, jlong ptr) {
     SkImage* instance = reinterpret_cast<SkImage*>(static_cast<uintptr_t>(ptr));
     return skija::ImageInfo::toJava(env, instance->imageInfo());
-}
-
-extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Image__1nEncodePNG
-  (JNIEnv* env, jclass jclass, jlong ptr, jlong ctxPtr, jint flagsInt, jint zlibLevel) {
-    SkImage* instance = reinterpret_cast<SkImage*>(static_cast<uintptr_t>(ptr));
-    GrDirectContext* ctx = reinterpret_cast<GrDirectContext*>(static_cast<uintptr_t>(ctxPtr));
-    SkPngEncoder::FilterFlag flags = static_cast<SkPngEncoder::FilterFlag>(flagsInt);
-    SkPngEncoder::Options opts {flags, zlibLevel};
-    sk_sp<SkData> data = SkPngEncoder::Encode(ctx, instance, opts);
-    return reinterpret_cast<jlong>(data.release());
-}
-
-extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Image__1nEncodeJPEG
-  (JNIEnv* env, jclass jclass, jlong ptr, jlong ctxPtr, jint quality, jint alphaMode, jint downsampleMode) {
-    SkImage* instance = reinterpret_cast<SkImage*>(static_cast<uintptr_t>(ptr));
-    GrDirectContext* ctx = reinterpret_cast<GrDirectContext*>(static_cast<uintptr_t>(ctxPtr));
-    SkJpegEncoder::Options opts {quality, (SkJpegEncoder::Downsample) downsampleMode, (SkJpegEncoder::AlphaOption) alphaMode};
-    sk_sp<SkData> data = SkJpegEncoder::Encode(ctx, instance, opts);
-    return reinterpret_cast<jlong>(data.release());
-}
-
-extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Image__1nEncodeWEBP
-  (JNIEnv* env, jclass jclass, jlong ptr, jlong ctxPtr, jint compressionMode, jfloat quality) {
-    SkImage* instance = reinterpret_cast<SkImage*>(static_cast<uintptr_t>(ptr));
-    GrDirectContext* ctx = reinterpret_cast<GrDirectContext*>(static_cast<uintptr_t>(ctxPtr));
-    SkWebpEncoder::Options opts {(SkWebpEncoder::Compression) compressionMode, quality};
-    sk_sp<SkData> data = SkWebpEncoder::Encode(ctx, instance, opts);
-    return reinterpret_cast<jlong>(data.release());
 }
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Image__1nMakeShader

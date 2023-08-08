@@ -2,6 +2,10 @@ package io.github.humbleui.skija;
 
 import org.jetbrains.annotations.*;
 
+/**
+ * @deprecated - use {@link EncoderJPEG}, {@link EncoderPNG} or {@link EncoderWEBP} directly
+ */
+@Deprecated
 public enum EncodedImageFormat {
     BMP,
     GIF,

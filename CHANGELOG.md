@@ -1,9 +1,5 @@
 # 0.116.0 - Aug 8, 2023
 
-Added:
-
-- ARM64 jars thx @Glavo
-
 Fixed:
 
 - Race condition in shared library unpacking #54 #56 thx @dzaima
@@ -13,8 +9,13 @@ Changed:
 
 - Skia version m109-664500fa93 -> m116-f44dbc40d8
 - [ BREAKING ] `Bitmap::erase(Color4f)` no longer takes ColorSpace
-- [ BREAKING ] `Image::encodeToData` has been replaced with `::encodeJPEG`, `::encodePNG`, `::encodeWEBP`, plus the encoding options
 - [ BREAKING ] `ImageFilter::MakeMagnifier` required two more arguments: `zoomAmount` and `SamplingMode`
+- `Image::makeRaster(ImageInfo, byte[], long)` -> `makeRasterFromBytes`
+- `Image::makeRaster(ImageInfo, Data, long)` -> `makeRasterFromData`
+- `Image::makeRasterBitmap(Bitmap)` -> `makeRasterFromBitmap`
+- `Image::makeRasterPixmap(Pixmap)` -> `makeRasterFromPixmap`
+- `Image::makeFromEncoded(byte[])` -> `makeDeferredFromEncodedBytes`
+- `Image::encodeToData` has been replaced with `EncoderJPEG`, `EncoderPNG`, `EncoderWEBP`, plus the encoding options
 
 Removed:
 
