@@ -11,7 +11,7 @@ public class ImageFiltersScene extends Scene {
 
     public ImageFiltersScene() {
         try {
-            image = Image.makeFromEncoded(Files.readAllBytes(java.nio.file.Path.of(file("images/circus.jpg"))));
+            image = Image.makeDeferredFromEncodedBytes(Files.readAllBytes(java.nio.file.Path.of(file("images/circus.jpg"))));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

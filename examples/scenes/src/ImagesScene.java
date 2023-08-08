@@ -16,16 +16,16 @@ public class ImagesScene extends Scene {
 
     public ImagesScene() {
         try {
-            circus = Image.makeFromEncoded(Files.readAllBytes(Path.of(file("images/circus.jpg"))));
-            circusCropped = Image.makeFromEncoded(Files.readAllBytes(Path.of(file("images/circus.jpg"))));
-            cloud = Image.makeFromEncoded(Files.readAllBytes(Path.of(file("images/cloud.png"))));
-            ducks = Image.makeFromEncoded(Files.readAllBytes(Path.of(file("images/ducks.jpg"))));
+            circus = Image.makeDeferredFromEncodedBytes(Files.readAllBytes(Path.of(file("images/circus.jpg"))));
+            circusCropped = Image.makeDeferredFromEncodedBytes(Files.readAllBytes(Path.of(file("images/circus.jpg"))));
+            cloud = Image.makeDeferredFromEncodedBytes(Files.readAllBytes(Path.of(file("images/cloud.png"))));
+            ducks = Image.makeDeferredFromEncodedBytes(Files.readAllBytes(Path.of(file("images/ducks.jpg"))));
             tests = new Image[] {
-                Image.makeFromEncoded(Files.readAllBytes(Path.of(file("images/icc-v2-gbr.jpg")))),
-                Image.makeFromEncoded(Files.readAllBytes(Path.of(file("images/purple-displayprofile.png")))),
-                Image.makeFromEncoded(Files.readAllBytes(Path.of(file("images/wide-gamut.png")))),
-                Image.makeFromEncoded(Files.readAllBytes(Path.of(file("images/wide_gamut_yellow_224_224_64.jpeg")))),
-                Image.makeFromEncoded(Files.readAllBytes(Path.of(file("images/webkit_logo_p3.png")))),
+                Image.makeDeferredFromEncodedBytes(Files.readAllBytes(Path.of(file("images/icc-v2-gbr.jpg")))),
+                Image.makeDeferredFromEncodedBytes(Files.readAllBytes(Path.of(file("images/purple-displayprofile.png")))),
+                Image.makeDeferredFromEncodedBytes(Files.readAllBytes(Path.of(file("images/wide-gamut.png")))),
+                Image.makeDeferredFromEncodedBytes(Files.readAllBytes(Path.of(file("images/wide_gamut_yellow_224_224_64.jpeg")))),
+                Image.makeDeferredFromEncodedBytes(Files.readAllBytes(Path.of(file("images/webkit_logo_p3.png")))),
             };
         } catch (IOException e) {
             throw new RuntimeException(e);

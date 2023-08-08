@@ -12,9 +12,9 @@ public class ShadowsScene extends Scene {
 
     public ShadowsScene() {
         try {
-            figma = Image.makeFromEncoded(Files.readAllBytes(java.nio.file.Path.of(file("images/shadows/figma.png"))));
-            firefox = Image.makeFromEncoded(Files.readAllBytes(java.nio.file.Path.of(file("images/shadows/firefox.png"))));
-            safari = Image.makeFromEncoded(Files.readAllBytes(java.nio.file.Path.of(file("images/shadows/safari.png"))));
+            figma = Image.makeDeferredFromEncodedBytes(Files.readAllBytes(java.nio.file.Path.of(file("images/shadows/figma.png"))));
+            firefox = Image.makeDeferredFromEncodedBytes(Files.readAllBytes(java.nio.file.Path.of(file("images/shadows/firefox.png"))));
+            safari = Image.makeDeferredFromEncodedBytes(Files.readAllBytes(java.nio.file.Path.of(file("images/shadows/safari.png"))));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

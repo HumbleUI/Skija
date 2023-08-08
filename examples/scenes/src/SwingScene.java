@@ -761,7 +761,7 @@ class SkiaGraphics extends java.awt.Graphics2D {
                 b.erase(color, IRect.makeXYWH(x, y, 1, 1));
             }
         }
-        i = Image.makeFromBitmap(b);
+        i = Image.makeRasterFromBitmap(b);
         rasterCache.put(bi, i);
         return i;
     }

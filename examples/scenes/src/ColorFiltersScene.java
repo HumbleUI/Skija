@@ -11,7 +11,7 @@ public class ColorFiltersScene extends Scene {
 
     public ColorFiltersScene() {
         try {
-            image = Image.makeFromEncoded(Files.readAllBytes(Path.of(file("images/circus.jpg"))));
+            image = Image.makeDeferredFromEncodedBytes(Files.readAllBytes(Path.of(file("images/circus.jpg"))));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

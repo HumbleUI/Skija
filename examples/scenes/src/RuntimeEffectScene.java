@@ -14,7 +14,7 @@ public class RuntimeEffectScene extends Scene {
 
     public RuntimeEffectScene() {
         try {
-            _texture = Image.makeFromEncoded(Files.readAllBytes(Path.of(file("images/triangle.png"))));
+            _texture = Image.makeDeferredFromEncodedBytes(Files.readAllBytes(Path.of(file("images/triangle.png"))));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

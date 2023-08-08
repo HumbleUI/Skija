@@ -5,7 +5,7 @@
 #include "ganesh/SkSurfaceGanesh.h"
 #include "interop.hh"
 
-extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Surface__1nMakeRasterDirect
+extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Surface__1nWrapPixels
   (JNIEnv* env, jclass jclass,
     jint width, jint height, jint colorType, jint alphaType, jlong colorSpacePtr,
     jlong pixelsPtr, jlong rowBytes,
@@ -27,7 +27,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Surface__1nMake
     return reinterpret_cast<jlong>(instance.release());
 }
 
-extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Surface__1nMakeRasterDirectWithPixmap
+extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Surface__1nWrapPixelsPixmap
   (JNIEnv* env, jclass jclass,
     jlong pixmapPtr, jobject surfacePropsObj)
 {
@@ -59,17 +59,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Surface__1nMake
     return reinterpret_cast<jlong>(instance.release());
 }
 
-extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Surface__1nMakeRasterN32Premul
-  (JNIEnv* env, jclass jclass, jint width, jint height) {
-    SkImageInfo imageInfo = SkImageInfo::MakeN32Premul(width, height);
-    sk_sp<SkSurface> surface = SkSurfaces::Raster(
-        imageInfo,
-        /* const SkSurfaceProps* */ nullptr
-    );
-    return reinterpret_cast<jlong>(surface.release());
-}
-
-extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Surface__1nMakeFromBackendRenderTarget
+extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Surface__1nWrapBackendRenderTarget
   (JNIEnv* env, jclass jclass, jlong pContext, jlong pBackendRenderTarget, jint surfaceOrigin, jint colorType, jlong colorSpacePtr, jobject surfacePropsObj) {
     GrDirectContext* context = reinterpret_cast<GrDirectContext*>(static_cast<uintptr_t>(pContext));
     GrBackendRenderTarget* backendRenderTarget = reinterpret_cast<GrBackendRenderTarget*>(static_cast<uintptr_t>(pBackendRenderTarget));
@@ -94,7 +84,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Surface__1nMake
 #ifdef SK_METAL
 #include "ganesh/mtl/SkSurfaceMetal.h"
 
-extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Surface__1nMakeFromMTKView
+extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Surface__1nWrapMTKView
   (JNIEnv* env, jclass jclass, jlong contextPtr, jlong mtkViewPtr, jint surfaceOrigin, jint sampleCount, jint colorType, jlong colorSpacePtr, jobject surfacePropsObj) {
     GrDirectContext* context = reinterpret_cast<GrDirectContext*>(static_cast<uintptr_t>(contextPtr));
     GrMTLHandle* mtkView = reinterpret_cast<GrMTLHandle*>(static_cast<uintptr_t>(mtkViewPtr));

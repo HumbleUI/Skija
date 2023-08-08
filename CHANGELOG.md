@@ -16,6 +16,14 @@ Changed:
 - `Image::makeRasterPixmap(Pixmap)` -> `makeRasterFromPixmap`
 - `Image::makeFromEncoded(byte[])` -> `makeDeferredFromEncodedBytes`
 - `Image::encodeToData` has been replaced with `EncoderJPEG`, `EncoderPNG`, `EncoderWEBP`, plus the encoding options
+- `Surface::makeRasterDirect` -> `wrapPixels`
+- `Surface::makeFromBackendRenderTarget` -> `wrapBackendRenderTarget`
+- `Surface::makeFromMTKView` -> `wrapMTKView`
+
+Deprecated:
+
+- `Surface::makeRasterN32Premul`
+- `EncodedImageFormat`
 
 Removed:
 

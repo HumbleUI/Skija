@@ -41,7 +41,7 @@ public class BitmapScene extends Scene {
         try (Bitmap bitmap = new Bitmap();) {
             bitmap.allocPixels(new ImageInfo((int) (target.getWidth() * dpi), (int) (target.getHeight() * dpi), ColorType.GRAY_8, ColorAlphaType.OPAQUE));
             if (canvas.readPixels(bitmap, (int) ((target.getLeft() - 10) * dpi), (int) ((target.getTop() - 10) * dpi))) {
-                try (Image image = Image.makeFromBitmap(bitmap.setImmutable())) {
+                try (Image image = Image.makeRasterFromBitmap(bitmap.setImmutable())) {
                     canvas.drawImageRect(image, target.toRect());
                 }
             }
@@ -108,7 +108,7 @@ public class BitmapScene extends Scene {
                 .closePath();
             canvas2.drawPath(path, stroke);
 
-            try (Image image = Image.makeFromBitmap(bitmap.setImmutable())) {
+            try (Image image = Image.makeRasterFromBitmap(bitmap.setImmutable())) {
                 canvas.drawImageRect(image, target.toRect());
             }
         }
@@ -148,7 +148,7 @@ public class BitmapScene extends Scene {
 
                 bitmap.installPixels(dstInfo, pixels, rowBytes);
                 bitmap.notifyPixelsChanged();
-                try (var image = Image.makeFromBitmap(bitmap.setImmutable());) {
+                try (var image = Image.makeRasterFromBitmap(bitmap.setImmutable());) {
                     canvas.drawImageRect(image, inner.toRect());
                 }
             }
@@ -167,7 +167,7 @@ public class BitmapScene extends Scene {
             src.allocPixels(srcInfo);
             if (canvas.readPixels(src, (int) (target.getLeft() * dpi), (int) (target.getTop() * dpi))) {
                 src.extractSubset(dst, Rect.makeXYWH(target.getWidth() / 4 * dpi, target.getHeight() / 4 * dpi, target.getWidth() / 2 * dpi, target.getHeight() / 2 * dpi).toIRect());
-                try (var image = Image.makeFromBitmap(dst.setImmutable());) {
+                try (var image = Image.makeRasterFromBitmap(dst.setImmutable());) {
                     canvas.drawImageRect(image, target.toRect());
                 }
             }
@@ -188,7 +188,7 @@ public class BitmapScene extends Scene {
                 var pixelRef = src.getPixelRef();
                 dst.setImageInfo(info.withWidthHeight((int) (target.getWidth() / 2 * dpi), (int) (target.getHeight() / 2 * dpi)));
                 dst.setPixelRef(pixelRef, (int) (target.getWidth() / 4 * dpi), (int) (target.getHeight() / 4 * dpi));
-                try (var image = Image.makeFromBitmap(dst.setImmutable());) {
+                try (var image = Image.makeRasterFromBitmap(dst.setImmutable());) {
                     canvas.drawImageRect(image, target.toRect());
                 }
             }
@@ -212,12 +212,12 @@ public class BitmapScene extends Scene {
                 int color = (alpha << 24) | (alpha << 16) | (0 << 8) | (255 - alpha);
                 src.erase(color, IRect.makeXYWH(x, 0, 1, (int) (target.getHeight() / 2 * dpi)));
             }
-            try (var image = Image.makeFromBitmap(src.setImmutable());) {
+            try (var image = Image.makeRasterFromBitmap(src.setImmutable());) {
                 canvas.drawImageRect(image, Rect.makeXYWH(target.getLeft(), target.getTop(), target.getWidth(), target.getHeight() / 2));
             }
 
             if (src.extractAlpha(dst)) {
-                try (var image = Image.makeFromBitmap(dst.setImmutable());) {
+                try (var image = Image.makeRasterFromBitmap(dst.setImmutable());) {
                     canvas.drawImageRect(image, Rect.makeXYWH(target.getLeft(), target.getTop() + target.getHeight() / 2, target.getWidth(), target.getHeight() / 2));
                 }
             }
@@ -238,7 +238,7 @@ public class BitmapScene extends Scene {
             src.erase(red);
             var color = src.getColor4f((int) (w / 2 * dpi), (int) (h / 2 * dpi));
             assert new Color4f(1, 0, 0).equals(color) : "Expected " + new Color4f(1, 0, 0) + ", got " + color;
-            try (var image = Image.makeFromBitmap(src.setImmutable());) {
+            try (var image = Image.makeRasterFromBitmap(src.setImmutable());) {
                 canvas.drawImageRect(image, Rect.makeXYWH(target.getLeft(), target.getTop(), w, h));
             }
         }
@@ -248,7 +248,7 @@ public class BitmapScene extends Scene {
             src.erase(red);
             var color = src.getColor4f((int) (w / 2 * dpi), (int) (h / 2 * dpi));
             assert red.equals(color) : "Expected " + red + ", got " + color;
-            try (var image = Image.makeFromBitmap(src.setImmutable());) {
+            try (var image = Image.makeRasterFromBitmap(src.setImmutable());) {
                 canvas.drawImageRect(image, Rect.makeXYWH(target.getLeft() + w, target.getTop(), w, h));
             }
         }
@@ -258,7 +258,7 @@ public class BitmapScene extends Scene {
             src.erase(red, IRect.makeXYWH((int) (w / 4 * dpi), (int) (h / 4 * dpi), (int) (w / 2 * dpi), (int) (h / 2 * dpi)));
             var color = src.getColor4f((int) (w / 2 * dpi), (int) (h / 2 * dpi));
             assert new Color4f(1, 0, 0).equals(color) : "Expected " + new Color4f(1, 0, 0) + ", got " + color;
-            try (var image = Image.makeFromBitmap(src.setImmutable());) {
+            try (var image = Image.makeRasterFromBitmap(src.setImmutable());) {
                 canvas.drawImageRect(image, Rect.makeXYWH(target.getLeft(), target.getTop() + h, w, h));
             }
         }
@@ -268,7 +268,7 @@ public class BitmapScene extends Scene {
             src.erase(red, IRect.makeXYWH((int) (w / 4 * dpi), (int) (h / 4 * dpi), (int) (w / 2 * dpi), (int) (h / 2 * dpi)));
             var color = src.getColor4f((int) (w / 2 * dpi), (int) (h / 2 * dpi));
             assert red.equals(color) : "Expected " + red + ", got " + color;
-            try (var image = Image.makeFromBitmap(src.setImmutable());) {
+            try (var image = Image.makeRasterFromBitmap(src.setImmutable());) {
                 canvas.drawImageRect(image, Rect.makeXYWH(target.getLeft() + w, target.getTop() + h, w, h));
             }
         }

@@ -13,7 +13,7 @@ public class ImageCodecsScene extends Scene {
     public void loadImage(String file) {
         try {
             var path = Path.of(file("images/codecs/" + file));
-            images.add(new Pair(file, Image.makeFromEncoded(Files.readAllBytes(path))));
+            images.add(new Pair(file, Image.makeDeferredFromEncodedBytes(Files.readAllBytes(path))));
         } catch (IllegalArgumentException e) {
             images.add(new Pair(file, null));
         } catch (IOException e) {

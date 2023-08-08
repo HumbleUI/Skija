@@ -12,9 +12,14 @@ public class Surface extends RefCnt {
     @ApiStatus.Internal public final DirectContext _context;
     @ApiStatus.Internal public final BackendRenderTarget _renderTarget;
 
-    @NotNull @Contract("_ -> new")
-    public static Surface makeRasterDirect(@NotNull Pixmap pixmap) {
-        return makeRasterDirect(pixmap, null);
+    /**
+     * @deprecated - use {@link #wrapPixels(ImageInfo, long, long)}
+     */
+    @Deprecated
+    public static Surface makeRasterDirect(@NotNull ImageInfo imageInfo,
+                                           long pixelsPtr,
+                                           long rowBytes) {
+        return wrapPixels(imageInfo, pixelsPtr, rowBytes, null);
     }
 
     /**
@@ -40,27 +45,21 @@ public class Surface extends RefCnt {
      * @return              created Surface
      */
     @NotNull @Contract("_, _, _ -> new")
-    public static Surface makeRasterDirect(@NotNull ImageInfo imageInfo,
-                                           long pixelsPtr,
-                                           long rowBytes) {
-        return makeRasterDirect(imageInfo, pixelsPtr, rowBytes, null);
+    public static Surface wrapPixels(@NotNull ImageInfo imageInfo,
+                                     long pixelsPtr,
+                                     long rowBytes) {
+        return wrapPixels(imageInfo, pixelsPtr, rowBytes, null);
     }
 
-    @NotNull @Contract("_, _ -> new")
-    public static Surface makeRasterDirect(@NotNull Pixmap pixmap,
+    /**
+     * @deprecated - use {@link #wrapPixels(ImageInfo, long, long, SurfaceProps)}
+     */
+    @Deprecated
+    public static Surface makeRasterDirect(@NotNull ImageInfo imageInfo,
+                                           long pixelsPtr,
+                                           long rowBytes,
                                            @Nullable SurfaceProps surfaceProps) {
-        try {
-            assert pixmap != null : "Can’t makeRasterDirect with pixmap == null";
-            Stats.onNativeCall();
-            long ptr = _nMakeRasterDirectWithPixmap(
-                Native.getPtr(pixmap), surfaceProps
-            );
-            if (ptr == 0)
-                throw new IllegalArgumentException(String.format("Failed Surface.makeRasterDirect(%s, %s)", pixmap, surfaceProps));
-            return new Surface(ptr);
-        } finally {
-            ReferenceUtil.reachabilityFence(pixmap);
-        }
+        return wrapPixels(imageInfo, pixelsPtr, rowBytes, surfaceProps);
     }
 
     /**
@@ -88,14 +87,14 @@ public class Surface extends RefCnt {
      * @return              created Surface
      */
     @NotNull @Contract("_, _, _, _ -> new")
-    public static Surface makeRasterDirect(@NotNull ImageInfo imageInfo,
-                                           long pixelsPtr,
-                                           long rowBytes,
-                                           @Nullable SurfaceProps surfaceProps) {
+    public static Surface wrapPixels(@NotNull ImageInfo imageInfo,
+                                     long pixelsPtr,
+                                     long rowBytes,
+                                     @Nullable SurfaceProps surfaceProps) {
         try {
-            assert imageInfo != null : "Can’t makeRasterDirect with imageInfo == null";
+            assert imageInfo != null : "Can’t wrapPixels with imageInfo == null";
             Stats.onNativeCall();
-            long ptr = _nMakeRasterDirect(
+            long ptr = _nWrapPixels(
                 imageInfo._width,
                 imageInfo._height,
                 imageInfo._colorInfo._colorType.ordinal(),
@@ -104,11 +103,51 @@ public class Surface extends RefCnt {
                 pixelsPtr,
                 rowBytes,
                 surfaceProps);
-            if (ptr == 0)
-                throw new IllegalArgumentException(String.format("Failed Surface.makeRasterDirect(%s, %d, %d, %s)", imageInfo, pixelsPtr, rowBytes, surfaceProps));
+            if (ptr == 0) {
+                throw new IllegalArgumentException(String.format("Failed Surface.wrapPixels(%s, %d, %d, %s)", imageInfo, pixelsPtr, rowBytes, surfaceProps));
+            }
             return new Surface(ptr);
         } finally {
             ReferenceUtil.reachabilityFence(imageInfo._colorInfo._colorSpace);
+        }
+    }
+
+    /**
+     * @deprecated - use {@link #wrapPixels(Pixmap)}
+     */
+    @Deprecated
+    public static Surface makeRasterDirect(@NotNull Pixmap pixmap) {
+        return wrapPixels(pixmap, null);
+    }
+
+    @NotNull @Contract("_ -> new")
+    public static Surface wrapPixels(@NotNull Pixmap pixmap) {
+        return wrapPixels(pixmap, null);
+    }
+
+    
+    /**
+     * @deprecated - use {@link #wrapPixels(Pixmap, SurfaceProps)}
+     */
+    @Deprecated
+    public static Surface makeRasterDirect(@NotNull Pixmap pixmap,
+                                           @Nullable SurfaceProps surfaceProps) {
+        return wrapPixels(pixmap, surfaceProps);
+    }
+
+    @NotNull @Contract("_, _ -> new")
+    public static Surface wrapPixels(@NotNull Pixmap pixmap,
+                                     @Nullable SurfaceProps surfaceProps) {
+        try {
+            assert pixmap != null : "Can’t wrapPixels with pixmap == null";
+            Stats.onNativeCall();
+            long ptr = _nWrapPixelsPixmap(Native.getPtr(pixmap), surfaceProps);
+            if (ptr == 0) {
+                throw new IllegalArgumentException(String.format("Failed Surface.wrapPixels(%s, %s)", pixmap, surfaceProps));
+            }
+            return new Surface(ptr);
+        } finally {
+            ReferenceUtil.reachabilityFence(pixmap);
         }
     }
 
@@ -201,6 +240,18 @@ public class Surface extends RefCnt {
     }
 
     /**
+     * @deprecated - use {@link #wrapBackendRenderTarget(DirectContext, BackendRenderTarget, SurfaceOrigin, SurfaceColorFormat, ColorSpace)}
+     */
+    @Deprecated
+    public static Surface makeFromBackendRenderTarget(DirectContext context,
+                                                      BackendRenderTarget rt,
+                                                      SurfaceOrigin origin,
+                                                      SurfaceColorFormat colorFormat,
+                                                      ColorSpace colorSpace) {
+        return wrapBackendRenderTarget(context, rt, origin, colorFormat, colorSpace, null);
+    }
+
+    /**
      * <p>Wraps a GPU-backed buffer into {@link Surface}.</p>
      *
      * <p>Caller must ensure backendRenderTarget is valid for the lifetime of returned {@link Surface}.</p>
@@ -220,13 +271,27 @@ public class Surface extends RefCnt {
      * @see <a href="https://fiddle.skia.org/c/@Surface_MakeFromBackendTexture">https://fiddle.skia.org/c/@Surface_MakeFromBackendTexture</a>
      */
     @NotNull
-    public static Surface makeFromBackendRenderTarget(@NotNull DirectContext context,
-                                                      @NotNull BackendRenderTarget rt,
-                                                      @NotNull SurfaceOrigin origin,
-                                                      @NotNull SurfaceColorFormat colorFormat,
-                                                      @Nullable ColorSpace colorSpace) {
-        return makeFromBackendRenderTarget(context, rt, origin, colorFormat, colorSpace, null);
+    public static Surface wrapBackendRenderTarget(@NotNull DirectContext context,
+                                                  @NotNull BackendRenderTarget rt,
+                                                  @NotNull SurfaceOrigin origin,
+                                                  @NotNull SurfaceColorFormat colorFormat,
+                                                  @Nullable ColorSpace colorSpace) {
+        return wrapBackendRenderTarget(context, rt, origin, colorFormat, colorSpace, null);
     }
+
+    /**
+     * @deprecated - use {@link #wrapBackendRenderTarget(DirectContext, BackendRenderTarget, SurfaceOrigin, SurfaceColorFormat, ColorSpace, SurfaceProps)}
+     */
+    @Deprecated
+    public static Surface makeFromBackendRenderTarget(DirectContext context,
+                                                      BackendRenderTarget rt,
+                                                      SurfaceOrigin origin,
+                                                      SurfaceColorFormat colorFormat,
+                                                      ColorSpace colorSpace,
+                                                      SurfaceProps surfaceProps) {
+        return wrapBackendRenderTarget(context, rt, origin, colorFormat, colorSpace, surfaceProps);
+    }
+
     /**
      * <p>Wraps a GPU-backed buffer into {@link Surface}.</p>
      *
@@ -247,22 +312,23 @@ public class Surface extends RefCnt {
      * @return              Surface if all parameters are valid; otherwise, null
      * @see <a href="https://fiddle.skia.org/c/@Surface_MakeFromBackendTexture">https://fiddle.skia.org/c/@Surface_MakeFromBackendTexture</a>
      */
+
     @NotNull
-    public static Surface makeFromBackendRenderTarget(@NotNull DirectContext context,
+    public static Surface wrapBackendRenderTarget(@NotNull DirectContext context,
                                                       @NotNull BackendRenderTarget rt,
                                                       @NotNull SurfaceOrigin origin,
                                                       @NotNull SurfaceColorFormat colorFormat,
                                                       @Nullable ColorSpace colorSpace,
                                                       @Nullable SurfaceProps surfaceProps) {
         try {
-            assert context != null : "Can’t makeFromBackendRenderTarget with context == null";
-            assert rt != null : "Can’t makeFromBackendRenderTarget with rt == null";
-            assert origin != null : "Can’t makeFromBackendRenderTarget with origin == null";
-            assert colorFormat != null : "Can’t makeFromBackendRenderTarget with colorFormat == null";
+            assert context != null : "Can’t wrapBackendRenderTarget with context == null";
+            assert rt != null : "Can’t wrapBackendRenderTarget with rt == null";
+            assert origin != null : "Can’t wrapBackendRenderTarget with origin == null";
+            assert colorFormat != null : "Can’t wrapBackendRenderTarget with colorFormat == null";
             Stats.onNativeCall();
-            long ptr = _nMakeFromBackendRenderTarget(Native.getPtr(context), Native.getPtr(rt), origin.ordinal(), colorFormat.ordinal(), Native.getPtr(colorSpace), surfaceProps);
+            long ptr = _nWrapBackendRenderTarget(Native.getPtr(context), Native.getPtr(rt), origin.ordinal(), colorFormat.ordinal(), Native.getPtr(colorSpace), surfaceProps);
             if (ptr == 0)
-                throw new IllegalArgumentException(String.format("Failed Surface.makeFromBackendRenderTarget(%s, %s, %s, %s, %s)", context, rt, origin, colorFormat, colorSpace));
+                throw new IllegalArgumentException(String.format("Failed Surface.wrapBackendRenderTarget(%s, %s, %s, %s, %s)", context, rt, origin, colorFormat, colorSpace));
             return new Surface(ptr, context, rt);
         } finally {
             ReferenceUtil.reachabilityFence(context);
@@ -271,7 +337,10 @@ public class Surface extends RefCnt {
         }
     }
 
-    @NotNull
+    /**
+     * @deprecated - use {@link #wrapMTKView(DirectContext, long, SurfaceOrigin, int, SurfaceColorFormat, ColorSpace, SurfaceProps)}
+     */
+    @Deprecated
     public static Surface makeFromMTKView(@NotNull DirectContext context,
                                           long mtkViewPtr,
                                           @NotNull SurfaceOrigin origin,
@@ -279,14 +348,25 @@ public class Surface extends RefCnt {
                                           @NotNull SurfaceColorFormat colorFormat,
                                           @Nullable ColorSpace colorSpace,
                                           @Nullable SurfaceProps surfaceProps) {
+        return wrapMTKView(context, mtkViewPtr, origin, sampleCount, colorFormat, colorSpace, surfaceProps);
+    }
+
+    @NotNull
+    public static Surface wrapMTKView(@NotNull DirectContext context,
+                                      long mtkViewPtr,
+                                      @NotNull SurfaceOrigin origin,
+                                      int sampleCount,
+                                      @NotNull SurfaceColorFormat colorFormat,
+                                      @Nullable ColorSpace colorSpace,
+                                      @Nullable SurfaceProps surfaceProps) {
         try {
-            assert context != null : "Can’t makeFromBackendRenderTarget with context == null";
-            assert origin != null : "Can’t makeFromBackendRenderTarget with origin == null";
-            assert colorFormat != null : "Can’t makeFromBackendRenderTarget with colorFormat == null";
+            assert context != null : "Can’t wrapMTKView with context == null";
+            assert origin != null : "Can’t wrapMTKView with origin == null";
+            assert colorFormat != null : "Can’t wrapMTKView with colorFormat == null";
             Stats.onNativeCall();
-            long ptr = _nMakeFromMTKView(Native.getPtr(context), mtkViewPtr, origin.ordinal(), sampleCount, colorFormat.ordinal(), Native.getPtr(colorSpace), surfaceProps);
+            long ptr = _nWrapMTKView(Native.getPtr(context), mtkViewPtr, origin.ordinal(), sampleCount, colorFormat.ordinal(), Native.getPtr(colorSpace), surfaceProps);
             if (ptr == 0)
-                throw new IllegalArgumentException(String.format("Failed Surface.makeFromMTKView(%s, %s, %s, %s, %s, %s)", context, mtkViewPtr, origin, colorFormat, colorSpace, surfaceProps));
+                throw new IllegalArgumentException(String.format("Failed Surface.WrapMTKView(%s, %s, %s, %s, %s, %s)", context, mtkViewPtr, origin, colorFormat, colorSpace, surfaceProps));
             return new Surface(ptr, context);
         } finally {
             ReferenceUtil.reachabilityFence(context);
@@ -295,6 +375,8 @@ public class Surface extends RefCnt {
     }
 
     /**
+     * @deprecated - use makeRaster(ImageInfo.makeN32Premul(width, height))
+     * 
      * <p>Allocates raster {@link Surface}.</p>
      *
      * <p>Canvas returned by Surface draws directly into pixels. Allocates and zeroes pixel memory.
@@ -312,13 +394,9 @@ public class Surface extends RefCnt {
      * @return Surface if all parameters are valid; otherwise, null
      * @see <a href="https://fiddle.skia.org/c/@Surface_MakeRasterN32Premul">https://fiddle.skia.org/c/@Surface_MakeRasterN32Premul</a>
      */
-    @NotNull
+    @NotNull @Deprecated
     public static Surface makeRasterN32Premul(int width, int height) {
-        Stats.onNativeCall();
-        long ptr = _nMakeRasterN32Premul(width, height);
-        if (ptr == 0)
-            throw new IllegalArgumentException(String.format("Failed Surface.makeRasterN32Premul(%d, %d)", width, height));
-        return new Surface(ptr);
+        return makeRaster(ImageInfo.makeN32Premul(width, height));
     }
 
     /**
@@ -889,12 +967,11 @@ public class Surface extends RefCnt {
         _renderTarget = renderTarget;
     }
 
-    public static native long _nMakeRasterDirect(int width, int height, int colorType, int alphaType, long colorSpacePtr, long pixelsPtr, long rowBytes, SurfaceProps surfaceProps);
-    public static native long _nMakeRasterDirectWithPixmap(long pixmapPtr, SurfaceProps surfaceProps);
+    public static native long _nWrapPixels(int width, int height, int colorType, int alphaType, long colorSpacePtr, long pixelsPtr, long rowBytes, SurfaceProps surfaceProps);
+    public static native long _nWrapPixelsPixmap(long pixmapPtr, SurfaceProps surfaceProps);
     public static native long _nMakeRaster(int width, int height, int colorType, int alphaType, long colorSpacePtr, long rowBytes, SurfaceProps surfaceProps);
-    public static native long _nMakeRasterN32Premul(int width, int height);
-    public static native long _nMakeFromBackendRenderTarget(long pContext, long pBackendRenderTarget, int surfaceOrigin, int colorType, long colorSpacePtr, SurfaceProps surfaceProps);
-    public static native long _nMakeFromMTKView(long contextPtr, long mtkViewPtr, int surfaceOrigin, int sampleCount, int colorType, long colorSpacePtr, SurfaceProps surfaceProps);
+    public static native long _nWrapBackendRenderTarget(long pContext, long pBackendRenderTarget, int surfaceOrigin, int colorType, long colorSpacePtr, SurfaceProps surfaceProps);
+    public static native long _nWrapMTKView(long contextPtr, long mtkViewPtr, int surfaceOrigin, int sampleCount, int colorType, long colorSpacePtr, SurfaceProps surfaceProps);
     public static native long _nMakeRenderTarget(long contextPtr, boolean budgeted, int width, int height, int colorType, int alphaType, long colorSpacePtr, int sampleCount, int surfaceOrigin, SurfaceProps surfaceProps, boolean shouldCreateWithMips);
     public static native long _nMakeNull(int width, int height);
     public static native int _nGetWidth(long ptr);

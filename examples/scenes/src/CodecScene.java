@@ -81,7 +81,7 @@ public class CodecScene extends Scene {
                 });
             } else {
                 drawOne(canvas, width, label, () -> {
-                    try (var image = Image.makeFromBitmap(bitmap);) {
+                    try (var image = Image.makeRasterFromBitmap(bitmap);) {
                         canvas.drawImageRect(image, Rect.makeXYWH(0, 0, columnW, rowH));
                     }
                 });
@@ -100,7 +100,7 @@ public class CodecScene extends Scene {
                 drawOne(canvas, width, label + "\n" + codec.getEncodedImageFormat(), () -> {
                     canvas.save();
                     canvas.concat(origin.toMatrix(bitmapWidth, bitmapHeight));
-                    try (var image = Image.makeFromBitmap(bitmap);) {
+                    try (var image = Image.makeRasterFromBitmap(bitmap);) {
                         canvas.drawImageRect(image, Rect.makeXYWH(0, 0, codec.getWidth(), codec.getHeight()));
                     }
                     canvas.restore();
@@ -131,7 +131,7 @@ public class CodecScene extends Scene {
                 try (var bitmap = new Bitmap()) {
                     bitmap.allocPixels(codec.getImageInfo());
                     codec.readPixels(bitmap, finalFrame);
-                    try (var image = Image.makeFromBitmap(bitmap.setImmutable());) {
+                    try (var image = Image.makeRasterFromBitmap(bitmap.setImmutable());) {
                         canvas.drawImageRect(image, Rect.makeXYWH(0, 0, columnW, rowH));
                     }
                 }
@@ -139,7 +139,7 @@ public class CodecScene extends Scene {
 
             drawOne(canvas, width, label + "\n" + codec.getEncodedImageFormat() + " + priorFrame", () -> {
                 codec.readPixels(animation.bitmap, finalFrame, animation.prevFrame);
-                try (var image = Image.makeFromBitmap(animation.bitmap);) {
+                try (var image = Image.makeRasterFromBitmap(animation.bitmap);) {
                     canvas.drawImageRect(image, Rect.makeXYWH(0, 0, columnW, rowH));
                 }
             });

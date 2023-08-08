@@ -16,9 +16,9 @@ public class ImageBenchScene extends Scene {
     public ImageBenchScene() throws IOException {
         sprites = new Image[14];
         for (int i = 0; i < 14; ++i) {
-            sprites[i] = Image.makeFromEncoded(Files.readAllBytes(java.nio.file.Path.of(file("images/sprites/bunny" + i + ".png"))));
+            sprites[i] = Image.makeDeferredFromEncodedBytes(Files.readAllBytes(java.nio.file.Path.of(file("images/sprites/bunny" + i + ".png"))));
         }
-        all = Image.makeFromEncoded(Files.readAllBytes(java.nio.file.Path.of(file("images/sprites/all.png"))));
+        all = Image.makeDeferredFromEncodedBytes(Files.readAllBytes(java.nio.file.Path.of(file("images/sprites/all.png"))));
         _variants = new String[] {"One image", "14 images"};
     }
 

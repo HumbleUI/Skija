@@ -15,7 +15,7 @@ public class BitmapImageScene extends Scene {
 
     public BitmapImageScene() {
         try {
-            image = Image.makeFromEncoded(Files.readAllBytes(Path.of(file("images/IMG_7098.jpeg"))));
+            image = Image.makeDeferredFromEncodedBytes(Files.readAllBytes(Path.of(file("images/IMG_7098.jpeg"))));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -48,7 +48,7 @@ public class BitmapImageScene extends Scene {
         try (var bitmap = new Bitmap();) {
             bitmap.allocPixels(ImageInfo.makeS32(400, 400, ColorAlphaType.OPAQUE));
             image.readPixels(bitmap);
-            try (var image = Image.makeFromBitmap(bitmap.setImmutable());) {
+            try (var image = Image.makeRasterFromBitmap(bitmap.setImmutable());) {
                 canvas.drawImageRect(image, Rect.makeXYWH(0, 0, 200, 200));
             }
             canvas.drawString("Image.readPixels", 0, 220, inter13, blackFill);
@@ -59,7 +59,7 @@ public class BitmapImageScene extends Scene {
         try (var bitmap = new Bitmap();) {
             bitmap.allocPixels(new ImageInfo(300, 300, ColorType.RGBA_8888, ColorAlphaType.OPAQUE));
             image.readPixels(bitmap, 50, 50);
-            try (var image = Image.makeFromBitmap(bitmap.setImmutable());) {
+            try (var image = Image.makeRasterFromBitmap(bitmap.setImmutable());) {
                 canvas.drawImageRect(image, Rect.makeXYWH(25, 25, 150, 150));
             }
             canvas.drawString("Image.readPixels(50, 50)", 0, 220, inter13, blackFill);
@@ -75,7 +75,7 @@ public class BitmapImageScene extends Scene {
             pixels = bitmap.readPixels();
             pixelSorting(canvas, ByteBuffer.wrap(pixels), info);
             bitmap.installPixels(pixels);
-            try (var image = Image.makeFromBitmap(bitmap.setImmutable());) {
+            try (var image = Image.makeRasterFromBitmap(bitmap.setImmutable());) {
                 canvas.drawImageRect(image, Rect.makeXYWH(0, 0, 200, 200));
             }
             canvas.drawString("Bitmap.readPixels/installPixels", 0, 220, inter13, blackFill);
@@ -85,24 +85,24 @@ public class BitmapImageScene extends Scene {
         // Bitmap peekPixels
         try (var bitmap = Bitmap.makeFromImage(image);) {
             pixelSorting(canvas, bitmap.peekPixels(), bitmap.getImageInfo());
-            try (var image = Image.makeFromBitmap(bitmap.setImmutable());) {
+            try (var image = Image.makeRasterFromBitmap(bitmap.setImmutable());) {
                 canvas.drawImageRect(image, Rect.makeXYWH(0, 0, 200, 200));
             }
             canvas.drawString("Bitmap.peekPixels", 0, 220, inter13, blackFill);
             advance(canvas, width);
         }
 
-        // Image.makeRaster
-        try (var imageFromPixels = Image.makeRaster(info, pixels, info.getMinRowBytes());) {
+        // Image.makeRasterFromBytes
+        try (var imageFromPixels = Image.makeRasterFromBytes(info, pixels, info.getMinRowBytes());) {
             canvas.drawImageRect(imageFromPixels, Rect.makeXYWH(0, 0, 200, 200));
-            canvas.drawString("Image.makeRaster", 0, 220, inter13, blackFill);
+            canvas.drawString("Image.makeRasterFromBytes", 0, 220, inter13, blackFill);
             advance(canvas, width);
         }
 
-        // Image.makeRaster + Data
-        try (var imageFromData = Image.makeRaster(info, Data.makeFromBytes(pixels), info.getMinRowBytes());) {
+        // Image.makeRasterFromData
+        try (var imageFromData = Image.makeRasterFromData(info, Data.makeFromBytes(pixels), info.getMinRowBytes());) {
             canvas.drawImageRect(imageFromData, Rect.makeXYWH(0, 0, 200, 200));
-            canvas.drawString("Image.makeRaster + Data", 0, 220, inter13, blackFill);
+            canvas.drawString("Image.makeRasterFromBytes + Data", 0, 220, inter13, blackFill);
             advance(canvas, width);
         }
     }

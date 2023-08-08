@@ -56,7 +56,7 @@ public class FigmaScene extends Scene {
         icons.put("Mask Fill",   new Path().moveTo(16.75f, 13.24f).cubicTo(14.24f, 14.45f, 12.5f, 17.02f, 12.5f, 20).cubicTo(12.5f, 22.98f, 14.24f, 25.55f, 16.75f, 26.76f)
                                    .cubicTo(19.26f, 25.55f, 21, 22.98f, 21, 20).cubicTo(21, 17.02f, 19.26f, 14.45f, 16.75f, 13.24f));
         icons.put("Union",       new Path().moveTo(13, 12).lineTo(13, 23).lineTo(18, 23).lineTo(18, 28).lineTo(29, 28).lineTo(29, 17).lineTo(24, 17).lineTo(24, 12).closePath());
-        avatar = Image.makeFromEncoded(Files.readAllBytes(java.nio.file.Path.of(file("images/IMG_5563.png"))));
+        avatar = Image.makeDeferredFromEncodedBytes(Files.readAllBytes(java.nio.file.Path.of(file("images/IMG_5563.png"))));
         icons.put("Present",     new Path().moveTo(15.5f, 15).lineTo(15.5f, 25).lineTo(23, 20).closePath());
         icons.put("Layer Frame", new Path().moveTo(3.5f, 0.5f).lineTo(3.5f, 11.5f).moveTo(8.5f, 0.5f).lineTo(8.5f, 11.5f).moveTo(0.5f, 3.5f).lineTo(11.5f, 3.5f).moveTo(0.5f, 8.5f).lineTo(11.5f, 8.5f));
         icons.put("Layer Image", new Path().addRRect(RRect.makeXYWH(0.5f, 0.5f, 11, 11, 1)).addCircle(8, 4, 1.5f).moveTo(0.5f, 8.5f).lineTo(3.5f, 5.5f).lineTo(9.5f, 11.5f));
