@@ -1,3 +1,9 @@
+# 0.116.1 - Aug 9, 2023
+
+Fixed:
+
+- Broken shared library unpacking #54 #56
+
 # 0.116.0 - Aug 8, 2023
 
 Fixed:

@@ -172,7 +172,7 @@ public class Library {
                     }
                     File fileTmp = File.createTempFile(fileName, "tmp", tempDir);
                     Log.debug("Extracting " + fileName + " to " + file + " via " + fileTmp);
-                    Files.copy(is, fileTmp.toPath());
+                    Files.copy(is, fileTmp.toPath(), StandardCopyOption.REPLACE_EXISTING);
                     Files.move(fileTmp.toPath(), file.toPath(), StandardCopyOption.ATOMIC_MOVE, StandardCopyOption.REPLACE_EXISTING);
                 }
             }
