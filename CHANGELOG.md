@@ -1,3 +1,10 @@
+# 0.116.2 - Dec 8, 2023
+
+Changed:
+
+- Skia version m116-f44dbc40d8 -> m116-d2c211228d
+- Link with EGL on Linux
+
 # 0.116.1 - Aug 9, 2023
 
 Fixed:

@@ -12,7 +12,7 @@ runtime_deps = [
 
 compile_deps = [
   {'group': 'org.jetbrains', 'name': 'annotations', 'version': '20.1.0'},
-  {'group': 'org.projectlombok', 'name': 'lombok', 'version': '1.18.28'},
+  {'group': 'org.projectlombok', 'name': 'lombok', 'version': '1.18.30'},
 ]
 
 @functools.lru_cache(maxsize=1)

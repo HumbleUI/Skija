@@ -23,7 +23,9 @@ if(WIN32)
 elseif(APPLE)
   find_library(SKIA_OPENGL_LIBRARY OpenGL NAMES GL)
 else()
-  find_library(SKIA_OPENGL_LIBRARY opengl NAMES GL)
+    find_library(SKIA_GL_LIBRARY opengl NAMES GL)
+    find_library(SKIA_EGL_LIBRARY EGL NAMES EGL)
+    set(SKIA_OPENGL_LIBRARY ${SKIA_GL_LIBRARY} ${SKIA_EGL_LIBRARY})
 endif()
 
 # SkUnicode

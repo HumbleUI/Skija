@@ -1,4 +1,13 @@
 on:
+  pull_request:
+    branches:
+      - 'master'
+    paths:
+      - '.github'
+      - 'platform'
+      - 'script'
+      - 'shared'
+      - 'tests'
   push:
     branches:
       - '**'
@@ -48,7 +57,7 @@ jobs:
           echo "JAVA_HOME=$JAVA_HOME_11_X64" >> $GITHUB_ENV
           echo "$JAVA_HOME_11_X64/bin" >> $GITHUB_PATH
           sudo apt-get update
-          sudo apt-get --quiet --yes install ninja-build libglu1-mesa-dev g\+\+-9-aarch64-linux-gnu
+          sudo apt-get --quiet --yes install ninja-build libglu1-mesa-dev libegl-dev g\+\+-9-aarch64-linux-gnu libwayland-dev libglvnd-dev libegl1-mesa libegl1-mesa-dev
           sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 60 --slave /usr/bin/g++ g++ /usr/bin/g++-9
           sudo update-alternatives --config gcc
       - uses: actions/checkout@v3
