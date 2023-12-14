@@ -23,7 +23,9 @@ if(WIN32)
 elseif(APPLE)
   find_library(SKIA_OPENGL_LIBRARY OpenGL NAMES GL)
 else()
-  find_library(SKIA_OPENGL_LIBRARY opengl NAMES GL)
+  find_library(SKIA_GL_LIBRARY opengl NAMES GL)
+  find_library(SKIA_EGL_LIBRARY EGL NAMES EGL)
+  set(SKIA_OPENGL_LIBRARY ${SKIA_GL_LIBRARY} ${SKIA_EGL_LIBRARY})
 endif()
 
 # SkUnicode
@@ -84,6 +86,7 @@ find_library(SKIA_SKSG_LIBRARY sksg PATH "${SKIA_LIBRARY_DIR}")
 add_library(sksg INTERFACE)
 target_link_libraries(sksg INTERFACE ${SKIA_SKSG_LIBRARY})
 find_path(SKIA_SKSG_INCLUDE_DIR SkSGInvalidationController.h HINTS "${SKIA_DIR}/modules/sksg/include")
+
 
 find_path(SKIA_CONFIG_INCLUDE_DIR SkUserConfig.h HINTS "${SKIA_DIR}/include/config")
 find_path(SKIA_CORE_INCLUDE_DIR SkCanvas.h HINTS "${SKIA_DIR}/include/core")
