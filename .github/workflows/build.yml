@@ -55,7 +55,9 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - run: python3 script/build.py
+      - run: | 
+          python3 script/build.py
+          ldd platform/target/linux-x64/native/libskija.so
       - run: python3 script/package_shared.py
       - uses: actions/upload-artifact@v3
         with:
