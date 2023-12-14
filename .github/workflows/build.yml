@@ -20,11 +20,11 @@ jobs:
   build_macos:
     runs-on: macos-11
     steps:
+      - run: exit 1
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - uses: abdes/gha-setup-ninja@660f330a40aefa8d11632b3f901e92a4adb33d65
-      - run: exit 1
       - run: |
           echo "JAVA_HOME=$JAVA_HOME_11_X64" >> $GITHUB_ENV
           echo "$JAVA_HOME_11_X64/bin" >> $GITHUB_PATH
@@ -49,6 +49,7 @@ jobs:
       - run: |
           echo "JAVA_HOME=$JAVA_HOME_11_X64" >> $GITHUB_ENV
           echo "$JAVA_HOME_11_X64/bin" >> $GITHUB_PATH
+          
           sudo apt-get update
           sudo apt-get --quiet --yes install ninja-build libglu1-mesa-dev g\+\+-9-aarch64-linux-gnu mesa-utils-extra \
             libwayland-dev libglvnd-dev
@@ -58,6 +59,7 @@ jobs:
         with:
           fetch-depth: 0
       - run: | 
+          export LD_LIBRARY_PATH="/usr/lib/x86_64-linux-gnu"
           LD_LIBRARY_PATH="/usr/lib/x86_64-linux-gnu" python3 script/build.py
           ldd platform/target/linux-x64/native/libskija.so
       - run: python3 script/package_shared.py
@@ -83,11 +85,11 @@ jobs:
   build_windows:
     runs-on: windows-2022
     steps:
+      - run: exit 1
       - uses: actions/checkout@v3
       - uses: microsoft/setup-msbuild@v1
       - uses: ilammy/msvc-dev-cmd@v1
       - uses: abdes/gha-setup-ninja@660f330a40aefa8d11632b3f901e92a4adb33d65
-      - run: exit 1
       - shell: bash
         run: |
           echo "JAVA_HOME=$JAVA_HOME_11_X64" >> $GITHUB_ENV
