@@ -52,14 +52,14 @@ jobs:
           
           sudo apt-get update
           sudo apt-get --quiet --yes install ninja-build libglu1-mesa-dev g\+\+-9-aarch64-linux-gnu mesa-utils-extra \
-            libwayland-dev libglvnd-dev
+            libwayland-dev libglvnd-dev libegl1-mesa libegl1-mesa-dev
           sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 60 --slave /usr/bin/g++ g++ /usr/bin/g++-9
           sudo update-alternatives --config gcc
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - run: | 
-          LD_LIBRARY_PATH="/usr/lib/x86_64-linux-gnu" python3 script/build.py
+          python3 script/build.py
           ldd platform/target/linux-x64/native/libskija.so
           ldconfig -p | grep EGL
       - run: python3 script/package_shared.py
