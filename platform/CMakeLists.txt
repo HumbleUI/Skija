@@ -61,7 +61,7 @@ if(APPLE)
 
 elseif(UNIX)
     target_include_directories(skija PRIVATE $ENV{JAVA_HOME}/include $ENV{JAVA_HOME}/include/linux)
-
+    target_link_libraries(skija EGL)
 elseif(WIN32)
     set(CMAKE_C_COMPILER cl)
     set(CMAKE_CXX_COMPILER cl)
@@ -84,4 +84,4 @@ endif()
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 include(FindSkia)
-target_link_libraries(skija skottie sksg svg skparagraph skshaper skunicode skresources skia EGL ${FREETYPE_LIBRARIES} ${HARFBUZZ_LIBRARIES})
+target_link_libraries(skija skottie sksg svg skparagraph skshaper skunicode skresources skia ${FREETYPE_LIBRARIES} ${HARFBUZZ_LIBRARIES})
