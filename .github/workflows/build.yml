@@ -58,10 +58,8 @@ jobs:
         with:
           fetch-depth: 0
       - run: | 
-          python3 script/build.py
-          ldd platform/target/linux-x64/native/libskija.so
-          ld -lEGL
-          nm -D /usr/lib/x86_64-linux-gnu/libEGL.so.1
+          LD_LIBRARY_PATH="/usr/lib/x86_64-linux-gnu" python3 script/build.py
+
       - run: python3 script/package_shared.py
       - uses: actions/upload-artifact@v3
         with:
