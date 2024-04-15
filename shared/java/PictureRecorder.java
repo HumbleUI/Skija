@@ -7,6 +7,8 @@ import io.github.humbleui.types.*;
 
 public class PictureRecorder extends Managed {
     static { Library.staticLoad(); }
+
+    @ApiStatus.Internal public Canvas _canvas;
     
     public PictureRecorder() {
         this(_nMake());
@@ -31,9 +33,11 @@ public class PictureRecorder extends Managed {
      * @return the canvas.
     */
     public Canvas beginRecording(Rect bounds) {
+        assert _canvas == null : "Recording already in progress";
         try {
             Stats.onNativeCall();
-            return new Canvas(_nBeginRecording(_ptr, bounds._left, bounds._top, bounds._right, bounds._bottom), false, this);
+            _canvas = new Canvas(_nBeginRecording(_ptr, bounds._left, bounds._top, bounds._right, bounds._bottom), false, this);
+            return _canvas;
         } finally {
             ReferenceUtil.reachabilityFence(this);
         }
@@ -44,13 +48,7 @@ public class PictureRecorder extends Managed {
      */
     @Nullable
     public Canvas getRecordingCanvas() {
-        try {
-            Stats.onNativeCall();
-            long ptr = _nGetRecordingCanvas(_ptr);
-            return ptr == 0 ? null : new Canvas(ptr, false, this);
-        } finally {
-            ReferenceUtil.reachabilityFence(this);
-        }
+        return _canvas;
     }
 
     /**
@@ -64,6 +62,9 @@ public class PictureRecorder extends Managed {
      */
     public Picture finishRecordingAsPicture() {
         try {
+            assert _canvas != null : "Recording not started";
+            _canvas.invalidate();
+            _canvas = null;
             Stats.onNativeCall();
             return new Picture(_nFinishRecordingAsPicture(_ptr));
         } finally {
@@ -83,11 +84,23 @@ public class PictureRecorder extends Managed {
      */
     public Picture finishRecordingAsPicture(@NotNull Rect cull) {
         try {
+            assert _canvas != null : "Recording not started";
+            _canvas.invalidate();
+            _canvas = null;
             Stats.onNativeCall();
             return new Picture(_nFinishRecordingAsPictureWithCull(_ptr, cull._left, cull._top, cull._right, cull._bottom));
         } finally {
             ReferenceUtil.reachabilityFence(this);
         }
+    }
+
+    @Override
+    public void close() {
+        if (_canvas != null) {
+            _canvas.invalidate();
+            _canvas = null;
+        }
+        super.close();
     }
 
     // TODO
@@ -109,7 +122,6 @@ public class PictureRecorder extends Managed {
     @ApiStatus.Internal public static native long _nMake();
     @ApiStatus.Internal public static native long _nGetFinalizer();
     @ApiStatus.Internal public static native long _nBeginRecording(long ptr, float left, float top, float right, float bottom);
-    @ApiStatus.Internal public static native long _nGetRecordingCanvas(long ptr);
     @ApiStatus.Internal public static native long _nFinishRecordingAsPicture(long ptr);
     @ApiStatus.Internal public static native long _nFinishRecordingAsPictureWithCull(long ptr, float left, float top, float right, float bottom);
     @ApiStatus.Internal public static native long _nFinishRecordingAsDrawable(long ptr);

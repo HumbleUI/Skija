@@ -9,6 +9,7 @@ public class Surface extends RefCnt {
         Library.staticLoad();
     }
 
+    @ApiStatus.Internal public Canvas _canvas;
     @ApiStatus.Internal public final DirectContext _context;
     @ApiStatus.Internal public final BackendRenderTarget _renderTarget;
 
@@ -660,9 +661,12 @@ public class Surface extends RefCnt {
     @NotNull
     public Canvas getCanvas() {
         try {
-            Stats.onNativeCall();
-            long ptr = _nGetCanvas(_ptr);
-            return ptr == 0 ? null : new Canvas(ptr, false, this);
+            if (_canvas == null) {
+                Stats.onNativeCall();
+                long ptr = _nGetCanvas(_ptr);
+                _canvas = ptr == 0 ? null : new Canvas(ptr, false, this);
+            }
+            return _canvas;
         } finally {
             ReferenceUtil.reachabilityFence(this);
         }
@@ -965,6 +969,15 @@ public class Surface extends RefCnt {
         super(ptr);
         _context = context;
         _renderTarget = renderTarget;
+    }
+
+    @Override
+    public void close() {
+        if (_canvas != null) {
+            _canvas.invalidate();
+            _canvas = null;
+        }
+        super.close();
     }
 
     public static native long _nWrapPixels(int width, int height, int colorType, int alphaType, long colorSpacePtr, long pixelsPtr, long rowBytes, SurfaceProps surfaceProps);

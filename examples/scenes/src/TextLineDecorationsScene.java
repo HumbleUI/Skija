@@ -134,7 +134,7 @@ public class TextLineDecorationsScene extends Scene {
         var control = strokew * 1f;
         
         try (var line = TextLine.make("Sinus " + w + "px" + descenders, inter13);
-             var surface = Surface.makeRasterN32Premul((int) Math.ceil(texw), (int) Math.ceil(texh));
+             var surface = Surface.makeRaster(ImageInfo.makeN32Premul((int) Math.ceil(texw), (int) Math.ceil(texh)));
              var path = new Path()
                             .moveTo(0, texh - 0.5f * strokew)
                             .cubicTo(control, texh - 0.5f * strokew, texw / 2f - control, 0.5f * strokew, texw / 2f, 0.5f * strokew)

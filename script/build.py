@@ -73,7 +73,8 @@ def main():
                     '../shared/target/classes-java9',
                     classpath = common.deps_compile(),
                     modulepath = common.deps_compile(),
-                    opts = ['--patch-module', 'io.github.humbleui.skija.shared=../shared/target/classes'],
+                    opts = ['-Xlint:-options',
+                            '--patch-module', 'io.github.humbleui.skija.shared=../shared/target/classes',],
                     release = '9')
 
   build_utils.copy_replace(

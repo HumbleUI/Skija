@@ -839,7 +839,7 @@ class SkiaVolatileImage extends java.awt.image.VolatileImage {
         this.width = width;
         this.height = height;
         this.caps = caps;
-        this.surface = Surface.makeRasterN32Premul(width, height);
+        this.surface = Surface.makeRaster(ImageInfo.makeN32Premul(width, height));
     }
 
     @Override

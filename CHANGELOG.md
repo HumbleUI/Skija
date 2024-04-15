@@ -1,3 +1,9 @@
+# WIP
+
+Changed:
+
+- Surface and PictureRecorder cache returned Canvas object and invalidate it when owner is closed #66
+
 # 0.116.2 - Dec 8, 2023
 
 Changed:

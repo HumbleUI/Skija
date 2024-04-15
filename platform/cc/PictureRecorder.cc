@@ -27,13 +27,6 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_PictureRecorder
     return reinterpret_cast<jlong>(canvas);
 }
 
-extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_PictureRecorder__1nGetRecordingCanvas
-  (JNIEnv* env, jclass jclass, jlong ptr) {
-    SkPictureRecorder* instance = reinterpret_cast<SkPictureRecorder*>(static_cast<uintptr_t>(ptr));
-    SkCanvas* canvas = instance->getRecordingCanvas();
-    return reinterpret_cast<jlong>(canvas);
-}
-
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_PictureRecorder__1nFinishRecordingAsPicture
   (JNIEnv* env, jclass jclass, jlong ptr) {
     SkPictureRecorder* instance = reinterpret_cast<SkPictureRecorder*>(static_cast<uintptr_t>(ptr));

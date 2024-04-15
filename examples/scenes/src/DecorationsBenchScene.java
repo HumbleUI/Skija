@@ -25,7 +25,7 @@ public class DecorationsBenchScene extends Scene {
     @Override
     public void draw(Canvas canvas, int width, int height, float dpi, int xpos, int ypos) {
         if (shaderStrokeOdd == null) {
-            try (var surface = Surface.makeRasterN32Premul((int) Math.ceil(4 * dpi), (int) Math.ceil(3 * dpi));) {
+            try (var surface = Surface.makeRaster(ImageInfo.makeN32Premul((int) Math.ceil(4 * dpi), (int) Math.ceil(3 * dpi)));) {
                 var c = surface.getCanvas();
                 c.scale(dpi, dpi);
                 c.translate(0, 1.5f);
@@ -37,7 +37,7 @@ public class DecorationsBenchScene extends Scene {
         }
 
         if (shaderStrokeEven == null) {
-            try (var surface = Surface.makeRasterN32Premul((int) Math.ceil(4 * dpi), (int) Math.ceil(3 * dpi));) {
+            try (var surface = Surface.makeRaster(ImageInfo.makeN32Premul((int) Math.ceil(4 * dpi), (int) Math.ceil(3 * dpi)));) {
                 var c = surface.getCanvas();
                 c.scale(dpi, dpi);
                 c.translate(0, 1.5f);

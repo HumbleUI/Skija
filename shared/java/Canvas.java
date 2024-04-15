@@ -63,6 +63,7 @@ public class Canvas extends Managed {
     @NotNull
     public SurfaceProps getBaseProps() {
         try {
+            assert _ptr != 0 : "Canvas is closed";
             Stats.onNativeCall();
             return _nGetBaseProps(_ptr);
         } finally {
@@ -80,6 +81,7 @@ public class Canvas extends Managed {
     @NotNull
     public SurfaceProps getTopProps() {
         try {
+            assert _ptr != 0 : "Canvas is closed";
             Stats.onNativeCall();
             return _nGetTopProps(_ptr);
         } finally {
@@ -90,6 +92,7 @@ public class Canvas extends Managed {
     @Nullable
     public Surface getSurface() {
         try {
+            assert _ptr != 0 : "Canvas is closed";
             Stats.onNativeCall();
             long ptr = _nGetSurface(_ptr);
             return ptr == 0 ? null : new Surface(ptr);
@@ -100,6 +103,7 @@ public class Canvas extends Managed {
 
     @NotNull @Contract("_, _, _ -> this")
     public Canvas drawPoint(float x, float y, @NotNull Paint paint) {
+        assert _ptr != 0 : "Canvas is closed";
         assert paint != null : "Can’t drawPoint with paint == null";
         Stats.onNativeCall();
         _nDrawPoint(_ptr, x, y, Native.getPtr(paint));
@@ -156,6 +160,7 @@ public class Canvas extends Managed {
      */
     @NotNull @Contract("_, _ -> this")
     public Canvas drawPoints(@NotNull float[] coords, @NotNull Paint paint) {
+        assert _ptr != 0 : "Canvas is closed";
         assert coords != null : "Can’t drawPoints with coords == null";
         assert paint != null : "Can’t drawPoints with paint == null";
         Stats.onNativeCall();
@@ -209,6 +214,7 @@ public class Canvas extends Managed {
      */
     @NotNull @Contract("_, _ -> this")
     public Canvas drawLines(@NotNull float[] coords, @NotNull Paint paint) {
+        assert _ptr != 0 : "Canvas is closed";
         assert coords != null : "Can’t drawLines with coords == null";
         assert paint != null : "Can’t drawLines with paint == null";
         Stats.onNativeCall();
@@ -260,6 +266,7 @@ public class Canvas extends Managed {
      */
     @NotNull @Contract("_, _ -> this")
     public Canvas drawPolygon(@NotNull float[] coords, @NotNull Paint paint) {
+        assert _ptr != 0 : "Canvas is closed";
         assert coords != null : "Can’t drawPolygon with coords == null";
         assert paint != null : "Can’t drawPolygon with paint == null";
         Stats.onNativeCall();
@@ -270,6 +277,7 @@ public class Canvas extends Managed {
 
     @NotNull @Contract("_, _, _, _, _ -> this")
     public Canvas drawLine(float x0, float y0, float x1, float y1, @NotNull Paint paint) {
+        assert _ptr != 0 : "Canvas is closed";
         assert paint != null : "Can’t drawLine with paint == null";
         Stats.onNativeCall();
         _nDrawLine(_ptr, x0, y0, x1, y1, Native.getPtr(paint));
@@ -279,6 +287,7 @@ public class Canvas extends Managed {
 
     @NotNull @Contract("_, _, _, _, _, _, _, _ -> this")
     public Canvas drawArc(float left, float top, float right, float bottom, float startAngle, float sweepAngle, boolean includeCenter, @NotNull Paint paint) {
+        assert _ptr != 0 : "Canvas is closed";
         assert paint != null : "Can’t drawArc with paint == null";
         Stats.onNativeCall();
         _nDrawArc(_ptr, left, top, right, bottom, startAngle, sweepAngle, includeCenter, Native.getPtr(paint));
@@ -288,6 +297,7 @@ public class Canvas extends Managed {
 
     @NotNull @Contract("_, _ -> this")
     public Canvas drawRect(@NotNull Rect r, @NotNull Paint paint) {
+        assert _ptr != 0 : "Canvas is closed";
         assert r != null : "Can’t drawRect with r == null";
         assert paint != null : "Can’t drawRect with paint == null";
         Stats.onNativeCall();
@@ -298,6 +308,7 @@ public class Canvas extends Managed {
 
     @NotNull @Contract("_, _ -> this")
     public Canvas drawOval(@NotNull Rect r, @NotNull Paint paint) {
+        assert _ptr != 0 : "Canvas is closed";
         assert r != null : "Can’t drawOval with r == null";
         assert paint != null : "Can’t drawOval with paint == null";
         Stats.onNativeCall();
@@ -308,6 +319,7 @@ public class Canvas extends Managed {
 
     @NotNull @Contract("_, _, _, _ -> this")
     public Canvas drawCircle(float x, float y, float radius, @NotNull Paint paint) {
+        assert _ptr != 0 : "Canvas is closed";
         assert paint != null : "Can’t drawCircle with paint == null";
         Stats.onNativeCall();
         _nDrawOval(_ptr, x - radius, y - radius, x + radius, y + radius, Native.getPtr(paint));
@@ -317,6 +329,7 @@ public class Canvas extends Managed {
 
     @NotNull @Contract("_, _ -> this")
     public Canvas drawRRect(@NotNull RRect r, @NotNull Paint paint) {
+        assert _ptr != 0 : "Canvas is closed";
         assert r != null : "Can’t drawRRect with r == null";
         assert paint != null : "Can’t drawRRect with paint == null";
         Stats.onNativeCall();
@@ -328,6 +341,7 @@ public class Canvas extends Managed {
     @NotNull @Contract("_ -> this")
     public boolean quickReject(@NotNull Rect r) {
         try {
+            assert _ptr != 0 : "Canvas is closed";
             assert r != null : "Can’t quickReject with r == null";
             Stats.onNativeCall();
             return _nQuickReject(_ptr, r._left, r._top, r._right, r._bottom);
@@ -339,6 +353,7 @@ public class Canvas extends Managed {
     @NotNull @Contract("_ -> this")
     public boolean quickReject(@NotNull Path path) {
         try {
+            assert _ptr != 0 : "Canvas is closed";
             assert path != null : "Can’t quickReject with path == null";
             Stats.onNativeCall();
             return _nQuickRejectPath(_ptr, Native.getPtr(path));
@@ -350,6 +365,7 @@ public class Canvas extends Managed {
 
     @NotNull @Contract("_, _, _ -> this")
     public Canvas drawDRRect(@NotNull RRect outer, @NotNull RRect inner, @NotNull Paint paint) {
+        assert _ptr != 0 : "Canvas is closed";
         assert outer != null : "Can’t drawDRRect with outer == null";
         assert inner != null : "Can’t drawDRRect with inner == null";
         assert paint != null : "Can’t drawDRRect with paint == null";
@@ -398,6 +414,7 @@ public class Canvas extends Managed {
 
     @NotNull @Contract("_, _ -> this")
     public Canvas drawPath(@NotNull Path path, @NotNull Paint paint) {
+        assert _ptr != 0 : "Canvas is closed";
         assert path != null : "Can’t drawPath with path == null";
         assert paint != null : "Can’t drawPath with paint == null";
         Stats.onNativeCall();
@@ -444,6 +461,7 @@ public class Canvas extends Managed {
 
     @NotNull @Contract("_, _, _, _, _ -> this")
     public Canvas drawImageRect(@NotNull Image image, @NotNull Rect src, @NotNull Rect dst, @NotNull SamplingMode samplingMode, @Nullable Paint paint, boolean strict) {
+        assert _ptr != 0 : "Canvas is closed";
         assert image != null : "Can’t drawImageRect with image == null";
         assert src != null : "Can’t drawImageRect with src == null";
         assert dst != null : "Can’t drawImageRect with dst == null";
@@ -457,6 +475,7 @@ public class Canvas extends Managed {
 
     @NotNull @Contract("_, _, _, _, _ -> this")
     public Canvas drawImageNine(@NotNull Image image, @NotNull IRect center, @NotNull Rect dst, @NotNull FilterMode filterMode, @Nullable Paint paint) {
+        assert _ptr != 0 : "Canvas is closed";
         assert image != null : "Can’t drawImageNine with image == null";
         assert center != null : "Can’t drawImageNine with center == null";
         assert dst != null : "Can’t drawImageNine with dst == null";
@@ -470,6 +489,7 @@ public class Canvas extends Managed {
 
     @NotNull @Contract("_, _ -> this")
     public Canvas drawRegion(@NotNull Region r, @NotNull Paint paint) {
+        assert _ptr != 0 : "Canvas is closed";
         assert r != null : "Can’t drawRegion with r == null";
         assert paint != null : "Can’t drawRegion with paint == null";
         Stats.onNativeCall();
@@ -481,6 +501,7 @@ public class Canvas extends Managed {
 
     @NotNull @Contract("_, _, _, _, _ -> this")
     public Canvas drawString(@NotNull String s, float x, float y, Font font, @NotNull Paint paint) {
+        assert _ptr != 0 : "Canvas is closed";
         assert s != null : "Can’t drawString with s == null";
         assert paint != null : "Can’t drawString with paint == null";
         Stats.onNativeCall();
@@ -492,6 +513,7 @@ public class Canvas extends Managed {
 
     @NotNull @Contract("_, _, _, _ -> this")
     public Canvas drawTextBlob(@NotNull TextBlob blob, float x, float y, @NotNull Paint paint) {
+        assert _ptr != 0 : "Canvas is closed";
         assert blob != null : "Can’t drawTextBlob with blob == null";
         assert paint != null : "Can’t drawTextBlob with paint == null";
         Stats.onNativeCall();
@@ -503,6 +525,7 @@ public class Canvas extends Managed {
 
     @NotNull @Contract("_, _, _, _ -> this")
     public Canvas drawTextLine(@NotNull TextLine line, float x, float y, @NotNull Paint paint) {
+        assert _ptr != 0 : "Canvas is closed";
         assert line != null : "Can’t drawTextLine with line == null";
         assert paint != null : "Can’t drawTextLine with paint == null";
         try (TextBlob blob = line.getTextBlob();) {
@@ -519,6 +542,7 @@ public class Canvas extends Managed {
 
     @NotNull @Contract("_, _, _ -> this")
     public Canvas drawPicture(@NotNull Picture picture, @Nullable Matrix33 matrix, @Nullable Paint paint) {
+        assert _ptr != 0 : "Canvas is closed";
         assert picture != null : "Can’t drawPicture with picture == null";
         Stats.onNativeCall();
         _nDrawPicture(_ptr, Native.getPtr(picture), matrix == null ? null : matrix._mat, Native.getPtr(paint));
@@ -591,6 +615,7 @@ public class Canvas extends Managed {
      */
     @NotNull @Contract("_, _, _, _, _, _ -> this")
     public Canvas drawTriangles(@NotNull Point[] positions, @Nullable int[] colors, @Nullable Point[] texCoords, @Nullable short[] indices, @NotNull BlendMode mode, @NotNull Paint paint) {
+        assert _ptr != 0 : "Canvas is closed";
         assert positions != null : "Can’t drawTriangles with positions == null";
         assert positions.length % 3 == 0 : "Expected positions.length % 3 == 0, got: " + positions.length;
         assert colors == null || colors.length == positions.length : "Expected colors.length == positions.length, got: " + colors.length + " != " + positions.length;
@@ -666,6 +691,7 @@ public class Canvas extends Managed {
      */
     @NotNull @Contract("_, _, _, _, _, _ -> this")
     public Canvas drawTriangleStrip(@NotNull Point[] positions, @Nullable int[] colors, @Nullable Point[] texCoords, @Nullable short[] indices, @NotNull BlendMode mode, @NotNull Paint paint) {
+        assert _ptr != 0 : "Canvas is closed";
         assert positions != null : "Can’t drawTriangleStrip with positions == null";
         assert colors == null || colors.length == positions.length : "Expected colors.length == positions.length, got: " + colors.length + " != " + positions.length;
         assert texCoords == null || texCoords.length == positions.length : "Expected texCoords.length == positions.length, got: " + texCoords.length + " != " + positions.length;
@@ -741,6 +767,7 @@ public class Canvas extends Managed {
      */
     @NotNull @Contract("_, _, _, _, _, _ -> this")
     public Canvas drawTriangleFan(@NotNull Point[] positions, @Nullable int[] colors, @Nullable Point[] texCoords, @Nullable short[] indices, @NotNull BlendMode mode, @NotNull Paint paint) {
+        assert _ptr != 0 : "Canvas is closed";
         assert positions != null : "Can’t drawTriangleFan with positions == null";
         assert colors == null || colors.length == positions.length : "Expected colors.length == positions.length, got: " + colors.length + " != " + positions.length;
         assert texCoords == null || texCoords.length == positions.length : "Expected texCoords.length == positions.length, got: " + texCoords.length + " != " + positions.length;
@@ -845,6 +872,7 @@ public class Canvas extends Managed {
      */
     @NotNull @Contract("_, _, _, _, _ -> this")
     public Canvas drawPatch(@NotNull Point[] cubics, @NotNull int[] colors, @Nullable Point[] texCoords, @NotNull BlendMode mode, @NotNull Paint paint) {
+        assert _ptr != 0 : "Canvas is closed";
         assert cubics != null : "Can’t drawPatch with cubics == null";
         assert cubics.length == 12 : "Expected cubics.length == 12, got: " + cubics.length;
         assert colors != null : "Can’t drawPatch with colors == null";
@@ -911,6 +939,7 @@ public class Canvas extends Managed {
      */
     @NotNull @Contract("_, _ -> this")
     public Canvas drawDrawable(@NotNull Drawable drawable, @Nullable Matrix33 matrix) {
+        assert _ptr != 0 : "Canvas is closed";
         assert drawable != null : "Can’t drawDrawable with drawable == null";
         Stats.onNativeCall();
         _nDrawDrawable(_ptr, Native.getPtr(drawable), matrix == null ? null : matrix._mat);
@@ -925,6 +954,7 @@ public class Canvas extends Managed {
 
     @NotNull @Contract("_, _ -> this")
     public Canvas drawColor(int color, @NotNull BlendMode mode) {
+        assert _ptr != 0 : "Canvas is closed";
         Stats.onNativeCall();
         _nDrawColor(_ptr, color, mode.ordinal());
         return this;
@@ -937,6 +967,7 @@ public class Canvas extends Managed {
 
     @NotNull @Contract("_, _ -> this")
     public Canvas drawColor(@NotNull Color4f color, @NotNull BlendMode mode) {
+        assert _ptr != 0 : "Canvas is closed";
         Stats.onNativeCall();
         _nDrawColor4f(_ptr, color._r, color._g, color._b, color._a, mode.ordinal());
         return this;
@@ -945,6 +976,7 @@ public class Canvas extends Managed {
 
     @NotNull @Contract("_ -> this")
     public Canvas clear(int color) {
+        assert _ptr != 0 : "Canvas is closed";
         Stats.onNativeCall();
         _nClear(_ptr, color);
         return this;
@@ -952,6 +984,7 @@ public class Canvas extends Managed {
 
     @NotNull @Contract("_ -> this")
     public Canvas drawPaint(@NotNull Paint paint) {
+        assert _ptr != 0 : "Canvas is closed";
         assert paint != null : "Can’t drawPaint with paint == null";
         Stats.onNativeCall();
         _nDrawPaint(_ptr, Native.getPtr(paint));
@@ -969,6 +1002,7 @@ public class Canvas extends Managed {
      */
     @NotNull @Contract("_ -> this")
     public Canvas setMatrix(@NotNull Matrix33 matrix) {
+        assert _ptr != 0 : "Canvas is closed";
         assert matrix != null : "Can’t setMatrix with matrix == null";
         Stats.onNativeCall();
         _nSetMatrix(_ptr, matrix._mat);
@@ -985,6 +1019,7 @@ public class Canvas extends Managed {
      */
     @NotNull @Contract("_ -> this")
     public Canvas setMatrix(@NotNull Matrix44 matrix) {
+        assert _ptr != 0 : "Canvas is closed";
         assert matrix != null : "Can’t setMatrix with matrix == null";
         Stats.onNativeCall();
         _nSetMatrix44(_ptr, matrix._mat);
@@ -999,6 +1034,7 @@ public class Canvas extends Managed {
      */
     @NotNull @Contract("-> this")
     public Canvas resetMatrix() {
+        assert _ptr != 0 : "Canvas is closed";
         Stats.onNativeCall();
         _nResetMatrix(_ptr);
         return this;
@@ -1010,6 +1046,7 @@ public class Canvas extends Managed {
     @NotNull @Contract("-> new")
     public Matrix44 getLocalToDevice() {
         try {
+            assert _ptr != 0 : "Canvas is closed";
             Stats.onNativeCall();
             float[] mat = _nGetLocalToDevice(_ptr);
             return new Matrix44(mat);
@@ -1025,6 +1062,7 @@ public class Canvas extends Managed {
 
     @NotNull @Contract("_, _, _ -> this")
     public Canvas clipRect(@NotNull Rect r, @NotNull ClipMode mode, boolean antiAlias) {
+        assert _ptr != 0 : "Canvas is closed";
         assert r != null : "Can’t clipRect with r == null";
         assert mode != null : "Can’t clipRect with mode == null";
         Stats.onNativeCall();
@@ -1049,6 +1087,7 @@ public class Canvas extends Managed {
 
     @NotNull @Contract("_, _, _ -> this")
     public Canvas clipRRect(@NotNull RRect r, @NotNull ClipMode mode, boolean antiAlias) {
+        assert _ptr != 0 : "Canvas is closed";
         assert r != null : "Can’t clipRRect with r == null";
         assert mode != null : "Can’t clipRRect with mode == null";
         Stats.onNativeCall();
@@ -1073,6 +1112,7 @@ public class Canvas extends Managed {
 
     @NotNull @Contract("_, _, _ -> this")
     public Canvas clipPath(@NotNull Path p, @NotNull ClipMode mode, boolean antiAlias) {
+        assert _ptr != 0 : "Canvas is closed";
         assert p != null : "Can’t clipPath with p == null";
         assert mode != null : "Can’t clipPath with mode == null";
         Stats.onNativeCall();
@@ -1098,6 +1138,7 @@ public class Canvas extends Managed {
 
     @NotNull @Contract("_, _ -> this")
     public Canvas clipRegion(@NotNull Region r, @NotNull ClipMode mode) {
+        assert _ptr != 0 : "Canvas is closed";
         assert r != null : "Can’t clipRegion with r == null";
         assert mode != null : "Can’t clipRegion with mode == null";
         Stats.onNativeCall();
@@ -1137,6 +1178,7 @@ public class Canvas extends Managed {
 
     @NotNull @Contract("_ -> this")
     public Canvas concat(@NotNull Matrix33 matrix) {
+        assert _ptr != 0 : "Canvas is closed";
         assert matrix != null : "Can’t concat with matrix == null";
         Stats.onNativeCall();
         _nConcat(_ptr, matrix.getMat());
@@ -1145,6 +1187,7 @@ public class Canvas extends Managed {
 
     @NotNull @Contract("_ -> this")
     public Canvas concat(@NotNull Matrix44 matrix) {
+        assert _ptr != 0 : "Canvas is closed";
         assert matrix != null : "Can’t concat with matrix == null";
         Stats.onNativeCall();
         _nConcat44(_ptr, matrix.getMat());
@@ -1191,6 +1234,7 @@ public class Canvas extends Managed {
      */
     public boolean readPixels(@NotNull Bitmap bitmap, int srcX, int srcY) {
         try {
+            assert _ptr != 0 : "Canvas is closed";
             assert bitmap != null : "Can’t readPixels with bitmap == null";
             Stats.onNativeCall();
             return _nReadPixels(_ptr, Native.getPtr(bitmap), srcX, srcY);
@@ -1243,6 +1287,7 @@ public class Canvas extends Managed {
     */
     public boolean writePixels(@NotNull Bitmap bitmap, int x, int y) {
         try {
+            assert _ptr != 0 : "Canvas is closed";
             assert bitmap != null : "Can’t writePixels with bitmap == null";
             Stats.onNativeCall();
             return _nWritePixels(_ptr, Native.getPtr(bitmap), x, y);
@@ -1254,6 +1299,7 @@ public class Canvas extends Managed {
 
     public int save() {
         try {
+            assert _ptr != 0 : "Canvas is closed";
             Stats.onNativeCall();
             return _nSave(_ptr);
         } finally {
@@ -1263,6 +1309,7 @@ public class Canvas extends Managed {
 
     public int saveLayer(float left, float top, float right, float bottom, @Nullable Paint paint) {
         try {
+            assert _ptr != 0 : "Canvas is closed";
             Stats.onNativeCall();
             return _nSaveLayerRect(_ptr, left, top, right, bottom, Native.getPtr(paint));
         } finally {
@@ -1296,6 +1343,7 @@ public class Canvas extends Managed {
     */
     public int saveLayer(@Nullable Rect bounds, @Nullable Paint paint) {
         try {
+            assert _ptr != 0 : "Canvas is closed";
             Stats.onNativeCall();
             if (bounds == null)
                 return _nSaveLayer(_ptr, Native.getPtr(paint));
@@ -1330,6 +1378,7 @@ public class Canvas extends Managed {
      */
     public int saveLayerAlpha(@Nullable Rect bounds, int alpha) {
         try {
+            assert _ptr != 0 : "Canvas is closed";
             Stats.onNativeCall();
             if (bounds == null)
                 return _nSaveLayerAlpha(_ptr, alpha);
@@ -1361,6 +1410,7 @@ public class Canvas extends Managed {
      */
     public int saveLayer(@NotNull SaveLayerRec layerRec) {
         try {
+            assert _ptr != 0 : "Canvas is closed";
             Stats.onNativeCall();
             Rect bounds = layerRec._bounds;
             if (bounds == null)
@@ -1375,6 +1425,7 @@ public class Canvas extends Managed {
 
     public int getSaveCount() {
         try {
+            assert _ptr != 0 : "Canvas is closed";
             Stats.onNativeCall();
             return _nGetSaveCount(_ptr);
         } finally {
@@ -1384,6 +1435,7 @@ public class Canvas extends Managed {
 
     @NotNull @Contract("-> this")
     public Canvas restore() {
+        assert _ptr != 0 : "Canvas is closed";
         Stats.onNativeCall();
         _nRestore(_ptr);
         return this;
@@ -1391,9 +1443,15 @@ public class Canvas extends Managed {
 
     @NotNull @Contract("_ -> this")
     public Canvas restoreToCount(int saveCount) {
+        assert _ptr != 0 : "Canvas is closed";
         Stats.onNativeCall();
         _nRestoreToCount(_ptr, saveCount);
         return this;
+    }
+
+    @ApiStatus.Internal
+    public void invalidate() {
+        _ptr = 0;
     }
 
     @ApiStatus.Internal
