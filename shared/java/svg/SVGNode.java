@@ -22,5 +22,15 @@ public abstract class SVGNode extends RefCnt {
         }
     }
 
+    public boolean parseAndSetAttribute(String name, String value) {
+        try {
+            Stats.onNativeCall();
+            return _nParseAndSetAttribute(name, value);
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
     @ApiStatus.Internal public static native int _nGetTag(long ptr);
+    @ApiStatus.Internal public static native boolean _nParseAndSetAttribute(String name, String value);
 }
