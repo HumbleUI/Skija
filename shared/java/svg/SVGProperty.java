@@ -3,11 +3,14 @@ package io.github.humbleui.skija.svg;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Optional;
-
 public class SVGProperty<T> {
     @ApiStatus.Internal @Nullable public final T _value;
     @ApiStatus.Internal public static SVGPropertyState _state;
+
+    @ApiStatus.Internal
+    public SVGProperty(@Nullable Object value, int state) {
+        this(value, SVGPropertyState._values[state]);
+    }
 
     @ApiStatus.Internal
     public SVGProperty(@Nullable Object value, SVGPropertyState state) {

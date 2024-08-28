@@ -95,3 +95,9 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGSVG__1nSe
     SkSVGSVG* instance = reinterpret_cast<SkSVGSVG*>(static_cast<uintptr_t>(ptr));
     instance->setViewBox(SkRect::MakeLTRB(l, t, r, b));
 }
+
+extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_svg_SVGSVG__1nMake
+  (JNIEnv* env, jclass jclass, jint type) {
+    sk_sp<SkSVGSVG> instance = SkSVGSVG::Make(static_cast<SkSVGSVG::Type>(type));
+    return reinterpret_cast<jlong>(instance.release());
+}

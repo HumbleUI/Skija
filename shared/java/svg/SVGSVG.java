@@ -149,6 +149,11 @@ public class SVGSVG extends SVGContainer {
         }
     }
 
+    public static SVGSVG make(SVGSVGType type) {
+        Stats.onNativeCall();
+        return new SVGSVG(_nMake(type.ordinal()));
+    }
+
     @ApiStatus.Internal public static native SVGLength _nGetX(long ptr);
     @ApiStatus.Internal public static native SVGLength _nGetY(long ptr);
     @ApiStatus.Internal public static native SVGLength _nGetWidth(long ptr);
@@ -162,4 +167,5 @@ public class SVGSVG extends SVGContainer {
     @ApiStatus.Internal public static native void _nSetHeight(long ptr, float value, int unit);
     @ApiStatus.Internal public static native void _nSetPreserveAspectRatio(long ptr, int align, int scale);
     @ApiStatus.Internal public static native void _nSetViewBox(long ptr, float l, float t, float r, float b);
+    @ApiStatus.Internal public static native long _nMake(int type);
 }

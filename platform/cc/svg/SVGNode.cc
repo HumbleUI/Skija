@@ -22,8 +22,7 @@ extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_svg_SVGNode__
   (JNIEnv* env, jclass jclass, jlong ptr) {
     SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
     SkSVGProperty<SkSVGLength, true> property = instance->getStrokeWidth();
-    jobject value = property.isValue() ? skija::svg::SVGLength::toJava(env, *property) : nullptr;
-    return skija::svg::SVGProperty::toJava(env, value, property.isInheritable());
+    return property.isValue() ? skija::svg::SVGLength::toJava(env, *property) : nullptr;
 }
 
 extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nSetStrokeWidthValue
