@@ -1,7 +1,6 @@
 package io.github.humbleui.skija.svg;
 
 import org.jetbrains.annotations.*;
-import io.github.humbleui.skija.*;
 import io.github.humbleui.skija.impl.*;
 import io.github.humbleui.types.*;
 
@@ -11,6 +10,11 @@ public class SVGSVG extends SVGContainer {
     @ApiStatus.Internal
     public SVGSVG(long ptr) {
         super(ptr);
+    }
+
+    public SVGSVG(SVGSVGType type) {
+        this(_nMake(type.ordinal()));
+        Stats.onNativeCall();
     }
 
     @NotNull
@@ -147,11 +151,6 @@ public class SVGSVG extends SVGContainer {
         } finally {
             ReferenceUtil.reachabilityFence(this);
         }
-    }
-
-    public static SVGSVG make(SVGSVGType type) {
-        Stats.onNativeCall();
-        return new SVGSVG(_nMake(type.ordinal()));
     }
 
     @ApiStatus.Internal public static native SVGLength _nGetX(long ptr);

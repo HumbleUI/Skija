@@ -9,7 +9,7 @@ import static io.github.humbleui.skija.test.runner.TestRunner.runner;
 public class SVGNodePropsTest implements Executable {
     @Override
     public void execute() throws Exception {
-        SVGNode node = SVGSVG.make(SVGSVGType.ROOT);
+        SVGNode node = new SVGSVG(SVGSVGType.ROOT);
 
         node.setStrokeWidth(new SVGLength(1f));
         assertEquals(1f, node.getStrokeWidth().get().getValue());
