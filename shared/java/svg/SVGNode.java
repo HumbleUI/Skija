@@ -9,9 +9,6 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Optional;
-import java.util.OptionalInt;
-
 /**
  * Note about the lack of explicit inherit in attribute API: Internally, Skia uses a wrapper type called SkSVGProperty
  * in its attribute getters and setters. SkSVGProperty contains an instance variable _fstate of type
@@ -52,16 +49,16 @@ public abstract class SVGNode extends RefCnt {
         }
     }
 
-    @NotNull
-    public Optional<SVGFillRule> getClipRule() {
+    @Nullable
+    public SVGFillRule getClipRule() {
         try {
             Stats.onNativeCall();
             if (_nHasClipRule(_ptr)) {
                 Stats.onNativeCall();
-                return Optional.of(SVGFillRule._values[_nGetClipRule(_ptr)]);
+                return SVGFillRule._values[_nGetClipRule(_ptr)];
             }
             else {
-                return Optional.empty();
+                return null;
             }
         } finally {
             ReferenceUtil.reachabilityFence(this);
@@ -83,16 +80,16 @@ public abstract class SVGNode extends RefCnt {
         return this;
     }
 
-    @NotNull
-    public OptionalInt getColor() {
+    @Nullable
+    public Integer getColor() {
         try {
             Stats.onNativeCall();
             if (_nHasColor(_ptr)) {
                 Stats.onNativeCall();
-                return OptionalInt.of(_nGetColor(_ptr));
+                return _nGetColor(_ptr);
             }
             else {
-                return OptionalInt.empty();
+                return null;
             }
         } finally {
             ReferenceUtil.reachabilityFence(this);
@@ -114,16 +111,15 @@ public abstract class SVGNode extends RefCnt {
         return this;
     }
 
-    @NotNull
-    public Optional<SVGColorSpace> getColorInterpolation() {
+    @Nullable
+    public SVGColorSpace getColorInterpolation() {
         try {
             Stats.onNativeCall();
             if (_nHasColorInterpolation(_ptr)) {
                 Stats.onNativeCall();
-                return Optional.of(SVGColorSpace._values[_nGetColorInterpolation(_ptr)]);
-            }
-            else {
-                return Optional.empty();
+                return SVGColorSpace._values[_nGetColorInterpolation(_ptr)];
+            }  else {
+                return null;
             }
         } finally {
             ReferenceUtil.reachabilityFence(this);
@@ -145,16 +141,16 @@ public abstract class SVGNode extends RefCnt {
         return this;
     }
 
-    @NotNull
-    public Optional<SVGColorSpace> getColorInterpolationFilters() {
+    @Nullable
+    public SVGColorSpace getColorInterpolationFilters() {
         try {
             Stats.onNativeCall();
             if (_nHasColorInterpolationFilters(_ptr)) {
                 Stats.onNativeCall();
-                return Optional.of(SVGColorSpace._values[_nGetColorInterpolationFilters(_ptr)]);
+                return SVGColorSpace._values[_nGetColorInterpolationFilters(_ptr)];
             }
             else {
-                return Optional.empty();
+                return null;
             }
         } finally {
             ReferenceUtil.reachabilityFence(this);
@@ -176,16 +172,16 @@ public abstract class SVGNode extends RefCnt {
         return this;
     }
 
-    @NotNull
-    public Optional<SVGFillRule> getFillRule() {
+    @Nullable
+    public SVGFillRule getFillRule() {
         try {
             Stats.onNativeCall();
             if (_nHasFillRule(_ptr)) {
                 Stats.onNativeCall();
-                return Optional.of(SVGFillRule._values[_nGetFillRule(_ptr)]);
+                return SVGFillRule._values[_nGetFillRule(_ptr)];
             }
             else {
-                return Optional.empty();
+                return null;
             }
         } finally {
             ReferenceUtil.reachabilityFence(this);
@@ -207,11 +203,11 @@ public abstract class SVGNode extends RefCnt {
         return this;
     }
 
-    @NotNull
-    public Optional<SVGLength> getStrokeWidth() {
+    @Nullable
+    public SVGLength getStrokeWidth() {
         try {
             Stats.onNativeCall();
-            return Optional.ofNullable(_nGetStrokeWidth(_ptr));
+            return _nGetStrokeWidth(_ptr);
         } finally {
             ReferenceUtil.reachabilityFence(this);
         }

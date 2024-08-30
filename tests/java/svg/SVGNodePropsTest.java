@@ -14,60 +14,60 @@ public class SVGNodePropsTest implements Executable {
         // Clip Rule
 
         node.setClipRule(SVGFillRule.EVEN_ODD);
-        assertEquals(SVGFillRule.EVEN_ODD, node.getClipRule().get());
+        assertEquals(SVGFillRule.EVEN_ODD, node.getClipRule());
 
         node.setClipRule(null);
-        if (node.getClipRule().isPresent()) {
+        if (node.getClipRule() != null) {
             runner.fail("clip rule should not have value");
         }
 
         // Color
 
         node.setColor(0xFFFFFF);
-        assertEquals(0xFFFFFF, node.getColor().getAsInt());
+        assertEquals(0xFFFFFF, node.getColor());
 
         node.setColor(null);
-        if (node.getColor().isPresent()) {
+        if (node.getColor() != null) {
             runner.fail("color should not have value");
         }
 
         // Color Interpolation
 
         node.setColorInterpolation(SVGColorSpace.SRGB);
-        assertEquals(SVGColorSpace.SRGB, node.getColorInterpolation().get());
+        assertEquals(SVGColorSpace.SRGB, node.getColorInterpolation());
 
         node.setColorInterpolation(null);
-        if (node.getColorInterpolation().isPresent()) {
+        if (node.getColorInterpolation() != null) {
             runner.fail("color interpolation should not have value");
         }
 
         // Color Interpolation Filters
 
         node.setColorInterpolationFilters(SVGColorSpace.SRGB);
-        assertEquals(SVGColorSpace.SRGB, node.getColorInterpolationFilters().get());
+        assertEquals(SVGColorSpace.SRGB, node.getColorInterpolationFilters());
 
         node.setColorInterpolationFilters(null);
-        if (node.getColorInterpolationFilters().isPresent()) {
+        if (node.getColorInterpolationFilters() != null) {
             runner.fail("color interpolation filters should not have value");
         }
 
         // Fill Rule
 
         node.setFillRule(SVGFillRule.EVEN_ODD);
-        assertEquals(SVGFillRule.EVEN_ODD, node.getFillRule().get());
+        assertEquals(SVGFillRule.EVEN_ODD, node.getFillRule());
 
         node.setFillRule(null);
-        if (node.getFillRule().isPresent()) {
+        if (node.getFillRule() != null) {
             runner.fail("fill rule should not have value");
         }
 
         // Stroke Width
 
         node.setStrokeWidth(new SVGLength(1f));
-        assertEquals(1f, node.getStrokeWidth().get().getValue());
+        assertEquals(1f, node.getStrokeWidth().getValue());
 
         node.setStrokeWidth(null);
-        if (node.getStrokeWidth().isPresent()) {
+        if (node.getStrokeWidth() != null) {
             runner.fail("stroke width should not have value");
         }
     }
