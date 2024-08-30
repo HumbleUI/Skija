@@ -6,8 +6,6 @@ import org.jetbrains.annotations.ApiStatus;
 @Data
 public class SVGPaint {
     @ApiStatus.Internal public final SVGPaintType _type;
-
-    // logical union
     @ApiStatus.Internal public final int _color;
     @ApiStatus.Internal public final SVGIRI _iri;
 
@@ -18,17 +16,8 @@ public class SVGPaint {
         _iri = iri;
     }
 
-    @ApiStatus.Internal
-    public SVGPaint(int type, int color, SVGIRI iri) {
-        this(SVGPaintType._values[type], color, iri);
-    }
-
     public SVGPaint() {
         this(SVGPaintType.NONE, 0x000000, new SVGIRI());
-    }
-
-    public SVGPaint(SVGPaintType type) {
-        this(type, 0x000000, new SVGIRI());
     }
 
     public SVGPaint(int color) {
