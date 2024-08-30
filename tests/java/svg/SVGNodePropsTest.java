@@ -14,12 +14,7 @@ public class SVGNodePropsTest implements Executable {
         node.setStrokeWidth(new SVGLength(1f));
         assertEquals(1f, node.getStrokeWidth().get().getValue());
 
-        node.setStrokeWidth(SVGProperty.unspecified());
-        if (node.getStrokeWidth().isPresent()) {
-            runner.fail("StrokeWidth should not have value");
-        }
-
-        node.setStrokeWidth(SVGProperty.inherit());
+        node.setStrokeWidth(null);
         if (node.getStrokeWidth().isPresent()) {
             runner.fail("StrokeWidth should not have value");
         }

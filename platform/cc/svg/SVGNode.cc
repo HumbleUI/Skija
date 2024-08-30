@@ -29,14 +29,12 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nS
   (JNIEnv* env, jclass jclass, jlong ptr, jfloat value, jint unit) {
     SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
     SkSVGLength length(value, static_cast<SkSVGLength::Unit>(unit));
-    SkSVGProperty<SkSVGLength, true> prop(length);
-    instance->setStrokeWidth(prop);
+    instance->setStrokeWidth(SkSVGProperty<SkSVGLength, true>(length));
 }
 
 extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nSetStrokeWidthNull
-  (JNIEnv* env, jclass jclass, jlong ptr, jint state) {
+  (JNIEnv* env, jclass jclass, jlong ptr) {
     SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
-    SkSVGProperty<SkSVGLength, true> prop(static_cast<SkSVGPropertyState>(state));
-    instance->setStrokeWidth(prop);
+    instance->setStrokeWidth(SkSVGProperty<SkSVGLength, true>(SkSVGPropertyState::kUnspecified));
 }
 
