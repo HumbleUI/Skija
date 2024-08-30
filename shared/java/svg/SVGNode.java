@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
+import java.util.OptionalInt;
 
 /**
  * Note about the lack of explicit inherit in attribute API: Internally, Skia uses a wrapper type called SkSVGProperty
@@ -52,6 +53,68 @@ public abstract class SVGNode extends RefCnt {
     }
 
     @NotNull
+    public Optional<SVGFillRuleType> getClipRule() {
+        try {
+            Stats.onNativeCall();
+            if (_nHasClipRule(_ptr)) {
+                Stats.onNativeCall();
+                return Optional.of(SVGFillRuleType._values[_nGetClipRule(_ptr)]);
+            }
+            else {
+                return Optional.empty();
+            }
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    @NotNull @Contract("_ -> this")
+    public SVGNode setClipRule(@Nullable SVGFillRuleType type) {
+        try {
+            Stats.onNativeCall();
+            if (type != null) {
+                _nSetClipRule(_ptr, type.ordinal());
+            } else {
+                _nSetClipRuleNull(_ptr);
+            }
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+        return this;
+    }
+
+    @NotNull
+    public OptionalInt getColor() {
+        try {
+            Stats.onNativeCall();
+            if (_nHasColor(_ptr)) {
+                Stats.onNativeCall();
+                return OptionalInt.of(_nGetColor(_ptr));
+            }
+            else {
+                return OptionalInt.empty();
+            }
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    @NotNull @Contract("_ -> this")
+    public SVGNode setColor(@Nullable Integer color) {
+        try {
+            Stats.onNativeCall();
+            if (color != null) {
+                _nSetColor(_ptr, color);
+            } else {
+                _nSetColorNull(_ptr);
+            }
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+        return this;
+    }
+
+    @NotNull
     public Optional<SVGLength> getStrokeWidth() {
         try {
             Stats.onNativeCall();
@@ -66,7 +129,7 @@ public abstract class SVGNode extends RefCnt {
         try {
             Stats.onNativeCall();
             if (length != null) {
-                _nSetStrokeWidthValue(_ptr, length._value, length._unit.ordinal());
+                _nSetStrokeWidth(_ptr, length._value, length._unit.ordinal());
             } else {
                 _nSetStrokeWidthNull(_ptr);
             }
@@ -78,7 +141,18 @@ public abstract class SVGNode extends RefCnt {
 
     @ApiStatus.Internal public static native int _nGetTag(long ptr);
     @ApiStatus.Internal public static native boolean _nParseAndSetAttribute(long ptr, String name, String value);
+
+    @ApiStatus.Internal public static native boolean _nHasClipRule(long ptr);
+    @ApiStatus.Internal public static native int _nGetClipRule(long ptr);
+    @ApiStatus.Internal public static native void _nSetClipRule(long ptr, int type);
+    @ApiStatus.Internal public static native void _nSetClipRuleNull(long ptr);
+
+    @ApiStatus.Internal public static native boolean _nHasColor(long ptr);
+    @ApiStatus.Internal public static native int _nGetColor(long ptr);
+    @ApiStatus.Internal public static native void _nSetColor(long ptr, int color);
+    @ApiStatus.Internal public static native void _nSetColorNull(long ptr);
+
     @ApiStatus.Internal public static native SVGLength _nGetStrokeWidth(long ptr);
-    @ApiStatus.Internal public static native void _nSetStrokeWidthValue(long ptr, float value, int unit);
+    @ApiStatus.Internal public static native void _nSetStrokeWidth(long ptr, float value, int unit);
     @ApiStatus.Internal public static native void _nSetStrokeWidthNull(long ptr);
 }
