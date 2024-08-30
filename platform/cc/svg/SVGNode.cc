@@ -18,7 +18,7 @@ extern "C" JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nP
     return instance->parseAndSetAttribute(name.c_str(), value.c_str());
 }
 
-// ClipRule
+// Clip Rule
 
 extern "C" JNIEXPORT jboolean JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nHasClipRule
   (JNIEnv* env, jclass jclass, jlong ptr) {
@@ -69,6 +69,85 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nS
   (JNIEnv* env, jclass jclass, jlong ptr) {
     SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
     instance->setColor(SkSVGProperty<SkSVGColorType, true>(SkSVGPropertyState::kUnspecified));
+}
+
+// Color Interpolation
+
+extern "C" JNIEXPORT jboolean JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nHasColorInterpolation
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    return instance->getColorInterpolation().isValue();
+}
+
+extern "C" JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nGetColorInterpolation
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    return static_cast<jint>(*(instance->getColorInterpolation()));
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nSetColorInterpolation
+  (JNIEnv* env, jclass jclass, jlong ptr, jint space) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    instance->setColorInterpolation(SkSVGProperty<SkSVGColorspace, true>(static_cast<SkSVGColorspace>(space)));
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nSetColorInterpolationNull
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    instance->setColorInterpolation(SkSVGProperty<SkSVGColorspace, true>(SkSVGPropertyState::kUnspecified));
+}
+
+// Color Interpolation Filters
+
+extern "C" JNIEXPORT jboolean JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nHasColorInterpolationFilters
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    return instance->getColorInterpolationFilters().isValue();
+}
+
+extern "C" JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nGetColorInterpolationFilters
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    return static_cast<jint>(*(instance->getColorInterpolationFilters()));
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nSetColorInterpolationFilters
+  (JNIEnv* env, jclass jclass, jlong ptr, jint space) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    instance->setColorInterpolationFilters(SkSVGProperty<SkSVGColorspace, true>(static_cast<SkSVGColorspace>(space)));
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nSetColorInterpolationFiltersNull
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    instance->setColorInterpolationFilters(SkSVGProperty<SkSVGColorspace, true>(SkSVGPropertyState::kUnspecified));
+}
+
+// Fill Rule
+
+extern "C" JNIEXPORT jboolean JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nHasFillRule
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    return instance->getFillRule().isValue();
+}
+
+extern "C" JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nGetFillRule
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    return static_cast<jint>((*(instance->getFillRule())).type());
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nSetFillRule
+  (JNIEnv* env, jclass jclass, jlong ptr, jint type) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    SkSVGFillRule fill(static_cast<SkSVGFillRule::Type>(type));
+    instance->setFillRule(SkSVGProperty<SkSVGFillRule, true>(fill));
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nSetFillRuleNull
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    instance->setFillRule(SkSVGProperty<SkSVGFillRule, true>(SkSVGPropertyState::kUnspecified));
 }
 
 // Stroke Width

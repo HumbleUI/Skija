@@ -53,12 +53,12 @@ public abstract class SVGNode extends RefCnt {
     }
 
     @NotNull
-    public Optional<SVGFillRuleType> getClipRule() {
+    public Optional<SVGFillRule> getClipRule() {
         try {
             Stats.onNativeCall();
             if (_nHasClipRule(_ptr)) {
                 Stats.onNativeCall();
-                return Optional.of(SVGFillRuleType._values[_nGetClipRule(_ptr)]);
+                return Optional.of(SVGFillRule._values[_nGetClipRule(_ptr)]);
             }
             else {
                 return Optional.empty();
@@ -69,7 +69,7 @@ public abstract class SVGNode extends RefCnt {
     }
 
     @NotNull @Contract("_ -> this")
-    public SVGNode setClipRule(@Nullable SVGFillRuleType type) {
+    public SVGNode setClipRule(@Nullable SVGFillRule type) {
         try {
             Stats.onNativeCall();
             if (type != null) {
@@ -115,6 +115,99 @@ public abstract class SVGNode extends RefCnt {
     }
 
     @NotNull
+    public Optional<SVGColorSpace> getColorInterpolation() {
+        try {
+            Stats.onNativeCall();
+            if (_nHasColorInterpolation(_ptr)) {
+                Stats.onNativeCall();
+                return Optional.of(SVGColorSpace._values[_nGetColorInterpolation(_ptr)]);
+            }
+            else {
+                return Optional.empty();
+            }
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    @NotNull @Contract("_ -> this")
+    public SVGNode setColorInterpolation(@Nullable SVGColorSpace color) {
+        try {
+            Stats.onNativeCall();
+            if (color != null) {
+                _nSetColorInterpolation(_ptr, color.ordinal());
+            } else {
+                _nSetColorInterpolationNull(_ptr);
+            }
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+        return this;
+    }
+
+    @NotNull
+    public Optional<SVGColorSpace> getColorInterpolationFilters() {
+        try {
+            Stats.onNativeCall();
+            if (_nHasColorInterpolationFilters(_ptr)) {
+                Stats.onNativeCall();
+                return Optional.of(SVGColorSpace._values[_nGetColorInterpolationFilters(_ptr)]);
+            }
+            else {
+                return Optional.empty();
+            }
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    @NotNull @Contract("_ -> this")
+    public SVGNode setColorInterpolationFilters(@Nullable SVGColorSpace color) {
+        try {
+            Stats.onNativeCall();
+            if (color != null) {
+                _nSetColorInterpolationFilters(_ptr, color.ordinal());
+            } else {
+                _nSetColorInterpolationFiltersNull(_ptr);
+            }
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+        return this;
+    }
+
+    @NotNull
+    public Optional<SVGFillRule> getFillRule() {
+        try {
+            Stats.onNativeCall();
+            if (_nHasFillRule(_ptr)) {
+                Stats.onNativeCall();
+                return Optional.of(SVGFillRule._values[_nGetFillRule(_ptr)]);
+            }
+            else {
+                return Optional.empty();
+            }
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    @NotNull @Contract("_ -> this")
+    public SVGNode setFillRule(@Nullable SVGFillRule type) {
+        try {
+            Stats.onNativeCall();
+            if (type != null) {
+                _nSetFillRule(_ptr, type.ordinal());
+            } else {
+                _nSetFillRuleNull(_ptr);
+            }
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+        return this;
+    }
+
+    @NotNull
     public Optional<SVGLength> getStrokeWidth() {
         try {
             Stats.onNativeCall();
@@ -151,6 +244,21 @@ public abstract class SVGNode extends RefCnt {
     @ApiStatus.Internal public static native int _nGetColor(long ptr);
     @ApiStatus.Internal public static native void _nSetColor(long ptr, int color);
     @ApiStatus.Internal public static native void _nSetColorNull(long ptr);
+
+    @ApiStatus.Internal public static native boolean _nHasColorInterpolation(long ptr);
+    @ApiStatus.Internal public static native int _nGetColorInterpolation(long ptr);
+    @ApiStatus.Internal public static native void _nSetColorInterpolation(long ptr, int color);
+    @ApiStatus.Internal public static native void _nSetColorInterpolationNull(long ptr);
+
+    @ApiStatus.Internal public static native boolean _nHasColorInterpolationFilters(long ptr);
+    @ApiStatus.Internal public static native int _nGetColorInterpolationFilters(long ptr);
+    @ApiStatus.Internal public static native void _nSetColorInterpolationFilters(long ptr, int color);
+    @ApiStatus.Internal public static native void _nSetColorInterpolationFiltersNull(long ptr);
+
+    @ApiStatus.Internal public static native boolean _nHasFillRule(long ptr);
+    @ApiStatus.Internal public static native int _nGetFillRule(long ptr);
+    @ApiStatus.Internal public static native void _nSetFillRule(long ptr, int type);
+    @ApiStatus.Internal public static native void _nSetFillRuleNull(long ptr);
 
     @ApiStatus.Internal public static native SVGLength _nGetStrokeWidth(long ptr);
     @ApiStatus.Internal public static native void _nSetStrokeWidth(long ptr, float value, int unit);
