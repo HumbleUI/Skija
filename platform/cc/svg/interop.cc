@@ -20,16 +20,16 @@ namespace skija {
 
             SkSVGColor fromJava(JNIEnv* env, jint jtype, jint color, jobjectArray vars) {
                 SkSVGColor::Type type = static_cast<SkSVGColor::Type>(jtype);
-                return SkSVGColor(SkSVGColor::Type::kCurrentColor, skStringVector(env, vars));
                 switch (type) {
                     case SkSVGColor::Type::kCurrentColor:
-                        return SkSVGColor();
+                        // TODO: SkSVGColor default constructor has undefined behavior for member var fType
+                        return SkSVGColor(SkSVGColor::Type::kCurrentColor, std::vector<SkString>());
                     case SkSVGColor::Type::kColor:
                         return SkSVGColor(color, skStringVector(env, vars));
                     case SkSVGColor::Type::kICCColor:
                         return SkSVGColor(type, skStringVector(env, vars));
                     default:
-                        return SkSVGColor();
+                        return SkSVGColor(SkSVGColor::Type::kCurrentColor, std::vector<SkString>());
                 }
             }
 
@@ -81,7 +81,7 @@ namespace skija {
                 cls  = static_cast<jclass>(env->NewGlobalRef(local));
                 ctorNone = env->GetMethodID(cls, "<init>", "()V");
                 ctorColor = env->GetMethodID(cls, "<init>", "(Lio/github/humbleui/skija/svg/SVGColor;)V");
-                ctorIRI = env->GetMethodID(cls, "<init>", "(Lio/github/humbleui/skija/svg/SVGIRI;I)V");
+                ctorIRI = env->GetMethodID(cls, "<init>", "(Lio/github/humbleui/skija/svg/SVGIRI;Lio/github/humbleui/skija/svg/SVGColor;)V");
             }
 
             void onUnload(JNIEnv* env) {

@@ -67,6 +67,17 @@ public class SVGNodePropsTest implements Executable {
         assertEquals(new SVGPaint(0xFFFFFF), node.getFill());
         node.setFill(new SVGPaint(new SVGColor()));
         assertEquals(new SVGPaint(new SVGColor()), node.getFill());
+        node.setFill(new SVGPaint(new SVGColor(0xFFFFFF, new String[]{"test"})));
+        assertEquals(new SVGPaint(new SVGColor(0xFFFFFF, new String[]{"test"})), node.getFill());
+        node.setFill(new SVGPaint(new SVGIRI(), 0xFFFFFF));
+        assertEquals(new SVGPaint(new SVGIRI(), 0xFFFFFF), node.getFill());
+        node.setFill(new SVGPaint(new SVGIRI(SVGIRIType.DATA_URI, "test"), 0xFFFFFF));
+        assertEquals(new SVGPaint(new SVGIRI(SVGIRIType.DATA_URI, "test"), 0xFFFFFF), node.getFill());
+
+        node.setFill(null);
+        if (node.getFill() != null) {
+            runner.fail("fill should not have value");
+        }
 
         // Stroke Width
 

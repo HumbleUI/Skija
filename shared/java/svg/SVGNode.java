@@ -214,6 +214,11 @@ public abstract class SVGNode extends RefCnt {
     }
 
     @NotNull @Contract("_ -> this")
+    public SVGNode setFill(int color) {
+        return setFill(new SVGPaint(color));
+    }
+
+    @NotNull @Contract("_ -> this")
     public SVGNode setFill(@Nullable SVGPaint paint) {
         try {
             Stats.onNativeCall();
