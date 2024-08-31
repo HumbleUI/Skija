@@ -61,6 +61,13 @@ public class SVGNodePropsTest implements Executable {
             runner.fail("fill rule should not have value");
         }
 
+        // Fill
+
+        node.setFill(new SVGPaint(0xFFFFFF));
+        assertEquals(new SVGPaint(0xFFFFFF), node.getFill());
+        node.setFill(new SVGPaint(new SVGColor()));
+        assertEquals(new SVGPaint(new SVGColor()), node.getFill());
+
         // Stroke Width
 
         node.setStrokeWidth(new SVGLength(1f));

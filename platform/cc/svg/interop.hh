@@ -10,6 +10,7 @@ namespace skija {
 
             void onLoad(JNIEnv* env);
             void onUnload(JNIEnv* env);
+            SkSVGColor fromJava(JNIEnv* env, jint jtype, jint color, jobjectArray vars);
             jobject toJava(JNIEnv* env, const SkSVGColor& color);
         }
 
@@ -19,6 +20,7 @@ namespace skija {
 
             void onLoad(JNIEnv* env);
             void onUnload(JNIEnv* env);
+            SkSVGIRI fromJava(JNIEnv* env, jint jtype, jstring iri);
             jobject toJava(JNIEnv* env, const SkSVGIRI& paint);
         }
 
@@ -30,6 +32,7 @@ namespace skija {
 
             void onLoad(JNIEnv* env);
             void onUnload(JNIEnv* env);
+            SkSVGPaint fromJava(JNIEnv* env, jint jtype, jint colorType, jint color, jobjectArray vars, jint iriType, jstring iri);
             jobject toJava(JNIEnv* env, const SkSVGPaint& paint);
         }
 

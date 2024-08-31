@@ -204,6 +204,38 @@ public abstract class SVGNode extends RefCnt {
     }
 
     @Nullable
+    public SVGPaint getFill() {
+        try {
+            Stats.onNativeCall();
+            return _nGetFill(_ptr);
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    @NotNull @Contract("_ -> this")
+    public SVGNode setFill(@Nullable SVGPaint paint) {
+        try {
+            Stats.onNativeCall();
+            if (paint != null) {
+                _nSetFill(_ptr,
+                        paint.getType().ordinal(),
+                        paint.getColor().getType().ordinal(),
+                        paint.getColor().getColor(),
+                        paint.getColor().getVars(),
+                        paint.getIri().getType().ordinal(),
+                        paint.getIri().getIri()
+                );
+            } else {
+                _nSetFillNull(_ptr);
+            }
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+        return this;
+    }
+
+    @Nullable
     public SVGLength getStrokeWidth() {
         try {
             Stats.onNativeCall();
@@ -255,6 +287,10 @@ public abstract class SVGNode extends RefCnt {
     @ApiStatus.Internal public static native int _nGetFillRule(long ptr);
     @ApiStatus.Internal public static native void _nSetFillRule(long ptr, int type);
     @ApiStatus.Internal public static native void _nSetFillRuleNull(long ptr);
+
+    @ApiStatus.Internal public static native SVGPaint _nGetFill(long ptr);
+    @ApiStatus.Internal public static native void _nSetFill(long ptr, int type, int colorType, int color, String[] vars, int iriType, String iri);
+    @ApiStatus.Internal public static native void _nSetFillNull(long ptr);
 
     @ApiStatus.Internal public static native SVGLength _nGetStrokeWidth(long ptr);
     @ApiStatus.Internal public static native void _nSetStrokeWidth(long ptr, float value, int unit);
