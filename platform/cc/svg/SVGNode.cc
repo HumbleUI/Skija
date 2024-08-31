@@ -171,6 +171,32 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nS
     instance->setFill(SkSVGProperty<SkSVGPaint, true>(SkSVGPropertyState::kUnspecified));
 }
 
+// Fill Opacity
+
+extern "C" JNIEXPORT jboolean JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nHasFillOpacity
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    return instance->getFillOpacity().isValue();
+}
+
+extern "C" JNIEXPORT jfloat JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nGetFillOpacity
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    return *(instance->getFillOpacity());
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nSetFillOpacity
+  (JNIEnv* env, jclass jclass, jlong ptr, jfloat opacity) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    instance->setFillOpacity(SkSVGProperty<SkSVGNumberType, true>(opacity));
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nSetFillOpacityNull
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    instance->setFillOpacity(SkSVGProperty<SkSVGNumberType, true>(SkSVGPropertyState::kUnspecified));
+}
+
 // Stroke Width
 
 extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nGetStrokeWidth

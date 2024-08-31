@@ -241,6 +241,37 @@ public abstract class SVGNode extends RefCnt {
     }
 
     @Nullable
+    public Float getFillOpacity() {
+        try {
+            Stats.onNativeCall();
+            if (_nHasFillOpacity(_ptr)) {
+                Stats.onNativeCall();
+                return _nGetFillOpacity(_ptr);
+            }
+            else {
+                return null;
+            }
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    @NotNull @Contract("_ -> this")
+    public SVGNode setFillOpacity(@Nullable Float opacity) {
+        try {
+            Stats.onNativeCall();
+            if (opacity != null) {
+                _nSetFillOpacity(_ptr, opacity);
+            } else {
+                _nSetFillOpacityNull(_ptr);
+            }
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+        return this;
+    }
+
+    @Nullable
     public SVGLength getStrokeWidth() {
         try {
             Stats.onNativeCall();
@@ -296,6 +327,11 @@ public abstract class SVGNode extends RefCnt {
     @ApiStatus.Internal public static native SVGPaint _nGetFill(long ptr);
     @ApiStatus.Internal public static native void _nSetFill(long ptr, int type, int colorType, int color, String[] vars, int iriType, String iri);
     @ApiStatus.Internal public static native void _nSetFillNull(long ptr);
+
+    @ApiStatus.Internal public static native boolean _nHasFillOpacity(long ptr);
+    @ApiStatus.Internal public static native float _nGetFillOpacity(long ptr);
+    @ApiStatus.Internal public static native void _nSetFillOpacity(long ptr, float opacity);
+    @ApiStatus.Internal public static native void _nSetFillOpacityNull(long ptr);
 
     @ApiStatus.Internal public static native SVGLength _nGetStrokeWidth(long ptr);
     @ApiStatus.Internal public static native void _nSetStrokeWidth(long ptr, float value, int unit);

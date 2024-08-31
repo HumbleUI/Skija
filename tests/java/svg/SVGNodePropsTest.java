@@ -79,6 +79,16 @@ public class SVGNodePropsTest implements Executable {
             runner.fail("fill should not have value");
         }
 
+        // Fill Opacity
+
+        node.setFillOpacity(1f);
+        assertEquals(1f, node.getFillOpacity());
+
+        node.setFillOpacity(null);
+        if (node.getFillOpacity() != null) {
+            runner.fail("fill opacity should not have value");
+        }
+
         // Stroke Width
 
         node.setStrokeWidth(new SVGLength(1f));
