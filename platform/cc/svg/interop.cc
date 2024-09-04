@@ -143,6 +143,28 @@ namespace skija {
             }
         }
 
+        namespace SVGFontFamily {
+            jclass cls;
+            jmethodID ctor;
+
+            void onLoad(JNIEnv* env) {
+                jclass local = env->FindClass("io/github/humbleui/skija/svg/SVGFontFamily");
+                cls  = static_cast<jclass>(env->NewGlobalRef(local));
+                ctor = env->GetMethodID(cls, "<init>", "(ILjava/lang/String;)V");
+            }
+
+            void onUnload(JNIEnv* env) {
+                env->DeleteGlobalRef(cls);
+            }
+
+            jobject toJava(JNIEnv* env, const SkSVGFontFamily& family) {
+                jstring str = family.type() == SkSVGFontFamily::Type::kFamily
+                    ? javaString(env, family.family())
+                    : nullptr;
+                return env->NewObject(cls, ctor, static_cast<jint>(family.type()), str);
+            }
+        }
+
         namespace SVGPreserveAspectRatio {
             jclass cls;
             jmethodID ctor;
@@ -167,11 +189,13 @@ namespace skija {
             SVGIRI::onLoad(env);
             SVGPaint::onLoad(env);
             SVGLength::onLoad(env);
+            SVGFontFamily::onLoad(env);
             SVGPreserveAspectRatio::onLoad(env);
         }
 
         void onUnload(JNIEnv* env) {
             SVGPreserveAspectRatio::onUnload(env);
+            SVGFontFamily::onUnload(env);
             SVGLength::onUnload(env);
             SVGPaint::onUnload(env);
             SVGIRI::onUnload(env);

@@ -89,6 +89,18 @@ public class SVGNodePropsTest implements Executable {
             runner.fail("fill opacity should not have value");
         }
 
+        // Font Family
+
+        node.setFontFamily(new SVGFontFamily("test"));
+        assertEquals(new SVGFontFamily("test"), node.getFontFamily());
+        node.setFontFamily(new SVGFontFamily());
+        assertEquals(new SVGFontFamily(), node.getFontFamily());
+
+        node.setFontFamily(null);
+        if (node.getFontFamily() != null) {
+            runner.fail("font family should not have value");
+        }
+
         // Stroke Width
 
         node.setStrokeWidth(new SVGLength(1f));

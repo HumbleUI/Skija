@@ -272,6 +272,31 @@ public abstract class SVGNode extends RefCnt {
     }
 
     @Nullable
+    public SVGFontFamily getFontFamily() {
+        try {
+            Stats.onNativeCall();
+            return _nGetFontFamily(_ptr);
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    @NotNull @Contract("_ -> this")
+    public SVGNode setFontFamily(@Nullable SVGFontFamily family) {
+        try {
+            Stats.onNativeCall();
+            if (family != null) {
+                _nSetFontFamily(_ptr, family._type.ordinal(), family._family);
+            } else {
+                _nSetFontFamilyNull(_ptr);
+            }
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+        return this;
+    }
+
+    @Nullable
     public SVGLength getStrokeWidth() {
         try {
             Stats.onNativeCall();
@@ -332,6 +357,10 @@ public abstract class SVGNode extends RefCnt {
     @ApiStatus.Internal public static native float _nGetFillOpacity(long ptr);
     @ApiStatus.Internal public static native void _nSetFillOpacity(long ptr, float opacity);
     @ApiStatus.Internal public static native void _nSetFillOpacityNull(long ptr);
+
+    @ApiStatus.Internal public static native SVGFontFamily _nGetFontFamily(long ptr);
+    @ApiStatus.Internal public static native void _nSetFontFamily(long ptr, int type, String family);
+    @ApiStatus.Internal public static native void _nSetFontFamilyNull(long ptr);
 
     @ApiStatus.Internal public static native SVGLength _nGetStrokeWidth(long ptr);
     @ApiStatus.Internal public static native void _nSetStrokeWidth(long ptr, float value, int unit);

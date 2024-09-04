@@ -197,6 +197,32 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nS
     instance->setFillOpacity(SkSVGProperty<SkSVGNumberType, true>(SkSVGPropertyState::kUnspecified));
 }
 
+// Font Family
+
+extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nGetFontFamily
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    SkSVGProperty<SkSVGFontFamily, true> property = instance->getFontFamily();
+    return property.isValue() ? skija::svg::SVGFontFamily::toJava(env, *property) : nullptr;
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nSetFontFamily
+  (JNIEnv* env, jclass jclass, jlong ptr, jint type, jstring family) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    SkSVGFontFamily::Type castType = static_cast<SkSVGFontFamily::Type>(type);
+    if (castType == SkSVGFontFamily::Type::kFamily) {
+        instance->setFontFamily(SkSVGProperty<SkSVGFontFamily, true>(SkSVGFontFamily(skString(env, family).c_str())));
+    } else {
+        instance->setFontFamily(SkSVGProperty<SkSVGFontFamily, true>(SkSVGFontFamily()));
+    }
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nSetFontFamilyNull
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    instance->setFontFamily(SkSVGProperty<SkSVGFontFamily, true>(SkSVGPropertyState::kUnspecified));
+}
+
 // Stroke Width
 
 extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nGetStrokeWidth
