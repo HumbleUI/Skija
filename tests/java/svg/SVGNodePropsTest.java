@@ -101,6 +101,19 @@ public class SVGNodePropsTest implements Executable {
             runner.fail("font family should not have value");
         }
 
+        // Font Size
+
+        node.setFontSize(new SVGFontSize(new SVGLength(1f)));
+        assertEquals(new SVGFontSize(new SVGLength(1f)), node.getFontSize());
+        node.setFontSize(new SVGFontSize());
+        assertEquals(new SVGFontSize(), node.getFontSize());
+
+        node.setFontSize(null);
+        if (node.getFontSize() != null) {
+            runner.fail("font size should not have value");
+        }
+
+
         // Stroke Width
 
         node.setStrokeWidth(new SVGLength(1f));

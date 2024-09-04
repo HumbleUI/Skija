@@ -223,6 +223,33 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nS
     instance->setFontFamily(SkSVGProperty<SkSVGFontFamily, true>(SkSVGPropertyState::kUnspecified));
 }
 
+// Font Size
+
+extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nGetFontSize
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    SkSVGProperty<SkSVGFontSize, true> property = instance->getFontSize();
+    return property.isValue() ? skija::svg::SVGFontSize::toJava(env, *property) : nullptr;
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nSetFontSize
+  (JNIEnv* env, jclass jclass, jlong ptr, jint type, jfloat value, jint unit) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    SkSVGLength length(value, static_cast<SkSVGLength::Unit>(unit));
+    SkSVGFontSize::Type castType = static_cast<SkSVGFontSize::Type>(type);
+    if (castType == SkSVGFontSize::Type::kLength) {
+        instance->setFontSize(SkSVGProperty<SkSVGFontSize, true>(SkSVGFontSize(length)));
+    } else {
+        instance->setFontSize(SkSVGProperty<SkSVGFontSize, true>(SkSVGFontSize()));
+    }
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nSetFontSizeNull
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    instance->setFontSize(SkSVGProperty<SkSVGFontSize, true>(SkSVGPropertyState::kUnspecified));
+}
+
 // Stroke Width
 
 extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nGetStrokeWidth

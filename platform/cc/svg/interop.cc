@@ -165,6 +165,25 @@ namespace skija {
             }
         }
 
+        namespace SVGFontSize {
+            jclass cls;
+            jmethodID ctor;
+
+            void onLoad(JNIEnv* env) {
+                jclass local = env->FindClass("io/github/humbleui/skija/svg/SVGFontSize");
+                cls  = static_cast<jclass>(env->NewGlobalRef(local));
+                ctor = env->GetMethodID(cls, "<init>", "(ILio/github/humbleui/skija/svg/SVGLength;)V");
+            }
+
+            void onUnload(JNIEnv* env) {
+                env->DeleteGlobalRef(cls);
+            }
+
+            jobject toJava(JNIEnv* env, const SkSVGFontSize& size) {
+                return env->NewObject(cls, ctor, static_cast<jint>(size.type()), skija::svg::SVGLength::toJava(env, size.size()));
+            }
+        }
+
         namespace SVGPreserveAspectRatio {
             jclass cls;
             jmethodID ctor;
@@ -190,11 +209,13 @@ namespace skija {
             SVGPaint::onLoad(env);
             SVGLength::onLoad(env);
             SVGFontFamily::onLoad(env);
+            SVGFontSize::onLoad(env);
             SVGPreserveAspectRatio::onLoad(env);
         }
 
         void onUnload(JNIEnv* env) {
             SVGPreserveAspectRatio::onUnload(env);
+            SVGFontSize::onUnload(env);
             SVGFontFamily::onUnload(env);
             SVGLength::onUnload(env);
             SVGPaint::onUnload(env);

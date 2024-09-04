@@ -52,6 +52,14 @@ namespace skija {
             jobject toJava(JNIEnv* env, const SkSVGFontFamily& family);
         }
 
+        namespace SVGFontSize {
+            extern jclass cls;
+            extern jmethodID ctor;
+            void onLoad(JNIEnv* env);
+            void onUnload(JNIEnv* env);
+            jobject toJava(JNIEnv* env, const SkSVGFontSize& size);
+        }
+
         namespace SVGPreserveAspectRatio {
             extern jclass cls;
             extern jmethodID ctor;
