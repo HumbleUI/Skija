@@ -322,6 +322,37 @@ public abstract class SVGNode extends RefCnt {
     }
 
     @Nullable
+    public SVGFontStyle getFontStyle() {
+        try {
+            Stats.onNativeCall();
+            if (_nHasFontStyle(_ptr)) {
+                Stats.onNativeCall();
+                return SVGFontStyle._values[_nGetFontStyle(_ptr)];
+            }
+            else {
+                return null;
+            }
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    @NotNull @Contract("_ -> this")
+    public SVGNode setFontStyle(@Nullable SVGFontStyle style) {
+        try {
+            Stats.onNativeCall();
+            if (style != null) {
+                _nSetFontStyle(_ptr, style.ordinal());
+            } else {
+                _nSetFontStyleNull(_ptr);
+            }
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+        return this;
+    }
+
+    @Nullable
     public SVGLength getStrokeWidth() {
         try {
             Stats.onNativeCall();
@@ -390,6 +421,11 @@ public abstract class SVGNode extends RefCnt {
     @ApiStatus.Internal public static native SVGFontSize _nGetFontSize(long ptr);
     @ApiStatus.Internal public static native void _nSetFontSize(long ptr, int type, float value, int unit);
     @ApiStatus.Internal public static native void _nSetFontSizeNull(long ptr);
+
+    @ApiStatus.Internal public static native boolean _nHasFontStyle(long ptr);
+    @ApiStatus.Internal public static native int _nGetFontStyle(long ptr);
+    @ApiStatus.Internal public static native void _nSetFontStyle(long ptr, int type);
+    @ApiStatus.Internal public static native void _nSetFontStyleNull(long ptr);
 
     @ApiStatus.Internal public static native SVGLength _nGetStrokeWidth(long ptr);
     @ApiStatus.Internal public static native void _nSetStrokeWidth(long ptr, float value, int unit);

@@ -113,6 +113,15 @@ public class SVGNodePropsTest implements Executable {
             runner.fail("font size should not have value");
         }
 
+        // Fill Style
+
+        node.setFontStyle(SVGFontStyle.ITALIC);
+        assertEquals(SVGFontStyle.ITALIC, node.getFontStyle());
+
+        node.setFontStyle(null);
+        if (node.getFontStyle() != null) {
+            runner.fail("fill style should not have value");
+        }
 
         // Stroke Width
 
