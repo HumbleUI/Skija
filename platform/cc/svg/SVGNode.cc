@@ -276,6 +276,53 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nS
     instance->setFontStyle(SkSVGProperty<SkSVGFontStyle, true>(SkSVGPropertyState::kUnspecified));
 }
 
+// Font Weight
+
+extern "C" JNIEXPORT jboolean JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nHasFontWeight
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    return instance->getFontWeight().isValue();
+}
+
+extern "C" JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nGetFontWeight
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    return static_cast<jint>((*(instance->getFontWeight())).type());
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nSetFontWeight
+  (JNIEnv* env, jclass jclass, jlong ptr, jint type) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    instance->setFontWeight(SkSVGProperty<SkSVGFontWeight, true>(SkSVGFontWeight(static_cast<SkSVGFontWeight::Type>(type))));
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nSetFontWeightNull
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    instance->setFontWeight(SkSVGProperty<SkSVGFontWeight, true>(SkSVGPropertyState::kUnspecified));
+}
+
+// Stroke
+
+extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nGetStroke
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    SkSVGProperty<SkSVGPaint, true> property = instance->getStroke();
+    return property.isValue() ? skija::svg::SVGPaint::toJava(env, *property) : nullptr;
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nSetStroke
+  (JNIEnv* env, jclass jclass, jlong ptr, jint type, jint colorType, jint color, jobjectArray vars, jint iriType, jstring iri) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    instance->setStroke(SkSVGProperty<SkSVGPaint, true>(skija::svg::SVGPaint::fromJava(env, type, colorType, color, vars, iriType, iri)));
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nSetStrokeNull
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    instance->setStroke(SkSVGProperty<SkSVGPaint, true>(SkSVGPropertyState::kUnspecified));
+}
+
 // Stroke Width
 
 extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nGetStrokeWidth

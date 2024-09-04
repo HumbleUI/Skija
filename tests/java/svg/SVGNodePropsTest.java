@@ -113,7 +113,7 @@ public class SVGNodePropsTest implements Executable {
             runner.fail("font size should not have value");
         }
 
-        // Fill Style
+        // Font Style
 
         node.setFontStyle(SVGFontStyle.ITALIC);
         assertEquals(SVGFontStyle.ITALIC, node.getFontStyle());
@@ -121,6 +121,34 @@ public class SVGNodePropsTest implements Executable {
         node.setFontStyle(null);
         if (node.getFontStyle() != null) {
             runner.fail("fill style should not have value");
+        }
+
+        // Font Weight
+
+        node.setFontWeight(SVGFontWeight.WEIGHT_100);
+        assertEquals(SVGFontWeight.WEIGHT_100, node.getFontWeight());
+
+        node.setFontWeight(null);
+        if (node.getFontWeight() != null) {
+            runner.fail("fill weight should not have value");
+        }
+
+        // Stroke
+
+        node.setStroke(new SVGPaint(0xFFFFFF));
+        assertEquals(new SVGPaint(0xFFFFFF), node.getStroke());
+        node.setStroke(new SVGPaint(new SVGColor()));
+        assertEquals(new SVGPaint(new SVGColor()), node.getStroke());
+        node.setStroke(new SVGPaint(new SVGColor(0xFFFFFF, new String[]{"test"})));
+        assertEquals(new SVGPaint(new SVGColor(0xFFFFFF, new String[]{"test"})), node.getStroke());
+        node.setStroke(new SVGPaint(new SVGIRI(), 0xFFFFFF));
+        assertEquals(new SVGPaint(new SVGIRI(), 0xFFFFFF), node.getStroke());
+        node.setStroke(new SVGPaint(new SVGIRI(SVGIRIType.DATA_URI, "test"), 0xFFFFFF));
+        assertEquals(new SVGPaint(new SVGIRI(SVGIRIType.DATA_URI, "test"), 0xFFFFFF), node.getStroke());
+
+        node.setStroke(null);
+        if (node.getStroke() != null) {
+            runner.fail("stroke should not have value");
         }
 
         // Stroke Width

@@ -353,6 +353,74 @@ public abstract class SVGNode extends RefCnt {
     }
 
     @Nullable
+    public SVGFontWeight getFontWeight() {
+        try {
+            Stats.onNativeCall();
+            if (_nHasFontWeight(_ptr)) {
+                Stats.onNativeCall();
+                return SVGFontWeight._values[_nGetFontWeight(_ptr)];
+            }
+            else {
+                return null;
+            }
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    @NotNull @Contract("_ -> this")
+    public SVGNode setFontWeight(@Nullable SVGFontWeight style) {
+        try {
+            Stats.onNativeCall();
+            if (style != null) {
+                _nSetFontWeight(_ptr, style.ordinal());
+            } else {
+                _nSetFontWeightNull(_ptr);
+            }
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+        return this;
+    }
+
+    @Nullable
+    public SVGPaint getStroke() {
+        try {
+            Stats.onNativeCall();
+            return _nGetStroke(_ptr);
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    @NotNull @Contract("_ -> this")
+    public SVGNode setStroke(int color) {
+        return setStroke(new SVGPaint(color));
+    }
+
+    @NotNull @Contract("_ -> this")
+    public SVGNode setStroke(@Nullable SVGPaint paint) {
+        try {
+            Stats.onNativeCall();
+            if (paint != null) {
+                _nSetStroke(_ptr,
+                        paint.getType().ordinal(),
+                        paint.getColor().getType().ordinal(),
+                        paint.getColor().getColor(),
+                        paint.getColor().getVars(),
+                        paint.getIri().getType().ordinal(),
+                        paint.getIri().getIri()
+                );
+            } else {
+                _nSetStrokeNull(_ptr);
+            }
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+        return this;
+    }
+
+    @Nullable
     public SVGLength getStrokeWidth() {
         try {
             Stats.onNativeCall();
@@ -426,6 +494,15 @@ public abstract class SVGNode extends RefCnt {
     @ApiStatus.Internal public static native int _nGetFontStyle(long ptr);
     @ApiStatus.Internal public static native void _nSetFontStyle(long ptr, int type);
     @ApiStatus.Internal public static native void _nSetFontStyleNull(long ptr);
+
+    @ApiStatus.Internal public static native boolean _nHasFontWeight(long ptr);
+    @ApiStatus.Internal public static native int _nGetFontWeight(long ptr);
+    @ApiStatus.Internal public static native void _nSetFontWeight(long ptr, int type);
+    @ApiStatus.Internal public static native void _nSetFontWeightNull(long ptr);
+
+    @ApiStatus.Internal public static native SVGPaint _nGetStroke(long ptr);
+    @ApiStatus.Internal public static native void _nSetStroke(long ptr, int type, int colorType, int color, String[] vars, int iriType, String iri);
+    @ApiStatus.Internal public static native void _nSetStrokeNull(long ptr);
 
     @ApiStatus.Internal public static native SVGLength _nGetStrokeWidth(long ptr);
     @ApiStatus.Internal public static native void _nSetStrokeWidth(long ptr, float value, int unit);
