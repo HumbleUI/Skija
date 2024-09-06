@@ -6,7 +6,6 @@ import org.jetbrains.annotations.*;
 @AllArgsConstructor
 @Data
 @With
-@EqualsAndHashCode
 public class SVGLength {
     @ApiStatus.Internal public final float _value;
     @ApiStatus.Internal public final SVGLengthUnit _unit;

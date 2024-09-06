@@ -1,12 +1,10 @@
 package io.github.humbleui.skija.svg;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 @Data
-@EqualsAndHashCode
 public class SVGFontFamily {
     @ApiStatus.Internal public final SVGFontFamilyType _type;
     @ApiStatus.Internal @Nullable public final String _family;

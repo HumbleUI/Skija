@@ -1,11 +1,9 @@
 package io.github.humbleui.skija.svg;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import org.jetbrains.annotations.ApiStatus;
 
 @Data
-@EqualsAndHashCode
 public class SVGFontSize {
     @ApiStatus.Internal public final SVGFontSizeType _type;
     @ApiStatus.Internal public final SVGLength _size;

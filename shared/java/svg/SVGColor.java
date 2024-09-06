@@ -1,10 +1,8 @@
 package io.github.humbleui.skija.svg;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import org.jetbrains.annotations.ApiStatus;
 
-@EqualsAndHashCode
 @Data
 public class SVGColor {
     @ApiStatus.Internal public final SVGColorType _type;

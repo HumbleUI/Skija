@@ -1,11 +1,9 @@
 package io.github.humbleui.skija.svg;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
-@EqualsAndHashCode
 @Data
 public class SVGIRI {
     @ApiStatus.Internal public final SVGIRIType _type;
