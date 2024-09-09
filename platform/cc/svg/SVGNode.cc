@@ -323,6 +323,27 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nS
     instance->setStroke(SkSVGProperty<SkSVGPaint, true>(SkSVGPropertyState::kUnspecified));
 }
 
+// Stroke Dash Array
+
+extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nGetStrokeDashArray
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    SkSVGProperty<SkSVGDashArray, true> property = instance->getStrokeDashArray();
+    return property.isValue() ? skija::svg::SVGDashArray::toJava(env, *property) : nullptr;
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nSetStrokeDashArray
+  (JNIEnv* env, jclass jclass, jlong ptr, jint type, jobjectArray dashArray) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    instance->setStrokeDashArray(SkSVGProperty<SkSVGDashArray, true>(skija::svg::SVGDashArray::fromJava(env, type, dashArray)));
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nSetStrokeDashArrayNull
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    instance->setStrokeDashArray(SkSVGProperty<SkSVGDashArray, true>(SkSVGPropertyState::kUnspecified));
+}
+
 // Stroke Width
 
 extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nGetStrokeWidth

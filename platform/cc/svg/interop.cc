@@ -42,6 +42,51 @@ namespace skija {
             }
         }
 
+        namespace SVGDashArray {
+            jclass cls;
+            jmethodID ctor;
+
+            void onLoad(JNIEnv* env) {
+                jclass local = env->FindClass("io/github/humbleui/skija/svg/SVGDashArray");
+                cls  = static_cast<jclass>(env->NewGlobalRef(local));
+                ctor = env->GetMethodID(cls, "<init>", "(I[Lio/github/humbleui/skija/svg/SVGLength;)V");
+            }
+
+            void onUnload(JNIEnv* env) {
+                env->DeleteGlobalRef(cls);
+            }
+
+            SkSVGDashArray fromJava(JNIEnv* env, jint jtype, jobjectArray dashArray) {
+                SkSVGDashArray::Type type = static_cast<SkSVGDashArray::Type>(jtype);
+                switch (type) {
+                    case SkSVGDashArray::Type::kNone:
+                        return SkSVGDashArray();
+                    case SkSVGDashArray::Type::kDashArray: {
+                        jsize len = env->GetArrayLength(dashArray);
+                        std::vector<SkSVGLength> res(len);
+                        for (jint i = 0; i < len; ++i) {
+                            skija::AutoLocal<jobject> length(env, env->GetObjectArrayElement(dashArray, i));
+                            res[i] = skija::svg::SVGLength::fromJava(env, length.get());
+                        }
+                        return SkSVGDashArray(std::move(res));
+                    }
+                    case SkSVGDashArray::Type::kInherit:
+                        return SkSVGDashArray(SkSVGDashArray::Type::kInherit);
+                    default:
+                        return SkSVGDashArray();
+                }
+            }
+
+            jobject toJava(JNIEnv* env, const SkSVGDashArray& dash) {
+                jobjectArray lengthArray = env->NewObjectArray((jsize) dash.dashArray().size(), skija::svg::SVGLength::cls, nullptr);
+                for (jint i = 0; i < (jsize) dash.dashArray().size(); ++i) {
+                    skija::AutoLocal<jobject> length(env, skija::svg::SVGLength::toJava(env, dash.dashArray()[i]));
+                    env->SetObjectArrayElement(lengthArray, i, length.get());
+                }
+                return env->NewObject(cls, ctor, static_cast<jint>(dash.type()), lengthArray);
+            }
+        }
+
         namespace SVGIRI {
             jclass cls;
             jmethodID ctor;
@@ -127,19 +172,54 @@ namespace skija {
         namespace SVGLength {
             jclass cls;
             jmethodID ctor;
+            jfieldID valueField;
+            jfieldID unitField;
 
             void onLoad(JNIEnv* env) {
                 jclass local = env->FindClass("io/github/humbleui/skija/svg/SVGLength");
                 cls  = static_cast<jclass>(env->NewGlobalRef(local));
                 ctor = env->GetMethodID(cls, "<init>", "(FI)V");
+                valueField = env->GetFieldID(cls, "_value", "F");
+                unitField = env->GetFieldID(cls, "_unit", "Lio/github/humbleui/skija/svg/SVGLengthUnit;");
             }
 
             void onUnload(JNIEnv* env) {
                 env->DeleteGlobalRef(cls);
             }
 
+            SkSVGLength fromJava(JNIEnv* env, jobject object) {
+                jfloat value = env->GetFloatField(object, valueField);
+                jobject unitObject = env->GetObjectField(object, unitField);
+                jint unit = skija::svg::SVGLengthUnit::ordinal(env, unitObject);
+                return SkSVGLength(value, static_cast<SkSVGLength::Unit>(unit));
+            }
+
             jobject toJava(JNIEnv* env, const SkSVGLength& length) {
                 return env->NewObject(cls, ctor, length.value(), static_cast<jint>(length.unit()));
+            }
+        }
+
+        namespace SVGLengthUnit {
+            jclass cls;
+            jmethodID ordinalMethod;
+
+            void onLoad(JNIEnv* env) {
+                jclass local = env->FindClass("io/github/humbleui/skija/svg/SVGLengthUnit");
+                cls  = static_cast<jclass>(env->NewGlobalRef(local));
+                ordinalMethod = env->GetMethodID(cls, "ordinal", "()I");
+            }
+
+            void onUnload(JNIEnv* env) {
+                env->DeleteGlobalRef(cls);
+            }
+
+            jint ordinal(JNIEnv* env, jobject unit) {
+                jint res = env->CallIntMethod(unit, ordinalMethod);
+                if (java::lang::Throwable::exceptionThrown(env)) {
+                    return 0;
+                } else {
+                    return res;
+                }
             }
         }
 
@@ -205,9 +285,11 @@ namespace skija {
 
         void onLoad(JNIEnv* env) {
             SVGColor::onLoad(env);
+            SVGDashArray::onLoad(env);
             SVGIRI::onLoad(env);
             SVGPaint::onLoad(env);
             SVGLength::onLoad(env);
+            SVGLengthUnit::onLoad(env);
             SVGFontFamily::onLoad(env);
             SVGFontSize::onLoad(env);
             SVGPreserveAspectRatio::onLoad(env);
@@ -217,9 +299,11 @@ namespace skija {
             SVGPreserveAspectRatio::onUnload(env);
             SVGFontSize::onUnload(env);
             SVGFontFamily::onUnload(env);
+            SVGLengthUnit::onUnload(env);
             SVGLength::onUnload(env);
             SVGPaint::onUnload(env);
             SVGIRI::onUnload(env);
+            SVGDashArray::onUnload(env);
             SVGColor::onUnload(env);
         }
     }

@@ -27,7 +27,7 @@ public class SVGDashArray {
         this(SVGDashArrayType.DASH_ARRAY, dashArray);
     }
 
-    public SVGDashArray makeInherit() {
+    public static SVGDashArray makeInherit() {
         return new SVGDashArray(SVGDashArrayType.INHERIT, new SVGLength[]{});
     }
 }

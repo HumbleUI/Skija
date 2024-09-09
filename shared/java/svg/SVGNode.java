@@ -421,6 +421,31 @@ public abstract class SVGNode extends RefCnt {
     }
 
     @Nullable
+    public SVGDashArray getStrokeDashArray() {
+        try {
+            Stats.onNativeCall();
+            return _nGetStrokeDashArray(_ptr);
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    @NotNull @Contract("_ -> this")
+    public SVGNode setStrokeDashArray(@Nullable SVGDashArray dash) {
+        try {
+            Stats.onNativeCall();
+            if (dash != null) {
+                _nSetStrokeDashArray(_ptr, dash._type.ordinal(), dash._dashArray);
+            } else {
+                _nSetStrokeDashArrayNull(_ptr);
+            }
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+        return this;
+    }
+
+    @Nullable
     public SVGLength getStrokeWidth() {
         try {
             Stats.onNativeCall();
@@ -503,6 +528,10 @@ public abstract class SVGNode extends RefCnt {
     @ApiStatus.Internal public static native SVGPaint _nGetStroke(long ptr);
     @ApiStatus.Internal public static native void _nSetStroke(long ptr, int type, int colorType, int color, String[] vars, int iriType, String iri);
     @ApiStatus.Internal public static native void _nSetStrokeNull(long ptr);
+
+    @ApiStatus.Internal public static native SVGDashArray _nGetStrokeDashArray(long ptr);
+    @ApiStatus.Internal public static native void _nSetStrokeDashArray(long ptr, int type, SVGLength[] dashArray);
+    @ApiStatus.Internal public static native void _nSetStrokeDashArrayNull(long ptr);
 
     @ApiStatus.Internal public static native SVGLength _nGetStrokeWidth(long ptr);
     @ApiStatus.Internal public static native void _nSetStrokeWidth(long ptr, float value, int unit);

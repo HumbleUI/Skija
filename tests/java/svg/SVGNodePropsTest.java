@@ -151,6 +151,20 @@ public class SVGNodePropsTest implements Executable {
             runner.fail("stroke should not have value");
         }
 
+        // Stroke Dash Array
+
+        node.setStrokeDashArray(new SVGDashArray());
+        assertEquals(new SVGDashArray(), node.getStrokeDashArray());
+        node.setStrokeDashArray(new SVGDashArray(new SVGLength[]{new SVGLength(1f), new SVGLength(2f)}));
+        assertEquals(new SVGDashArray(new SVGLength[]{new SVGLength(1f), new SVGLength(2f)}), node.getStrokeDashArray());
+        node.setStrokeDashArray(SVGDashArray.makeInherit());
+        assertEquals(SVGDashArray.makeInherit(), node.getStrokeDashArray());
+
+        node.setStrokeDashArray(null);
+        if (node.getStrokeDashArray() != null) {
+            runner.fail("stroke dash array should not have value");
+        }
+
         // Stroke Width
 
         node.setStrokeWidth(new SVGLength(1f));

@@ -14,6 +14,16 @@ namespace skija {
             jobject toJava(JNIEnv* env, const SkSVGColor& color);
         }
 
+        namespace SVGDashArray {
+            extern jclass cls;
+            extern jmethodID ctor;
+
+            void onLoad(JNIEnv* env);
+            void onUnload(JNIEnv* env);
+            SkSVGDashArray fromJava(JNIEnv* env, jint type, jobjectArray dashArray);
+            jobject toJava(JNIEnv* env, const SkSVGDashArray& color);
+        }
+
         namespace SVGIRI {
             extern jclass cls;
             extern jmethodID ctor;
@@ -41,7 +51,16 @@ namespace skija {
             extern jmethodID ctor;
             void onLoad(JNIEnv* env);
             void onUnload(JNIEnv* env);
+            SkSVGLength fromJava(JNIEnv* env, jobject object);
             jobject toJava(JNIEnv* env, const SkSVGLength& length);
+        }
+
+        namespace SVGLengthUnit {
+            extern jclass cls;
+            extern jmethodID ordinalMethod;
+            void onLoad(JNIEnv* env);
+            void onUnload(JNIEnv* env);
+            jint ordinal(JNIEnv* env, jobject unit);
         }
 
         namespace SVGFontFamily {
