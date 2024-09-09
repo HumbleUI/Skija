@@ -344,6 +344,132 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nS
     instance->setStrokeDashArray(SkSVGProperty<SkSVGDashArray, true>(SkSVGPropertyState::kUnspecified));
 }
 
+// Stroke Offset
+
+extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nGetStrokeDashOffset
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    SkSVGProperty<SkSVGLength, true> property = instance->getStrokeDashOffset();
+    return property.isValue() ? skija::svg::SVGLength::toJava(env, *property) : nullptr;
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nSetStrokeDashOffset
+  (JNIEnv* env, jclass jclass, jlong ptr, jfloat value, jint unit) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    SkSVGLength length(value, static_cast<SkSVGLength::Unit>(unit));
+    instance->setStrokeDashOffset(SkSVGProperty<SkSVGLength, true>(length));
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nSetStrokeDashOffsetNull
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    instance->setStrokeDashOffset(SkSVGProperty<SkSVGLength, true>(SkSVGPropertyState::kUnspecified));
+}
+
+// Stroke Line Cap
+
+extern "C" JNIEXPORT jboolean JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nHasStrokeLineCap
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    return instance->getStrokeLineCap().isValue();
+}
+
+extern "C" JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nGetStrokeLineCap
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    return static_cast<jint>(*(instance->getStrokeLineCap()));
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nSetStrokeLineCap
+  (JNIEnv* env, jclass jclass, jlong ptr, jint type) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    instance->setStrokeLineCap(SkSVGProperty<SkSVGLineCap, true>(static_cast<SkSVGLineCap>(type)));
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nSetStrokeLineCapNull
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    instance->setStrokeLineCap(SkSVGProperty<SkSVGLineCap, true>(SkSVGPropertyState::kUnspecified));
+}
+
+// Stroke Line Join
+
+extern "C" JNIEXPORT jboolean JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nHasStrokeLineJoin
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    return instance->getStrokeLineJoin().isValue();
+}
+
+extern "C" JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nGetStrokeLineJoin
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    return static_cast<jint>((*(instance->getStrokeLineJoin())).type());
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nSetStrokeLineJoin
+  (JNIEnv* env, jclass jclass, jlong ptr, jint type) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    instance->setStrokeLineJoin(SkSVGProperty<SkSVGLineJoin, true>(SkSVGLineJoin(static_cast<SkSVGLineJoin::Type>(type))));
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nSetStrokeLineJoinNull
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    instance->setStrokeLineJoin(SkSVGProperty<SkSVGLineJoin, true>(SkSVGPropertyState::kUnspecified));
+}
+
+// Stroke Miter Limit
+
+extern "C" JNIEXPORT jboolean JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nHasStrokeMiterLimit
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    return instance->getStrokeMiterLimit().isValue();
+}
+
+extern "C" JNIEXPORT jfloat JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nGetStrokeMiterLimit
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    return *(instance->getStrokeMiterLimit());
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nSetStrokeMiterLimit
+  (JNIEnv* env, jclass jclass, jlong ptr, jfloat opacity) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    instance->setStrokeMiterLimit(SkSVGProperty<SkSVGNumberType, true>(opacity));
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nSetStrokeMiterLimitNull
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    instance->setStrokeMiterLimit(SkSVGProperty<SkSVGNumberType, true>(SkSVGPropertyState::kUnspecified));
+}
+
+// Stroke Opacity
+
+extern "C" JNIEXPORT jboolean JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nHasStrokeOpacity
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    return instance->getStrokeOpacity().isValue();
+}
+
+extern "C" JNIEXPORT jfloat JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nGetStrokeOpacity
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    return *(instance->getStrokeOpacity());
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nSetStrokeOpacity
+  (JNIEnv* env, jclass jclass, jlong ptr, jfloat opacity) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    instance->setStrokeOpacity(SkSVGProperty<SkSVGNumberType, true>(opacity));
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nSetStrokeOpacityNull
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    instance->setStrokeOpacity(SkSVGProperty<SkSVGNumberType, true>(SkSVGPropertyState::kUnspecified));
+}
+
 // Stroke Width
 
 extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nGetStrokeWidth

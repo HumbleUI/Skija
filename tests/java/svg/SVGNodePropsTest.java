@@ -165,10 +165,64 @@ public class SVGNodePropsTest implements Executable {
             runner.fail("stroke dash array should not have value");
         }
 
+        // Stroke Dash Offset
+
+        node.setStrokeDashOffset(new SVGLength(1f));
+        assertEquals(new SVGLength(1f), node.getStrokeDashOffset());
+        node.setStrokeDashOffset(new SVGLength(1f, SVGLengthUnit.IN));
+        assertEquals(new SVGLength(1f, SVGLengthUnit.IN), node.getStrokeDashOffset());
+
+        node.setStrokeDashOffset(null);
+        if (node.getStrokeDashOffset() != null) {
+            runner.fail("stroke dash offset should not have value");
+        }
+
+        // Stroke Line Cap
+
+        node.setStrokeLineCap(SVGLineCap.SQUARE);
+        assertEquals(SVGLineCap.SQUARE, node.getStrokeLineCap());
+
+        node.setStrokeLineCap(null);
+        if (node.getStrokeLineCap() != null) {
+            runner.fail("stroke line cap should not have value");
+        }
+
+        // Stroke Line Join
+
+        node.setStrokeLineJoin(SVGLineJoin.ROUND);
+        assertEquals(SVGLineJoin.ROUND, node.getStrokeLineJoin());
+
+        node.setStrokeLineJoin(null);
+        if (node.getStrokeLineJoin() != null) {
+            runner.fail("stroke line join should not have value");
+        }
+
+        // Stroke Miter Limit
+
+        node.setStrokeMiterLimit(1f);
+        assertEquals(1f, node.getStrokeMiterLimit());
+
+        node.setStrokeMiterLimit(null);
+        if (node.getStrokeMiterLimit() != null) {
+            runner.fail("stroke miter limit should not have value");
+        }
+
+        // Stroke Opacity
+
+        node.setStrokeOpacity(0.5f);
+        assertEquals(0.5f, node.getStrokeOpacity());
+
+        node.setStrokeOpacity(null);
+        if (node.getStrokeOpacity() != null) {
+            runner.fail("stroke miter limit should not have value");
+        }
+
         // Stroke Width
 
         node.setStrokeWidth(new SVGLength(1f));
-        assertEquals(1f, node.getStrokeWidth().getValue());
+        assertEquals(new SVGLength(1f), node.getStrokeWidth());
+        node.setStrokeWidth(new SVGLength(1f, SVGLengthUnit.IN));
+        assertEquals(new SVGLength(1f, SVGLengthUnit.IN), node.getStrokeWidth());
 
         node.setStrokeWidth(null);
         if (node.getStrokeWidth() != null) {

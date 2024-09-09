@@ -446,6 +446,155 @@ public abstract class SVGNode extends RefCnt {
     }
 
     @Nullable
+    public SVGLength getStrokeDashOffset() {
+        try {
+            Stats.onNativeCall();
+            return _nGetStrokeDashOffset(_ptr);
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    @NotNull @Contract("_ -> this")
+    public SVGNode setStrokeDashOffset(@Nullable SVGLength length) {
+        try {
+            Stats.onNativeCall();
+            if (length != null) {
+                _nSetStrokeDashOffset(_ptr, length._value, length._unit.ordinal());
+            } else {
+                _nSetStrokeDashOffsetNull(_ptr);
+            }
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+        return this;
+    }
+
+    @Nullable
+    public SVGLineCap getStrokeLineCap() {
+        try {
+            Stats.onNativeCall();
+            if (_nHasStrokeLineCap(_ptr)) {
+                Stats.onNativeCall();
+                return SVGLineCap._values[_nGetStrokeLineCap(_ptr)];
+            }
+            else {
+                return null;
+            }
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    @NotNull @Contract("_ -> this")
+    public SVGNode setStrokeLineCap(@Nullable SVGLineCap cap) {
+        try {
+            Stats.onNativeCall();
+            if (cap != null) {
+                _nSetStrokeLineCap(_ptr, cap.ordinal());
+            } else {
+                _nSetStrokeLineCapNull(_ptr);
+            }
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+        return this;
+    }
+
+    @Nullable
+    public SVGLineJoin getStrokeLineJoin() {
+        try {
+            Stats.onNativeCall();
+            if (_nHasStrokeLineJoin(_ptr)) {
+                Stats.onNativeCall();
+                return SVGLineJoin._values[_nGetStrokeLineJoin(_ptr)];
+            }
+            else {
+                return null;
+            }
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    @NotNull @Contract("_ -> this")
+    public SVGNode setStrokeLineJoin(@Nullable SVGLineJoin join) {
+        try {
+            Stats.onNativeCall();
+            if (join != null) {
+                _nSetStrokeLineJoin(_ptr, join.ordinal());
+            } else {
+                _nSetStrokeLineJoinNull(_ptr);
+            }
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+        return this;
+    }
+
+    @Nullable
+    public Float getStrokeMiterLimit() {
+        try {
+            Stats.onNativeCall();
+            if (_nHasStrokeMiterLimit(_ptr)) {
+                Stats.onNativeCall();
+                return _nGetStrokeMiterLimit(_ptr);
+            }
+            else {
+                return null;
+            }
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    @NotNull @Contract("_ -> this")
+    public SVGNode setStrokeMiterLimit(@Nullable Float opacity) {
+        try {
+            Stats.onNativeCall();
+            if (opacity != null) {
+                _nSetStrokeMiterLimit(_ptr, opacity);
+            } else {
+                _nSetStrokeMiterLimitNull(_ptr);
+            }
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+        return this;
+    }
+
+    @Nullable
+    public Float getStrokeOpacity() {
+        try {
+            Stats.onNativeCall();
+            if (_nHasStrokeOpacity(_ptr)) {
+                Stats.onNativeCall();
+                return _nGetStrokeOpacity(_ptr);
+            }
+            else {
+                return null;
+            }
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    @NotNull @Contract("_ -> this")
+    public SVGNode setStrokeOpacity(@Nullable Float opacity) {
+        try {
+            Stats.onNativeCall();
+            if (opacity != null) {
+                _nSetStrokeOpacity(_ptr, opacity);
+            } else {
+                _nSetStrokeOpacityNull(_ptr);
+            }
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+        return this;
+    }
+
+    @Nullable
     public SVGLength getStrokeWidth() {
         try {
             Stats.onNativeCall();
@@ -532,6 +681,30 @@ public abstract class SVGNode extends RefCnt {
     @ApiStatus.Internal public static native SVGDashArray _nGetStrokeDashArray(long ptr);
     @ApiStatus.Internal public static native void _nSetStrokeDashArray(long ptr, int type, SVGLength[] dashArray);
     @ApiStatus.Internal public static native void _nSetStrokeDashArrayNull(long ptr);
+
+    @ApiStatus.Internal public static native SVGLength _nGetStrokeDashOffset(long ptr);
+    @ApiStatus.Internal public static native void _nSetStrokeDashOffset(long ptr, float value, int unit);
+    @ApiStatus.Internal public static native void _nSetStrokeDashOffsetNull(long ptr);
+
+    @ApiStatus.Internal public static native boolean _nHasStrokeLineCap(long ptr);
+    @ApiStatus.Internal public static native int _nGetStrokeLineCap(long ptr);
+    @ApiStatus.Internal public static native void _nSetStrokeLineCap(long ptr, int type);
+    @ApiStatus.Internal public static native void _nSetStrokeLineCapNull(long ptr);
+
+    @ApiStatus.Internal public static native boolean _nHasStrokeLineJoin(long ptr);
+    @ApiStatus.Internal public static native int _nGetStrokeLineJoin(long ptr);
+    @ApiStatus.Internal public static native void _nSetStrokeLineJoin(long ptr, int type);
+    @ApiStatus.Internal public static native void _nSetStrokeLineJoinNull(long ptr);
+
+    @ApiStatus.Internal public static native boolean _nHasStrokeMiterLimit(long ptr);
+    @ApiStatus.Internal public static native float _nGetStrokeMiterLimit(long ptr);
+    @ApiStatus.Internal public static native void _nSetStrokeMiterLimit(long ptr, float opacity);
+    @ApiStatus.Internal public static native void _nSetStrokeMiterLimitNull(long ptr);
+
+    @ApiStatus.Internal public static native boolean _nHasStrokeOpacity(long ptr);
+    @ApiStatus.Internal public static native float _nGetStrokeOpacity(long ptr);
+    @ApiStatus.Internal public static native void _nSetStrokeOpacity(long ptr, float opacity);
+    @ApiStatus.Internal public static native void _nSetStrokeOpacityNull(long ptr);
 
     @ApiStatus.Internal public static native SVGLength _nGetStrokeWidth(long ptr);
     @ApiStatus.Internal public static native void _nSetStrokeWidth(long ptr, float value, int unit);
