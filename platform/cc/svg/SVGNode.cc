@@ -592,3 +592,185 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nS
     instance->setDisplay(SkSVGProperty<SkSVGDisplay, false>(SkSVGPropertyState::kUnspecified));
 }
 
+// Mask
+
+extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nGetMask
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    SkSVGProperty<SkSVGFuncIRI, false> property = instance->getMask();
+    return property.isValue() ? skija::svg::SVGFuncIRI::toJava(env, *property) : nullptr;
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nSetMask
+  (JNIEnv* env, jclass jclass, jlong ptr, jint funcType, jint iriType, jstring iri) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    instance->setMask(SkSVGProperty<SkSVGFuncIRI, false>(skija::svg::SVGFuncIRI::fromJava(env, funcType, iriType, iri)));
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nSetMaskNull
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    instance->setMask(SkSVGProperty<SkSVGFuncIRI, false>(SkSVGPropertyState::kUnspecified));
+}
+
+// Filter
+
+extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nGetFilter
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    SkSVGProperty<SkSVGFuncIRI, false> property = instance->getFilter();
+    return property.isValue() ? skija::svg::SVGFuncIRI::toJava(env, *property) : nullptr;
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nSetFilter
+  (JNIEnv* env, jclass jclass, jlong ptr, jint funcType, jint iriType, jstring iri) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    instance->setFilter(SkSVGProperty<SkSVGFuncIRI, false>(skija::svg::SVGFuncIRI::fromJava(env, funcType, iriType, iri)));
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nSetFilterNull
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    instance->setFilter(SkSVGProperty<SkSVGFuncIRI, false>(SkSVGPropertyState::kUnspecified));
+}
+
+// Opacity
+
+extern "C" JNIEXPORT jboolean JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nHasOpacity
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    return instance->getOpacity().isValue();
+}
+
+extern "C" JNIEXPORT jfloat JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nGetOpacity
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    return *(instance->getOpacity());
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nSetOpacity
+  (JNIEnv* env, jclass jclass, jlong ptr, jfloat opacity) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    instance->setOpacity(SkSVGProperty<SkSVGNumberType, false>(opacity));
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nSetOpacityNull
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    instance->setOpacity(SkSVGProperty<SkSVGNumberType, false>(SkSVGPropertyState::kUnspecified));
+}
+
+// Stop Color
+
+extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nGetStopColor
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    SkSVGProperty<SkSVGColor, false> property = instance->getStopColor();
+    return property.isValue() ? skija::svg::SVGColor::toJava(env, *property) : nullptr;
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nSetStopColor
+  (JNIEnv* env, jclass jclass, jlong ptr, jint type, jint color, jobjectArray vars) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    instance->setStopColor(SkSVGProperty<SkSVGColor, false>(skija::svg::SVGColor::fromJava(env, type, color, vars)));
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nSetStopColorNull
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    instance->setStopColor(SkSVGProperty<SkSVGColor, false>(SkSVGPropertyState::kUnspecified));
+}
+
+// Stop Opacity
+
+extern "C" JNIEXPORT jboolean JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nHasStopOpacity
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    return instance->getStopOpacity().isValue();
+}
+
+extern "C" JNIEXPORT jfloat JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nGetStopOpacity
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    return *(instance->getStopOpacity());
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nSetStopOpacity
+  (JNIEnv* env, jclass jclass, jlong ptr, jfloat opacity) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    instance->setStopOpacity(SkSVGProperty<SkSVGNumberType, false>(opacity));
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nSetStopOpacityNull
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    instance->setStopOpacity(SkSVGProperty<SkSVGNumberType, false>(SkSVGPropertyState::kUnspecified));
+}
+
+// Flood Color
+
+extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nGetFloodColor
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    SkSVGProperty<SkSVGColor, false> property = instance->getFloodColor();
+    return property.isValue() ? skija::svg::SVGColor::toJava(env, *property) : nullptr;
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nSetFloodColor
+  (JNIEnv* env, jclass jclass, jlong ptr, jint type, jint color, jobjectArray vars) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    instance->setFloodColor(SkSVGProperty<SkSVGColor, false>(skija::svg::SVGColor::fromJava(env, type, color, vars)));
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nSetFloodColorNull
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    instance->setFloodColor(SkSVGProperty<SkSVGColor, false>(SkSVGPropertyState::kUnspecified));
+}
+
+// Stop Opacity
+
+extern "C" JNIEXPORT jboolean JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nHasFloodOpacity
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    return instance->getFloodOpacity().isValue();
+}
+
+extern "C" JNIEXPORT jfloat JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nGetFloodOpacity
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    return *(instance->getFloodOpacity());
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nSetFloodOpacity
+  (JNIEnv* env, jclass jclass, jlong ptr, jfloat opacity) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    instance->setFloodOpacity(SkSVGProperty<SkSVGNumberType, false>(opacity));
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nSetFloodOpacityNull
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    instance->setFloodOpacity(SkSVGProperty<SkSVGNumberType, false>(SkSVGPropertyState::kUnspecified));
+}
+
+// Lighting Color
+
+extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nGetLightingColor
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    SkSVGProperty<SkSVGColor, false> property = instance->getLightingColor();
+    return property.isValue() ? skija::svg::SVGColor::toJava(env, *property) : nullptr;
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nSetLightingColor
+  (JNIEnv* env, jclass jclass, jlong ptr, jint type, jint color, jobjectArray vars) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    instance->setLightingColor(SkSVGProperty<SkSVGColor, false>(skija::svg::SVGColor::fromJava(env, type, color, vars)));
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nSetLightingColorNull
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    instance->setLightingColor(SkSVGProperty<SkSVGColor, false>(SkSVGPropertyState::kUnspecified));
+}

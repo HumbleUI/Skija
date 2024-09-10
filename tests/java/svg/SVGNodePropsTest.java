@@ -214,7 +214,7 @@ public class SVGNodePropsTest implements Executable {
 
         node.setStrokeOpacity(null);
         if (node.getStrokeOpacity() != null) {
-            runner.fail("stroke miter limit should not have value");
+            runner.fail("stroke opacity should not have value");
         }
 
         // Stroke Width
@@ -236,7 +236,7 @@ public class SVGNodePropsTest implements Executable {
 
         node.setTextAnchor(null);
         if (node.getTextAnchor() != null) {
-            runner.fail("stroke line cap should not have value");
+            runner.fail("text anchor should not have value");
         }
 
         // Visibility
@@ -246,7 +246,7 @@ public class SVGNodePropsTest implements Executable {
 
         node.setVisibility(null);
         if (node.getVisibility() != null) {
-            runner.fail("visibility cap should not have value");
+            runner.fail("visibility should not have value");
         }
 
         // Clip Path
@@ -260,7 +260,117 @@ public class SVGNodePropsTest implements Executable {
 
         node.setClipPath(null);
         if (node.getClipPath() != null) {
-            runner.fail("clip path cap should not have value");
+            runner.fail("clip path should not have value");
+        }
+
+        // Display
+
+        node.setDisplay(SVGDisplay.NONE);
+        assertEquals(SVGDisplay.NONE, node.getDisplay());
+
+        node.setDisplay(null);
+        if (node.getDisplay() != null) {
+            runner.fail("display should not have value");
+        }
+
+        // Mask
+
+        node.setMask(new SVGFuncIRI());
+        assertEquals(new SVGFuncIRI(), node.getMask());
+        node.setMask(new SVGFuncIRI(new SVGIRI()));
+        assertEquals(new SVGFuncIRI(new SVGIRI()), node.getMask());
+        node.setMask(new SVGFuncIRI(new SVGIRI(SVGIRIType.NON_LOCAL, "test")));
+        assertEquals(new SVGFuncIRI(new SVGIRI(SVGIRIType.NON_LOCAL, "test")), node.getMask());
+
+        node.setMask(null);
+        if (node.getMask() != null) {
+            runner.fail("mask should not have value");
+        }
+
+        // Filter
+
+        node.setFilter(new SVGFuncIRI());
+        assertEquals(new SVGFuncIRI(), node.getFilter());
+        node.setFilter(new SVGFuncIRI(new SVGIRI()));
+        assertEquals(new SVGFuncIRI(new SVGIRI()), node.getFilter());
+        node.setFilter(new SVGFuncIRI(new SVGIRI(SVGIRIType.NON_LOCAL, "test")));
+        assertEquals(new SVGFuncIRI(new SVGIRI(SVGIRIType.NON_LOCAL, "test")), node.getFilter());
+
+        node.setFilter(null);
+        if (node.getFilter() != null) {
+            runner.fail("filter should not have value");
+        }
+
+        // Opacity
+
+        node.setOpacity(0.5f);
+        assertEquals(0.5f, node.getOpacity());
+
+        node.setOpacity(null);
+        if (node.getOpacity() != null) {
+            runner.fail("opacity should not have value");
+        }
+
+        // Stop Color
+
+        node.setStopColor(new SVGColor(0xFFFFFF));
+        assertEquals(new SVGColor(0xFFFFFF), node.getStopColor());
+        node.setStopColor(new SVGColor());
+        assertEquals(new SVGColor(), node.getStopColor());
+        node.setStopColor(new SVGColor(0xFFFFFF, new String[]{"test"}));
+        assertEquals(new SVGColor(0xFFFFFF, new String[]{"test"}), node.getStopColor());
+
+        node.setStopColor(null);
+        if (node.getStopColor() != null) {
+            runner.fail("stop color should not have value");
+        }
+
+        // Stop Opacity
+
+        node.setStopOpacity(0.5f);
+        assertEquals(0.5f, node.getStopOpacity());
+
+        node.setStopOpacity(null);
+        if (node.getStopOpacity() != null) {
+            runner.fail("stop opacity should not have value");
+        }
+
+        // Flood Color
+
+        node.setFloodColor(new SVGColor(0xFFFFFF));
+        assertEquals(new SVGColor(0xFFFFFF), node.getFloodColor());
+        node.setFloodColor(new SVGColor());
+        assertEquals(new SVGColor(), node.getFloodColor());
+        node.setFloodColor(new SVGColor(0xFFFFFF, new String[]{"test"}));
+        assertEquals(new SVGColor(0xFFFFFF, new String[]{"test"}), node.getFloodColor());
+
+        node.setFloodColor(null);
+        if (node.getFloodColor() != null) {
+            runner.fail("flood color should not have value");
+        }
+
+        // Flood Opacity
+
+        node.setFloodOpacity(0.5f);
+        assertEquals(0.5f, node.getFloodOpacity());
+
+        node.setFloodOpacity(null);
+        if (node.getFloodOpacity() != null) {
+            runner.fail("flood opacity should not have value");
+        }
+
+        // Lighting Color
+
+        node.setLightingColor(new SVGColor(0xFFFFFF));
+        assertEquals(new SVGColor(0xFFFFFF), node.getLightingColor());
+        node.setLightingColor(new SVGColor());
+        assertEquals(new SVGColor(), node.getLightingColor());
+        node.setLightingColor(new SVGColor(0xFFFFFF, new String[]{"test"}));
+        assertEquals(new SVGColor(0xFFFFFF, new String[]{"test"}), node.getLightingColor());
+
+        node.setLightingColor(null);
+        if (node.getLightingColor() != null) {
+            runner.fail("lighting color should not have value");
         }
     }
 }

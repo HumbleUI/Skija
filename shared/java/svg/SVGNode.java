@@ -681,7 +681,7 @@ public abstract class SVGNode extends RefCnt {
         return this;
     }
 
-     @Nullable
+    @Nullable
     public SVGFuncIRI getClipPath() {
         try {
             Stats.onNativeCall();
@@ -730,6 +730,251 @@ public abstract class SVGNode extends RefCnt {
                 _nSetDisplay(_ptr, join.ordinal());
             } else {
                 _nSetDisplayNull(_ptr);
+            }
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+        return this;
+    }
+
+    @Nullable
+    public SVGFuncIRI getMask() {
+        try {
+            Stats.onNativeCall();
+            return _nGetMask(_ptr);
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    @NotNull @Contract("_ -> this")
+    public SVGNode setMask(@Nullable SVGFuncIRI func) {
+        try {
+            Stats.onNativeCall();
+            if (func != null) {
+                _nSetMask(_ptr, func._type.ordinal(), func._iri._type.ordinal(), func._iri._iri);
+            } else {
+                _nSetMaskNull(_ptr);
+            }
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+        return this;
+    }
+
+    @Nullable
+    public SVGFuncIRI getFilter() {
+        try {
+            Stats.onNativeCall();
+            return _nGetFilter(_ptr);
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    @NotNull @Contract("_ -> this")
+    public SVGNode setFilter(@Nullable SVGFuncIRI func) {
+        try {
+            Stats.onNativeCall();
+            if (func != null) {
+                _nSetFilter(_ptr, func._type.ordinal(), func._iri._type.ordinal(), func._iri._iri);
+            } else {
+                _nSetFilterNull(_ptr);
+            }
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+        return this;
+    }
+
+    @Nullable
+    public Float getOpacity() {
+        try {
+            Stats.onNativeCall();
+            if (_nHasOpacity(_ptr)) {
+                Stats.onNativeCall();
+                return _nGetOpacity(_ptr);
+            }
+            else {
+                return null;
+            }
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    @NotNull @Contract("_ -> this")
+    public SVGNode setOpacity(@Nullable Float opacity) {
+        try {
+            Stats.onNativeCall();
+            if (opacity != null) {
+                _nSetOpacity(_ptr, opacity);
+            } else {
+                _nSetOpacityNull(_ptr);
+            }
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+        return this;
+    }
+
+    @Nullable
+    public SVGColor getStopColor() {
+        try {
+            Stats.onNativeCall();
+            return _nGetStopColor(_ptr);
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    @NotNull @Contract("_ -> this")
+    public SVGNode setStopColor(int color) {
+        return setStopColor(new SVGColor(color));
+    }
+
+    @NotNull @Contract("_ -> this")
+    public SVGNode setStopColor(@Nullable SVGColor color) {
+        try {
+            Stats.onNativeCall();
+            if (color != null) {
+                _nSetStopColor(_ptr,
+                        color.getType().ordinal(),
+                        color.getColor(),
+                        color.getVars()
+                );
+            } else {
+                _nSetStopColorNull(_ptr);
+            }
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+        return this;
+    }
+
+    @Nullable
+    public Float getStopOpacity() {
+        try {
+            Stats.onNativeCall();
+            if (_nHasStopOpacity(_ptr)) {
+                Stats.onNativeCall();
+                return _nGetStopOpacity(_ptr);
+            }
+            else {
+                return null;
+            }
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    @NotNull @Contract("_ -> this")
+    public SVGNode setStopOpacity(@Nullable Float opacity) {
+        try {
+            Stats.onNativeCall();
+            if (opacity != null) {
+                _nSetStopOpacity(_ptr, opacity);
+            } else {
+                _nSetStopOpacityNull(_ptr);
+            }
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+        return this;
+    }
+
+    @Nullable
+    public SVGColor getFloodColor() {
+        try {
+            Stats.onNativeCall();
+            return _nGetFloodColor(_ptr);
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    @NotNull @Contract("_ -> this")
+    public SVGNode setFloodColor(int color) {
+        return setFloodColor(new SVGColor(color));
+    }
+
+    @NotNull @Contract("_ -> this")
+    public SVGNode setFloodColor(@Nullable SVGColor color) {
+        try {
+            Stats.onNativeCall();
+            if (color != null) {
+                _nSetFloodColor(_ptr,
+                        color.getType().ordinal(),
+                        color.getColor(),
+                        color.getVars()
+                );
+            } else {
+                _nSetFloodColorNull(_ptr);
+            }
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+        return this;
+    }
+
+    @Nullable
+    public Float getFloodOpacity() {
+        try {
+            Stats.onNativeCall();
+            if (_nHasFloodOpacity(_ptr)) {
+                Stats.onNativeCall();
+                return _nGetFloodOpacity(_ptr);
+            }
+            else {
+                return null;
+            }
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    @NotNull @Contract("_ -> this")
+    public SVGNode setFloodOpacity(@Nullable Float opacity) {
+        try {
+            Stats.onNativeCall();
+            if (opacity != null) {
+                _nSetFloodOpacity(_ptr, opacity);
+            } else {
+                _nSetFloodOpacityNull(_ptr);
+            }
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+        return this;
+    }
+
+    @Nullable
+    public SVGColor getLightingColor() {
+        try {
+            Stats.onNativeCall();
+            return _nGetLightingColor(_ptr);
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    @NotNull @Contract("_ -> this")
+    public SVGNode setLightingColor(int color) {
+        return setLightingColor(new SVGColor(color));
+    }
+
+    @NotNull @Contract("_ -> this")
+    public SVGNode setLightingColor(@Nullable SVGColor color) {
+        try {
+            Stats.onNativeCall();
+            if (color != null) {
+                _nSetLightingColor(_ptr,
+                        color.getType().ordinal(),
+                        color.getColor(),
+                        color.getVars()
+                );
+            } else {
+                _nSetLightingColorNull(_ptr);
             }
         } finally {
             ReferenceUtil.reachabilityFence(this);
@@ -846,4 +1091,39 @@ public abstract class SVGNode extends RefCnt {
     @ApiStatus.Internal public static native int _nGetDisplay(long ptr);
     @ApiStatus.Internal public static native void _nSetDisplay(long ptr, int type);
     @ApiStatus.Internal public static native void _nSetDisplayNull(long ptr);
+
+    @ApiStatus.Internal public static native SVGFuncIRI _nGetMask(long ptr);
+    @ApiStatus.Internal public static native void _nSetMask(long ptr, int funcType, int iriType, String iri);
+    @ApiStatus.Internal public static native void _nSetMaskNull(long ptr);
+
+    @ApiStatus.Internal public static native SVGFuncIRI _nGetFilter(long ptr);
+    @ApiStatus.Internal public static native void _nSetFilter(long ptr, int funcType, int iriType, String iri);
+    @ApiStatus.Internal public static native void _nSetFilterNull(long ptr);
+
+    @ApiStatus.Internal public static native boolean _nHasOpacity(long ptr);
+    @ApiStatus.Internal public static native float _nGetOpacity(long ptr);
+    @ApiStatus.Internal public static native void _nSetOpacity(long ptr, float opacity);
+    @ApiStatus.Internal public static native void _nSetOpacityNull(long ptr);
+
+    @ApiStatus.Internal public static native SVGColor _nGetStopColor(long ptr);
+    @ApiStatus.Internal public static native void _nSetStopColor(long ptr, int type, int color, String[] vars);
+    @ApiStatus.Internal public static native void _nSetStopColorNull(long ptr);
+
+    @ApiStatus.Internal public static native boolean _nHasStopOpacity(long ptr);
+    @ApiStatus.Internal public static native float _nGetStopOpacity(long ptr);
+    @ApiStatus.Internal public static native void _nSetStopOpacity(long ptr, float opacity);
+    @ApiStatus.Internal public static native void _nSetStopOpacityNull(long ptr);
+
+    @ApiStatus.Internal public static native SVGColor _nGetFloodColor(long ptr);
+    @ApiStatus.Internal public static native void _nSetFloodColor(long ptr, int type, int color, String[] vars);
+    @ApiStatus.Internal public static native void _nSetFloodColorNull(long ptr);
+
+    @ApiStatus.Internal public static native boolean _nHasFloodOpacity(long ptr);
+    @ApiStatus.Internal public static native float _nGetFloodOpacity(long ptr);
+    @ApiStatus.Internal public static native void _nSetFloodOpacity(long ptr, float opacity);
+    @ApiStatus.Internal public static native void _nSetFloodOpacityNull(long ptr);
+
+    @ApiStatus.Internal public static native SVGColor _nGetLightingColor(long ptr);
+    @ApiStatus.Internal public static native void _nSetLightingColor(long ptr, int type, int color, String[] vars);
+    @ApiStatus.Internal public static native void _nSetLightingColorNull(long ptr);
 }
