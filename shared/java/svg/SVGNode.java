@@ -619,6 +619,124 @@ public abstract class SVGNode extends RefCnt {
         return this;
     }
 
+    @Nullable
+    public SVGTextAnchor getTextAnchor() {
+        try {
+            Stats.onNativeCall();
+            if (_nHasTextAnchor(_ptr)) {
+                Stats.onNativeCall();
+                return SVGTextAnchor._values[_nGetTextAnchor(_ptr)];
+            }
+            else {
+                return null;
+            }
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    @NotNull @Contract("_ -> this")
+    public SVGNode setTextAnchor(@Nullable SVGTextAnchor join) {
+        try {
+            Stats.onNativeCall();
+            if (join != null) {
+                _nSetTextAnchor(_ptr, join.ordinal());
+            } else {
+                _nSetTextAnchorNull(_ptr);
+            }
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+        return this;
+    }
+
+    @Nullable
+    public SVGVisibility getVisibility() {
+        try {
+            Stats.onNativeCall();
+            if (_nHasVisibility(_ptr)) {
+                Stats.onNativeCall();
+                return SVGVisibility._values[_nGetVisibility(_ptr)];
+            }
+            else {
+                return null;
+            }
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    @NotNull @Contract("_ -> this")
+    public SVGNode setVisibility(@Nullable SVGVisibility visibility) {
+        try {
+            Stats.onNativeCall();
+            if (visibility != null) {
+                _nSetVisibility(_ptr, visibility.ordinal());
+            } else {
+                _nSetVisibilityNull(_ptr);
+            }
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+        return this;
+    }
+
+     @Nullable
+    public SVGFuncIRI getClipPath() {
+        try {
+            Stats.onNativeCall();
+            return _nGetClipPath(_ptr);
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    @NotNull @Contract("_ -> this")
+    public SVGNode setClipPath(@Nullable SVGFuncIRI func) {
+        try {
+            Stats.onNativeCall();
+            if (func != null) {
+                _nSetClipPath(_ptr, func._type.ordinal(), func._iri._type.ordinal(), func._iri._iri);
+            } else {
+                _nSetClipPathNull(_ptr);
+            }
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+        return this;
+    }
+
+    @Nullable
+    public SVGDisplay getDisplay() {
+        try {
+            Stats.onNativeCall();
+            if (_nHasDisplay(_ptr)) {
+                Stats.onNativeCall();
+                return SVGDisplay._values[_nGetDisplay(_ptr)];
+            }
+            else {
+                return null;
+            }
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    @NotNull @Contract("_ -> this")
+    public SVGNode setDisplay(@Nullable SVGDisplay join) {
+        try {
+            Stats.onNativeCall();
+            if (join != null) {
+                _nSetDisplay(_ptr, join.ordinal());
+            } else {
+                _nSetDisplayNull(_ptr);
+            }
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+        return this;
+    }
+
     @ApiStatus.Internal public static native int _nGetTag(long ptr);
     @ApiStatus.Internal public static native boolean _nParseAndSetAttribute(long ptr, String name, String value);
 
@@ -709,4 +827,23 @@ public abstract class SVGNode extends RefCnt {
     @ApiStatus.Internal public static native SVGLength _nGetStrokeWidth(long ptr);
     @ApiStatus.Internal public static native void _nSetStrokeWidth(long ptr, float value, int unit);
     @ApiStatus.Internal public static native void _nSetStrokeWidthNull(long ptr);
+
+    @ApiStatus.Internal public static native boolean _nHasTextAnchor(long ptr);
+    @ApiStatus.Internal public static native int _nGetTextAnchor(long ptr);
+    @ApiStatus.Internal public static native void _nSetTextAnchor(long ptr, int type);
+    @ApiStatus.Internal public static native void _nSetTextAnchorNull(long ptr);
+
+    @ApiStatus.Internal public static native boolean _nHasVisibility(long ptr);
+    @ApiStatus.Internal public static native int _nGetVisibility(long ptr);
+    @ApiStatus.Internal public static native void _nSetVisibility(long ptr, int type);
+    @ApiStatus.Internal public static native void _nSetVisibilityNull(long ptr);
+
+    @ApiStatus.Internal public static native SVGFuncIRI _nGetClipPath(long ptr);
+    @ApiStatus.Internal public static native void _nSetClipPath(long ptr, int funcType, int iriType, String iri);
+    @ApiStatus.Internal public static native void _nSetClipPathNull(long ptr);
+
+    @ApiStatus.Internal public static native boolean _nHasDisplay(long ptr);
+    @ApiStatus.Internal public static native int _nGetDisplay(long ptr);
+    @ApiStatus.Internal public static native void _nSetDisplay(long ptr, int type);
+    @ApiStatus.Internal public static native void _nSetDisplayNull(long ptr);
 }

@@ -492,3 +492,103 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nS
     instance->setStrokeWidth(SkSVGProperty<SkSVGLength, true>(SkSVGPropertyState::kUnspecified));
 }
 
+// Text Anchor
+
+extern "C" JNIEXPORT jboolean JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nHasTextAnchor
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    return instance->getTextAnchor().isValue();
+}
+
+extern "C" JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nGetTextAnchor
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    return static_cast<jint>((*(instance->getTextAnchor())).type());
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nSetTextAnchor
+  (JNIEnv* env, jclass jclass, jlong ptr, jint type) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    instance->setTextAnchor(SkSVGProperty<SkSVGTextAnchor, true>(SkSVGTextAnchor(static_cast<SkSVGTextAnchor::Type>(type))));
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nSetTextAnchorNull
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    instance->setTextAnchor(SkSVGProperty<SkSVGTextAnchor, true>(SkSVGPropertyState::kUnspecified));
+}
+
+// Visibility
+
+extern "C" JNIEXPORT jboolean JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nHasVisibility
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    return instance->getVisibility().isValue();
+}
+
+extern "C" JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nGetVisibility
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    return static_cast<jint>((*(instance->getVisibility())).type());
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nSetVisibility
+  (JNIEnv* env, jclass jclass, jlong ptr, jint type) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    instance->setVisibility(SkSVGProperty<SkSVGVisibility, true>(SkSVGVisibility(static_cast<SkSVGVisibility::Type>(type))));
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nSetVisibilityNull
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    instance->setVisibility(SkSVGProperty<SkSVGVisibility, true>(SkSVGPropertyState::kUnspecified));
+}
+
+
+// Clip Path
+
+extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nGetClipPath
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    SkSVGProperty<SkSVGFuncIRI, false> property = instance->getClipPath();
+    return property.isValue() ? skija::svg::SVGFuncIRI::toJava(env, *property) : nullptr;
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nSetClipPath
+  (JNIEnv* env, jclass jclass, jlong ptr, jint funcType, jint iriType, jstring iri) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    instance->setClipPath(SkSVGProperty<SkSVGFuncIRI, false>(skija::svg::SVGFuncIRI::fromJava(env, funcType, iriType, iri)));
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nSetClipPathNull
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    instance->setClipPath(SkSVGProperty<SkSVGFuncIRI, false>(SkSVGPropertyState::kUnspecified));
+}
+
+// Display
+
+extern "C" JNIEXPORT jboolean JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nHasDisplay
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    return instance->getDisplay().isValue();
+}
+
+extern "C" JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nGetDisplay
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    return static_cast<jint>(*(instance->getDisplay()));
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nSetDisplay
+  (JNIEnv* env, jclass jclass, jlong ptr, jint type) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    instance->setDisplay(SkSVGProperty<SkSVGDisplay, false>(static_cast<SkSVGDisplay>(type)));
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_svg_SVGNode__1nSetDisplayNull
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkSVGNode* instance = reinterpret_cast<SkSVGNode*>(static_cast<uintptr_t>(ptr));
+    instance->setDisplay(SkSVGProperty<SkSVGDisplay, false>(SkSVGPropertyState::kUnspecified));
+}
+

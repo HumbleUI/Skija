@@ -46,6 +46,16 @@ namespace skija {
             jobject toJava(JNIEnv* env, const SkSVGPaint& paint);
         }
 
+        namespace SVGFuncIRI {
+            extern jclass cls;
+            extern jmethodID ctorNone;
+            extern jmethodID ctorIri;
+            void onLoad(JNIEnv* env);
+            void onUnload(JNIEnv* env);
+            SkSVGFuncIRI fromJava(JNIEnv* env, jint jfuncType, jint iriType, jstring iri);
+            jobject toJava(JNIEnv* env, const SkSVGFuncIRI& paint);
+        }
+
         namespace SVGLength {
             extern jclass cls;
             extern jmethodID ctor;

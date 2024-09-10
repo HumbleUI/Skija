@@ -22,7 +22,6 @@ namespace skija {
                 SkSVGColor::Type type = static_cast<SkSVGColor::Type>(jtype);
                 switch (type) {
                     case SkSVGColor::Type::kCurrentColor:
-                        // TODO: SkSVGColor default constructor has undefined behavior for member var fType
                         return SkSVGColor(SkSVGColor::Type::kCurrentColor, std::vector<SkString>());
                     case SkSVGColor::Type::kColor:
                         return SkSVGColor(color, skStringVector(env, vars));
@@ -110,8 +109,8 @@ namespace skija {
                 }
             }
 
-            jobject toJava(JNIEnv* env, const SkSVGIRI& paint) {
-                return env->NewObject(cls, ctor, static_cast<jint>(paint.type()), javaString(env, paint.iri()));
+            jobject toJava(JNIEnv* env, const SkSVGIRI& iri) {
+                return env->NewObject(cls, ctor, static_cast<jint>(iri.type()), javaString(env, iri.iri()));
             }
         }
 
@@ -166,6 +165,40 @@ namespace skija {
                         break;
                 }
                 return result;
+            }
+        }
+
+        namespace SVGFuncIRI {
+            jclass cls;
+            jmethodID ctorNone;
+            jmethodID ctorIri;
+
+            void onLoad(JNIEnv* env) {
+                jclass local = env->FindClass("io/github/humbleui/skija/svg/SVGFuncIRI");
+                cls  = static_cast<jclass>(env->NewGlobalRef(local));
+                ctorNone = env->GetMethodID(cls, "<init>", "()V");
+                ctorIri = env->GetMethodID(cls, "<init>", "(Lio/github/humbleui/skija/svg/SVGIRI;)V");
+            }
+
+            void onUnload(JNIEnv* env) {
+                env->DeleteGlobalRef(cls);
+            }
+
+            SkSVGFuncIRI fromJava(JNIEnv* env, jint jfuncType, jint iriType, jstring iri) {
+                SkSVGFuncIRI::Type funcType = static_cast<SkSVGFuncIRI::Type>(jfuncType);
+                if (funcType == SkSVGFuncIRI::Type::kNone) {
+                    return SkSVGFuncIRI();
+                } else {
+                    return SkSVGFuncIRI(skija::svg::SVGIRI::fromJava(env, iriType, iri));
+                }
+            }
+
+            jobject toJava(JNIEnv* env, const SkSVGFuncIRI& func) {
+                if (func.type() == SkSVGFuncIRI::Type::kNone) {
+                    return env->NewObject(cls, ctorNone);
+                } else {
+                    return env->NewObject(cls, ctorIri, skija::svg::SVGIRI::toJava(env, func.iri()));
+                }
             }
         }
 
@@ -288,6 +321,7 @@ namespace skija {
             SVGDashArray::onLoad(env);
             SVGIRI::onLoad(env);
             SVGPaint::onLoad(env);
+            SVGFuncIRI::onLoad(env);
             SVGLength::onLoad(env);
             SVGLengthUnit::onLoad(env);
             SVGFontFamily::onLoad(env);
@@ -300,6 +334,7 @@ namespace skija {
             SVGFontSize::onUnload(env);
             SVGFontFamily::onUnload(env);
             SVGLengthUnit::onUnload(env);
+            SVGFuncIRI::onUnload(env);
             SVGLength::onUnload(env);
             SVGPaint::onUnload(env);
             SVGIRI::onUnload(env);

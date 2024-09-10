@@ -228,5 +228,39 @@ public class SVGNodePropsTest implements Executable {
         if (node.getStrokeWidth() != null) {
             runner.fail("stroke width should not have value");
         }
+
+        // Text Anchor
+
+        node.setTextAnchor(SVGTextAnchor.MIDDLE);
+        assertEquals(SVGTextAnchor.MIDDLE, node.getTextAnchor());
+
+        node.setTextAnchor(null);
+        if (node.getTextAnchor() != null) {
+            runner.fail("stroke line cap should not have value");
+        }
+
+        // Visibility
+
+        node.setVisibility(SVGVisibility.COLLAPSE);
+        assertEquals(SVGVisibility.COLLAPSE, node.getVisibility());
+
+        node.setVisibility(null);
+        if (node.getVisibility() != null) {
+            runner.fail("visibility cap should not have value");
+        }
+
+        // Clip Path
+
+        node.setClipPath(new SVGFuncIRI());
+        assertEquals(new SVGFuncIRI(), node.getClipPath());
+        node.setClipPath(new SVGFuncIRI(new SVGIRI()));
+        assertEquals(new SVGFuncIRI(new SVGIRI()), node.getClipPath());
+        node.setClipPath(new SVGFuncIRI(new SVGIRI(SVGIRIType.NON_LOCAL, "test")));
+        assertEquals(new SVGFuncIRI(new SVGIRI(SVGIRIType.NON_LOCAL, "test")), node.getClipPath());
+
+        node.setClipPath(null);
+        if (node.getClipPath() != null) {
+            runner.fail("clip path cap should not have value");
+        }
     }
 }
