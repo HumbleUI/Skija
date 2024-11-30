@@ -43,7 +43,7 @@ extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_PathSegmentIt
             segment = env->NewObject(skija::PathSegment::cls, skija::PathSegment::ctorConic, pts[0].fX, pts[0].fY, pts[1].fX, pts[1].fY, pts[2].fX, pts[2].fY, instance->conicWeight(), instance->isClosedContour());
             break;
         case SkPath::Verb::kCubic_Verb:
-            segment = env->NewObject(skija::PathSegment::cls, skija::PathSegment::ctorConic, pts[0].fX, pts[0].fY, pts[1].fX, pts[1].fY, pts[2].fX, pts[2].fY, pts[3].fX, pts[3].fY, instance->isClosedContour());
+            segment = env->NewObject(skija::PathSegment::cls, skija::PathSegment::ctorCubic, pts[0].fX, pts[0].fY, pts[1].fX, pts[1].fY, pts[2].fX, pts[2].fY, pts[3].fX, pts[3].fY, instance->isClosedContour());
             break;
     }
     return segment;
