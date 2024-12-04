@@ -123,14 +123,18 @@ public class FontMgr extends RefCnt {
     }
 
     /**
-     * Create a typeface for the specified data and TTC index (pass 0 for none)
-     * or null if the data is not recognized. The caller must call {@link #close()} on
-     * the returned object if it is not null.
+     * Create a typeface for the specified data or null if the data is not recognized.
+     * The caller must call {@link #close()} on the returned object if it is not null.
      */
     public Typeface makeFromData(Data data) {
         return makeFromData(data, 0);
     }
 
+    /**
+     * Create a typeface for the specified data and TTC index (pass 0 for none)
+     * or null if the data is not recognized. The caller must call {@link #close()} on
+     * the returned object if it is not null.
+     */
     public Typeface makeFromData(Data data, int ttcIndex) {
         try {
             Stats.onNativeCall();
