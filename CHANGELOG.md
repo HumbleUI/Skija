@@ -1,9 +1,12 @@
-# WIP
+# 0.116.3 - Jan 13, 2025
 
 Changed:
 
 - Surface and PictureRecorder cache returned Canvas object and invalidate it when owner is closed #66
-- Fixed ColorType enum mapping #73
+
+Fixed:
+
+- ColorType enum mapping #73
 
 # 0.116.2 - Dec 8, 2023
 
