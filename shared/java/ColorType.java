@@ -61,7 +61,12 @@ public enum ColorType {
     /**
      * Pixel with 10 bits each for blue, green, red; in 32-bit word
      */
-    BGR_101010X,  
+    BGR_101010X,
+
+    /**
+     * Pixel with 10 bits each for blue, green, red; in 32-bit word, extended range
+     */
+    BGR_101010X_XR,
 
     /**
      * Pixel with grayscale level in 8-bit byte
