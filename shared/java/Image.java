@@ -41,10 +41,10 @@ public class Image extends RefCnt implements IHasImageInfo {
      * @param colorType   color type of the texture
      * @return            Image
      */
-    public static Image adoptTextureFrom(DirectContext context, int textureId, int target, int width, int height, int format, SurfaceOrigin surfaceOrigin, ColorType colorType) {
+    public static Image adoptGLTextureFrom(DirectContext context, int textureId, int target, int width, int height, int format, SurfaceOrigin surfaceOrigin, ColorType colorType) {
         try {
             Stats.onNativeCall();
-            long ptr = _nAdoptTextureFrom(Native.getPtr(context),
+            long ptr = _nAdoptGLTextureFrom(Native.getPtr(context),
                                             textureId,
                                             target,
                                             width,
@@ -53,7 +53,7 @@ public class Image extends RefCnt implements IHasImageInfo {
                                             surfaceOrigin.ordinal(),
                                             colorType.ordinal());
             if (ptr == 0)
-                throw new RuntimeException("Failed to adoptTextureFrom " + textureId + " " + width + "x" + height);
+                throw new RuntimeException("Failed to adoptGLTextureFrom " + textureId + " " + width + "x" + height);
             return new Image(ptr);
         } finally {
             ReferenceUtil.reachabilityFence(context);
@@ -419,7 +419,7 @@ public class Image extends RefCnt implements IHasImageInfo {
         }
     }
 
-    @ApiStatus.Internal public static native long _nAdoptTextureFrom(long contextPtr, int textureId, int target, int width, int height, int format, int surfaceOrigin, int colorType);
+    @ApiStatus.Internal public static native long _nAdoptGLTextureFrom(long contextPtr, int textureId, int target, int width, int height, int format, int surfaceOrigin, int colorType);
     @ApiStatus.Internal public static native long _nMakeRasterFromBytes(int width, int height, int colorType, int alphaType, long colorSpacePtr, byte[] pixels, long rowBytes);
     @ApiStatus.Internal public static native long _nMakeRasterFromData(int width, int height, int colorType, int alphaType, long colorSpacePtr, long dataPtr, long rowBytes);
     @ApiStatus.Internal public static native long _nMakeRasterFromBitmap(long bitmapPtr);
