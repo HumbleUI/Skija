@@ -5,6 +5,11 @@
 #include "SkImage.h"
 #include "SkShader.h"
 #include "interop.hh"
+#include "GrBackendSurface.h"
+#include "GrDirectContext.h"
+#include "include/gpu/GrBackendSurface.h"
+#include "include/gpu/ganesh/SkImageGanesh.h"
+#include "include/gpu/gl/GrGLTypes.h"
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Image__1nAdoptTextureFrom
   (JNIEnv* env, jclass jclass, jlong contextPtr, jint textureId, jint target, jint width, jint height, jint format, jint surfaceOrigin, jint colorType) {
