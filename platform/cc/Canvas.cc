@@ -196,7 +196,7 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Canvas__1nDrawVe
     jfloat* positions = env->GetFloatArrayElements(positionsArr, 0);
     jint*   colors    = colorsArr == nullptr ? nullptr : env->GetIntArrayElements(colorsArr, 0);
     jfloat* texCoords = texCoordsArr == nullptr ? nullptr : env->GetFloatArrayElements(texCoordsArr, 0);
-    const jshort* indices = indexArr == nullptr ? nullptr : env->GetShortArrayElements(indexArr, 0);
+    jshort* indices   = indexArr == nullptr ? nullptr : env->GetShortArrayElements(indexArr, 0);
     sk_sp<SkVertices> vertices = SkVertices::MakeCopy(
         static_cast<SkVertices::VertexMode>(verticesMode),
         env->GetArrayLength(positionsArr) / 2,
@@ -209,6 +209,8 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Canvas__1nDrawVe
 
     canvas->drawVertices(vertices, static_cast<SkBlendMode>(blendMode), *paint);
     
+    if (indexArr != nullptr)
+        env->ReleaseShortArrayElements(indexArr, indices, 0);
     if (texCoords != nullptr)
         env->ReleaseFloatArrayElements(texCoordsArr, texCoords, 0);
     if (colors != nullptr)
@@ -218,11 +220,11 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Canvas__1nDrawVe
 
 extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Canvas__1nDrawPatch
   (JNIEnv* env, jclass jclass, jlong ptr, jfloatArray cubicsArr, jintArray colorsArr, jfloatArray texCoordsArr, jint blendMode, jlong paintPtr) {
-    SkCanvas* canvas = reinterpret_cast<SkCanvas*>   (static_cast<uintptr_t>(ptr));
+    SkCanvas* canvas  = reinterpret_cast<SkCanvas*> (static_cast<uintptr_t>(ptr));
     jfloat* cubics    = env->GetFloatArrayElements(cubicsArr, 0);
     jint*   colors    = env->GetIntArrayElements(colorsArr, 0);
     jfloat* texCoords = texCoordsArr == nullptr ? nullptr : env->GetFloatArrayElements(texCoordsArr, 0);
-    SkPaint* paint = reinterpret_cast<SkPaint*>(static_cast<uintptr_t>(paintPtr));
+    SkPaint* paint    = reinterpret_cast<SkPaint*>(static_cast<uintptr_t>(paintPtr));
 
     canvas->drawPatch(reinterpret_cast<SkPoint*>(cubics), reinterpret_cast<SkColor*>(colors), reinterpret_cast<SkPoint*>(texCoords), static_cast<SkBlendMode>(blendMode), *paint);
     

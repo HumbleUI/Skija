@@ -1,3 +1,13 @@
+# 0.116.4 - Feb 13, 2025
+
+Added:
+
+- `adoptGLTextureFrom` #67 #72 #74 #75 via @EldoDebug
+
+Fixed:
+
+- Memory leak in `Canvas::drawTriangles` #76
+
 # 0.116.3 - Jan 13, 2025
 
 Changed:
