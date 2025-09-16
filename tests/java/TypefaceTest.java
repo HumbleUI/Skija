@@ -75,6 +75,20 @@ public class TypefaceTest implements Executable {
         assertEquals("Inter", interV.getFamilyName());
         // if (OperatingSystem.CURRENT != OperatingSystem.LINUX)
         //     assertEquals(Rect.makeLTRB(-0.7386364f, -1.0909119f, 2.5830965f, 0.31959534f), interV.getBounds());
+    
+    
+         int[] ttcIndex = new int[1];
+         ttcIndex[0] = -1;
+         StreamAsset stream1 = inter.openStream(ttcIndex);
+         assertNotNull(stream1);
+         assertEquals(0, ttcIndex[0]);
+         assertEquals(680112, stream1.getLength());
+         stream1.close();
+
+         StreamAsset stream2 = interV.openStream();
+         assertNotNull(stream2);
+         assertEquals(777688, stream2.getLength());
+         stream2.close();
     }
 }
 

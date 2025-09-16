@@ -1,6 +1,7 @@
 #include <iostream>
 #include <jni.h>
 #include "SkData.h"
+#include "SkStream.h"
 #include "SkTypeface.h"
 #include "interop.hh"
 
@@ -241,4 +242,18 @@ extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_Typeface__1nG
   (JNIEnv* env, jclass jclass, jlong ptr) {
     SkTypeface* instance = reinterpret_cast<SkTypeface*>(static_cast<uintptr_t>(ptr));
     return types::Rect::fromSkRect(env, instance->getBounds());
+}
+
+extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Typeface__1nOpenStream
+  (JNIEnv* env, jclass jclass, jlong ptr, jintArray ttcIndexArray) {
+    SkTypeface* instance = reinterpret_cast<SkTypeface*>(static_cast<uintptr_t>(ptr));
+    int ttcIndex = 0;
+    std::unique_ptr<SkStreamAsset> streamPtr = instance->openStream(&ttcIndex);
+    SkStreamAsset* stream = streamPtr.release(); 
+    
+    if (ttcIndexArray != nullptr && env->GetArrayLength(ttcIndexArray) > 0) {
+        env->SetIntArrayRegion(ttcIndexArray, 0, 1, &ttcIndex);
+    }
+    
+    return reinterpret_cast<jlong>(stream);
 }
