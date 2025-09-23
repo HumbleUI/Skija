@@ -62,6 +62,13 @@ public class TestRunner {
         assertClose(expected, actual, 0.00001f);
     }
 
+    public static void assertNotNull(Object expected) {
+        if (expected == null)
+            runner.fail("Expected '" + expected + "' != 'null'");
+        else
+            System.out.print(".");
+    }
+
     public static void assertClose(float expected, float actual, float epsilon) {
         runner.asserts++;
         try {

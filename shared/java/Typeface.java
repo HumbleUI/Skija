@@ -389,6 +389,29 @@ public class Typeface extends RefCnt {
         }
     }
 
+    /**
+     * Opens a stream for reading the data of this typeface.
+     * @return  a StreamAsset for the typeface data, or null if not available
+     */
+    public StreamAsset openStream(){
+        return openStream(null);
+    }
+
+   /**
+     * Opens a stream for reading the data of this typeface.
+     * @param ttcIndex  if not null, will be filled with the TTC index (for TrueType Collections)
+     * @return  a StreamAsset for the typeface data, or null if not available
+     */
+    public StreamAsset openStream(int[] ttcIndex) {
+        try {
+            Stats.onNativeCall();
+            long ptr = _nOpenStream(_ptr, ttcIndex);
+            return ptr == 0 ? null : new StreamAsset(ptr);
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
     @ApiStatus.Internal
     public Typeface(long ptr) {
         super(ptr);
@@ -417,4 +440,5 @@ public class Typeface extends RefCnt {
     @ApiStatus.Internal public static native FontFamilyName[] _nGetFamilyNames(long ptr);
     @ApiStatus.Internal public static native String   _nGetFamilyName(long ptr);
     @ApiStatus.Internal public static native Rect     _nGetBounds(long ptr);
+    @ApiStatus.Internal public static native long     _nOpenStream(long ptr, int[] ttcIndex);
 }
