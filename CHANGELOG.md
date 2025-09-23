@@ -1,3 +1,9 @@
+# 0.116.5 - Sep 23, 2025
+
+Added:
+
+- `StreamAsset`, `Typeface::openStream` #82 via @vladimirsamsonov
+
 # 0.116.4 - Feb 13, 2025
 
 Added:

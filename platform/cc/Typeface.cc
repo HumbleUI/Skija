@@ -252,7 +252,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Typeface__1nOpe
     SkStreamAsset* stream = streamPtr.release(); 
     
     if (ttcIndexArray != nullptr && env->GetArrayLength(ttcIndexArray) > 0) {
-        env->SetIntArrayRegion(ttcIndexArray, 0, 1, &ttcIndex);
+        env->SetIntArrayRegion(ttcIndexArray, 0, 1, reinterpret_cast<const jint*>(&ttcIndex));
     }
     
     return reinterpret_cast<jlong>(stream);
