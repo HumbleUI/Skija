@@ -143,8 +143,7 @@ jobs:
           python3 ./script/release.py
         env:
           GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
-          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+          SONATYPE_BEARER_TOKEN: ${{ secrets.SONATYPE_BEARER_TOKEN }}
       - name: Delete useless jars
         run: |
           rm target/skija-macos-*-sources.jar

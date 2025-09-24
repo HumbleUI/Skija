@@ -1,5 +1,5 @@
 #! /usr/bin/env python3
-import argparse, base64, functools, glob, itertools, json, os, pathlib, platform, re, shutil, subprocess, tempfile, time, urllib.request, zipfile
+import argparse, base64, functools, glob, hashlib, itertools, json, os, pathlib, platform, random, re, shutil, subprocess, tempfile, time, urllib.request, zipfile
 from typing import List, Tuple
 
 def get_arg(name):
@@ -66,6 +66,8 @@ def copy_newer(src, dst):
 
 def has_newer(sources, targets):
   mtime = time.time()
+  if sources and not targets:
+    return True
   for target in targets:
     if os.path.exists(target):
       mtime = min(mtime, os.path.getmtime(target))
@@ -155,101 +157,136 @@ def javadoc(dirs: List[str], target: str, classpath: List[str] = [], modulepath:
       "-Xdoclint:all,-missing",
       *sources])
 
-def deploy(jar,
-           tempdir = tempfile.gettempdir(),
-           classifier = None,
-           ossrh_username = os.getenv('OSSRH_USERNAME'),
-           ossrh_password = os.getenv('OSSRH_PASSWORD'),
-           repo="https://s01.oss.sonatype.org/service/local/staging"):
-  makedirs(tempdir)
-  settings = tempdir + "/settings.xml"
-  with open(settings, 'w') as f:
-    f.write("""
-      <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
-            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
-                                http://maven.apache.org/xsd/settings-1.0.0.xsd">
-          <servers>
-              <server>
-                  <id>ossrh</id>
-                  <username>${ossrh.username}</username>
-                  <password>${ossrh.password}</password>
-              </server>
-          </servers>
-      </settings>
-    """)
+def collect_jars(group, name, version, jars, target_dir):
+  # output_dir: target_dir/group/name/version
+  group_path = group.replace('.', '/')
+  output_dir = os.path.join(target_dir, group_path, name, version)
+  makedirs(output_dir)
 
-  mvn_settings = [
-    '--settings', settings,
-    '-Dossrh.username=' + ossrh_username,
-    '-Dossrh.password=' + ossrh_password,
-    '-Durl=' + repo + "/deploy/maven2/",
-    '-DrepositoryId=ossrh'
-  ]
+  all_files = []
 
-  with zipfile.ZipFile(jar, 'r') as f:
-    pom = [path for path in f.namelist() if re.fullmatch(r"META-INF/maven/.*/pom\.xml", path)][0]
-    f.extract(pom, tempdir)
+  # Move all JARs to output directory
+  print(f"Collecting {output_dir}")
+  for jar in jars:
+    jar_basename = os.path.basename(jar)
+    dest_jar = os.path.join(output_dir, jar_basename)
+    shutil.copy2(jar, dest_jar)
+    all_files.append(dest_jar)
+    print(f"  Copied {jar}")
 
-  classifier = classifier or (re.fullmatch(r".*-\d+\.\d+\.\d+(?:-SNAPSHOT)?(?:-([a-z0-9\-]+))?\.jar", os.path.basename(jar))[1])
+  # Extract POM from first JAR
+  pom_path = os.path.join(output_dir, f"{name}-{version}.pom")
+  with zipfile.ZipFile(jars[0], 'r') as f:
+    poms = [path for path in f.namelist() if re.fullmatch(r"META-INF/maven/.*/pom\.xml", path)]
+    if not poms:
+      raise Exception(f"  No pom.xml found in {jars[0]}")
+    with f.open(poms[0]) as pom:
+      with open(pom_path, 'wb') as out:
+        out.write(pom.read())
+    print(f"  Extracted {poms[0]}")
+  all_files.append(pom_path)
 
-  print(f'Deploying {jar}', classifier, pom, flush=True)
-  subprocess.check_call(
-    [mvn, 'gpg:sign-and-deploy-file'] + \
-    mvn_settings + \
-    [f'-DpomFile={tempdir}/{pom}',
-     f'-Dfile={jar}']
-    + ([f"-Dclassifier={classifier}"] if classifier else []))
-  return 0
+  # Signing
+  for file_path in all_files:
+    basename = os.path.basename(file_path)
 
-def release(ossrh_username = os.getenv('OSSRH_USERNAME'),
-            ossrh_password = os.getenv('OSSRH_PASSWORD'),
-            repo="https://s01.oss.sonatype.org/service/local/staging"):
-  headers = {
-    'Accept': 'application/json',
-    'Authorization': 'Basic ' + base64.b64encode((ossrh_username + ":" + ossrh_password).encode('utf-8')).decode('utf-8'),
-    'Content-Type': 'application/json',
-  }
+    # GPG
+    asc_file = file_path + '.asc'
+    if os.path.exists(asc_file):
+      os.remove(asc_file)
+    subprocess.check_call(['gpg', '--quiet', '--detach-sign', '--armor', file_path])
+    print(f"  GPG  {basename}")
 
-  def fetch(path, data = None):
-    req = urllib.request.Request(repo + path,
-                                 headers=headers,
-                                 data = json.dumps(data).encode('utf-8') if data else None)
-    resp = urllib.request.urlopen(req).read().decode('utf-8')
-    print(' ', path, "->", resp, flush=True)
-    return json.loads(resp) if resp else None
+    # MD5
+    with open(file_path, 'rb') as f:
+      md5_hash = hashlib.md5(f.read()).hexdigest()
+    with open(file_path + '.md5', 'w') as f:
+      f.write(md5_hash)
+    print(f"  MD5  {basename}")
 
-  print('Finding staging repo', flush=True)
-  resp = fetch('/profile_repositories')
-  if len(resp['data']) != 1:
-    print("Too many open repositories:", [repo['repositoryId'] for repo in resp['data']], flush=True)
+    # SHA1
+    with open(file_path, 'rb') as f:
+      sha1_hash = hashlib.sha1(f.read()).hexdigest()
+    with open(file_path + '.sha1', 'w') as f:
+      f.write(sha1_hash)
+    print(f"  SHA1  {basename}")
+
+  print(f"  [ DONE ] Collected artifacts in {output_dir}")
+  return output_dir
+
+def release2(zip_name, target_dir):
+  parent_dir = os.path.dirname(target_dir)
+  zip_path = os.path.join(parent_dir, zip_name)
+
+  # Create zip archive
+  with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
+    for root, dirs, files in os.walk(target_dir):
+      for file in files:
+        file_path = os.path.join(root, file)
+        arc_path = os.path.relpath(file_path, target_dir)
+        zipf.write(file_path, arc_path)
+
+  print(f"Created {zip_path}")
+
+  # Upload to Sonatype Central
+  bearer_token = os.getenv('SONATYPE_BEARER_TOKEN')
+  if not bearer_token:
+    print("SONATYPE_BEARER_TOKEN not set, skipping upload")
     return 1
 
-  repo_id = resp['data'][0]["repositoryId"]
-  
-  print('Closing repo', repo_id, flush=True)
-  resp = fetch('/bulk/close', data = {"data": {"description": "", "stagedRepositoryIds": [repo_id]}})
+  print("Uploading to Sonatype Central Portal...")
+  boundary = '----WebKitFormBoundary' + ''.join([str(random.randint(0, 9)) for _ in range(16)])
+  with open(zip_path, 'rb') as f:
+    zip_data = f.read()
+  body = []
+  body.append(f'--{boundary}'.encode())
+  body.append(b'Content-Disposition: form-data; name="bundle"; filename="' + zip_name.encode() + b'"')
+  body.append(b'Content-Type: application/octet-stream')
+  body.append(b'')
+  body.append(zip_data)
+  body.append(f'--{boundary}--'.encode())
 
+  url = f'https://central.sonatype.com/api/v1/publisher/upload?name={zip_name}&publishingType=AUTOMATIC'
+  req = urllib.request.Request(url, data=b'\r\n'.join(body))
+  req.add_header('Authorization', f'Bearer {bearer_token}')
+  req.add_header('Content-Type', f'multipart/form-data; boundary={boundary}')
+
+  try:
+    response = urllib.request.urlopen(req)
+    response_data = response.read().decode('utf-8')
+    print(f"Upload successful: {response.status} - {response_data}")
+  except urllib.error.HTTPError as e:
+    error_data = e.read().decode('utf-8') if e.fp else str(e)
+    print(f"Upload failed: {e.code} - {error_data}")
+    raise Exception(f"Failed to upload to Sonatype Central: {e.code} - {error_data}")
+
+  # Check deployment status
+  deployment_id = response_data
   while True:
-    print('Checking repo', repo_id, 'status', flush=True)
-    resp = fetch('/repository/' + repo_id + '/activity')
-    close_events = [e for e in resp if e['name'] == 'close' and 'stopped' in e and 'events' in e]
-    close_events = close_events[0]['events'] if close_events else []
-    fail_events = [e for e in close_events if e['name'] == 'ruleFailed']
-    if fail_events:
-      print(fail_events, flush=True)
-      return 1
+    status_url = f'https://central.sonatype.com/api/v1/publisher/status?id={deployment_id}'
+    status_req = urllib.request.Request(status_url, data=b'')
+    status_req.add_header('Authorization', f'Bearer {bearer_token}')
 
-    if close_events and close_events[-1]['name'] == 'repositoryClosed':
+    try:
+      status_response = urllib.request.urlopen(status_req)
+      status_data = json.loads(status_response.read().decode('utf-8'))
+
+      deployment_state = status_data.get('deploymentState', 'UNKNOWN')
+      print(f"Deployment {deployment_id} is {deployment_state}")
+
+      if deployment_state == 'PUBLISHED':
+        return 0
+
+      if deployment_state == 'FAILED':
+        print('Deployment failed', status_data)
+        return 1
+
+    except urllib.error.HTTPError as e:
+      error_data = e.read().decode('utf-8') if e.fp else str(e)
+      print(f"Failed to check deployment status: {e.code} - {error_data}")
       break
 
-    time.sleep(0.5)
+    time.sleep(10)
 
-  print('Releasing staging repo', repo_id, flush=True)
-  resp = fetch('/bulk/promote', data = {"data": {
-              "autoDropAfterRelease": True,
-              "description": "",
-              "stagedRepositoryIds":[repo_id]
-        }})
-  print('Success! Just released', repo_id, flush=True)
-  return 0
+  print('should not return here')
+  return 1
