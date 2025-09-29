@@ -1,3 +1,9 @@
+# 0.116.6 - Sep 29, 2025
+
+Fixed:
+
+- Bitmap swap method #84 via @vladimirsamsonov
+
 # 0.116.5 - Sep 23, 2025
 
 Added:
