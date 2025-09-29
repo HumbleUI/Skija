@@ -10,6 +10,11 @@ import io.github.humbleui.skija.test.runner.*;
 public class BitmapTest implements Executable {
     @Override
     public void execute() throws Exception {
+        TestRunner.testMethod(this, "base");
+        TestRunner.testMethod(this, "swap");
+    }
+
+    public void base() throws Exception {
         try (var bitmap = new Bitmap()) {
             int id1 = bitmap.getGenerationId();
             assertEquals(true, bitmap.isNull());
@@ -38,9 +43,25 @@ public class BitmapTest implements Executable {
             assertEquals(false, bitmap.isNull());
             assertEquals(true, bitmap.isReadyToDraw());
 
-
             bitmap.getGenerationId();
+        }
+    }
 
+    public void swap() throws Exception {
+        try (Bitmap a = new Bitmap(); Bitmap b = new Bitmap()) {
+            a.allocN32Pixels(10, 20);
+            b.allocN32Pixels(5, 6);
+            int aW = a.getWidth();
+            int aH = a.getHeight();
+            int bW = b.getWidth();
+            int bH = b.getHeight();
+            assertNotEquals(aW, bW);
+            a.swap(b);
+            // After swap, a should now have original b dimensions and vice versa
+            assertEquals(bW, a.getWidth());
+            assertEquals(bH, a.getHeight());
+            assertEquals(aW, b.getWidth());
+            assertEquals(aH, b.getHeight());
         }
     }
 }

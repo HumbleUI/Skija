@@ -73,6 +73,7 @@ public class Bitmap extends Managed implements IHasImageInfo {
         Stats.onNativeCall();
         _nSwap(_ptr, Native.getPtr(other));
         _imageInfo = null;
+        other._imageInfo = null;
         ReferenceUtil.reachabilityFence(this);
         ReferenceUtil.reachabilityFence(other);
     }
