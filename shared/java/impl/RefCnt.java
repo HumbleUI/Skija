@@ -23,7 +23,10 @@ public abstract class RefCnt extends Managed {
     @Override
     public String toString() {
         String s = super.toString();
-        return s.substring(0, s.length() - 1) + ", refCount=" + getRefCount() + ")";
+        String base = s.substring(0, s.length() - 1); 
+        return base + (isClosed()
+                ? ", object is closed)"
+                : ", refCount=" + getRefCount() + ")");
     }
 
     @ApiStatus.Internal
