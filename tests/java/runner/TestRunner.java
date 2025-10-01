@@ -204,6 +204,17 @@ public class TestRunner {
                 runner.fail("Expected '" + expected.getName() + "', caught '" + e + "'");
         }
     }
+    
+    public static void assertDoesNotThrow(Executable executable) {
+        runner.asserts++;
+        try {
+            executable.execute();
+            System.out.print(".");
+        } catch (Exception e) {
+            runner.fail("Did not expect exception, but caught '" + e + "'");
+        }
+    }
+
 
     public static void testClass(Class<? extends Executable> cls) {
         pushStack(cls.getName());
