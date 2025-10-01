@@ -1,3 +1,9 @@
+# 0.116.7 - Oct 2, 2025
+
+Fixed:
+
+- toString on closed RefCnt objects #85 via @vladimirsamsonov
+
 # 0.116.6 - Sep 29, 2025
 
 Fixed:
