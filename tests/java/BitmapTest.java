@@ -3,6 +3,7 @@ package io.github.humbleui.skija.test;
 import static io.github.humbleui.skija.test.runner.TestRunner.*;
 
 import io.github.humbleui.skija.Bitmap;
+import io.github.humbleui.skija.Canvas;
 import io.github.humbleui.skija.ColorAlphaType;
 import io.github.humbleui.skija.ImageInfo;
 import io.github.humbleui.skija.test.runner.*;
@@ -12,6 +13,7 @@ public class BitmapTest implements Executable {
     public void execute() throws Exception {
         TestRunner.testMethod(this, "base");
         TestRunner.testMethod(this, "swap");
+        TestRunner.testMethod(this, "getSurfaceNull");
     }
 
     public void base() throws Exception {
@@ -62,6 +64,15 @@ public class BitmapTest implements Executable {
             assertEquals(bH, a.getHeight());
             assertEquals(aW, b.getWidth());
             assertEquals(aH, b.getHeight());
+        }
+    }
+    
+    public void getSurfaceNull() throws Exception {
+        try (Bitmap a = new Bitmap()) {
+            a.allocN32Pixels(10, 20);
+            Canvas canvas = new Canvas(a);
+            assertNull(canvas.getSurface());
+            canvas.close();
         }
     }
 }
