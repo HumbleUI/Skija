@@ -42,6 +42,8 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Canvas__1nGetSu
   (JNIEnv* env, jclass jclass, jlong canvasPtr) {
     SkCanvas* canvas = reinterpret_cast<SkCanvas*>(static_cast<uintptr_t>(canvasPtr));
     SkSurface* surface = canvas->getSurface();
+    if (surface == nullptr)
+      return 0;
     surface->ref();
     return reinterpret_cast<jlong>(surface);
 }
