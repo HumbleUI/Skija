@@ -1,10 +1,12 @@
 #include <iostream>
 #include <jni.h>
 #include "GrDirectContext.h"
+#include "GrTypes.h"
+#include "include/gpu/ganesh/gl/GrGLDirectContext.h"
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_DirectContext__1nMakeGL
   (JNIEnv* env, jclass jclass) {
-    return reinterpret_cast<jlong>(GrDirectContext::MakeGL().release());
+    return reinterpret_cast<jlong>(GrDirectContexts::MakeGL().release());
 }
 
 #ifdef SK_METAL
@@ -45,10 +47,30 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_DirectContext__1
     context->flush(GrFlushInfo());
 }
 
-extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_DirectContext__1nSubmit
+extern "C" JNIEXPORT jboolean JNICALL Java_io_github_humbleui_skija_DirectContext__1nSubmit
   (JNIEnv* env, jclass jclass, jlong ptr, jboolean syncCpu) {
     GrDirectContext* context = reinterpret_cast<GrDirectContext*>(static_cast<uintptr_t>(ptr));
-    context->submit(syncCpu);
+    return context->submit(syncCpu ? GrSyncCpu::kYes : GrSyncCpu::kNo);
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_DirectContext__1nFlushAndSubmit
+  (JNIEnv* env, jclass jclass, jlong ptr, jboolean syncCpu) {
+    GrDirectContext* context = reinterpret_cast<GrDirectContext*>(static_cast<uintptr_t>(ptr));
+    context->flushAndSubmit(syncCpu ? GrSyncCpu::kYes : GrSyncCpu::kNo);
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_DirectContext__1nFlushSurface
+  (JNIEnv* env, jclass jclass, jlong ptr, jlong surfacePtr) {
+    GrDirectContext* context = reinterpret_cast<GrDirectContext*>(static_cast<uintptr_t>(ptr));
+    SkSurface* surface = reinterpret_cast<SkSurface*>(static_cast<uintptr_t>(surfacePtr));
+    context->flush(surface);
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_DirectContext__1nFlushAndSubmitSurface
+  (JNIEnv* env, jclass jclass, jlong ptr, jlong surfacePtr, jboolean syncCpu) {
+    GrDirectContext* context = reinterpret_cast<GrDirectContext*>(static_cast<uintptr_t>(ptr));
+    SkSurface* surface = reinterpret_cast<SkSurface*>(static_cast<uintptr_t>(surfacePtr));
+    context->flushAndSubmit(surface, syncCpu ? GrSyncCpu::kYes : GrSyncCpu::kNo);
 }
 
 extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_DirectContext__1nReset
@@ -62,3 +84,4 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_DirectContext__1
     GrDirectContext* context = reinterpret_cast<GrDirectContext*>(static_cast<uintptr_t>(ptr));
     context->abandonContext();
 }
+

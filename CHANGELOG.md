@@ -1,3 +1,31 @@
+# 0.123.0 - Oct 28, 2025
+
+Changed:
+
+- Skia version m116-d2c211228d -> m123-f44dbc40d8
+- `DirectContext::submit` returns `boolean`
+
+Added:
+
+- `FontMgr::makeFromFile`
+- `DirectContext::flushAndSubmit`
+
+Removed:
+
+- [ BREAKING ] `Font::getTypefaceOrDefault`
+- [ BREAKING ] `Typeface::makeDefault`
+- [ BREAKING ] `Typeface::makeFromName` (use `FontMgr::matchFamilyStyle`)
+- [ BREAKING ] `Typeface::makeFromFile` (use `FontMgr::makeFromFile`)
+- [ BREAKING ] `Typeface::makeFromData` (use `FontMgr::makeFromData`)
+- [ BREAKING ] `Surface::flush` (use `DirectContext::flush(Surface)`)
+- [ BREAKING ] `Surface::flushAndSubmit` (use `DirectContext::flushAndSubmit(Surface)`)
+
+# 0.116.8 - Oct 11, 2025
+
+Fixed:
+
+- Prevent EXCEPTION_ACCESS_VIOLATION in Canvas.getSurface() method #86 via @vladimirsamsonov
+
 # 0.116.7 - Oct 2, 2025
 
 Fixed:

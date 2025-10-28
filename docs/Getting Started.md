@@ -217,7 +217,7 @@ For drawing text, there are two important concepts: Typeface and Font.
 [Typeface](/shared/java/Typeface.java) corresponds to a font file and is relatively expensive to create. You can create typeface directly:
 
 ```java
-Typeface face = Typeface.makeFromFile("Inter.ttf");
+Typeface face = FontMgr.getDefault().makeFromFile("Inter.ttf");
 ```
 
 or ask operating system to locate one for you:

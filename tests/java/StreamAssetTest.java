@@ -10,7 +10,7 @@ public class StreamAssetTest implements Executable {
 
     @Override
     public void execute() throws Exception {
-        Typeface typeface = Typeface.makeFromFile("fonts/InterHinted-Regular.ttf", 0);
+        Typeface typeface = FontMgr.getDefault().makeFromFile("fonts/InterHinted-Regular.ttf", 0);
         int[] ttcIndex = new int[1];
         ttcIndex[0] = -1;
         StreamAsset stream = typeface.openStream(ttcIndex);

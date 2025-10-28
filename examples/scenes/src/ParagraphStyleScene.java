@@ -10,7 +10,7 @@ public class ParagraphStyleScene extends Scene {
 
     public ParagraphStyleScene() {
         fc.setDefaultFontManager(FontMgr.getDefault());
-        slabo = Typeface.makeFromFile(file("fonts/Slabo13px-Regular.ttf"));
+        slabo = FontMgr.getDefault().makeFromFile(file("fonts/Slabo13px-Regular.ttf"));
     }
 
     public void drawLine(Canvas canvas, String text, ParagraphStyle ps, float width) {

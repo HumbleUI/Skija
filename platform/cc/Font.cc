@@ -159,13 +159,6 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Font__1nGetType
     return reinterpret_cast<jlong>(typeface);
 }
 
-extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Font__1nGetTypefaceOrDefault
- (JNIEnv* env, jclass jclass, jlong ptr) {
-    SkFont* instance = reinterpret_cast<SkFont*>(static_cast<uintptr_t>(ptr));
-    SkTypeface* typeface = instance->refTypefaceOrDefault().release();
-    return reinterpret_cast<jlong>(typeface);
-}
-
 extern "C" JNIEXPORT jfloat JNICALL Java_io_github_humbleui_skija_Font__1nGetSize
  (JNIEnv* env, jclass jclass, jlong ptr) {
     SkFont* instance = reinterpret_cast<SkFont*>(static_cast<uintptr_t>(ptr));

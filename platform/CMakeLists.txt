@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.9)
+cmake_minimum_required(VERSION 3.10)
 project(skija LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -38,6 +38,7 @@ add_definitions(-DFT2_BUILD_LIBRARY
     -DSK_GANESH
     -DSK_SHAPER_HARFBUZZ_AVAILABLE
     -DSK_UNICODE_AVAILABLE
+    -DSK_SHAPER_UNICODE_AVAILABLE
     # skia/third_party/icu/BUILD.gn
     -DU_DISABLE_RENAMING
     -DU_USING_ICU_NAMESPACE=0
@@ -55,11 +56,13 @@ endif()
 
 if(APPLE)
     target_include_directories(skija PRIVATE $ENV{JAVA_HOME}/include $ENV{JAVA_HOME}/include/darwin)
-    add_definitions(-DSK_ENABLE_API_AVAILABLE
+    add_definitions(-DSK_BUILD_FOR_MAC
+        -DSK_ENABLE_API_AVAILABLE
         -DSK_METAL
         -DSK_SHAPER_CORETEXT_AVAILABLE)
 
 elseif(UNIX)
+    add_definitions(-DSK_BUILD_FOR_UNIX)
     target_include_directories(skija PRIVATE $ENV{JAVA_HOME}/include $ENV{JAVA_HOME}/include/linux)
 
 elseif(WIN32)
@@ -74,7 +77,8 @@ elseif(WIN32)
     set(CMAKE_CXX_FLAGS_RELEASE "/MT")
     set(CMAKE_CXX_FLAGS_DEBUG "/MTd")
     target_link_options(skija PRIVATE /INCREMENTAL:NO /NODEFAULTLIB:MSVCRT /machine:X64)
-    add_definitions(-DNOMINMAX
+    add_definitions(-DSK_BUILD_FOR_WIN
+        -DNOMINMAX
         -DWIN32_LEAN_AND_MEAN
         -DSK_DIRECT3D
         -DU_NOEXCEPT=)

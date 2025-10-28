@@ -200,18 +200,6 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Surface__1nWrite
     surface->writePixels(*bitmap, x, y);
 }
 
-extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Surface__1nFlushAndSubmit
-  (JNIEnv* env, jclass jclass, jlong ptr, jboolean syncCpu) {
-    SkSurface* surface = reinterpret_cast<SkSurface*>(static_cast<uintptr_t>(ptr));
-    surface->flushAndSubmit(syncCpu);
-}
-
-extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Surface__1nFlush
-  (JNIEnv* env, jclass jclass, jlong ptr) {
-    SkSurface* surface = reinterpret_cast<SkSurface*>(static_cast<uintptr_t>(ptr));
-    surface->flush();
-}
-
 extern "C" JNIEXPORT jboolean JNICALL Java_io_github_humbleui_skija_Surface__1nUnique
   (JNIEnv* env, jclass jclass, jlong ptr) {
     SkSurface* surface = reinterpret_cast<SkSurface*>(static_cast<uintptr_t>(ptr));

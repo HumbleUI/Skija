@@ -101,78 +101,6 @@ public class Typeface extends RefCnt {
     }
 
     /**
-     * @return  the default normal typeface, which is never null
-     */
-    @NotNull
-    public static Typeface makeDefault() {
-        Stats.onNativeCall();
-        return new Typeface(_nMakeDefault());
-    }
-
-    /**
-     * Creates a new reference to the typeface that most closely matches the
-     * requested name and style. This method allows extended font
-     * face specifiers as in the {@link FontStyle} type. Will never return null.
-     * @param name   May be null. The name of the font family
-     * @param style  The style of the typeface
-     * @return       reference to the closest-matching typeface
-     */
-    @NotNull
-    public static Typeface makeFromName(String name, FontStyle style) {
-        Stats.onNativeCall();
-        long ptr = _nMakeFromName(name, style._value);
-        return 0 == ptr ? makeDefault() : new Typeface(ptr);
-    }
-
-    /**
-     * @return  a new typeface given a file
-     * @throws IllegalArgumentException  If the file does not exist, or is not a valid font file
-     */
-    @NotNull
-    public static Typeface makeFromFile(String path) {
-        return makeFromFile(path, 0);
-    }
-
-    /**
-     * @return  a new typeface given a file
-     * @throws IllegalArgumentException  If the file does not exist, or is not a valid font file
-     */
-    @NotNull
-    public static Typeface makeFromFile(String path, int index) {
-        Stats.onNativeCall();
-        long ptr = _nMakeFromFile(path, index);
-        if (ptr == 0)
-            throw new IllegalArgumentException("Failed to create Typeface from path=\"" + path + "\" index=" + index);
-        return new Typeface(ptr);
-    }
-
-    /**
-     * @return  a new typeface given a Data
-     * @throws IllegalArgumentException  If the data is null, or is not a valid font file
-     */
-    @NotNull
-    public static Typeface makeFromData(Data data) {
-        return makeFromData(data, 0);
-    }
-
-    /**
-     * @return  a new typeface given a Data
-     * @throws IllegalArgumentException  If the data is null, or is not a valid font file
-     */
-    @NotNull
-    public static Typeface makeFromData(Data data, int index) {
-        try {
-            Stats.onNativeCall();
-            long ptr = _nMakeFromData(Native.getPtr(data), index);
-            if (ptr == 0)
-                throw new IllegalArgumentException("Failed to create Typeface from data " + data);
-            return new Typeface(ptr);
-        } finally {
-            ReferenceUtil.reachabilityFence(data);
-        }
-    }
-
-    /**
      * Return a new typeface based on this typeface but parameterized as specified in the
      * variation. If the variation does not supply an argument for a parameter
      * in the font then the value from this typeface will be used as the value for that argument.
@@ -423,7 +351,6 @@ public class Typeface extends RefCnt {
     @ApiStatus.Internal public static native FontVariationAxis[] _nGetVariationAxes(long ptr);
     @ApiStatus.Internal public static native int      _nGetUniqueId(long ptr);
     @ApiStatus.Internal public static native boolean  _nEquals(long ptr, long otherPtr);
-    @ApiStatus.Internal public static native long     _nMakeDefault();
     @ApiStatus.Internal public static native long     _nMakeFromName(String name, int fontStyle);
     @ApiStatus.Internal public static native long     _nMakeFromFile(String path, int index);
     @ApiStatus.Internal public static native long     _nMakeFromData(long dataPtr, int index);

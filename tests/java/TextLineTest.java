@@ -3,14 +3,15 @@ package io.github.humbleui.skija.test;
 import static io.github.humbleui.skija.test.runner.TestRunner.*;
 
 import io.github.humbleui.skija.Font;
+import io.github.humbleui.skija.FontMgr;
 import io.github.humbleui.skija.TextLine;
 import io.github.humbleui.skija.Typeface;
 import io.github.humbleui.skija.test.runner.*;
 
 public class TextLineTest implements Executable {
-    public Font inter36 = new Font(Typeface.makeFromFile("fonts/InterHinted-Regular.ttf"), 36);
-    public Font firaCode36 = new Font(Typeface.makeFromFile("fonts/FiraCode-Regular.ttf"), 36);
-    public Font jbMono36 = new Font(Typeface.makeFromFile("fonts/JetBrainsMono-Regular.ttf"), 36);
+    public Font inter36 = new Font(FontMgr.getDefault().makeFromFile("fonts/InterHinted-Regular.ttf"), 36);
+    public Font firaCode36 = new Font(FontMgr.getDefault().makeFromFile("fonts/FiraCode-Regular.ttf"), 36);
+    public Font jbMono36 = new Font(FontMgr.getDefault().makeFromFile("fonts/JetBrainsMono-Regular.ttf"), 36);
 
     @Override
     public void execute() throws Exception {

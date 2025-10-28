@@ -11,7 +11,7 @@ public class TextStyleScene extends Scene {
 
     public TextStyleScene() {
         fc.setDefaultFontManager(FontMgr.getDefault());
-        slabo = Typeface.makeFromFile(file("fonts/Slabo13px-Regular.ttf"));
+        slabo = FontMgr.getDefault().makeFromFile(file("fonts/Slabo13px-Regular.ttf"));
     }
 
     public void drawLine(Canvas canvas, String text, TextStyle ts) {
@@ -108,9 +108,6 @@ public class TextStyleScene extends Scene {
             assert Arrays.equals(FontFeature.EMPTY, ts.getFontFeatures());
 
             FontMetrics m = ts.getFontMetrics();
-            if (OperatingSystem.CURRENT != OperatingSystem.LINUX) {
-                assert m.getTop() < m.getAscent() && m.getAscent() < m.getDescent() && m.getDescent() < m.getBottom();
-            }
             drawLine(canvas, m.toString(), ts);
         }
 

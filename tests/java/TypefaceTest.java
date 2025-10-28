@@ -11,10 +11,10 @@ import static io.github.humbleui.skija.test.runner.TestRunner.*;
 public class TypefaceTest implements Executable {
     @Override
     public void execute() throws Exception {
-        Typeface inter = Typeface.makeFromFile("fonts/InterHinted-Regular.ttf");
-        Typeface interV = Typeface.makeFromFile("fonts/Inter-V.ttf");
-        Typeface jbMono = Typeface.makeFromFile("fonts/JetBrainsMono-Regular.ttf");
-        Typeface jbMonoBold = Typeface.makeFromData(Data.makeFromFileName("fonts/JetBrainsMono-Bold.ttf"));
+        Typeface inter = FontMgr.getDefault().makeFromFile("fonts/InterHinted-Regular.ttf");
+        Typeface interV = FontMgr.getDefault().makeFromFile("fonts/Inter-V.ttf");
+        Typeface jbMono = FontMgr.getDefault().makeFromFile("fonts/JetBrainsMono-Regular.ttf");
+        Typeface jbMonoBold = FontMgr.getDefault().makeFromData(Data.makeFromFileName("fonts/JetBrainsMono-Bold.ttf"));
 
         assertEquals(FontStyle.NORMAL, inter.getFontStyle());
         assertEquals(false, inter.isBold());
@@ -46,10 +46,8 @@ public class TypefaceTest implements Executable {
         assertNotEquals(inter.getUniqueId(), interV.getUniqueId());
         assertNotEquals(inter, interV);
         
-        assertNotEquals(null, Typeface.makeDefault());
-
         if (OperatingSystem.CURRENT != OperatingSystem.LINUX)
-            assertEquals("Arial", Typeface.makeFromName("Arial", FontStyle.NORMAL).getFamilyName());
+            assertEquals("Arial", FontMgr.getDefault().matchFamilyStyle("Arial", FontStyle.NORMAL).getFamilyName());
 
         int[] Skia = new int[] { 83, 107, 105, 97 };
         assertArrayEquals(new short[] { 394, 713, 677, 503 }, inter.getUTF32Glyphs(Skia));

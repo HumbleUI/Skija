@@ -16,9 +16,9 @@ public class FontCollectionTest implements Executable {
     @Override
     public void execute() throws Exception {
         TypefaceFontProvider fm = new TypefaceFontProvider();
-        Typeface jbMono = Typeface.makeFromFile("fonts/JetBrainsMono-Regular.ttf", 0);
+        Typeface jbMono = FontMgr.getDefault().makeFromFile("fonts/JetBrainsMono-Regular.ttf", 0);
         fm.registerTypeface(jbMono);
-        Typeface inter = Typeface.makeFromFile("fonts/InterHinted-Regular.ttf", 0);
+        Typeface inter = FontMgr.getDefault().makeFromFile("fonts/InterHinted-Regular.ttf", 0);
         fm.registerTypeface(inter, "Interface");
 
         // FontCollection

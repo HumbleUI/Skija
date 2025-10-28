@@ -322,19 +322,6 @@ public class Font extends Managed {
     }
 
     /**
-     * @return {@link Typeface} if set, or the default typeface.
-     */
-    @NotNull
-    public Typeface getTypefaceOrDefault() {
-        try {
-            Stats.onNativeCall();
-            return new Typeface(_nGetTypefaceOrDefault(_ptr));
-        } finally {
-            ReferenceUtil.reachabilityFence(this);
-        }
-    }
-
-    /**
      * @return  text size in points
      */
     public float getSize() {
@@ -666,7 +653,6 @@ public class Font extends Managed {
     @ApiStatus.Internal public static native int     _nGetHinting(long ptr);
     @ApiStatus.Internal public static native void    _nSetHinting(long ptr, int value);
     @ApiStatus.Internal public static native long    _nGetTypeface(long ptr);
-    @ApiStatus.Internal public static native long    _nGetTypefaceOrDefault(long ptr);
     @ApiStatus.Internal public static native float   _nGetSize(long ptr);
     @ApiStatus.Internal public static native float   _nGetScaleX(long ptr);
     @ApiStatus.Internal public static native float   _nGetSkewX(long ptr);

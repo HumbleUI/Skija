@@ -12,8 +12,8 @@ public class FontRenderingScene extends Scene {
     public float    _dpi = 0;
 
     public FontRenderingScene() {
-        _inter       = Typeface.makeFromFile(file("fonts/Inter-Regular.otf"));
-        _interV      = Typeface.makeFromFile(file("fonts/Inter-V.ttf"));
+        _inter       = FontMgr.getDefault().makeFromFile(file("fonts/Inter-Regular.otf"));
+        _interV      = FontMgr.getDefault().makeFromFile(file("fonts/Inter-V.ttf"));
         _interHinted = inter;
         _paint       = new Paint().setColor(0xFF000000);
         _variants    = new String[] { "Identity", "Scaled" };

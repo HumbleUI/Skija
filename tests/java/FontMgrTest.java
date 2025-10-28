@@ -2,8 +2,10 @@ package io.github.humbleui.skija.test;
 
 import static io.github.humbleui.skija.test.runner.TestRunner.assertArrayEquals;
 import static io.github.humbleui.skija.test.runner.TestRunner.assertEquals;
+import static io.github.humbleui.skija.test.runner.TestRunner.assertNotNull;
 
 import io.github.humbleui.skija.Data;
+import io.github.humbleui.skija.FontMgr;
 import io.github.humbleui.skija.FontStyle;
 import io.github.humbleui.skija.Typeface;
 import io.github.humbleui.skija.paragraph.FontCollection;
@@ -16,11 +18,11 @@ public class FontMgrTest implements Executable {
     public void execute() throws Exception {
         // FontManager
         TypefaceFontProvider fm = new TypefaceFontProvider();
-        Typeface jbMono = Typeface.makeFromFile("fonts/JetBrainsMono-Regular.ttf", 0);
+        Typeface jbMono = FontMgr.getDefault().makeFromFile("fonts/JetBrainsMono-Regular.ttf", 0);
         fm.registerTypeface(jbMono);
-        Typeface jbMonoBold = Typeface.makeFromFile("fonts/JetBrainsMono-Bold.ttf", 0);
+        Typeface jbMonoBold = FontMgr.getDefault().makeFromFile("fonts/JetBrainsMono-Bold.ttf", 0);
         fm.registerTypeface(jbMonoBold);
-        Typeface inter = Typeface.makeFromFile("fonts/InterHinted-Regular.ttf", 0);
+        Typeface inter = FontMgr.getDefault().makeFromFile("fonts/InterHinted-Regular.ttf", 0);
         fm.registerTypeface(inter, "Interface");
 
         assertEquals(2, fm.getFamiliesCount());
@@ -75,8 +77,8 @@ public class FontMgrTest implements Executable {
             assertEquals(jbMono, ss.matchStyle(FontStyle.ITALIC)); // ?
         }
 
-        assertEquals(null, fm.matchFamilyStyle("JetBrains Mono", FontStyle.BOLD)); // ?
-        assertEquals(null, fm.matchFamilyStyle("Interface", FontStyle.NORMAL)); // ?
+        assertNotNull(fm.matchFamilyStyle("JetBrains Mono", FontStyle.BOLD));
+        assertNotNull(fm.matchFamilyStyle("Interface", FontStyle.NORMAL));
 
         assertEquals(null, fm.matchFamilyStyleCharacter("JetBrains Mono", FontStyle.BOLD, new String[] {"en-US"}, 65 /* A */)); // ?
 

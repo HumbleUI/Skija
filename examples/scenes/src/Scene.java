@@ -5,8 +5,8 @@ import io.github.humbleui.skija.*;
 import io.github.humbleui.types.*;
 
 public abstract class Scene {
-    public static final Typeface inter = Typeface.makeFromFile(file("fonts/InterHinted-Regular.ttf"));
-    public static final Typeface jbMono = Typeface.makeFromFile(file("fonts/JetBrainsMono-Regular.ttf"));
+    public static final Typeface inter = FontMgr.getDefault().makeFromFile(file("fonts/InterHinted-Regular.ttf"));
+    public static final Typeface jbMono = FontMgr.getDefault().makeFromFile(file("fonts/JetBrainsMono-Regular.ttf"));
     public static final Font     inter13 = new Font(inter, 13).setSubpixel(true);
     public static final Paint    blackFill = new Paint().setColor(0xFF000000);
 

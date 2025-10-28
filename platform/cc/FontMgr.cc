@@ -1,9 +1,9 @@
 #include <iostream>
 #include <jni.h>
 #include "interop.hh"
+#include "FontMgr.hh"
 #include "SkData.h"
 #include "SkTypeface.h"
-#include "SkFontMgr.h"
 
 extern "C" JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_FontMgr__1nGetFamiliesCount
   (JNIEnv* env, jclass jclass, jlong ptr) {
@@ -58,6 +58,14 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_FontMgr__1nMatc
     return reinterpret_cast<jlong>(typeface.release());
 }
 
+extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_FontMgr__1nMakeFromFile
+  (JNIEnv* env, jclass jclass, jlong ptr, jstring pathStr, jint index) {
+    SkFontMgr* instance = reinterpret_cast<SkFontMgr*>(static_cast<uintptr_t>(ptr));
+    SkString path = skString(env, pathStr);
+    SkTypeface* typeface = instance->makeFromFile(path.c_str(), index).release();
+    return reinterpret_cast<jlong>(typeface);
+}
+
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_FontMgr__1nMakeFromData
   (JNIEnv* env, jclass jclass, jlong ptr, jlong dataPtr, jint ttcIndex) {
     SkFontMgr* instance = reinterpret_cast<SkFontMgr*>(static_cast<uintptr_t>(ptr));
@@ -68,6 +76,6 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_FontMgr__1nMake
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_FontMgr__1nDefault
   (JNIEnv* env, jclass jclass) {
-    SkFontMgr* instance = SkFontMgr::RefDefault().release();
-    return reinterpret_cast<jlong>(instance);
+    sk_sp<SkFontMgr> mgr = skija::FontMgr_impl::RefDefault();
+    return reinterpret_cast<jlong>(mgr.release());
 }

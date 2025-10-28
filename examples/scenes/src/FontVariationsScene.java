@@ -8,7 +8,7 @@ public class FontVariationsScene extends Scene {
     public final Map<FontVariation, Font> fontCache = new HashMap<>();
 
     public FontVariationsScene() {
-        _interV = Typeface.makeFromFile(file("fonts/Inter-V.ttf"));
+        _interV = FontMgr.getDefault().makeFromFile(file("fonts/Inter-V.ttf"));
     }
 
     public void drawLine(Canvas canvas, Font font, int color) {

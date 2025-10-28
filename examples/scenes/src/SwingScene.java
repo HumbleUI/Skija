@@ -551,8 +551,6 @@ class SkiaGraphics extends java.awt.Graphics2D {
             throw new RuntimeException("Unknown font style: " + font.getStyle() + " in " + font);
 
         var typeface = FontMgr.getDefault().matchFamiliesStyle(new String[] {"System Font", "Segoe UI", "Ubuntu"}, style);
-        if (typeface == null)
-            typeface = Typeface.makeDefault();
         return new Font(typeface, font.getSize());
     }
 

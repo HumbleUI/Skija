@@ -123,6 +123,29 @@ public class FontMgr extends RefCnt {
     }
 
     /**
+     * Create a typeface for the specified file name or null if the data is not recognized.
+     * The caller must call {@link #close()} on the returned object if it is not null.
+     */
+    public Typeface makeFromFile(String path) {
+        return makeFromFile(path, 0);
+    }
+
+    /**
+     * Create a typeface for the specified file name and TTC index (pass 0 for none)
+     * or null if the data is not recognized. The caller must call {@link #close()} on
+     * the returned object if it is not null.
+     */
+    public Typeface makeFromFile(String path, int ttcIndex) {
+        try {
+            Stats.onNativeCall();
+            long ptr = _nMakeFromFile(_ptr, path, ttcIndex);
+            return ptr == 0 ? null : new Typeface(ptr);
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    /**
      * Create a typeface for the specified data or null if the data is not recognized.
      * The caller must call {@link #close()} on the returned object if it is not null.
      */
@@ -174,6 +197,7 @@ public class FontMgr extends RefCnt {
     public static native long _nMatchFamily(long ptr, String familyName);
     public static native long _nMatchFamilyStyle(long ptr, String familyName, int fontStyle);
     public static native long _nMatchFamilyStyleCharacter(long ptr, String familyName, int fontStyle, String[] bcp47, int character);
+    public static native long _nMakeFromFile(long ptr, String path, int ttcIndex);
     public static native long _nMakeFromData(long ptr, long dataPtr, int ttcIndex);
     public static native long _nDefault();
 }

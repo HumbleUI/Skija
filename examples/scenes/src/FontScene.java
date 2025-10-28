@@ -27,12 +27,12 @@ public class FontScene extends Scene {
     public float    _dpi = 0;
 
     public FontScene() {
-        _inter          = Typeface.makeFromFile(file("fonts/Inter-Regular.otf"));
-        _interV         = Typeface.makeFromFile(file("fonts/Inter-V.ttf"));
+        _inter          = FontMgr.getDefault().makeFromFile(file("fonts/Inter-Regular.otf"));
+        _interV         = FontMgr.getDefault().makeFromFile(file("fonts/Inter-V.ttf"));
         _interHinted    = inter;
-        _jbMono         = Typeface.makeFromFile(file("fonts/JetBrainsMono-Regular.ttf"));
-        _testKern       = Typeface.makeFromFile(file("fonts/TestKERNOne.otf"));
-        _testSubpixel   = Typeface.makeFromFile(file("fonts/TestSubpixel-Regular.otf"));
+        _jbMono         = FontMgr.getDefault().makeFromFile(file("fonts/JetBrainsMono-Regular.ttf"));
+        _testKern       = FontMgr.getDefault().makeFromFile(file("fonts/TestKERNOne.otf"));
+        _testSubpixel   = FontMgr.getDefault().makeFromFile(file("fonts/TestSubpixel-Regular.otf"));
         _paint          = new Paint().setColor(0xFF000000);
         _stroke         = new Paint().setColor(0xFF2a9d8f).setMode(PaintMode.STROKE).setStrokeWidth(2).setPathEffect(PathEffect.makeDash(new float[] {6, 2}, 0));
         _boundaryPaint  = new Paint().setColor(0xFFe76f51).setMode(PaintMode.STROKE);
@@ -168,9 +168,7 @@ public class FontScene extends Scene {
         _inter13.setHinting(defaultHinting);
 
         assert Objects.equals(_inter13, _inter18.makeWithSize(13 * dpi));
-        assert Objects.equals(null, _defaultFont.getTypeface());
         assert Objects.equals(_inter, _inter13.getTypeface());
-        assert Objects.equals(Typeface.makeDefault(), _defaultFont.getTypefaceOrDefault());
         assert 13 * dpi == _inter13.getSize();
         assert 1 == _inter13.getScaleX();
         assert 0 == _inter13.getSkewX();

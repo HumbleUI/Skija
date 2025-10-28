@@ -1,6 +1,7 @@
 #include <iostream>
 #include <jni.h>
 #include "../interop.hh"
+#include "../FontMgr.hh"
 #include "interop.hh"
 #include "FontRunIterator.hh"
 #include "SkShaper.h"
@@ -70,7 +71,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_shaper_Shaper__
         text.c_str(),
         text.size(),
         *font,
-        SkFontMgr::RefDefault(),
+        skija::FontMgr_impl::RefDefault(),
         graphemeIter,
         env->GetBooleanField(opts, skija::shaper::ShapingOptions::_approximateSpaces),
         env->GetBooleanField(opts, skija::shaper::ShapingOptions::_approximatePunctuation)
@@ -109,8 +110,8 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_shaper_Shaper__
         text.c_str(),
         text.size(),
         *font,
-        SkFontMgr::RefDefault(),
-        graphemeIter, 
+        skija::FontMgr_impl::RefDefault(),
+        graphemeIter,
         env->GetBooleanField(opts, skija::shaper::ShapingOptions::_approximateSpaces),
         env->GetBooleanField(opts, skija::shaper::ShapingOptions::_approximatePunctuation)));
     if (!fontRunIter) return 0;

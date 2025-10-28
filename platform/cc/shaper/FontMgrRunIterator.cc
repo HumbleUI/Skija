@@ -1,5 +1,6 @@
 #include <jni.h>
 #include "../interop.hh"
+#include "../FontMgr.hh"
 #include "interop.hh"
 #include "FontRunIterator.hh"
 #include "SkFontMgr.h"
@@ -12,7 +13,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_shaper_FontMgrR
     SkFont* font = reinterpret_cast<SkFont*>(static_cast<uintptr_t>(fontPtr));
     jobject fontMgrObj = env->GetObjectField(opts, skija::shaper::ShapingOptions::_fontMgr);
     sk_sp<SkFontMgr> fontMgr = fontMgrObj == nullptr
-      ? SkFontMgr::RefDefault()
+      ? skija::FontMgr_impl::RefDefault()
       : sk_ref_sp(reinterpret_cast<SkFontMgr*>(skija::impl::Native::fromJava(env, fontMgrObj, skija::FontMgr::cls)));
     auto languageRunIter = std::shared_ptr<SkShaper::LanguageRunIterator>(languageRunIterObj == nullptr ? nullptr : new SkijaLanguageRunIterator(env, languageRunIterObj, *text));
     std::shared_ptr<UBreakIterator> graphemeIter = skija::shaper::graphemeBreakIterator(*text);

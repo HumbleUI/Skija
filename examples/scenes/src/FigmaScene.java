@@ -25,7 +25,7 @@ public class FigmaScene extends Scene {
         uiFontSmall.setSubpixel(true);
         metrics.put(uiFontSmall, uiFontSmall.getMetrics());
 
-        try (var medium = Typeface.makeFromFile(file("fonts/InterHinted-Bold.ttf"));) {
+        try (var medium = FontMgr.getDefault().makeFromFile(file("fonts/InterHinted-Bold.ttf"));) {
             uiFontBold = new Font(medium, 11);
             uiFontBold.setSubpixel(true);
             metrics.put(uiFontBold, uiFontBold.getMetrics());

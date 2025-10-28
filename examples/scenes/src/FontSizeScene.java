@@ -52,8 +52,8 @@ public class FontSizeScene extends Scene {
 
         faces = Arrays.stream(names)
                     .map(name -> {
-                        var face = Typeface.makeFromName(name, FontStyle.NORMAL);
-                        return name.equals(face.getFamilyName()) ? face : null;
+                        var face = FontMgr.getDefault().matchFamilyStyle(name, FontStyle.NORMAL);
+                        return face != null && Objects.equals(name, face.getFamilyName()) ? face : null;
                     })
                     .filter(face -> face != null)
                     .toArray(Typeface[]::new);

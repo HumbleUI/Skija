@@ -890,53 +890,6 @@ public class Surface extends RefCnt {
     }
 
     /**
-     * <p>Call to ensure all reads/writes of the surface have been issued to the underlying 3D API.</p>
-     *
-     * <p>Skia will correctly order its own draws and pixel operations.
-     * This must to be used to ensure correct ordering when the surface backing store is accessed
-     * outside Skia (e.g. direct use of the 3D API or a windowing system).
-     * DirectContext has additional flush and submit methods that apply to all surfaces and images created from
-     * a DirectContext.
-     */
-    public void flushAndSubmit() {
-        try {
-            Stats.onNativeCall();
-            _nFlushAndSubmit(_ptr, false);
-        } finally {
-            ReferenceUtil.reachabilityFence(this);
-        }
-    }
-
-    /**
-     * <p>Call to ensure all reads/writes of the surface have been issued to the underlying 3D API.</p>
-     *
-     * <p>Skia will correctly order its own draws and pixel operations.
-     * This must to be used to ensure correct ordering when the surface backing store is accessed
-     * outside Skia (e.g. direct use of the 3D API or a windowing system).
-     * DirectContext has additional flush and submit methods that apply to all surfaces and images created from
-     * a DirectContext.
-     *
-     * @param syncCpu a flag determining if cpu should be synced
-     */
-    public void flushAndSubmit(boolean syncCpu) {
-        try {
-            Stats.onNativeCall();
-            _nFlushAndSubmit(_ptr, syncCpu);
-        } finally {
-            ReferenceUtil.reachabilityFence(this);
-        }
-    }
-
-    public void flush() {
-        try {
-            Stats.onNativeCall();
-            _nFlush(_ptr);
-        } finally {
-            ReferenceUtil.reachabilityFence(this);
-        }
-    }
-
-    /**
      * <p>May return true if the caller is the only owner.</p>
      *
      * <p>Ensures that all previous owner's actions are complete.</p>
@@ -1004,7 +957,5 @@ public class Surface extends RefCnt {
     public static native boolean _nReadPixels(long ptr, long bitmapPtr, int srcX, int srcY);
     public static native void _nWritePixelsFromPixmap(long ptr, long pixmapPtr, int x, int y);
     public static native void _nWritePixels(long ptr, long bitmapPtr, int x, int y);
-    public static native void _nFlushAndSubmit(long ptr, boolean syncCpu);
-    public static native void _nFlush(long ptr);
     public static native boolean _nUnique(long ptr);
 }

@@ -1,12 +1,12 @@
 #! /usr/bin/env python3
-import argparse, build_utils, common, cross_compile, os, subprocess, sys, zipfile
+import argparse, build_utils, common, cross_compile, os, re, subprocess, sys, zipfile
 
 def main():
   parser = argparse.ArgumentParser()
   parser.add_argument('--debug', action='store_true')
   parser.add_argument('--arch', default=build_utils.arch)
   parser.add_argument('--skia-dir')
-  parser.add_argument('--skia-release', default='m116-d2c211228d')
+  parser.add_argument('--skia-release', default='m123-4a0a5e9906')
   parser.add_argument('--cmake-toolchain-file')
   (args, _) = parser.parse_known_args()
 
@@ -52,7 +52,7 @@ def main():
   subprocess.check_call(cmake_args, cwd=os.path.abspath(native_build_dir))
 
   # Ninja
-  subprocess.check_call(['ninja'], cwd=os.path.abspath(native_build_dir))
+  build_utils.ninja(os.path.abspath(native_build_dir))
 
   # Codesign
   if build_utils.system == 'macos' and os.getenv('APPLE_CODESIGN_IDENTITY'):

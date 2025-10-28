@@ -11,7 +11,7 @@ public class ShapersScene extends Scene {
     public final Paint fill = new Paint().setColor(0xFF000000);
 
     public ShapersScene() {
-        firaCode11 = new Font(Typeface.makeFromFile(file("fonts/FiraCode-Regular.ttf")), 11);
+        firaCode11 = new Font(FontMgr.getDefault().makeFromFile(file("fonts/FiraCode-Regular.ttf")), 11);
     }
 
     public void drawWithShaper(Canvas canvas, float maxWidth, int color, String name, Shaper shaper) {

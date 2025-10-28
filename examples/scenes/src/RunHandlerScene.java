@@ -14,7 +14,7 @@ public class RunHandlerScene extends Scene {
     public final Paint textFill = new Paint().setColor(0xFF000000);
 
     public RunHandlerScene() {
-        lato36 = new Font(Typeface.makeFromFile(file("fonts/Lato-Regular.ttf")), 36);
+        lato36 = new Font(FontMgr.getDefault().makeFromFile(file("fonts/Lato-Regular.ttf")), 36);
         inter9 = new Font(inter, 9);
 
         _variants = new String[] {

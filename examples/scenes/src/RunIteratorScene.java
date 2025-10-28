@@ -19,12 +19,12 @@ public class RunIteratorScene extends Scene {
     public final Paint textFill = new Paint().setColor(0xFF000000);
 
     public RunIteratorScene() {
-        lato36  = new Font(Typeface.makeFromFile(file("fonts/Lato-Regular.ttf")), 36);
-        fira36  = new Font(Typeface.makeFromFile(file("fonts/FiraCode-Regular.ttf")), 36);
+        lato36  = new Font(FontMgr.getDefault().makeFromFile(file("fonts/Lato-Regular.ttf")), 36);
+        fira36  = new Font(FontMgr.getDefault().makeFromFile(file("fonts/FiraCode-Regular.ttf")), 36);
         inter36 = new Font(inter, 36);
         inter11 = new Font(inter, 11);
         inter11Metrics = inter11.getMetrics();
-        geeza36 = new Font(Typeface.makeFromFile(file("fonts/Geeza Pro Regular.ttf")), 36);
+        geeza36 = new Font(FontMgr.getDefault().makeFromFile(file("fonts/Geeza Pro Regular.ttf")), 36);
 
         Typeface emoji = FontMgr.getDefault().matchFamilyStyleCharacter(null, FontStyle.NORMAL, null, "😀".codePointAt(0));
         emoji36 = emoji == null ? null : new Font(emoji, 36);
