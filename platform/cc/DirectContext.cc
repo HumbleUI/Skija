@@ -1,7 +1,7 @@
 #include <iostream>
 #include <jni.h>
-#include "GrDirectContext.h"
-#include "GrTypes.h"
+#include "include/gpu/ganesh/GrTypes.h"
+#include "include/gpu/ganesh/GrDirectContext.h"
 #include "include/gpu/ganesh/gl/GrGLDirectContext.h"
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_DirectContext__1nMakeGL
@@ -10,7 +10,8 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_DirectContext__
 }
 
 #ifdef SK_METAL
-#include "mtl/GrMtlBackendContext.h"
+#include "include/gpu/ganesh/mtl/GrMtlBackendContext.h"
+#include "include/gpu/ganesh/mtl/GrMtlDirectContext.h"
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_DirectContext__1nMakeMetal
   (JNIEnv* env, jclass jclass, long devicePtr, long queuePtr) {
@@ -19,13 +20,13 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_DirectContext__
     GrMTLHandle queue = reinterpret_cast<GrMTLHandle>(static_cast<uintptr_t>(queuePtr));
     backendContext.fDevice.retain(device);
     backendContext.fQueue.retain(queue);
-    sk_sp<GrDirectContext> instance = GrDirectContext::MakeMetal(backendContext);
+    sk_sp<GrDirectContext> instance = GrDirectContexts::MakeMetal(backendContext);
     return reinterpret_cast<jlong>(instance.release());
 }
 #endif
 
 #ifdef SK_DIRECT3D
-#include "d3d/GrD3DBackendContext.h"
+#include "include/gpu/ganesh/d3d/GrD3DBackendContext.h"
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_DirectContext__1nMakeDirect3D
   (JNIEnv* env, jclass jclass, jlong adapterPtr, jlong devicePtr, jlong queuePtr) {

@@ -1,8 +1,13 @@
-# WIP
+# 0.132.0 - Oct 30, 2025
 
 Changed:
 
+- Skia version m123-f44dbc40d8 -> m132-9ab7c2064b
 - Updated build to support JDK 25
+
+Added:
+
+- `Shaper::makeBestAvailable`
 
 # 0.123.0 - Oct 28, 2025
 

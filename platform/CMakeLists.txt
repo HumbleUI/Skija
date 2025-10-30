@@ -29,26 +29,10 @@ file(GLOB SKOTTIE_SOURCES ${CMAKE_SOURCE_DIR}/cc/skottie/*.cc)
 file(GLOB SKSG_SOURCES ${CMAKE_SOURCE_DIR}/cc/sksg/*.cc)
 add_library(skija SHARED ${SOURCES} ${IMPL_SOURCES} ${PARAGRAPH_SOURCES} ${SHAPER_SOURCES} ${SVG_SOURCES} ${RESOURCES_SOURCES} ${SKOTTIE_SOURCES} ${SKSG_SOURCES})
 
-add_definitions(-DFT2_BUILD_LIBRARY
-    -DFT_CONFIG_MODULES_H=<include/freetype-android/ftmodule.h>
-    -DFT_CONFIG_OPTIONS_H=<include/freetype-android/ftoption.h>
-    -DPNG_INTEL_SSE
-    -DPNG_SET_OPTION_SUPPORTED
-    -DSK_GL
-    -DSK_GANESH
-    -DSK_SHAPER_HARFBUZZ_AVAILABLE
-    -DSK_UNICODE_AVAILABLE
-    -DSK_SHAPER_UNICODE_AVAILABLE
-    # skia/third_party/icu/BUILD.gn
-    -DU_DISABLE_RENAMING
-    -DU_USING_ICU_NAMESPACE=0
-    -DU_DISABLE_RENAMING
-    -DSK_USING_THIRD_PARTY_ICU
-    -DU_COMMON_IMPLEMENTATION
-    -DU_STATIC_IMPLEMENTATION
-    -DU_ENABLE_DYLOAD=0
-    -DU_I18N_IMPLEMENTATION
-    -D_XOPEN_SOURCE=0)
+# Skia
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
+include(FindSkia)
+include("${SKIA_LIBRARY_DIR}/defines.cmake")
 
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
     add_definitions(-DNDEBUG)
@@ -56,13 +40,8 @@ endif()
 
 if(APPLE)
     target_include_directories(skija PRIVATE $ENV{JAVA_HOME}/include $ENV{JAVA_HOME}/include/darwin)
-    add_definitions(-DSK_BUILD_FOR_MAC
-        -DSK_ENABLE_API_AVAILABLE
-        -DSK_METAL
-        -DSK_SHAPER_CORETEXT_AVAILABLE)
 
 elseif(UNIX)
-    add_definitions(-DSK_BUILD_FOR_UNIX)
     target_include_directories(skija PRIVATE $ENV{JAVA_HOME}/include $ENV{JAVA_HOME}/include/linux)
 
 elseif(WIN32)
@@ -77,15 +56,6 @@ elseif(WIN32)
     set(CMAKE_CXX_FLAGS_RELEASE "/MT")
     set(CMAKE_CXX_FLAGS_DEBUG "/MTd")
     target_link_options(skija PRIVATE /INCREMENTAL:NO /NODEFAULTLIB:MSVCRT /machine:X64)
-    add_definitions(-DSK_BUILD_FOR_WIN
-        -DNOMINMAX
-        -DWIN32_LEAN_AND_MEAN
-        -DSK_DIRECT3D
-        -DU_NOEXCEPT=)
 endif()
 
-# Skia
-
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
-include(FindSkia)
 target_link_libraries(skija skottie sksg svg skparagraph skshaper skunicode skresources skia ${FREETYPE_LIBRARIES} ${HARFBUZZ_LIBRARIES})

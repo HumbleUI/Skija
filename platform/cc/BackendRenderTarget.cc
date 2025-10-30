@@ -1,8 +1,6 @@
 #include <iostream>
 #include <jni.h>
-#include "include/gpu/gl/GrGLTypes.h"
-#include "GrBackendSurface.h"
-#include "ganesh/gl/GrGLBackendSurface.h"
+#include "include/gpu/ganesh/GrBackendSurface.h"
 
 static void deleteBackendRenderTarget(GrBackendRenderTarget* rt) {
     // std::cout << "Deleting [GrBackendRenderTarget " << rt << "]" << std::endl;
@@ -14,6 +12,9 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_BackendRenderTa
     return static_cast<jlong>(reinterpret_cast<uintptr_t>(&deleteBackendRenderTarget));
 }
 
+#include "include/gpu/ganesh/gl/GrGLBackendSurface.h"
+#include "include/gpu/ganesh/gl/GrGLTypes.h"
+
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_BackendRenderTarget__1nMakeGL
   (JNIEnv* env, jclass jclass, jint width, jint height, jint sampleCnt, jint stencilBits, jint fbId, jint fbFormat) {
     GrGLFramebufferInfo glInfo = { static_cast<unsigned int>(fbId), static_cast<unsigned int>(fbFormat) };
@@ -23,18 +24,22 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_BackendRenderTa
 }
 
 #ifdef SK_METAL
+#include "include/gpu/ganesh/mtl/GrMtlBackendSurface.h"
+#include "include/gpu/ganesh/mtl/GrMtlTypes.h"
+
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_BackendRenderTarget__1nMakeMetal
   (JNIEnv* env, jclass jclass, jint width, jint height, jlong texturePtr) {
     GrMTLHandle texture = reinterpret_cast<GrMTLHandle>(static_cast<uintptr_t>(texturePtr));
     GrMtlTextureInfo fbInfo;
     fbInfo.fTexture.retain(texture);
-    GrBackendRenderTarget* instance = new GrBackendRenderTarget(width, height, fbInfo);
+    GrBackendRenderTarget target = GrBackendRenderTargets::MakeMtl(width, height, fbInfo);
+    GrBackendRenderTarget* instance = new GrBackendRenderTarget(target);
     return reinterpret_cast<jlong>(instance);
 }
-#endif
+#endif //SK_METAL
 
 #ifdef SK_DIRECT3D
-#include "d3d/GrD3DTypes.h"
+#include "include/gpu/ganesh/d3d/GrD3DTypes.h"
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_BackendRenderTarget__1nMakeDirect3D
   (JNIEnv* env, jclass jclass, jint width, jint height, jlong texturePtr, jint format, jint sampleCnt, jint levelCnt) {

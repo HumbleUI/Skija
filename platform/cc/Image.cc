@@ -1,16 +1,15 @@
 #include <iostream>
 #include <jni.h>
-#include "SkBitmap.h"
-#include "SkData.h"
-#include "SkImage.h"
-#include "SkShader.h"
-#include "interop.hh"
-#include "GrBackendSurface.h"
-#include "GrDirectContext.h"
-#include "include/gpu/GrBackendSurface.h"
-#include "include/gpu/ganesh/gl/GrGLBackendSurface.h"
+#include "include/core/SkBitmap.h"
+#include "include/core/SkData.h"
+#include "include/core/SkImage.h"
+#include "include/core/SkShader.h"
+#include "include/gpu/ganesh/GrBackendSurface.h"
+#include "include/gpu/ganesh/GrDirectContext.h"
 #include "include/gpu/ganesh/SkImageGanesh.h"
-#include "include/gpu/gl/GrGLTypes.h"
+#include "include/gpu/ganesh/gl/GrGLBackendSurface.h"
+#include "include/gpu/ganesh/gl/GrGLTypes.h"
+#include "interop.hh"
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Image__1nAdoptGLTextureFrom
   (JNIEnv* env, jclass jclass, jlong contextPtr, jint textureId, jint target, jint width, jint height, jint format, jint surfaceOrigin, jint colorType) {

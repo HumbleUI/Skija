@@ -95,6 +95,22 @@ public class Shaper extends Managed {
         }
     }
 
+    @NotNull @Contract("-> new")
+    public static Shaper makeBestAvailable() {
+        Stats.onNativeCall();
+        return new Shaper(_nMakeBestAvailable(0));
+    }
+
+    @NotNull @Contract("-> new")
+    public static Shaper makeBestAvailable(@Nullable FontMgr fontMgr) {
+        try {
+            Stats.onNativeCall();
+            return new Shaper(_nMakeBestAvailable(Native.getPtr(fontMgr)));
+        } finally {
+            ReferenceUtil.reachabilityFence(fontMgr);
+        }
+    }
+
     @Nullable @Contract("_, _ -> new")
     public TextBlob shape(String text, Font font) {
         return shape(text, font, ShapingOptions.DEFAULT, Float.POSITIVE_INFINITY, Point.ZERO);
@@ -215,6 +231,7 @@ public class Shaper extends Managed {
     public static native long _nMakeShapeDontWrapOrReorder(long fontMgrPtr);
     public static native long _nMakeCoreText();
     public static native long _nMake(long fontMgrPtr);
+    public static native long _nMakeBestAvailable(long fontMgrPtr);
     public static native long _nShapeBlob(long ptr, String text, long fontPtr, ShapingOptions opts, float width, float offsetX, float offsetY);
     public static native long _nShapeLine(long ptr, String text, long fontPtr, ShapingOptions opts);
     public static native void _nShape(long ptr, long textPtr, Iterator<FontRun> fontIter, Iterator<BidiRun> bidiIter, Iterator<ScriptRun> scriptIter, Iterator<LanguageRun> langIter, ShapingOptions opts, float width, RunHandler runHandler);

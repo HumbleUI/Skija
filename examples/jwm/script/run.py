@@ -39,7 +39,7 @@ def main():
   os.chdir(common.basedir + '/examples/jwm')
 
   sources = build_utils.files('src/**/*.java', '../scenes/src/**/*.java')
-  build_utils.javac(sources, 'target/classes', classpath = classpath, release = '16', opts = ["-Xlint:deprecation", '-Xlint:-options',])
+  build_utils.javac(sources, 'target/classes', classpath = classpath, release = '16')
 
   # Java
   subprocess.check_call([
@@ -50,7 +50,8 @@ def main():
     '-enablesystemassertions',
     '-Xcheck:jni',
     '-Dskija.logLevel=DEBUG',
-    'io.github.humbleui.skija.examples.jwm.Main'])
+    'io.github.humbleui.skija.examples.jwm.Main'
+  ])
 
   return 0
 

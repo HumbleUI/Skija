@@ -1,8 +1,8 @@
 #include <iostream>
 #include <jni.h>
-#include "GrDirectContext.h"
-#include "SkSurface.h"
-#include "ganesh/SkSurfaceGanesh.h"
+#include "include/core/SkSurface.h"
+#include "include/gpu/ganesh/GrDirectContext.h"
+#include "include/gpu/ganesh/SkSurfaceGanesh.h"
 #include "interop.hh"
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Surface__1nWrapPixels
@@ -82,7 +82,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Surface__1nWrap
 }
 
 #ifdef SK_METAL
-#include "ganesh/mtl/SkSurfaceMetal.h"
+#include "include/gpu/ganesh/mtl/SkSurfaceMetal.h"
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Surface__1nWrapMTKView
   (JNIEnv* env, jclass jclass, jlong contextPtr, jlong mtkViewPtr, jint surfaceOrigin, jint sampleCount, jint colorType, jlong colorSpacePtr, jobject surfacePropsObj) {
@@ -103,7 +103,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Surface__1nWrap
         surfaceProps.get());
     return reinterpret_cast<jlong>(surface.release());
 }
-#endif
+#endif //SK_METAL
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Surface__1nMakeRenderTarget
   (JNIEnv* env, jclass jclass, jlong contextPtr, jboolean budgeted,

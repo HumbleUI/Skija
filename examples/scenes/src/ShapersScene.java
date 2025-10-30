@@ -63,14 +63,14 @@ public class ShapersScene extends Scene {
 
         try (var shaper = Shaper.make()) {
             canvas.save();
-            canvas.translate(20, height / 3);
+            canvas.translate(20, height / 4);
             drawWithShaper(canvas, width / 2 - 30, 0xFF577590, "make", shaper);
             canvas.restore();
         }
 
         if (System.getProperty("os.name").equals("Mac OS X")) {
             canvas.save();
-            canvas.translate(20, height * 2 / 3);
+            canvas.translate(20, height * 2 / 4);
             try (var shaper = Shaper.makeCoreText()) {
                 drawWithShaper(canvas, width / 2 - 30, 0xFFf3722c, "CoreText", shaper);
             }
@@ -87,15 +87,22 @@ public class ShapersScene extends Scene {
 
         try (var shaper = Shaper.makeShapeThenWrap()) {
             canvas.save();
-            canvas.translate(width / 2 + 10, height / 3);
+            canvas.translate(width / 2 + 10, height / 4);
             drawWithShaper(canvas, width / 2 - 30, 0xFFf8961e, "ShapeThenWrap", shaper);
             canvas.restore();
         }
 
         try (var shaper = Shaper.makeShapeDontWrapOrReorder()) {
             canvas.save();
-            canvas.translate(width / 2 + 10, height * 2/ 3);
+            canvas.translate(width / 2 + 10, height * 2 / 4);
             drawWithShaper(canvas, width / 2 - 30, 0xFF90be6d, "ShapeDontWrapOrReorder", shaper);
+            canvas.restore();
+        }
+
+        try (var shaper = Shaper.makeBestAvailable()) {
+            canvas.save();
+            canvas.translate(width / 2 + 10, height * 3 / 4);
+            drawWithShaper(canvas, width / 2 - 30, 0xFF90be6d, "BestAvailable", shaper);
             canvas.restore();
         }
 

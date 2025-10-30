@@ -29,10 +29,11 @@ else()
 endif()
 
 # SkUnicode
-find_library(SKUNICODE_LIBRARY skunicode PATH "${SKIA_LIBRARY_DIR}")
-find_path(SKUNICODE_INCLUDE_DIR SkUnicode.h HINTS "${SKIA_DIR}/modules/skunicode/include")
+find_library(SKUNICODE_CORE_LIBRARY skunicode_core PATH "${SKIA_LIBRARY_DIR}")
+find_library(SKUNICODE_ICU_LIBRARY skunicode_icu PATH "${SKIA_LIBRARY_DIR}")
 add_library(skunicode INTERFACE)
-target_link_libraries(skunicode INTERFACE ${SKUNICODE_LIBRARY})
+target_link_libraries(skunicode INTERFACE ${SKUNICODE_CORE_LIBRARY} ${SKUNICODE_ICU_LIBRARY})
+find_path(SKUNICODE_INCLUDE_DIR SkUnicode.h HINTS "${SKIA_DIR}/modules/skunicode/include")
 
 # SkShaper module + freetype + harfbuzz
 find_library(SKSHAPER_LIBRARY skshaper PATH "${SKIA_LIBRARY_DIR}")
@@ -94,8 +95,6 @@ find_path(SKIA_CORE_SVG_INCLUDE_DIR SkSVGCanvas.h HINTS "${SKIA_DIR}/include/svg
 find_path(SKIA_UTILS_INCLUDE_DIR SkTextUtils.h HINTS "${SKIA_DIR}/include/utils")
 find_path(SKIA_CODEC_INCLUDE_DIR SkCodec.h HINTS "${SKIA_DIR}/include/codec")
 find_path(SKIA_EFFECTS_INCLUDE_DIR SkShaderMaskFilter.h HINTS "${SKIA_DIR}/include/effects")
-find_path(SKIA_GPU_INCLUDE_DIR GrDirectContext.h HINTS "${SKIA_DIR}/include/gpu")
-find_path(SKIA_GPU2_INCLUDE_DIR gl/GrGLDefines.h HINTS "${SKIA_DIR}/src/gpu")
 find_path(SKIA_ANGLE_INCLUDE_DIR angle_gl.h HINTS "${SKIA_DIR}/third_party/externals/angle2/include")
 find_path(SKIA_SKCMS_INCLUDE_DIR skcms.h
   HINTS
@@ -118,8 +117,6 @@ target_include_directories(skia INTERFACE
   ${SKIA_UTILS_INCLUDE_DIR}
   ${SKIA_CODEC_INCLUDE_DIR}
   ${SKIA_EFFECTS_INCLUDE_DIR}
-  ${SKIA_GPU_INCLUDE_DIR}
-  ${SKIA_GPU2_INCLUDE_DIR}
   ${SKIA_SKCMS_INCLUDE_DIR}
   ${SKUNICODE_INCLUDE_DIR}
   ${SKSHAPER_INCLUDE_DIR}

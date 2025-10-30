@@ -4,12 +4,15 @@
 #include "../FontMgr.hh"
 #include "interop.hh"
 #include "FontRunIterator.hh"
-#include "SkShaper.h"
-#include "src/base/SkUTF.h"
 #include "TextLineRunHandler.hh"
 #include "RunIterators.hh"
+#include "src/base/SkUTF.h"
 #include "unicode/ubidi.h"
-#include "SkUnicode.h"
+#include "modules/skshaper/include/SkShaper.h"
+#include "modules/skshaper/include/SkShaper_harfbuzz.h"
+#include "modules/skshaper/utils/FactoryHelpers.h"
+#include "modules/skunicode/include/SkUnicode.h"
+#include "modules/skunicode/include/SkUnicode_icu.h"
 
 static void deleteShaper(SkShaper* instance) {
     // std::cout << "Deleting [SkShaper " << instance << "]" << std::endl;
@@ -28,34 +31,48 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_shaper_Shaper__
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_shaper_Shaper__1nMakeShaperDrivenWrapper
   (JNIEnv* env, jclass jclass, jlong fontMgrPtr) {
     SkFontMgr* fontMgr = reinterpret_cast<SkFontMgr*>(static_cast<uintptr_t>(fontMgrPtr));
-    return reinterpret_cast<jlong>(SkShaper::MakeShaperDrivenWrapper(sk_ref_sp(fontMgr)).release());
+    return reinterpret_cast<jlong>(SkShapers::HB::ShaperDrivenWrapper(SkUnicodes::ICU::Make(), sk_ref_sp(fontMgr)).release());
 }
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_shaper_Shaper__1nMakeShapeThenWrap
   (JNIEnv* env, jclass jclass, jlong fontMgrPtr) {
     SkFontMgr* fontMgr = reinterpret_cast<SkFontMgr*>(static_cast<uintptr_t>(fontMgrPtr));
-    return reinterpret_cast<jlong>(SkShaper::MakeShapeThenWrap(sk_ref_sp(fontMgr)).release());
+    return reinterpret_cast<jlong>(SkShapers::HB::ShapeThenWrap(SkUnicodes::ICU::Make(), sk_ref_sp(fontMgr)).release());
 }
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_shaper_Shaper__1nMakeShapeDontWrapOrReorder
   (JNIEnv* env, jclass jclass, jlong fontMgrPtr) {
     SkFontMgr* fontMgr = reinterpret_cast<SkFontMgr*>(static_cast<uintptr_t>(fontMgrPtr));
-    return reinterpret_cast<jlong>(SkShaper::MakeShapeDontWrapOrReorder(SkUnicode::MakeIcuBasedUnicode(), sk_ref_sp(fontMgr)).release());
+    return reinterpret_cast<jlong>(SkShapers::HB::ShapeDontWrapOrReorder(SkUnicodes::ICU::Make(), sk_ref_sp(fontMgr)).release());
 }
+
+#ifdef SK_SHAPER_CORETEXT_AVAILABLE
+#include "modules/skshaper/include/SkShaper_coretext.h"
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_shaper_Shaper__1nMakeCoreText
   (JNIEnv* env, jclass jclass) {
-    #ifdef SK_SHAPER_CORETEXT_AVAILABLE
-        return reinterpret_cast<jlong>(SkShaper::MakeCoreText().release());
-    #else
-        return 0;
-    #endif
+    return reinterpret_cast<jlong>(SkShapers::CT::CoreText().release());
 }
+
+#else
+
+extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_shaper_Shaper__1nMakeCoreText
+  (JNIEnv* env, jclass jclass) {
+    return 0;
+}
+
+#endif
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_shaper_Shaper__1nMake
   (JNIEnv* env, jclass jclass, jlong fontMgrPtr) {
     SkFontMgr* fontMgr = reinterpret_cast<SkFontMgr*>(static_cast<uintptr_t>(fontMgrPtr));
     return reinterpret_cast<jlong>(SkShaper::Make(sk_ref_sp(fontMgr)).release());
+}
+
+extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_shaper_Shaper__1nMakeBestAvailable
+  (JNIEnv* env, jclass jclass, jlong fontMgrPtr) {
+    SkFontMgr* fontMgr = reinterpret_cast<SkFontMgr*>(static_cast<uintptr_t>(fontMgrPtr));
+    return reinterpret_cast<jlong>(SkShapers::BestAvailable()->makeShaper(sk_ref_sp(fontMgr)).release());
 }
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_shaper_Shaper__1nShapeBlob
