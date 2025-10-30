@@ -8,7 +8,7 @@ def main():
     jars = [f"target/{name}-{common.version}{classifier}.jar" for classifier in ["", "-sources", "-javadoc"]]
     build_utils.collect_jars('io.github.humbleui', name, common.version, jars, 'target/release')
 
-  return build_utils.release2(f"skija-{common.version}.zip", 'target/release')
+  return build_utils.release(f"skija-{common.version}.zip", 'target/release')
 
 if __name__ == "__main__":
   sys.exit(main())

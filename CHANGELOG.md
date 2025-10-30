@@ -1,3 +1,9 @@
+# WIP
+
+Changed:
+
+- Updated build to support JDK 25
+
 # 0.123.0 - Oct 28, 2025
 
 Changed:
