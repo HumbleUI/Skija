@@ -29,6 +29,35 @@ def parse_sha() -> str:
   if sha:
     return sha[:10]
 
+def release_notes(version: str):
+  with open('CHANGELOG.md', 'r') as f:
+    lines = f.readlines()
+
+  # Find the header that starts with "# {version}"
+  start_idx = None
+  for i, line in enumerate(lines):
+    if line.startswith(f'# {version}'):
+      start_idx = i
+      break
+
+  if start_idx is None:
+    raise Exception(f"Version {version} not found in CHANGELOG.md")
+
+  # Extract lines after the header until the next header (line starting with #) or end of file
+  content_lines = []
+  for i in range(start_idx + 1, len(lines)):
+    line = lines[i]
+    if line.startswith('#'):
+      break
+    content_lines.append(line)
+
+  # Write to RELEASE_NOTES.md
+  content = ''.join(content_lines).strip() + '\n'
+  with open('RELEASE_NOTES.md', 'w') as f:
+    f.write(content)
+
+  print(f"Wrote release notes for {version} to RELEASE_NOTES.md", flush=True)
+
 def makedirs(path):
   os.makedirs(path, exist_ok=True)
 
