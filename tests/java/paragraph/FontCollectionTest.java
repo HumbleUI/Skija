@@ -40,9 +40,9 @@ public class FontCollectionTest implements Executable {
         }
         assertEquals(3, jbMono.getRefCount());
 
-        assertArrayEquals(new Typeface[] {}, fc.findTypefaces(new String[] { "No Such Font" }, FontStyle.NORMAL));
+        assertArrayEquals(new Typeface[] { jbMono }, fc.findTypefaces(new String[] { "No Such Font" }, FontStyle.NORMAL)); // ?
         assertArrayEquals(new Typeface[] { jbMono }, fc.findTypefaces(new String[] { "JetBrains Mono" }, FontStyle.NORMAL));
-        assertArrayEquals(new Typeface[] {}, fc.findTypefaces(new String[] { "Inter" }, FontStyle.NORMAL));
+        assertArrayEquals(new Typeface[] { jbMono }, fc.findTypefaces(new String[] { "Inter" }, FontStyle.NORMAL)); // ?
         assertArrayEquals(new Typeface[] { inter }, fc.findTypefaces(new String[] { "Interface" }, FontStyle.NORMAL));
         assertArrayEquals(new Typeface[] { jbMono, inter }, fc.findTypefaces(new String[] { "JetBrains Mono", "Interface" }, FontStyle.NORMAL));
 

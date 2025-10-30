@@ -12,8 +12,8 @@ import io.github.humbleui.skija.test.runner.*;
 public class SurfaceTest implements Executable {
     @Override
     public void execute() throws Exception {
-        assertThrows(IllegalArgumentException.class, () -> Surface.makeRasterN32Premul(0, 0));
-        try (var surface = Surface.makeRasterN32Premul(100, 200)) {
+        assertThrows(IllegalArgumentException.class, () -> Surface.makeRaster(ImageInfo.makeN32Premul(0, 0)));
+        try (var surface = Surface.makeRaster(ImageInfo.makeN32Premul(100, 200))) {
             assertEquals(100, surface.getWidth());
             assertEquals(200, surface.getHeight());
 

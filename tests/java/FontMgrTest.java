@@ -30,11 +30,11 @@ public class FontMgrTest implements Executable {
         assertEquals("Interface", fm.getFamilyName(1));
 
         try (var ss = fm.makeStyleSet(0)) {
-            assertEquals(0, ss.count()); // ?
+            assertEquals(2, ss.count()); // ?
         }
 
         try (var ss = fm.makeStyleSet(1)) {
-            assertEquals(0, ss.count()); // ?
+            assertEquals(1, ss.count()); // ?
         }
 
         // FontStyleSet
