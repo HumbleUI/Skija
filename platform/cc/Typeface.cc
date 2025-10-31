@@ -20,10 +20,10 @@ extern "C" JNIEXPORT jboolean JNICALL Java_io_github_humbleui_skija_Typeface__1n
 extern "C" JNIEXPORT jobjectArray JNICALL Java_io_github_humbleui_skija_Typeface__1nGetVariations
   (JNIEnv* env, jclass jclass, jlong ptr) {
     SkTypeface* instance = reinterpret_cast<SkTypeface*>(static_cast<uintptr_t>(ptr));
-    int count = instance->getVariationDesignPosition(nullptr, 0);
+    int count = instance->getVariationDesignPosition({});
     if (count > 0) {
         std::vector<SkFontArguments::VariationPosition::Coordinate> coords(count);
-        instance->getVariationDesignPosition(coords.data(), count);
+        instance->getVariationDesignPosition(coords);
         jobjectArray res = env->NewObjectArray(count, skija::FontVariation::cls, nullptr);
         for (int i=0; i < count; ++i) {
             jobject var = env->NewObject(skija::FontVariation::cls, skija::FontVariation::ctor, coords[i].axis, coords[i].value);
@@ -37,10 +37,10 @@ extern "C" JNIEXPORT jobjectArray JNICALL Java_io_github_humbleui_skija_Typeface
 extern "C" JNIEXPORT jobjectArray JNICALL Java_io_github_humbleui_skija_Typeface__1nGetVariationAxes
   (JNIEnv* env, jclass jclass, jlong ptr) {
     SkTypeface* instance = reinterpret_cast<SkTypeface*>(static_cast<uintptr_t>(ptr));
-    int count = instance->getVariationDesignParameters(nullptr, 0);
+    int count = instance->getVariationDesignParameters({});
     if (count > 0) {
         std::vector<SkFontParameters::Variation::Axis> params(count);
-        instance->getVariationDesignParameters(params.data(), count);
+        instance->getVariationDesignParameters(params);
         jobjectArray res = env->NewObjectArray(count, skija::FontVariationAxis::cls, nullptr);
         for (int i=0; i < count; ++i) {
             jobject var = env->NewObject(skija::FontVariationAxis::cls, skija::FontVariationAxis::ctor, params[i].tag, params[i].min, params[i].def, params[i].max, params[i].isHidden());
@@ -88,9 +88,9 @@ extern "C" JNIEXPORT jshortArray JNICALL Java_io_github_humbleui_skija_Typeface_
   (JNIEnv* env, jclass jclass, jlong ptr, jintArray uniArr) {
     SkTypeface* instance = reinterpret_cast<SkTypeface*>(static_cast<uintptr_t>(ptr));
     jint count = env->GetArrayLength(uniArr);
-    std::vector<short> glyphs(count);
+    std::vector<SkGlyphID> glyphs(count);
     jint* uni = env->GetIntArrayElements(uniArr, nullptr);
-    instance->unicharsToGlyphs(reinterpret_cast<SkUnichar*>(uni), count, reinterpret_cast<SkGlyphID*>(glyphs.data()));
+    instance->unicharsToGlyphs(SkSpan(reinterpret_cast<SkUnichar*>(uni), count), glyphs);
     env->ReleaseIntArrayElements(uniArr, uni, 0);
     return javaShortArray(env, glyphs);
 }
@@ -117,8 +117,8 @@ extern "C" JNIEXPORT jintArray JNICALL Java_io_github_humbleui_skija_Typeface__1
   (JNIEnv* env, jclass jclass, jlong ptr) {
     SkTypeface* instance = reinterpret_cast<SkTypeface*>(static_cast<uintptr_t>(ptr));
     int count = instance->countTables();
-    std::vector<jint> tags(count);
-    instance->getTableTags(reinterpret_cast<SkFontTableTag*>(tags.data()));
+    std::vector<SkFontTableTag> tags(count);
+    instance->readTableTags(tags);
     return javaIntArray(env, tags);
 }
 
@@ -146,15 +146,13 @@ extern "C" JNIEXPORT jintArray JNICALL Java_io_github_humbleui_skija_Typeface__1
     SkTypeface* instance = reinterpret_cast<SkTypeface*>(static_cast<uintptr_t>(ptr));
     int count = glyphsArr == nullptr ? 0 : env->GetArrayLength(glyphsArr);
     if (count > 0) {
-        std::vector<jint> adjustments(count);
+        std::vector<int32_t> adjustments(count);
         jshort* glyphs = env->GetShortArrayElements(glyphsArr, nullptr);
-        bool res = instance->getKerningPairAdjustments(
-          reinterpret_cast<SkGlyphID*>(glyphs), count,
-            reinterpret_cast<int32_t*>(adjustments.data()));
+        bool res = instance->getKerningPairAdjustments(SkSpan(reinterpret_cast<SkGlyphID*>(glyphs), count), adjustments);
         env->ReleaseShortArrayElements(glyphsArr, glyphs, 0);
         return res ? javaIntArray(env, adjustments) : nullptr;
     } else {
-        bool res = instance->getKerningPairAdjustments(nullptr, 0, nullptr);
+        bool res = instance->getKerningPairAdjustments({}, {});
         return res ? javaIntArray(env, std::vector<jint>(0)) : nullptr;
     }
 }

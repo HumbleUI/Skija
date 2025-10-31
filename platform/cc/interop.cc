@@ -1020,15 +1020,21 @@ jbyteArray javaByteArray(JNIEnv* env, const std::vector<jbyte>& bytes) {
     return res;
 }
 
-jshortArray javaShortArray(JNIEnv* env, const std::vector<jshort>& shorts) {
+jshortArray javaShortArray(JNIEnv* env, const std::vector<uint16_t>& shorts) {
     jshortArray res = env->NewShortArray((jsize) shorts.size());
-    env->SetShortArrayRegion(res, 0, (jsize) shorts.size(), shorts.data());
+    env->SetShortArrayRegion(res, 0, (jsize) shorts.size(), reinterpret_cast<const jshort*>(shorts.data()));
     return res;
 }
 
-jintArray javaIntArray(JNIEnv* env, const std::vector<jint>& ints) {
+jintArray javaIntArray(JNIEnv* env, const std::vector<int32_t>& ints) {
     jintArray res = env->NewIntArray((jsize) ints.size());
-    env->SetIntArrayRegion( res, 0, (jsize) ints.size(), ints.data());
+    env->SetIntArrayRegion(res, 0, (jsize) ints.size(), reinterpret_cast<const jint*>(ints.data()));
+    return res;
+}
+
+jintArray javaIntArray(JNIEnv* env, const std::vector<uint32_t>& ints) {
+    jintArray res = env->NewIntArray((jsize) ints.size());
+    env->SetIntArrayRegion(res, 0, (jsize) ints.size(), reinterpret_cast<const jint*>(ints.data()));
     return res;
 }
 

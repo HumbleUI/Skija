@@ -180,7 +180,7 @@ public:
     }
 
     SkShaper::RunHandler::Buffer runBuffer(const SkShaper::RunHandler::RunInfo& info) {
-        fGlyphs    = std::vector<jshort>(info.glyphCount);
+        fGlyphs    = std::vector<SkGlyphID>(info.glyphCount);
         fPositions = std::vector<SkPoint>(info.glyphCount);
         fClusters  = std::vector<jint>(info.glyphCount);
 
@@ -223,7 +223,7 @@ private:
     JNIEnv* fEnv;
     jobject fRunHandler;
     skija::UtfIndicesConverter fIndicesConverter;
-    std::vector<jshort> fGlyphs;
+    std::vector<SkGlyphID> fGlyphs;
     std::vector<SkPoint> fPositions;
     std::vector<jint> fClusters;
 };

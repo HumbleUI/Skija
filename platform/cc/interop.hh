@@ -349,8 +349,9 @@ jlong packIPoint(SkIPoint p);
 jlong packISize(SkISize s);
 
 jbyteArray   javaByteArray  (JNIEnv* env, const std::vector<jbyte>& bytes);
-jshortArray  javaShortArray (JNIEnv* env, const std::vector<jshort>& shorts);
-jintArray    javaIntArray   (JNIEnv* env, const std::vector<jint>& ints);
+jshortArray  javaShortArray (JNIEnv* env, const std::vector<uint16_t>& shorts);
+jintArray    javaIntArray   (JNIEnv* env, const std::vector<int32_t>& ints);
+jintArray    javaIntArray   (JNIEnv* env, const std::vector<uint32_t>& ints);
 jlongArray   javaLongArray  (JNIEnv* env, const std::vector<jlong>& longs);
 jfloatArray  javaFloatArray (JNIEnv* env, const std::vector<float>& floats);
 

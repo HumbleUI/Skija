@@ -46,7 +46,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_TextBlob__1nMak
     jfloat* xpos = env->GetFloatArrayElements(xposArr, nullptr);
     SkFont* font = reinterpret_cast<SkFont*>(static_cast<uintptr_t>(fontPtr));
 
-    SkTextBlob* instance = SkTextBlob::MakeFromPosTextH(glyphs, len * sizeof(jshort), xpos, ypos, *font, SkTextEncoding::kGlyphID).release();
+    SkTextBlob* instance = SkTextBlob::MakeFromPosTextH(glyphs, len * sizeof(jshort), SkSpan(xpos, len), ypos, *font, SkTextEncoding::kGlyphID).release();
 
     env->ReleaseShortArrayElements(glyphsArr, glyphs, 0);
     env->ReleaseFloatArrayElements(xposArr, xpos, 0);
@@ -61,7 +61,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_TextBlob__1nMak
     jfloat* pos = env->GetFloatArrayElements(posArr, nullptr);
     SkFont* font = reinterpret_cast<SkFont*>(static_cast<uintptr_t>(fontPtr));
 
-    SkTextBlob* instance = SkTextBlob::MakeFromPosText(glyphs, len * sizeof(jshort), reinterpret_cast<SkPoint*>(pos), *font, SkTextEncoding::kGlyphID).release();
+    SkTextBlob* instance = SkTextBlob::MakeFromPosText(glyphs, len * sizeof(jshort), SkSpan(reinterpret_cast<SkPoint*>(pos), len), *font, SkTextEncoding::kGlyphID).release();
 
     env->ReleaseShortArrayElements(glyphsArr, glyphs, 0);
     env->ReleaseFloatArrayElements(posArr, pos, 0);
@@ -76,7 +76,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_TextBlob__1nMak
     jfloat* xform = env->GetFloatArrayElements(xformArr, nullptr);
     SkFont* font = reinterpret_cast<SkFont*>(static_cast<uintptr_t>(fontPtr));
 
-    SkTextBlob* instance = SkTextBlob::MakeFromRSXform(glyphs, len * sizeof(jshort), reinterpret_cast<SkRSXform*>(xform), *font, SkTextEncoding::kGlyphID).release();
+    SkTextBlob* instance = SkTextBlob::MakeFromRSXform(glyphs, len * sizeof(jshort), SkSpan(reinterpret_cast<SkRSXform*>(xform), len), *font, SkTextEncoding::kGlyphID).release();
 
     env->ReleaseShortArrayElements(glyphsArr, glyphs, 0);
     env->ReleaseFloatArrayElements(xformArr, xform, 0);
@@ -167,7 +167,7 @@ extern "C" JNIEXPORT jshortArray JNICALL Java_io_github_humbleui_skija_TextBlob_
     SkTextBlob* instance = reinterpret_cast<SkTextBlob*>(static_cast<uintptr_t>(ptr));
     SkTextBlob::Iter iter(*instance);
     SkTextBlob::Iter::Run run;
-    std::vector<jshort> glyphs;
+    std::vector<SkGlyphID> glyphs;
     size_t stored = 0;
     while (iter.next(&run)) {
         glyphs.resize(stored + run.fGlyphCount);
@@ -267,7 +267,7 @@ extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_TextBlob__1nG
         if (run.fGlyphCount > 1 && SkScalarNearlyEqual(posBuffer[(run.fGlyphCount - 2) * 2], lastLeft))
             lastWidth = 0;
         else
-            font.getWidths(&run.fGlyphIndices[run.fGlyphCount - 1], 1, &lastWidth);
+            font.getWidths(SkSpan(&run.fGlyphIndices[run.fGlyphCount - 1], 1), SkSpan(&lastWidth, 1));
         
         auto runBounds = SkRect::MakeLTRB(posBuffer[0], posBuffer[1] + metrics.fAscent, lastLeft + lastWidth, posBuffer[1] + metrics.fDescent);
         bounds.join(runBounds);

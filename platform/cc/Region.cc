@@ -48,10 +48,10 @@ extern "C" JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_Region__1nComput
     return instance->computeRegionComplexity();
 }
 
-extern "C" JNIEXPORT jboolean JNICALL Java_io_github_humbleui_skija_Region__1nGetBoundaryPath(JNIEnv* env, jclass jclass, jlong ptr, jlong pathPtr) {
+extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Region__1nGetBoundaryPath(JNIEnv* env, jclass jclass, jlong ptr) {
     SkRegion* instance = reinterpret_cast<SkRegion*>(static_cast<uintptr_t>(ptr));
-    SkPath* path = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(pathPtr));
-    return instance->getBoundaryPath(path);
+    SkPath path = instance->getBoundaryPath();
+    return reinterpret_cast<jlong>(new SkPath(path));
 }
 
 extern "C" JNIEXPORT jboolean JNICALL Java_io_github_humbleui_skija_Region__1nSetEmpty(JNIEnv* env, jclass jclass, jlong ptr) {

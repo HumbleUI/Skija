@@ -101,8 +101,8 @@ extern "C" JNIEXPORT jintArray JNICALL Java_io_github_humbleui_skija_BreakIterat
     int32_t len = ubrk_getRuleStatusVec(instance, nullptr, 0, &status);
     if (U_FAILURE(status))
       env->ThrowNew(java::lang::RuntimeException::cls, u_errorName(status));
-    std::vector<jint> vec(len);
-    ubrk_getRuleStatusVec(instance, reinterpret_cast<int32_t*>(vec.data()), len, &status);
+    std::vector<int32_t> vec(len);
+    ubrk_getRuleStatusVec(instance, vec.data(), len, &status);
     if (U_FAILURE(status))
       env->ThrowNew(java::lang::RuntimeException::cls, u_errorName(status));
     return javaIntArray(env, vec);

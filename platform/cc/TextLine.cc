@@ -68,7 +68,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_TextLine__1nGet
 extern "C" JNIEXPORT jshortArray JNICALL Java_io_github_humbleui_skija_TextLine__1nGetGlyphs
   (JNIEnv* env, jclass jclass, jlong ptr) {
     TextLine* instance = reinterpret_cast<TextLine*>(static_cast<uintptr_t>(ptr));
-    std::vector<jshort> glyphs(instance->fGlyphCount);
+    std::vector<SkGlyphID> glyphs(instance->fGlyphCount);
     size_t idx = 0;
     for (auto& run: instance->fRuns) {
         memcpy(glyphs.data() + idx, run.fGlyphs, run.fGlyphCount * sizeof(uint16_t));
@@ -81,7 +81,7 @@ extern "C" JNIEXPORT jshortArray JNICALL Java_io_github_humbleui_skija_TextLine_
 extern "C" JNIEXPORT jfloatArray JNICALL Java_io_github_humbleui_skija_TextLine__1nGetPositions
   (JNIEnv* env, jclass jclass, jlong ptr) {
     TextLine* instance = reinterpret_cast<TextLine*>(static_cast<uintptr_t>(ptr));
-    std::vector<jfloat> positions(2 * instance->fGlyphCount);
+    std::vector<float> positions(2 * instance->fGlyphCount);
     size_t idx = 0;
     for (auto& run: instance->fRuns) {
         memcpy(positions.data() + idx, run.fPos, run.fGlyphCount * sizeof(SkPoint));
@@ -94,7 +94,7 @@ extern "C" JNIEXPORT jfloatArray JNICALL Java_io_github_humbleui_skija_TextLine_
 extern "C" JNIEXPORT jfloatArray JNICALL Java_io_github_humbleui_skija_TextLine__1nGetRunPositions
   (JNIEnv* env, jclass jclass, jlong ptr) {
     TextLine* instance = reinterpret_cast<TextLine*>(static_cast<uintptr_t>(ptr));
-    std::vector<jfloat> positions(instance->fRuns.size());
+    std::vector<float> positions(instance->fRuns.size());
     for (size_t idx = 0; idx < positions.size(); ++idx)
         positions[idx] = instance->fRuns[idx].fPosition;
     return javaFloatArray(env, positions);

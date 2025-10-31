@@ -118,7 +118,7 @@ def ninja(dir):
   total_errors = 0
 
   process = subprocess.Popen(
-    ['ninja'],
+    ['ninja', '-k', '0'],
     cwd=dir,
     stdout=subprocess.PIPE,
     stderr=subprocess.STDOUT,

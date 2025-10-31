@@ -207,9 +207,9 @@ extern "C" JNIEXPORT jshortArray JNICALL Java_io_github_humbleui_skija_Font__1nG
     SkFont* instance = reinterpret_cast<SkFont*>(static_cast<uintptr_t>(ptr));
     jsize len = env->GetStringLength(str);
     const jchar* chars = env->GetStringCritical(str, nullptr);
-    int count = instance->textToGlyphs(chars, len * sizeof(jchar), SkTextEncoding::kUTF16, nullptr, 0);
-    std::vector<short> glyphs(count);
-    instance->textToGlyphs(chars, len * sizeof(jchar), SkTextEncoding::kUTF16, reinterpret_cast<SkGlyphID*>(glyphs.data()), count);
+    int count = instance->textToGlyphs(chars, len * sizeof(jchar), SkTextEncoding::kUTF16, SkSpan<SkGlyphID>());
+    std::vector<SkGlyphID> glyphs(count);
+    instance->textToGlyphs(chars, len * sizeof(jchar), SkTextEncoding::kUTF16, glyphs);
     env->ReleaseStringCritical(str, chars);
     return javaShortArray(env, glyphs);
 }
@@ -218,9 +218,9 @@ extern "C" JNIEXPORT jshortArray JNICALL Java_io_github_humbleui_skija_Font__1nG
   (JNIEnv* env, jclass jclass, jlong ptr, jintArray uniArr) {
     SkFont* instance = reinterpret_cast<SkFont*>(static_cast<uintptr_t>(ptr));
     int count = env->GetArrayLength(uniArr);
-    std::vector<jshort> glyphs(count);
+    std::vector<SkGlyphID> glyphs(count);
     jint* uni = env->GetIntArrayElements(uniArr, nullptr);
-    instance->unicharsToGlyphs(reinterpret_cast<SkUnichar*>(uni), count, reinterpret_cast<SkGlyphID*>(glyphs.data()));
+    instance->unicharsToGlyphs(SkSpan(reinterpret_cast<SkUnichar*>(uni), count), glyphs);
     env->ReleaseIntArrayElements(uniArr, uni, 0);
     return javaShortArray(env, glyphs);
 }
@@ -268,9 +268,9 @@ extern "C" JNIEXPORT jfloatArray JNICALL Java_io_github_humbleui_skija_Font__1nG
   (JNIEnv* env, jclass jclass, jlong ptr, jshortArray glyphsArr) {
     SkFont* instance = reinterpret_cast<SkFont*>(static_cast<uintptr_t>(ptr));
     int count = env->GetArrayLength(glyphsArr);
-    std::vector<jfloat> widths(count);
+    std::vector<SkScalar> widths(count);
     jshort* glyphs = env->GetShortArrayElements(glyphsArr, nullptr);
-    instance->getWidths(reinterpret_cast<SkGlyphID*>(glyphs), count, widths.data());
+    instance->getWidths(SkSpan(reinterpret_cast<SkGlyphID*>(glyphs), count), widths);
     env->ReleaseShortArrayElements(glyphsArr, glyphs, 0);
     return javaFloatArray(env, widths);
 }
@@ -282,7 +282,7 @@ extern "C" JNIEXPORT jobjectArray JNICALL Java_io_github_humbleui_skija_Font__1n
     int count = env->GetArrayLength(glyphsArr);
     std::vector<SkRect> bounds(count);
     jshort* glyphs = env->GetShortArrayElements(glyphsArr, nullptr);
-    instance->getBounds(reinterpret_cast<SkGlyphID*>(glyphs), count, bounds.data(), paint);
+    instance->getBounds(SkSpan(reinterpret_cast<SkGlyphID*>(glyphs), count), bounds, paint);
     env->ReleaseShortArrayElements(glyphsArr, glyphs, 0);
 
     jobjectArray res = env->NewObjectArray(count, types::Rect::cls, nullptr);
@@ -301,7 +301,7 @@ extern "C" JNIEXPORT jobjectArray JNICALL Java_io_github_humbleui_skija_Font__1n
     int count = env->GetArrayLength(glyphsArr);
     std::vector<SkPoint> positions(count);
     jshort* glyphs = env->GetShortArrayElements(glyphsArr, nullptr);
-    instance->getPos(reinterpret_cast<SkGlyphID*>(glyphs), count, positions.data(), {dx, dy});
+    instance->getPos(SkSpan(reinterpret_cast<SkGlyphID*>(glyphs), count), positions, {dx, dy});
     env->ReleaseShortArrayElements(glyphsArr, glyphs, 0);
 
     return types::Point::fromSkPoints(env, positions);
@@ -311,9 +311,9 @@ extern "C" JNIEXPORT jfloatArray JNICALL Java_io_github_humbleui_skija_Font__1nG
   (JNIEnv* env, jclass jclass, jlong ptr, jshortArray glyphsArr, jfloat dx) {
     SkFont* instance = reinterpret_cast<SkFont*>(static_cast<uintptr_t>(ptr));
     int count = env->GetArrayLength(glyphsArr);
-    std::vector<jfloat> positions(count);
+    std::vector<SkScalar> positions(count);
     jshort* glyphs = env->GetShortArrayElements(glyphsArr, nullptr);
-    instance->getXPos(reinterpret_cast<SkGlyphID*>(glyphs), count, positions.data(), dx);
+    instance->getXPos(SkSpan(reinterpret_cast<SkGlyphID*>(glyphs), count), positions, dx);
     env->ReleaseShortArrayElements(glyphsArr, glyphs, 0);
     return javaFloatArray(env, positions);
 }
@@ -321,9 +321,10 @@ extern "C" JNIEXPORT jfloatArray JNICALL Java_io_github_humbleui_skija_Font__1nG
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Font__1nGetPath
   (JNIEnv* env, jclass jclass, jlong ptr, jshort glyph) {
     SkFont* instance = reinterpret_cast<SkFont*>(static_cast<uintptr_t>(ptr));
-    SkPath* path = new SkPath();
-    instance->getPath(glyph, path);
-    return reinterpret_cast<jlong>(path);
+    if (auto pathOpt = instance->getPath(glyph)) {
+        return reinterpret_cast<jlong>(new SkPath(*pathOpt));
+    }
+    return 0;
 }
 
 extern "C" JNIEXPORT jobjectArray JNICALL Java_io_github_humbleui_skija_Font__1nGetPaths
@@ -339,11 +340,10 @@ extern "C" JNIEXPORT jobjectArray JNICALL Java_io_github_humbleui_skija_Font__1n
         JNIEnv*      env;
     } ctx = { env->NewObjectArray(count, skija::Path::cls, nullptr), 0, env };
 
-    instance->getPaths(reinterpret_cast<SkGlyphID*>(glyphs), count, [](const SkPath* orig, const SkMatrix& mx, void* voidCtx) {
+    instance->getPaths(SkSpan(reinterpret_cast<SkGlyphID*>(glyphs), count), [](const SkPath* orig, const SkMatrix& mx, void* voidCtx) {
         Ctx* ctx = static_cast<Ctx*>(voidCtx);
         if (orig) {
-            SkPath* path = new SkPath();
-            orig->transform(mx, path);
+            SkPath* path = new SkPath(orig->makeTransform(mx));
             jobject pathObj = ctx->env->NewObject(skija::Path::cls, skija::Path::ctor, reinterpret_cast<jlong>(path));
             ctx->env->SetObjectArrayElement(ctx->paths, ctx->idx, pathObj);
             ctx->env->DeleteLocalRef(pathObj);

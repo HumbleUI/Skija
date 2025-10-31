@@ -57,7 +57,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_PathEffect__1nM
   (JNIEnv* env, jclass jclass, jfloatArray intervalsArray, jfloat phase) {
     jsize len = env->GetArrayLength(intervalsArray);
     jfloat* intervals = env->GetFloatArrayElements(intervalsArray, 0);
-    SkPathEffect* ptr = SkDashPathEffect::Make(intervals, len, phase).release();
+    SkPathEffect* ptr = SkDashPathEffect::Make(SkSpan(intervals, len), phase).release();
     env->ReleaseFloatArrayElements(intervalsArray, intervals, 0);
     return reinterpret_cast<jlong>(ptr);
 }
