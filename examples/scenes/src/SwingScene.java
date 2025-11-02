@@ -242,46 +242,46 @@ class SkiaGraphics extends java.awt.Graphics2D {
     public void fill(java.awt.Shape s) {
         log("[+] fill " + s);
         beforeDraw();
-
+        var builder = new PathBuilder();
         if (s instanceof java.awt.geom.Path2D) {
-           try (var path = new Path();) {
-               var iter = s.getPathIterator(null);
-               float[] segment = new float[6];
-               while (!iter.isDone()) {
-                   int type = iter.currentSegment(segment);
-                   switch (type) {
-                       case java.awt.geom.PathIterator.SEG_MOVETO:
-                           path.moveTo(new Point(segment[0], segment[1]));
-                           // System.out.println("MOVETO " + segment[0] + " " + segment[1]);
-                           break;
-                       case java.awt.geom.PathIterator.SEG_LINETO:
-                           path.lineTo(new Point(segment[0], segment[1]));
-                           // System.out.println("LINETO " + segment[0] + " " + segment[1]);
-                           break;
-                       case java.awt.geom.PathIterator.SEG_QUADTO:
-                           path.quadTo(segment[0], segment[1], segment[2], segment[3]);
-                           // System.out.println("QUADTO " + segment[0] + " " + segment[1] + " " + segment[2] + " " + segment[3]);
-                           break;
-                       case java.awt.geom.PathIterator.SEG_CUBICTO:
-                           path.cubicTo(segment[0], segment[1], segment[2], segment[3], segment[4], segment[5]);
-                           // System.out.println("CUBICTO " + segment[0] + " " + segment[1] + " " + segment[2] + " " + segment[3] + " " + segment[4] + " " + segment[5]);
-                           break;
-                       case java.awt.geom.PathIterator.SEG_CLOSE:
-                           path.closePath();
-                           break;
-                   }
-                   iter.next();
-               }
+            var iter = s.getPathIterator(null);
+            float[] segment = new float[6];
+            while (!iter.isDone()) {
+                int type = iter.currentSegment(segment);
+                switch (type) {
+                    case java.awt.geom.PathIterator.SEG_MOVETO:
+                        builder.moveTo(segment[0], segment[1]);
+                        // System.out.println("MOVETO " + segment[0] + " " + segment[1]);
+                        break;
+                    case java.awt.geom.PathIterator.SEG_LINETO:
+                        builder.lineTo(segment[0], segment[1]);
+                        // System.out.println("LINETO " + segment[0] + " " + segment[1]);
+                        break;
+                    case java.awt.geom.PathIterator.SEG_QUADTO:
+                        builder.quadTo(segment[0], segment[1], segment[2], segment[3]);
+                        // System.out.println("QUADTO " + segment[0] + " " + segment[1] + " " + segment[2] + " " + segment[3]);
+                        break;
+                    case java.awt.geom.PathIterator.SEG_CUBICTO:
+                        builder.cubicTo(segment[0], segment[1], segment[2], segment[3], segment[4], segment[5]);
+                        // System.out.println("CUBICTO " + segment[0] + " " + segment[1] + " " + segment[2] + " " + segment[3] + " " + segment[4] + " " + segment[5]);
+                        break;
+                    case java.awt.geom.PathIterator.SEG_CLOSE:
+                        builder.closePath();
+                        break;
+                }
+                iter.next();
+            }
 
-               switch (((java.awt.geom.Path2D) s).getWindingRule()) {
-                   case java.awt.geom.Path2D.WIND_EVEN_ODD:
-                       path.setFillMode(PathFillMode.EVEN_ODD);
-                   case java.awt.geom.Path2D.WIND_NON_ZERO:
-                       path.setFillMode(PathFillMode.WINDING);
-               }
+            switch (((java.awt.geom.Path2D) s).getWindingRule()) {
+                case java.awt.geom.Path2D.WIND_EVEN_ODD:
+                    builder.setFillMode(PathFillMode.EVEN_ODD);
+                case java.awt.geom.Path2D.WIND_NON_ZERO:
+                    builder.setFillMode(PathFillMode.WINDING);
+            }
 
-               canvas.drawPath(path, paint);
-           }
+            try (var path = builder.build()) {
+                canvas.drawPath(path, paint);
+            }
         }
     }
 
@@ -680,12 +680,13 @@ class SkiaGraphics extends java.awt.Graphics2D {
     public void fillPolygon(int[] xPoints, int[] yPoints, int nPoints) {
         log("[+] fillPolygon " + Arrays.toString(xPoints) + " " + Arrays.toString(yPoints) + " " + nPoints);
         beforeDraw();
-        try (var path = new Path()) {
-            path.moveTo(xPoints[0], yPoints[0]);
-            for (int i = 1; i < nPoints; ++i)
-                path.lineTo(xPoints[i], yPoints[i]);
-            path.lineTo(xPoints[0], yPoints[0]);
-            path.closePath();
+        var builder = new PathBuilder();
+        builder.moveTo(xPoints[0], yPoints[0]);
+        for (int i = 1; i < nPoints; ++i)
+            builder.lineTo(xPoints[i], yPoints[i]);
+        builder.lineTo(xPoints[0], yPoints[0]);
+        builder.closePath();
+        try (var path = builder.build()) {
             canvas.drawPath(path, paint);
         }
     }

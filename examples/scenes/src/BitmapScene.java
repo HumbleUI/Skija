@@ -10,30 +10,30 @@ public class BitmapScene extends Scene {
     public BitmapScene() {
         var random = new Random(0);
         for (int i = 0; i < 100; ++i) {
-            var path = new Path();
+            var pathBuilder = new PathBuilder();
 
             switch (random.nextInt(4)) {
                 case 0:
-                    path.addRect(Rect.makeXYWH(-0.5f, -0.5f, 1, 1));
+                    pathBuilder.addRect(Rect.makeXYWH(-0.5f, -0.5f, 1, 1));
                     break;
                 case 1:
-                    path.addCircle(0, 0, 0.5f);
+                    pathBuilder.addCircle(0, 0, 0.5f);
                     break;
                 case 2:
-                    path.moveTo(0, -0.5f).lineTo(0.5f, 0.36f).lineTo(-0.5f, 0.36f).closePath();
+                    pathBuilder.moveTo(0, -0.5f).lineTo(0.5f, 0.36f).lineTo(-0.5f, 0.36f).closePath();
                     break;
                 case 3:
-                    path.addRRect(RRect.makeXYWH(-0.6f, -0.4f, 1.2f, 0.8f, 0.4f));
+                    pathBuilder.addRRect(RRect.makeXYWH(-0.6f, -0.4f, 1.2f, 0.8f, 0.4f));
                     break;
             }
 
-            path.transform(Matrix33.makeRotate(random.nextInt(360)));
-            path.transform(Matrix33.makeScale(10 + random.nextInt(250)));
-            path.transform(Matrix33.makeTranslate(random.nextInt(1920), random.nextInt(1080)));
+            pathBuilder.transform(Matrix33.makeRotate(random.nextInt(360)));
+            pathBuilder.transform(Matrix33.makeScale(10 + random.nextInt(250)));
+            pathBuilder.transform(Matrix33.makeTranslate(random.nextInt(1920), random.nextInt(1080)));
 
             int color = 0xFF000000 | random.nextInt(0xFFFFFF);
 
-            shapes.add(new Pair<>(path, color));
+            shapes.add(new Pair<>(pathBuilder.build(), color));
         }
     }
 
@@ -82,7 +82,12 @@ public class BitmapScene extends Scene {
 
     private void drawBitmapCanvas(Canvas canvas, IRect target, float dpi) {
         try (var bitmap = new Bitmap();
-             var path = new Path();
+             var path = new PathBuilder().moveTo(0, target.getHeight() / 2)
+                                         .lineTo(target.getWidth() / 2, target.getHeight() / 2 - target.getWidth() / 2)
+                                         .lineTo(target.getWidth(), target.getHeight() / 2)
+                                         .lineTo(target.getWidth() / 2, target.getHeight() / 2 + target.getWidth() / 2)
+                                         .closePath()
+                                         .build();
              var stroke = new Paint().setColor(0xFFe76f51).setMode(PaintMode.STROKE).setStrokeWidth(10);)
         {
             bitmap.allocPixels(ImageInfo.makeS32((int) (target.getWidth() * dpi), (int) (target.getHeight() * dpi), ColorAlphaType.PREMUL));
@@ -101,11 +106,6 @@ public class BitmapScene extends Scene {
 
             Canvas canvas2 = new Canvas(bitmap);
             canvas2.scale(dpi, dpi);
-            path.moveTo(0, target.getHeight() / 2)
-                .lineTo(target.getWidth() / 2, target.getHeight() / 2 - target.getWidth() / 2)
-                .lineTo(target.getWidth(), target.getHeight() / 2)
-                .lineTo(target.getWidth() / 2, target.getHeight() / 2 + target.getWidth() / 2)
-                .closePath();
             canvas2.drawPath(path, stroke);
 
             try (Image image = Image.makeRasterFromBitmap(bitmap.setImmutable())) {

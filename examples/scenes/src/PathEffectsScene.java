@@ -9,11 +9,11 @@ public class PathEffectsScene extends Scene {
         int x = 0;
         int y = 0;
 
-        try (Path  pattern = new Path().moveTo(-5f, -3f).lineTo(5f, 0).lineTo(-5f, 3f).closePath();
-             Path  dash = new Path().lineTo(10, 0).lineTo(10, 1).lineTo(0, 1).closePath();
-             Paint stroke = new Paint().setColor(0x20457b9d).setMode(PaintMode.STROKE).setStrokeWidth(1);
-             Paint fill   = new Paint().setColor(0xFFe76f51).setMode(PaintMode.STROKE).setStrokeWidth(1);
-             Path  figure = new Path().moveTo(100, 10).lineTo(190, 190).lineTo(10, 190).closePath();)
+        try (Path  pattern = new PathBuilder().moveTo(-5f, -3f).lineTo(5f, 0).lineTo(-5f, 3f).closePath().build();
+             Path  dash    = new PathBuilder().lineTo(10, 0).lineTo(10, 1).lineTo(0, 1).closePath().build();
+             Paint stroke  = new Paint().setColor(0x20457b9d).setMode(PaintMode.STROKE).setStrokeWidth(1);
+             Paint fill    = new Paint().setColor(0xFFe76f51).setMode(PaintMode.STROKE).setStrokeWidth(1);
+             Path  figure  = new PathBuilder().moveTo(100, 10).lineTo(190, 190).lineTo(10, 190).closePath().build();)
         {
             float offset = 1f - System.currentTimeMillis() % 1000 / 1000f;
 

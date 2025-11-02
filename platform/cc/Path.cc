@@ -96,11 +96,6 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Path__1nReset(JN
     instance->reset();
 }
 
-extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Path__1nRewind(JNIEnv* env, jclass jclass, jlong ptr) {
-    SkPath* instance = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(ptr));
-    instance->rewind();
-}
-
 extern "C" JNIEXPORT jboolean JNICALL Java_io_github_humbleui_skija_Path__1nIsEmpty(JNIEnv* env, jclass jclass, jlong ptr) {
     SkPath* instance = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(ptr));
     return instance->isEmpty();
@@ -155,33 +150,9 @@ extern "C" JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_Path__1nGetPoint
     return instance->countPoints();
 }
 
-extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_Path__1nGetPoint(JNIEnv* env, jclass jclass, jlong ptr, jint index) {
-    SkPath* instance = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(ptr));
-    SkPoint p = instance->getPoint(index);
-    return types::Point::fromSkPoint(env, p);
-}
-
-extern "C" JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_Path__1nGetPoints(JNIEnv* env, jclass jclass, jlong ptr, jobjectArray pointsArray, jint max) {
-    SkPath* instance = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(ptr));
-    std::vector<SkPoint> p(std::min<jint>(max, instance->countPoints()));
-    int count = instance->getPoints(p.data(), max);
-    for (int i = 0; i < max && i < count; ++ i)
-        env->SetObjectArrayElement(pointsArray, i, types::Point::fromSkPoint(env, p[i]));
-    return count;
-}
-
 extern "C" JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_Path__1nCountVerbs(JNIEnv* env, jclass jclass, jlong ptr) {
     SkPath* instance = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(ptr));
     return instance->countVerbs();
-}
-
-extern "C" JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_Path__1nGetVerbs(JNIEnv* env, jclass jclass, jlong ptr, jbyteArray verbsArray, jint max) {
-    SkPath* instance = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(ptr));
-    jbyte* verbs = verbsArray == nullptr ? nullptr : env->GetByteArrayElements(verbsArray, 0);
-    int count = instance->getVerbs(reinterpret_cast<uint8_t *>(verbs), max);
-    if (verbsArray != nullptr)
-        env->ReleaseByteArrayElements(verbsArray, verbs, 0);
-    return count;
 }
 
 extern "C" JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_Path__1nApproximateBytesUsed(JNIEnv* env, jclass jclass, jlong ptr) {
@@ -216,85 +187,6 @@ extern "C" JNIEXPORT jboolean JNICALL Java_io_github_humbleui_skija_Path__1nCons
     return instance->conservativelyContainsRect(rect);
 }
 
-extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Path__1nIncReserve(JNIEnv* env, jclass jclass, jlong ptr, int extraPtCount) {
-    SkPath* instance = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(ptr));
-    instance->incReserve(extraPtCount);
-}
-
-extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Path__1nMoveTo(JNIEnv* env, jclass jclass, jlong ptr, jfloat x, jfloat y) {
-    SkPath* instance = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(ptr));
-    instance->moveTo(x, y);
-}
-
-extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Path__1nRMoveTo(JNIEnv* env, jclass jclass, jlong ptr, jfloat dx, jfloat dy) {
-    SkPath* instance = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(ptr));
-    instance->rMoveTo(dx, dy);
-}
-
-extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Path__1nLineTo(JNIEnv* env, jclass jclass, jlong ptr, jfloat x, jfloat y) {
-    SkPath* instance = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(ptr));
-    instance->lineTo(x, y);
-}
-
-extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Path__1nRLineTo(JNIEnv* env, jclass jclass, jlong ptr, jfloat dx, jfloat dy) {
-    SkPath* instance = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(ptr));
-    instance->rLineTo(dx, dy);
-}
-
-extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Path__1nQuadTo(JNIEnv* env, jclass jclass, jlong ptr, jfloat x1, jfloat y1, jfloat x2, jfloat y2) {
-    SkPath* instance = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(ptr));
-    instance->quadTo(x1, y1, x2, y2);
-}
-
-extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Path__1nRQuadTo(JNIEnv* env, jclass jclass, jlong ptr, jfloat dx1, jfloat dy1, jfloat dx2, jfloat dy2) {
-    SkPath* instance = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(ptr));
-    instance->rQuadTo(dx1, dy1, dx2, dy2);
-}
-
-extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Path__1nConicTo(JNIEnv* env, jclass jclass, jlong ptr, jfloat x1, jfloat y1, jfloat x2, jfloat y2, jfloat w) {
-    SkPath* instance = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(ptr));
-    instance->conicTo(x1, y1, x2, y2, w);
-}
-
-extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Path__1nRConicTo(JNIEnv* env, jclass jclass, jlong ptr, jfloat dx1, jfloat dy1, jfloat dx2, jfloat dy2, jfloat w) {
-    SkPath* instance = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(ptr));
-    instance->rConicTo(dx1, dy1, dx2, dy2, w);
-}
-
-extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Path__1nCubicTo(JNIEnv* env, jclass jclass, jlong ptr, jfloat x1, jfloat y1, jfloat x2, jfloat y2, jfloat x3, jfloat y3) {
-    SkPath* instance = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(ptr));
-    instance->cubicTo(x1, y1, x2, y2, x3, y3);
-}
-
-extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Path__1nRCubicTo(JNIEnv* env, jclass jclass, jlong ptr, jfloat dx1, jfloat dy1, jfloat dx2, jfloat dy2, jfloat dx3, jfloat dy3) {
-    SkPath* instance = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(ptr));
-    instance->rCubicTo(dx1, dy1, dx2, dy2, dx3, dy3);
-}
-
-extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Path__1nArcTo(JNIEnv* env, jclass jclass, jlong ptr, jfloat left, jfloat top, jfloat right, jfloat bottom, jfloat startAngle, jfloat sweepAngle, jboolean forceMoveTo) {
-    SkPath* instance = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(ptr));
-    instance->arcTo({left, top, right, bottom}, startAngle, sweepAngle, forceMoveTo);
-}
-
-extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Path__1nTangentArcTo(JNIEnv* env, jclass jclass, jlong ptr, jfloat x1, jfloat y1, jfloat x2, jfloat y2, jfloat radius) {
-    SkPath* instance = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(ptr));
-    instance->arcTo(x1, y1, x2, y2, radius);
-}
-
-extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Path__1nEllipticalArcTo(JNIEnv* env, jclass jclass, jlong ptr, jfloat rx, jfloat ry, jfloat xAxisRotate, jint size, jint direction, jfloat x, float y) {
-    SkPath* instance = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(ptr));
-    instance->arcTo(rx, ry, xAxisRotate, static_cast<SkPath::ArcSize>(size), static_cast<SkPathDirection>(direction), x, y);
-}
-
-extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Path__1nREllipticalArcTo(JNIEnv* env, jclass jclass, jlong ptr, jfloat rx, jfloat ry, jfloat xAxisRotate, jint size, jint direction, jfloat dx, float dy) {
-    SkPath* instance = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(ptr));
-    instance->rArcTo(rx, ry, xAxisRotate, static_cast<SkPath::ArcSize>(size), static_cast<SkPathDirection>(direction), dx, dy);
-}
-
-extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Path__1nClosePath(JNIEnv* env, jclass jclass, jlong ptr) {
-    SkPath* instance = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(ptr));
-    instance->close();
-}
 
 extern "C" JNIEXPORT jobjectArray Java_io_github_humbleui_skija_Path__1nConvertConicToQuads
   (JNIEnv* env, jclass jclass, jfloat x0, jfloat y0, jfloat x1, jfloat y1, jfloat x2, jfloat y2, jfloat w, jint pow2) {
@@ -315,114 +207,6 @@ extern "C" JNIEXPORT jobject Java_io_github_humbleui_skija_Path__1nIsRect
         return types::Rect::fromSkRect(env, rect);
     else
         return nullptr;
-}
-
-extern "C" JNIEXPORT void Java_io_github_humbleui_skija_Path__1nAddRect
-  (JNIEnv* env, jclass jclass, jlong ptr, jfloat l, jfloat t, jfloat r, jfloat b, jint dirInt, jint start) {
-    SkPath* instance = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(ptr));
-    SkPathDirection dir = static_cast<SkPathDirection>(dirInt);
-    instance->addRect({l, t, r, b}, dir, start);
-}
-
-extern "C" JNIEXPORT void Java_io_github_humbleui_skija_Path__1nAddOval
-  (JNIEnv* env, jclass jclass, jlong ptr, jfloat l, jfloat t, jfloat r, jfloat b, jint dirInt, jint start) {
-    SkPath* instance = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(ptr));
-    SkPathDirection dir = static_cast<SkPathDirection>(dirInt);
-    instance->addOval({l, t, r, b}, dir, start);
-}
-
-extern "C" JNIEXPORT void Java_io_github_humbleui_skija_Path__1nAddCircle
-  (JNIEnv* env, jclass jclass, jlong ptr, jfloat x, jfloat y, jfloat r, jint dirInt) {
-    SkPath* instance = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(ptr));
-    SkPathDirection dir = static_cast<SkPathDirection>(dirInt);
-    instance->addCircle(x, y, r, dir);
-}
-
-extern "C" JNIEXPORT void Java_io_github_humbleui_skija_Path__1nAddArc
-  (JNIEnv* env, jclass jclass, jlong ptr, jfloat l, jfloat t, jfloat r, jfloat b, jfloat startAngle, jfloat sweepAngle) {
-    SkPath* instance = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(ptr));
-    instance->addArc({l, t, r, b}, startAngle, sweepAngle);
-}
-
-extern "C" JNIEXPORT void Java_io_github_humbleui_skija_Path__1nAddRRect
-  (JNIEnv* env, jclass jclass, jlong ptr, jfloat l, jfloat t, jfloat r, jfloat b, jfloatArray radii, jint dirInt, jint start) {
-    SkPath* instance = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(ptr));
-    SkRRect rrect = types::RRect::toSkRRect(env, l, t, r, b, radii);
-    SkPathDirection dir = static_cast<SkPathDirection>(dirInt);
-    instance->addRRect(rrect, dir, start);
-}
-
-extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Path__1nAddPoly
-  (JNIEnv* env, jclass jclass, jlong ptr, jfloatArray coords, jboolean close) {
-    SkPath* instance = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(ptr));
-    jsize len = env->GetArrayLength(coords);
-    jfloat* arr = env->GetFloatArrayElements(coords, 0);
-    instance->addPoly(reinterpret_cast<SkPoint*>(arr), len / 2, close);
-    env->ReleaseFloatArrayElements(coords, arr, 0);
-}
-
-extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Path__1nAddPath
-  (JNIEnv* env, jclass jclass, jlong ptr, jlong srcPtr, jboolean extend) {
-    SkPath* instance = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(ptr));
-    SkPath* src = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(srcPtr));
-    SkPath::AddPathMode mode = extend ? SkPath::AddPathMode::kExtend_AddPathMode : SkPath::AddPathMode::kAppend_AddPathMode;
-    instance->addPath(*src, mode);
-}
-
-extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Path__1nAddPathOffset
-  (JNIEnv* env, jclass jclass, jlong ptr, jlong srcPtr, jfloat dx, jfloat dy, jboolean extend) {
-    SkPath* instance = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(ptr));
-    SkPath* src = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(srcPtr));
-    SkPath::AddPathMode mode = extend ? SkPath::AddPathMode::kExtend_AddPathMode : SkPath::AddPathMode::kAppend_AddPathMode;
-    instance->addPath(*src, dx, dy, mode);
-}
-
-extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Path__1nAddPathTransform
-  (JNIEnv* env, jclass jclass, jlong ptr, jlong srcPtr, jfloatArray matrixArr, jboolean extend) {
-    SkPath* instance = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(ptr));
-    SkPath* src = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(srcPtr));
-    std::unique_ptr<SkMatrix> matrix = skMatrix(env, matrixArr);
-    SkPath::AddPathMode mode = extend ? SkPath::AddPathMode::kExtend_AddPathMode : SkPath::AddPathMode::kAppend_AddPathMode;
-    instance->addPath(*src, *matrix, mode);
-}
-
-extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Path__1nReverseAddPath
-  (JNIEnv* env, jclass jclass, jlong ptr, jlong srcPtr) {
-    SkPath* instance = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(ptr));
-    SkPath* src = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(srcPtr));
-    instance->reverseAddPath(*src);
-}
-
-extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Path__1nOffset
-  (JNIEnv* env, jclass jclass, jlong ptr, jfloat dx, jfloat dy, jlong dstPtr) {
-    SkPath* instance = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(ptr));
-    SkPath* dst = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(dstPtr));
-    instance->offset(dx, dy, dst);
-}
-
-extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Path__1nTransform
-  (JNIEnv* env, jclass jclass, jlong ptr, jfloatArray matrixArr, jlong dstPtr, jboolean pcBool) {
-    SkPath* instance = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(ptr));
-    SkPath* dst = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(dstPtr));
-    std::unique_ptr<SkMatrix> matrix = skMatrix(env, matrixArr);
-    SkApplyPerspectiveClip pc = pcBool ? SkApplyPerspectiveClip::kYes : SkApplyPerspectiveClip::kNo;
-    instance->transform(*matrix, dst, pc);
-}
-
-extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_Path__1nGetLastPt
-  (JNIEnv* env, jclass jclass, jlong ptr) {
-    SkPath* instance = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(ptr));
-    SkPoint out;
-    if (instance->getLastPt(&out))
-        return types::Point::fromSkPoint(env, out);
-    else
-        return nullptr;
-}
-
-extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Path__1nSetLastPt
-  (JNIEnv* env, jclass jclass, jlong ptr, jfloat x, jfloat y) {
-    SkPath* instance = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(ptr));
-    instance->setLastPt(x, y);
 }
 
 extern "C" JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_Path__1nGetSegmentMasks
@@ -474,17 +258,11 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Path__1nMakeCom
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Path__1nMakeFromBytes
   (JNIEnv* env, jclass jclass, jbyteArray bytesArray) {
-    SkPath* instance = new SkPath();
-    int count = env->GetArrayLength(bytesArray);
     jbyte* bytes = env->GetByteArrayElements(bytesArray, 0);
-    if (instance->readFromMemory(bytes, count)) {
-        env->ReleaseByteArrayElements(bytesArray, bytes, 0);
-        return reinterpret_cast<jlong>(instance);
-    } else {
-        env->ReleaseByteArrayElements(bytesArray, bytes, 0);
-        delete instance;
-        return 0;
-    }
+    int count = env->GetArrayLength(bytesArray);
+    std::optional<SkPath> path = SkPath::ReadFromMemory(bytes, count);
+    env->ReleaseByteArrayElements(bytesArray, bytes, JNI_ABORT);
+    return path ? reinterpret_cast<jlong>(new SkPath(*path)) : 0;
 }
 
 extern "C" JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_Path__1nGetGenerationId

@@ -317,7 +317,7 @@ namespace types {
         void onUnload(JNIEnv* env);
         jobject make(JNIEnv* env, float x, float y);
         jobject fromSkPoint(JNIEnv* env, const SkPoint& p);
-        jobjectArray fromSkPoints(JNIEnv* env, const std::vector<SkPoint>& ps);
+        jobjectArray fromSkPoints(JNIEnv* env, SkSpan<const SkPoint> ps);
     }
 
     namespace Rect {
@@ -374,7 +374,7 @@ jshortArray  javaShortArray (JNIEnv* env, const std::vector<uint16_t>& shorts);
 jintArray    javaIntArray   (JNIEnv* env, const std::vector<int32_t>& ints);
 jintArray    javaIntArray   (JNIEnv* env, const std::vector<uint32_t>& ints);
 jlongArray   javaLongArray  (JNIEnv* env, const std::vector<jlong>& longs);
-jfloatArray  javaFloatArray (JNIEnv* env, const std::vector<float>& floats);
+jfloatArray  javaFloatArray (JNIEnv* env, SkSpan<const float> floats);
 
 std::vector<SkString> skStringVector(JNIEnv* env, jobjectArray arr);
 jobjectArray javaStringArray(JNIEnv* env, const std::vector<SkString>& strings);

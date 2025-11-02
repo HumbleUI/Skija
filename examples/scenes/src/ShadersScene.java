@@ -128,19 +128,19 @@ public class ShadersScene extends Scene {
             canvas.translate(70, 0);
         }
 
-        try (Path p1 = new Path().lineTo(30.1f, 0).lineTo(0, 32.5f).closePath();
+        try (Path p1 = new PathBuilder().lineTo(30.1f, 0).lineTo(0, 32.5f).closePath().build();
              Shader s1 = Shader.makeLinearGradient(0, 32.5f, 30.1f, 0, 
                 new int[] {0xFF0095D5, 0xFF3C83DC, 0xFF6D74E1, 0xFF806EE3},
                 new float[] {0.1183f, 0.4178f, 0.6962f, 0.8333f});
              Paint f1 = new Paint().setShader(s1);
 
-             Path p2 = new Path().moveTo(30.1f, 0).lineTo(0, 31.7f).lineTo(0, 60).lineTo(30.1f, 29.9f).lineTo(60, 0).closePath();
+             Path p2 = new PathBuilder().moveTo(30.1f, 0).lineTo(0, 31.7f).lineTo(0, 60).lineTo(30.1f, 29.9f).lineTo(60, 0).closePath().build();
              Shader s2 = Shader.makeLinearGradient(0, 60, 60, 0,
                 new int[] {0xFFC757BC, 0xFFD0609A, 0xFFE1725C, 0xFFEE7E2F, 0xFFF58613, 0xFFF88909},
                 new float[] {0.1075f, 0.2138f, 0.4254f, 0.6048f, 0.743f, 0.8232f});
              Paint f2 = new Paint().setShader(s2);
 
-             Path p3 = new Path().moveTo(0, 60).lineTo(30.1f, 29.9f).lineTo(60, 60).closePath();
+             Path p3 = new PathBuilder().moveTo(0, 60).lineTo(30.1f, 29.9f).lineTo(60, 60).closePath().build();
              Shader s3 = Shader.makeLinearGradient(0, 60, 30.1f, 29.9f,
                 new int[] { 0xFF0095D5, 0xFF238AD9, 0xFF557BDE, 0xFF7472E2, 0xFF806EE3 },
                 new float[] {0f, 0.3f, 0.62f, 0.8643f, 1f});

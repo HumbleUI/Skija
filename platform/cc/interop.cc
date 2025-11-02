@@ -768,7 +768,7 @@ namespace types {
             return env->NewObject(cls, ctor, p.fX, p.fY);
         }
 
-        jobjectArray fromSkPoints(JNIEnv* env, const std::vector<SkPoint>& ps) {
+        jobjectArray fromSkPoints(JNIEnv* env, SkSpan<const SkPoint> ps) {
             jobjectArray res = env->NewObjectArray((jsize) ps.size(), cls, nullptr);
             for (int i = 0; i < ps.size(); ++i) {
                 skija::AutoLocal<jobject> pointObj(env, fromSkPoint(env, ps[i]));
@@ -1143,7 +1143,7 @@ jlongArray javaLongArray(JNIEnv* env, const std::vector<jlong>& longs) {
     return res;
 }
 
-jfloatArray javaFloatArray(JNIEnv* env, const std::vector<jfloat>& floats) {
+jfloatArray javaFloatArray(JNIEnv* env, SkSpan<const float> floats) {
     jfloatArray res = env->NewFloatArray((jsize) floats.size());
     env->SetFloatArrayRegion(res, 0, (jsize) floats.size(), floats.data());
     return res;

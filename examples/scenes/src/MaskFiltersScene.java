@@ -8,8 +8,9 @@ public class MaskFiltersScene extends Scene {
         canvas.translate(20, 20);
         
         try (Paint fill   = new Paint().setColor(0xFFe76f51);
-             Path  figure = new Path().moveTo(75, 19).lineTo(140, 131).lineTo(10, 131).closePath()
-                              .moveTo(75, 56).lineTo(42, 113).lineTo(107, 113).closePath();)
+             Path  figure = new PathBuilder().moveTo(75, 19).lineTo(140, 131).lineTo(10, 131).closePath()
+                                             .moveTo(75, 56).lineTo(42, 113).lineTo(107, 113).closePath()
+                                             .build();)
         {
             MaskFilter outer = MaskFilter.makeBlur(FilterBlurMode.OUTER, 5);
             MaskFilter inner = MaskFilter.makeBlur(FilterBlurMode.INNER, 5);

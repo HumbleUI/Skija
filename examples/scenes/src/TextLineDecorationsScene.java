@@ -53,7 +53,7 @@ public class TextLineDecorationsScene extends Scene {
             }
             
             try (var line = TextLine.make("Dotted " + w + "px" + descenders, inter13);
-                 var circle = new Path().addCircle(w / 2f, 0, w / 2f);
+                 var circle = new PathBuilder().addCircle(w / 2f, 0, w / 2f).build();
                  var effect = PathEffect.makePath1D(circle, w * 2, 0, PathEffect.Style.TRANSLATE);
                  var stroke = new Paint().setColor(0xFFCC3333).setPathEffect(effect);)
             {
@@ -98,7 +98,7 @@ public class TextLineDecorationsScene extends Scene {
             // }
 
             try (var line = TextLine.make("Wavy " + w + "px" + descenders, inter13);
-                 var element = new Path().moveTo(0, -1.5f).lineTo(2, 0.5f).lineTo(4, -1.5f).lineTo(4, -0.5f).lineTo(2, 1.5f).lineTo(0, -0.5f).closePath().transform(Matrix33.makeScale(w));
+                 var element = new PathBuilder().moveTo(0, -1.5f).lineTo(2, 0.5f).lineTo(4, -1.5f).lineTo(4, -0.5f).lineTo(2, 1.5f).lineTo(0, -0.5f).closePath().transform(Matrix33.makeScale(w)).build();
                  var effect = PathEffect.makePath1D(element, w * 4, 0, PathEffect.Style.TRANSLATE);
                  var stroke = new Paint().setColor(0xFFCC3333).setPathEffect(effect);)
             {
@@ -135,10 +135,11 @@ public class TextLineDecorationsScene extends Scene {
         
         try (var line = TextLine.make("Sinus " + w + "px" + descenders, inter13);
              var surface = Surface.makeRaster(ImageInfo.makeN32Premul((int) Math.ceil(texw), (int) Math.ceil(texh)));
-             var path = new Path()
+             var path = new PathBuilder()
                             .moveTo(0, texh - 0.5f * strokew)
                             .cubicTo(control, texh - 0.5f * strokew, texw / 2f - control, 0.5f * strokew, texw / 2f, 0.5f * strokew)
-                            .cubicTo(texw / 2 + control, 0.5f * strokew, texw - control, texh - 0.5f * strokew, texw, texh - 0.5f * strokew);
+                            .cubicTo(texw / 2 + control, 0.5f * strokew, texw - control, texh - 0.5f * strokew, texw, texh - 0.5f * strokew)
+                            .build();
              var stroke = new Paint().setColor(0xFFCC3333).setMode(PaintMode.STROKE).setStrokeWidth(strokew);)
         {
             var c = surface.getCanvas();

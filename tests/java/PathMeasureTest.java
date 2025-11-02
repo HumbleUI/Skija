@@ -4,6 +4,7 @@ import static io.github.humbleui.skija.test.runner.TestRunner.*;
 
 import io.github.humbleui.skija.Matrix33;
 import io.github.humbleui.skija.Path;
+import io.github.humbleui.skija.PathBuilder;
 import io.github.humbleui.skija.PathMeasure;
 import io.github.humbleui.types.Point;
 import io.github.humbleui.skija.test.runner.*;
@@ -11,9 +12,9 @@ import io.github.humbleui.skija.test.runner.*;
 public class PathMeasureTest implements Executable {
     @Override
     public void execute() throws Exception {
-        try (var path = new Path().moveTo(0, 0).lineTo(40, 0).moveTo(0, 40).lineTo(10, 50);
+        try (var path = new PathBuilder().moveTo(0, 0).lineTo(40, 0).moveTo(0, 40).lineTo(10, 50).build();
              var measure = new PathMeasure(path, false);
-             var path2 = new Path().lineTo(10, 10);)
+             var path2 = new PathBuilder().lineTo(10, 10).build();)
         {
             assertEquals(40f, measure.getLength());
             assertClose(new Point(0, 0), measure.getPosition(0));

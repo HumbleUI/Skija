@@ -6,7 +6,7 @@ import io.github.humbleui.skija.*;
 
 public class Scenes {
     public static TreeMap<String, Scene> scenes;
-    public static String currentScene = "Shapers";
+    public static String currentScene = "Paths";
     public static HUD hud = new HUD();
     public static boolean stats = true;
 
@@ -48,8 +48,8 @@ public class Scenes {
         scenes.put("SVG", null);
         scenes.put("SVG Scaling", null);
         scenes.put("Shaders", null);
-        scenes.put("Shadows", null);
         scenes.put("Shadow Utils", null);
+        scenes.put("Shadows", null);
         scenes.put("Shapers", null);
         scenes.put("Skottie", null);
         scenes.put("Squares", null);

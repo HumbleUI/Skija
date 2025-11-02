@@ -8,6 +8,7 @@ import static io.github.humbleui.skija.test.runner.TestRunner.assertThrows;
 import java.util.NoSuchElementException;
 
 import io.github.humbleui.skija.Path;
+import io.github.humbleui.skija.PathBuilder;
 import io.github.humbleui.skija.PathDirection;
 import io.github.humbleui.skija.PathFillMode;
 import io.github.humbleui.skija.PathSegment;
@@ -34,7 +35,7 @@ public class PathTest implements Executable {
     }
 
     public void iter() {
-        try (Path p = new Path().moveTo(10, 10).lineTo(20, 0).lineTo(20, 20).closePath();
+        try (Path p = new PathBuilder().moveTo(10, 10).lineTo(20, 0).lineTo(20, 20).closePath().build();
              var i = p.iterator();) {
             assertEquals(true, i.hasNext());
             PathSegment s = i.next();
@@ -75,11 +76,11 @@ public class PathTest implements Executable {
 
 
     public void convexity() {
-        try (Path p = new Path().lineTo(40, 20).lineTo(0, 40).lineTo(0, 0).closePath()) {
+        try (Path p = new PathBuilder().lineTo(40, 20).lineTo(0, 40).lineTo(0, 0).closePath().build()) {
             assertEquals(true, p.isConvex());
         }
 
-        try (Path p = new Path().lineTo(40, 40).lineTo(40, 0).lineTo(0, 40).lineTo(0, 0).closePath()) {
+        try (Path p = new PathBuilder().lineTo(40, 40).lineTo(40, 0).lineTo(0, 40).lineTo(0, 0).closePath().build()) {
             assertEquals(false, p.isConvex());
         }
     }
@@ -87,7 +88,7 @@ public class PathTest implements Executable {
     public void isShape() {
         for (var dir: PathDirection.values()) {
             for (int start = 0; start < 4; ++start) {
-                try (Path p = new Path().addRect(Rect.makeLTRB(0, 0, 40, 20), dir, start)) {
+                try (Path p = new PathBuilder().addRect(Rect.makeLTRB(0, 0, 40, 20), dir, start).build()) {
                     assertEquals(Rect.makeLTRB(0, 0, 40, 20), p.isRect());
                     assertEquals(null, p.isOval());
                     assertEquals(null, p.isRRect());
@@ -97,7 +98,7 @@ public class PathTest implements Executable {
 
         for (var dir: PathDirection.values()) {
             for (int start = 0; start < 4; ++start) {
-                try (Path p = new Path().addOval(Rect.makeLTRB(0, 0, 40, 20), dir, start)) {
+                try (Path p = new PathBuilder().addOval(Rect.makeLTRB(0, 0, 40, 20), dir, start).build()) {
                     assertEquals(null, p.isRect());
                     assertEquals(Rect.makeLTRB(0, 0, 40, 20), p.isOval());
                     assertEquals(null, p.isRRect());
@@ -106,7 +107,7 @@ public class PathTest implements Executable {
         }
 
         for (var dir: PathDirection.values()) {
-            try (Path p = new Path().addCircle(20, 20, 20, dir)) {
+            try (Path p = new PathBuilder().addCircle(20, 20, 20, dir).build()) {
                 assertEquals(null, p.isRect());
                 assertEquals(Rect.makeLTRB(0, 0, 40, 40), p.isOval());
                 assertEquals(null, p.isRRect());
@@ -115,19 +116,19 @@ public class PathTest implements Executable {
 
         for (var dir: PathDirection.values()) {
             for (int start = 0; start < 8; ++start) {
-                try (Path p = new Path().addRRect(RRect.makeLTRB(0, 0, 40, 20, 5), dir, start)) {
+                try (Path p = new PathBuilder().addRRect(RRect.makeLTRB(0, 0, 40, 20, 5), dir, start).build()) {
                     assertEquals(null, p.isRect());
                     assertEquals(null, p.isOval());
                     assertEquals(RRect.makeLTRB(0, 0, 40, 20, 5), p.isRRect());
                 }
 
-                try (Path p = new Path().addRRect(RRect.makeLTRB(0, 0, 40, 20, 0), dir, start)) {
+                try (Path p = new PathBuilder().addRRect(RRect.makeLTRB(0, 0, 40, 20, 0), dir, start).build()) {
                     assertEquals(Rect.makeLTRB(0, 0, 40, 20), p.isRect());
                     assertEquals(null, p.isOval());
                     assertEquals(null, p.isRRect());
                 }
 
-                try (Path p = new Path().addRRect(RRect.makeLTRB(0f, 0f, 40f, 20f, 20f, 10f), dir, start)) {
+                try (Path p = new PathBuilder().addRRect(RRect.makeLTRB(0f, 0f, 40f, 20f, 20f, 10f), dir, start).build()) {
                     assertEquals(null, p.isRect());
                     assertEquals(Rect.makeLTRB(0, 0, 40, 20), p.isOval());
                     assertEquals(null, p.isRRect());
@@ -135,7 +136,7 @@ public class PathTest implements Executable {
             }
         }
 
-        try (Path p = new Path().lineTo(40, 40).lineTo(40, 0).lineTo(0, 40).lineTo(0, 0).closePath()) {
+        try (Path p = new PathBuilder().lineTo(40, 40).lineTo(40, 0).lineTo(0, 40).lineTo(0, 0).closePath().build()) {
             assertEquals(null, p.isRect());
             assertEquals(null, p.isOval());
             assertEquals(null, p.isRRect());
@@ -143,37 +144,31 @@ public class PathTest implements Executable {
     }
 
     public void checks() {
-        try (Path p = new Path().lineTo(40, 40).lineTo(40, 0).lineTo(0, 40).lineTo(0, 0).closePath()) {
-            assertEquals(false, p.isEmpty());
-            p.reset();
-            assertEquals(true, p.isEmpty());
+        try (PathBuilder b = new PathBuilder().lineTo(40, 40).lineTo(40, 0).lineTo(0, 40).lineTo(0, 0).closePath()) {
+            assertEquals(false, b.isEmpty());
+            b.reset();
+            assertEquals(true, b.isEmpty());
         }
 
-        try (Path p = new Path().lineTo(40, 40).lineTo(40, 0).lineTo(0, 40).lineTo(0, 0).closePath()) {
-            assertEquals(false, p.isEmpty());
-            p.rewind();
-            assertEquals(true, p.isEmpty());
+        try (PathBuilder b = new PathBuilder().lineTo(40, 40).lineTo(40, 0).lineTo(0, 40).lineTo(0, 0)) {
+            assertEquals(false, b.snapshot().isLastContourClosed());
+            b.closePath();
+            assertEquals(true, b.snapshot().isLastContourClosed());
+            b.moveTo(100, 100).lineTo(140, 140).lineTo(140, 100).lineTo(100, 140);
+            assertEquals(false, b.snapshot().isLastContourClosed());
+            b.closePath();
+            assertEquals(true, b.snapshot().isLastContourClosed());
         }
 
-        try (Path p = new Path().lineTo(40, 40).lineTo(40, 0).lineTo(0, 40).lineTo(0, 0)) {
-            assertEquals(false, p.isLastContourClosed());
-            p.closePath();
-            assertEquals(true, p.isLastContourClosed());
-            p.moveTo(100, 100).lineTo(140, 140).lineTo(140, 100).lineTo(100, 140);
-            assertEquals(false, p.isLastContourClosed());
-            p.closePath();
-            assertEquals(true, p.isLastContourClosed());
-        }
-
-        try (Path p = new Path().lineTo(40, 40).lineTo(40, 0).lineTo(0, 40).lineTo(0, 0)) {
+        try (Path p = new PathBuilder().lineTo(40, 40).lineTo(40, 0).lineTo(0, 40).lineTo(0, 0).build()) {
             assertEquals(true, p.isFinite());
         }
 
-        try (Path p = new Path().lineTo(40, 40).lineTo(Float.POSITIVE_INFINITY, 0).lineTo(0, 40).lineTo(0, 0).closePath()) {
+        try (Path p = new PathBuilder().lineTo(40, 40).lineTo(Float.POSITIVE_INFINITY, 0).lineTo(0, 40).lineTo(0, 0).closePath().build()) {
             assertEquals(false, p.isFinite());
         }
 
-        try (Path p = new Path().lineTo(40, 40).lineTo(40, 0).lineTo(0, 40).lineTo(0, 0)) {
+        try (Path p = new PathBuilder().lineTo(40, 40).lineTo(40, 0).lineTo(0, 40).lineTo(0, 0).build()) {
             assertEquals(false, p.isVolatile());
             p.setVolatile(true);
             assertEquals(true, p.isVolatile());
@@ -181,98 +176,60 @@ public class PathTest implements Executable {
             assertEquals(false, p.isVolatile());
         }
 
-        try (Path p = new Path().lineTo(40, 40).lineTo(40, 0).lineTo(0, 40).lineTo(0, 0).closePath()) {
+        try (Path p = new PathBuilder().lineTo(40, 40).lineTo(40, 0).lineTo(0, 40).lineTo(0, 0).closePath().build()) {
             assertEquals(null, p.getAsLine());
         }
 
-        try (Path p = new Path().moveTo(20, 20).lineTo(40, 40)) {
+        try (Path p = new PathBuilder().moveTo(20, 20).lineTo(40, 40).build()) {
             assertArrayEquals(new Point[] { new Point(20, 20), new Point(40, 40) }, p.getAsLine());
         }
     }
 
     public void storage() {
-        Path subpath = new Path().lineTo(40, 40).lineTo(40, 0).lineTo(0, 40).lineTo(0, 0).closePath();
-        for (Path p: new Path[] {
-                       new Path().addPath(subpath),
-                       new Path().incReserve(10).addPath(subpath).closePath()
+        Path subpath = new PathBuilder().lineTo(40, 40).lineTo(40, 0).lineTo(0, 40).lineTo(0, 0).closePath().build();
+        for (PathBuilder b: new PathBuilder[] {
+                       new PathBuilder().addPath(subpath),
+                       new PathBuilder().incReserve(10).addPath(subpath).closePath()
                      })
         {
-            TestRunner.pushStack(p.toString());
+            TestRunner.pushStack(b.toString());
+            try {
+                Point p0 = new Point(0, 0);
+                Point p1 = new Point(40, 40);
+                Point p2 = new Point(40, 0);
+                Point p3 = new Point(0, 40);
+                Point p4 = new Point(0, 0);
+                Point p5 = new Point(10, 10);
 
-            Point p0 = new Point(0, 0);
-            Point p1 = new Point(40, 40);
-            Point p2 = new Point(40, 0);
-            Point p3 = new Point(0, 40);
-            Point p4 = new Point(0, 0);
-            Point p5 = new Point(10, 10);
+                assertArrayEquals(new Point[] { p0, p1, p2, p3, p4 }, b.getPoints());
+                assertEquals(p4, b.getLastPt());
+                b.setLastPt(p5);
+                assertArrayEquals(new Point[] { p0, p1, p2, p3, p5 }, b.getPoints());
+                assertEquals(p5, b.getLastPt());
 
-            assertEquals(5, p.getPointsCount());
-            assertEquals(p0, p.getPoint(0));
-            assertEquals(p1, p.getPoint(1));
-            assertEquals(p2, p.getPoint(2));
-            assertEquals(p3, p.getPoint(3));
-            assertEquals(p4, p.getPoint(4));
-            assertEquals(p4, p.getLastPt());
-            p.setLastPt(p5);
-            assertEquals(p5, p.getPoint(4));
-            assertEquals(p5, p.getLastPt());
+                assertArrayEquals(new PathVerb[] { PathVerb.MOVE, PathVerb.LINE, PathVerb.LINE, PathVerb.LINE, PathVerb.LINE, PathVerb.CLOSE }, b.getVerbs());
 
-            assertEquals(5, p.getPoints(null, 0));
-            
-            Point[] pts = new Point[5];
-            p.getPoints(pts, 5);
-            assertArrayEquals(new Point[] { p0, p1, p2, p3, p5 }, pts);
+                Path p = b.build();
+                assertNotEquals(0L, p.getApproximateBytesUsed());
 
-            pts = new Point[3];
-            p.getPoints(pts, 3);
-            assertArrayEquals(new Point[] { p0, p1, p2 }, pts);
-
-            pts = new Point[5];
-            p.getPoints(pts, 3);
-            assertArrayEquals(new Point[] { p0, p1, p2, null, null }, pts);
-
-            pts = new Point[10];
-            p.getPoints(pts, 10);
-            assertArrayEquals(new Point[] { p0, p1, p2, p3, p5, null, null, null, null, null }, pts);
-
-            assertEquals(6, p.getVerbsCount());
-            assertEquals(6, p.getVerbs(null, 0));
-
-            PathVerb[] verbs = new PathVerb[6];
-            p.getVerbs(verbs, 6);
-            assertArrayEquals(new PathVerb[] { PathVerb.MOVE, PathVerb.LINE, PathVerb.LINE, PathVerb.LINE, PathVerb.LINE, PathVerb.CLOSE }, verbs);
-
-            verbs = new PathVerb[3];
-            p.getVerbs(verbs, 3);
-            assertArrayEquals(new PathVerb[] { PathVerb.MOVE, PathVerb.LINE, PathVerb.LINE }, verbs);
-
-            verbs = new PathVerb[6];
-            p.getVerbs(verbs, 3);
-            assertArrayEquals(new PathVerb[] { PathVerb.MOVE, PathVerb.LINE, PathVerb.LINE, null, null, null }, verbs);
-
-            verbs = new PathVerb[10];
-            p.getVerbs(verbs, 10);
-            assertArrayEquals(new PathVerb[] { PathVerb.MOVE, PathVerb.LINE, PathVerb.LINE, PathVerb.LINE, PathVerb.LINE, PathVerb.CLOSE, null, null, null, null }, verbs);
-
-            assertNotEquals(0L, p.getApproximateBytesUsed());
-
-            assertEquals(PathSegmentMask.LINE, p.getSegmentMasks());
-
-            TestRunner.popStack();
+                assertEquals(PathSegmentMask.LINE, p.getSegmentMasks());
+            } finally {
+                TestRunner.popStack();
+            }
         }
     }
 
     public void swap() {
-        try (Path p1 = new Path().lineTo(40, 40).lineTo(40, 0).lineTo(0, 40).lineTo(0, 0).closePath();
-             Path p2 = new Path().lineTo(0, 0).lineTo(20, 20);) {
+        try (Path p1 = new PathBuilder().lineTo(40, 40).lineTo(40, 0).lineTo(0, 40).lineTo(0, 0).closePath().build();
+             Path p2 = new PathBuilder().lineTo(0, 0).lineTo(20, 20).build();) {
             p1.swap(p2);
-            assertEquals(new Path().lineTo(0, 0).lineTo(20, 20), p1);
-            assertEquals(new Path().lineTo(40, 40).lineTo(40, 0).lineTo(0, 40).lineTo(0, 0).closePath(), p2);
+            assertEquals(new PathBuilder().lineTo(0, 0).lineTo(20, 20).build(), p1);
+            assertEquals(new PathBuilder().lineTo(40, 40).lineTo(40, 0).lineTo(0, 40).lineTo(0, 0).closePath().build(), p2);
         }
     }
 
     public void contains() {
-        try (Path p = new Path().addRRect(RRect.makeLTRB(10, 20, 54, 120, 10, 20))) {
+        try (Path p = new PathBuilder().addRRect(RRect.makeLTRB(10, 20, 54, 120, 10, 20)).build()) {
             assertEquals(true, p.conservativelyContainsRect(Rect.makeLTRB(10, 40, 54, 80)));
             assertEquals(true, p.conservativelyContainsRect(Rect.makeLTRB(25, 20, 39, 120)));
             assertEquals(true, p.conservativelyContainsRect(Rect.makeLTRB(15, 25, 49, 115)));
@@ -303,19 +260,18 @@ public class PathTest implements Executable {
         assertArrayEquals(new Point[] {new Point(0, 20), new Point(3.0940108f, 16.90599f), new Point(8.452995f, 15.119661f), new Point(13.811979f, 13.333334f)},
             Path.convertConicToQuads(new Point(0, 20), new Point(20, 0), new Point(40, 20), 0.5f, 2));
 
-        try (Path p = new Path().lineTo(40, 40)) {
-            var g1 = p.getGenerationId();
-            p.lineTo(10, 40);
-            var g2 = p.getGenerationId();
+        try (PathBuilder b = new PathBuilder().lineTo(40, 40)) {
+            var g1 = b.snapshot().getGenerationId();
+            b.lineTo(10, 40);
+            var g2 = b.snapshot().getGenerationId();
             assertNotEquals(g1, g2);
-            p.setFillMode(PathFillMode.EVEN_ODD);
-            var g3 = p.getGenerationId();
-            assertEquals(g2, g3);
+            var g3 = b.snapshot().getGenerationId();
+            assertNotEquals(g2, g3);
         }
     }
 
     public void serialize() {
-        try (Path p = new Path().lineTo(40, 40).lineTo(40, 0).lineTo(0, 40).lineTo(0, 0).closePath();) {
+        try (Path p = new PathBuilder().lineTo(40, 40).lineTo(40, 0).lineTo(0, 40).lineTo(0, 0).closePath().build();) {
             Path p2 = Path.makeFromBytes(p.serializeToBytes());
             assertEquals(p, p2);
         }

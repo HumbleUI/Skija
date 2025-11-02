@@ -78,13 +78,12 @@ public class Region extends Managed {
         }
     }
 
-    public boolean getBoundaryPath(Path p) {
+    public Path getBoundaryPath() {
         try {
             Stats.onNativeCall();
-            return _nGetBoundaryPath(_ptr, Native.getPtr(p));
+            return new Path(_nGetBoundaryPath(_ptr));
         } finally {
             ReferenceUtil.reachabilityFence(this);
-            ReferenceUtil.reachabilityFence(p);
         }
     }
 
@@ -290,7 +289,7 @@ public class Region extends Managed {
     public static native boolean _nIsComplex(long ptr);
     public static native IRect   _nGetBounds(long ptr);
     public static native int     _nComputeRegionComplexity(long ptr);
-    public static native boolean _nGetBoundaryPath(long ptr, long pathPtr);
+    public static native long    _nGetBoundaryPath(long ptr);
     public static native boolean _nSetEmpty(long ptr);
     public static native boolean _nSetRect(long ptr, int left, int top, int right, int bottom);
     public static native boolean _nSetRects(long ptr, int[] rects);

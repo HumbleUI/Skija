@@ -4,7 +4,7 @@ import io.github.humbleui.skija.*;
 import io.github.humbleui.types.*;
 
 public class DecorationsBenchScene extends Scene {
-    public Path element = new Path().moveTo(0, -1.5f).lineTo(2, 0.5f).lineTo(4, -1.5f).lineTo(4, -0.5f).lineTo(2, 1.5f).lineTo(0, -0.5f).closePath().transform(Matrix33.makeScale(1));
+    public Path element = new PathBuilder().moveTo(0, -1.5f).lineTo(2, 0.5f).lineTo(4, -1.5f).lineTo(4, -0.5f).lineTo(2, 1.5f).lineTo(0, -0.5f).closePath().transform(Matrix33.makeScale(1)).build();
     public PathEffect effect = PathEffect.makePath1D(element, 1 * 4, 0, PathEffect.Style.TRANSLATE);
     public int odd = 0xffde8ece;
     public int even = 0xff03c5cf;

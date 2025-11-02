@@ -10,30 +10,30 @@ public class BackdropScene extends Scene {
     public BackdropScene() {
         var random = new Random(0);
         for (int i = 0; i < 100; ++i) {
-            var path = new Path();
+            var pathBuilder = new PathBuilder();
 
             switch (random.nextInt(4)) {
                 case 0:
-                    path.addRect(Rect.makeXYWH(-0.5f, -0.5f, 1, 1));
+                    pathBuilder.addRect(Rect.makeXYWH(-0.5f, -0.5f, 1, 1));
                     break;
                 case 1:
-                    path.addCircle(0, 0, 0.5f);
+                    pathBuilder.addCircle(0, 0, 0.5f);
                     break;
                 case 2:
-                    path.moveTo(0, -0.5f).lineTo(0.5f, 0.36f).lineTo(-0.5f, 0.36f).closePath();
+                    pathBuilder.moveTo(0, -0.5f).lineTo(0.5f, 0.36f).lineTo(-0.5f, 0.36f).closePath();
                     break;
                 case 3:
-                    path.addRRect(RRect.makeXYWH(-0.6f, -0.4f, 1.2f, 0.8f, 0.4f));
+                    pathBuilder.addRRect(RRect.makeXYWH(-0.6f, -0.4f, 1.2f, 0.8f, 0.4f));
                     break;
             }
 
-            path.transform(Matrix33.makeRotate(random.nextInt(360)));
-            path.transform(Matrix33.makeScale(10 + random.nextInt(250)));
-            path.transform(Matrix33.makeTranslate(random.nextInt(1920), random.nextInt(1080)));
+            pathBuilder.transform(Matrix33.makeRotate(random.nextInt(360)));
+            pathBuilder.transform(Matrix33.makeScale(10 + random.nextInt(250)));
+            pathBuilder.transform(Matrix33.makeTranslate(random.nextInt(1920), random.nextInt(1080)));
 
             int color = 0xFF000000 | random.nextInt(0xFFFFFF);
 
-            shapes.add(new Pair<>(path, color));
+            shapes.add(new Pair<>(pathBuilder.build(), color));
         }
     }
 

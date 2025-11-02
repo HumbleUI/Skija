@@ -147,7 +147,7 @@ public class PathMeasure extends Managed {
      * Begin the segment with a moveTo if startWithMoveTo is true
     */
     @Nullable
-    public boolean getSegment(float startD, float endD, @NotNull Path dst, boolean startWithMoveTo) {
+    public boolean getSegment(float startD, float endD, @NotNull PathBuilder dst, boolean startWithMoveTo) {
         try {
             Stats.onNativeCall();
             return _nGetSegment(_ptr, startD, endD, Native.getPtr(dst), startWithMoveTo);

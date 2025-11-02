@@ -18,7 +18,7 @@ public class ImageTest implements Executable {
     public void base() throws Exception {
         try (var surface = Surface.makeRaster(ImageInfo.makeN32Premul(100, 100));
              var paint = new Paint().setColor(0xFFFF0000);
-             var path = new io.github.humbleui.skija.Path().moveTo(20, 80).lineTo(50, 20).lineTo(80, 80).closePath();)
+             var path = new PathBuilder().moveTo(20, 80).lineTo(50, 20).lineTo(80, 80).closePath().build();)
         {
             var canvas = surface.getCanvas();
             canvas.drawPath(path, paint);

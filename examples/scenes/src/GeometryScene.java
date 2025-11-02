@@ -75,7 +75,7 @@ public class GeometryScene extends Scene {
         canvas.drawPolygon(new float[] { 0, 30, 10, 10, 20, 20, 30, 0 }, stroke5pxSquare);
         canvas.translate(40, 0);
 
-        canvas.drawPath(new Path().addPoly(new float[] { 0, 30, 10, 10, 20, 20, 30, 0 }, false), stroke5pxSquare);
+        canvas.drawPath(new PathBuilder().addPolygon(new float[] { 0, 30, 10, 10, 20, 20, 30, 0 }, false).build(), stroke5pxSquare);
         canvas.translate(40, 0);
 
         canvas.restore();
@@ -372,12 +372,13 @@ public class GeometryScene extends Scene {
         canvas.translate(50, 0);
 
         canvas.save();
-        Path path = new Path()
+        Path path = new PathBuilder()
             .moveTo(0, 12.5f).rCubicTo(0, -5f, 0, -7.5f, 2.5f, -10f).rCubicTo(2.5f, -2.5f, 5f, -2.5f, 10f, -2.5f)
             .rLineTo(15f, 0).rCubicTo(5, 0, 7.5f, 0, 10, 2.5f).rCubicTo(2.5f, 2.5f, 2.5f, 5f, 2.5f, 10f)
             .lineTo(40, 22f).arcTo(Rect.makeLTRB(22f, 22f, 40, 40), 0, 90, false)
             .lineTo(18f, 40).arcTo(Rect.makeLTRB(0, 22f, 18f, 40), 90, 90, false)
-            .closePath();
+            .closePath()
+            .build();
         canvas.clipPath(path, true);
         canvas.drawPaint(new Paint().setColor(0xFF3F80A7));
         canvas.restore();
@@ -418,8 +419,7 @@ public class GeometryScene extends Scene {
         xOffset += 50;
 
         // setPath
-        Path path = new Path().setFillMode(PathFillMode.EVEN_ODD).moveTo(xOffset * dpi, yOffset * dpi)
-            .rMoveTo(20 * dpi, 1.6f * dpi).rLineTo(11.7f * dpi, 36.2f * dpi).rLineTo(-30.8f * dpi, -22.4f * dpi).rLineTo(38.1f * dpi, 0f * dpi).rLineTo(-30.8f * dpi, 22.4f * dpi).closePath();
+        Path path = new PathBuilder().setFillMode(PathFillMode.EVEN_ODD).moveTo(xOffset * dpi, yOffset * dpi).rMoveTo(20 * dpi, 1.6f * dpi).rLineTo(11.7f * dpi, 36.2f * dpi).rLineTo(-30.8f * dpi, -22.4f * dpi).rLineTo(38.1f * dpi, 0f * dpi).rLineTo(-30.8f * dpi, 22.4f * dpi).closePath().build();
         Region r2 = new Region();
         r2.setRect(IRect.makeLTRB((int) ((xOffset + 7) * dpi), (int) ((yOffset + 7) * dpi), (int) ((xOffset + 33) * dpi), (int) ((yOffset + 33) * dpi)));
         r.setEmpty();
@@ -442,8 +442,7 @@ public class GeometryScene extends Scene {
             canvas.restore();
 
             IRect bounds = r.getBounds();
-            Path boundaryPath = new Path();
-            r.getBoundaryPath(boundaryPath);
+            Path boundaryPath = r.getBoundaryPath();
             canvas.save();
             canvas.translate(-xOffset, -yOffset);
             canvas.scale(1f/dpi, 1f/dpi);
@@ -478,8 +477,7 @@ public class GeometryScene extends Scene {
             canvas.restore();
 
             IRect bounds = r.getBounds();
-            Path boundaryPath = new Path();
-            r.getBoundaryPath(boundaryPath);
+            Path boundaryPath = r.getBoundaryPath();
             canvas.save();
             canvas.translate(-xOffset, -yOffset);
             canvas.scale(1f/dpi, 1f/dpi);

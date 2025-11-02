@@ -23,28 +23,29 @@ public class PathsScene extends Scene {
 
         canvas.save();
 
-        Path path = new Path();
+        PathBuilder pathBuilder = new PathBuilder();
 
         // moveTo, lineTo, close
         for (var fillMode: PathFillMode.values()) {
             canvas.save();
             canvas.clipRect(Rect.makeLTRB(0, 0, 40, 40));
-            path.reset().setFillMode(fillMode);
-            path.moveTo(20, 1.6f);
-            path.lineTo(31.7f, 37.8f);
-            path.lineTo(0.9f, 15.4f);
-            path.lineTo(39f, 15.4f);
-            path.lineTo(8.2f, 37.8f);
-            path.closePath();
-            canvas.drawPath(path, paint);
+            pathBuilder.setFillMode(fillMode);
+            pathBuilder.moveTo(20, 1.6f);
+            pathBuilder.lineTo(31.7f, 37.8f);
+            pathBuilder.lineTo(0.9f, 15.4f);
+            pathBuilder.lineTo(39f, 15.4f);
+            pathBuilder.lineTo(8.2f, 37.8f);
+            pathBuilder.closePath();
+            canvas.drawPath(pathBuilder.detach(), paint);
             canvas.restore();
             canvas.translate(50, 0);
         }
 
         // rMoveTo, rLineTo
-        path.reset().setFillMode(PathFillMode.EVEN_ODD);
-        path.rMoveTo(20, 1.6f).rLineTo(11.7f, 36.2f).rLineTo(-30.8f, -22.4f).rLineTo(38.1f, 0f).rLineTo(-30.8f, 22.4f);
-        canvas.drawPath(path, paint);
+        pathBuilder.setFillMode(PathFillMode.EVEN_ODD);
+        pathBuilder.rMoveTo(20, 1.6f).rLineTo(11.7f, 36.2f).rLineTo(-30.8f, -22.4f).rLineTo(38.1f, 0f).rLineTo(-30.8f, 22.4f);
+        canvas.drawPath(pathBuilder.snapshot(), paint);
+        pathBuilder.reset();
         canvas.translate(50, 0);
 
         // quadTo, rQuadTo
@@ -53,8 +54,8 @@ public class PathsScene extends Scene {
         canvas.drawLine(0, 20, 20, 40, tangentStroke);
         canvas.drawLine(20, 40, 40, 20, tangentStroke);
 
-        path.reset().rMoveTo(0, 20).quadTo(20, 0, 40, 20).rQuadTo(-20, 20, -40, 0);
-        canvas.drawPath(path, paint);
+        pathBuilder.rMoveTo(0, 20).quadTo(20, 0, 40, 20).rQuadTo(-20, 20, -40, 0);
+        canvas.drawPath(pathBuilder.detach(), paint);
         canvas.translate(50, 0);
 
         // conicTo, rConicTo
@@ -63,8 +64,8 @@ public class PathsScene extends Scene {
         canvas.drawLine(0, 20, 20, 40, tangentStroke);
         canvas.drawLine(20, 40, 40, 20, tangentStroke);
 
-        path.reset().rMoveTo(0, 20).conicTo(20, 0, 40, 20, 0.5f).rConicTo(-20, 20, -40, 0, 2);
-        canvas.drawPath(path, paint);
+        pathBuilder.rMoveTo(0, 20).conicTo(20, 0, 40, 20, 0.5f).rConicTo(-20, 20, -40, 0, 2);
+        canvas.drawPath(pathBuilder.detach(), paint);
         canvas.translate(50, 0);
 
         // cubicTo, rCubicTo
@@ -73,163 +74,162 @@ public class PathsScene extends Scene {
         canvas.drawLine(0, 20, 10, 30, tangentStroke);
         canvas.drawLine(40, 20, 30, 30, tangentStroke);
 
-        path.reset().rMoveTo(0, 20).cubicTo(0, 0, 40, 0, 40, 20).rCubicTo(-10, 10, -30, 10, -40, 0);
-        canvas.drawPath(path, paint);
+        pathBuilder.rMoveTo(0, 20).cubicTo(0, 0, 40, 0, 40, 20).rCubicTo(-10, 10, -30, 10, -40, 0);
+        canvas.drawPath(pathBuilder.detach(), paint);
         canvas.translate(50, 0);
 
         // cubic apple rounding
-        path.reset().lineTo(0, 20).arcTo(Rect.makeLTRB(0, 0, 40, 40), 180, -90, false).lineTo(40, 40).lineTo(40, 0).closePath();
-        canvas.drawPath(path, paint);
+        pathBuilder.lineTo(0, 20).arcTo(Rect.makeLTRB(0, 0, 40, 40), 180, -90, false).lineTo(40, 40).lineTo(40, 0).closePath();
+        canvas.drawPath(pathBuilder.detach(), paint);
         canvas.translate(50, 0);
 
-        path.reset().lineTo(0, 10).cubicTo(0, 30, 10, 40, 30, 40).lineTo(40, 40).lineTo(40, 0).closePath();
-        canvas.drawPath(path, paint);
+        pathBuilder.lineTo(0, 10).cubicTo(0, 30, 10, 40, 30, 40).lineTo(40, 40).lineTo(40, 0).closePath();
+        canvas.drawPath(pathBuilder.detach(), paint);
         canvas.translate(50, 0);
 
         // Infinity
         canvas.translate(25, 20);
-        path.reset().moveTo(0, 0); // Center
-        path.cubicTo(  5,     -5,      9.5f, -10,     15, -10); // To top of right loop
-        path.cubicTo( 20.5f, -10,     25,     -5.5f,  25,   0); // To far right of right loop
-        path.cubicTo( 25,      5.5f,  20.5f,  10,     15,  10); // To bottom of right loop
-        path.cubicTo(  9.5f,  10,      5,      5,      0,   0); // Back to center
-        path.cubicTo( -5,     -5,     -9.5f, -10,    -15, -10); // To top of left loop
-        path.cubicTo(-20.5f, -10,    -25,     -5.5f, -25,   0); // To far left of left loop
-        path.cubicTo(-25,      5.5f, -20.5f,  10,    -15,  10); // To bottom of left loop
-        path.cubicTo( -9.5f,  10,     -5,      5,      0,   0); // Back to center
-        path.closePath();
-        canvas.drawPath(path, paint);
+        pathBuilder.moveTo(0, 0); // Center
+        pathBuilder.cubicTo(  5,     -5,      9.5f, -10,     15, -10); // To top of right loop
+        pathBuilder.cubicTo( 20.5f, -10,     25,     -5.5f,  25,   0); // To far right of right loop
+        pathBuilder.cubicTo( 25,      5.5f,  20.5f,  10,     15,  10); // To bottom of right loop
+        pathBuilder.cubicTo(  9.5f,  10,      5,      5,      0,   0); // Back to center
+        pathBuilder.cubicTo( -5,     -5,     -9.5f, -10,    -15, -10); // To top of left loop
+        pathBuilder.cubicTo(-20.5f, -10,    -25,     -5.5f, -25,   0); // To far left of left loop
+        pathBuilder.cubicTo(-25,      5.5f, -20.5f,  10,    -15,  10); // To bottom of left loop
+        pathBuilder.cubicTo( -9.5f,  10,     -5,      5,      0,   0); // Back to center
+        pathBuilder.closePath();
+        canvas.drawPath(pathBuilder.detach(), paint);
         canvas.translate(35, -20);
 
         // arcTo
         canvas.drawOval(Rect.makeXYWH(0, 0, 40, 40), tangentStroke);
         canvas.drawLine(20, 20, 20, 0, tangentStroke);
         canvas.drawLine(20, 20, 40, 20, tangentStroke);
-        path.reset().moveTo(0, 0).arcTo(Rect.makeLTRB(0, 0, 40, 40), -90, 90, false);
-        canvas.drawPath(path, paint);
+        pathBuilder.moveTo(0, 0).arcTo(Rect.makeLTRB(0, 0, 40, 40), -90, 90, false);
+        canvas.drawPath(pathBuilder.detach(), paint);
         canvas.translate(50, 0);
 
         // arcTo
         canvas.drawOval(Rect.makeXYWH(0, 0, 40, 40), tangentStroke);
         canvas.drawLine(20, 20, 20, 0, tangentStroke);
         canvas.drawLine(20, 20, 40, 20, tangentStroke);
-        path.reset().moveTo(0, 0).arcTo(Rect.makeLTRB(0, 0, 40, 40), -90, 90, true);
-        canvas.drawPath(path, paint);
+        pathBuilder.moveTo(0, 0).arcTo(Rect.makeLTRB(0, 0, 40, 40), -90, 90, true);
+        canvas.drawPath(pathBuilder.detach(), paint);
         canvas.translate(50, 0);
 
         // tangentArcTo
         canvas.drawLine(0, 20, 20, 0, tangentStroke);
         canvas.drawLine(20, 0, 40, 20, tangentStroke);
         canvas.drawOval(Rect.makeXYWH(10, 4, 20, 20), tangentStroke);
-        path.reset().moveTo(0, 20).tangentArcTo(20, 0, 40, 20, 10);
-        canvas.drawPath(path, paint);
+        pathBuilder.moveTo(0, 20).tangentArcTo(20, 0, 40, 20, 10);
+        canvas.drawPath(pathBuilder.detach(), paint);
         canvas.translate(50, 0);
 
         // ellipticalArcTo, getBounds
-        path.reset().moveTo(0, 30).ellipticalArcTo(30, 15, 30, PathEllipseArc.SMALLER, PathDirection.CLOCKWISE, 40, 30);
+        pathBuilder.moveTo(0, 30).ellipticalArcTo(30, 15, 30, PathEllipseArc.SMALLER, PathDirection.CLOCKWISE, 40, 30);
+        Path path = pathBuilder.detach();
         Rect bounds = path.getBounds();
         canvas.drawRect(bounds, tangentStroke);
         canvas.drawPath(path, paint);
         canvas.translate(50, 0);
 
-        // ellipticalArcTo, getBounds
-        path.reset().moveTo(0, 30).ellipticalArcTo(30, 15, 30, PathEllipseArc.LARGER, PathDirection.CLOCKWISE, 40, 30);
-        bounds = path.getBounds();
-        canvas.drawRect(bounds, tangentStroke);
-        canvas.drawPath(path, paint);
-        canvas.translate(50, 0);
-
-        // rEllipticalArcTo, getTightBounds
-        path.reset().moveTo(0, 10).rEllipticalArcTo(30, 15, 30, PathEllipseArc.SMALLER, PathDirection.COUNTER_CLOCKWISE, 40, 0);
+        // ellipticalArcTo, computeTightBounds
+        pathBuilder.moveTo(0, 30).ellipticalArcTo(30, 15, 30, PathEllipseArc.LARGER, PathDirection.CLOCKWISE, 40, 30);
+        path = pathBuilder.detach();
         bounds = path.computeTightBounds();
         canvas.drawRect(bounds, tangentStroke);
         canvas.drawPath(path, paint);
         canvas.translate(50, 0);
 
-        // rEllipticalArcTo, getTightBounds
-        path.reset().moveTo(0, 10).rEllipticalArcTo(30, 15, 30, PathEllipseArc.LARGER, PathDirection.COUNTER_CLOCKWISE, 40, 0);
-        bounds = path.computeTightBounds();
+        // rEllipticalArcTo, computeFiniteBounds
+        pathBuilder.moveTo(0, 10).rEllipticalArcTo(30, 15, 30, PathEllipseArc.SMALLER, PathDirection.COUNTER_CLOCKWISE, 40, 0);
+        bounds = pathBuilder.computeFiniteBounds();
         canvas.drawRect(bounds, tangentStroke);
-        canvas.drawPath(path, paint);
+        canvas.drawPath(pathBuilder.detach(), paint);
+        canvas.translate(50, 0);
+
+        // rEllipticalArcTo, computeTightBounds
+        pathBuilder.moveTo(0, 10).rEllipticalArcTo(30, 15, 30, PathEllipseArc.LARGER, PathDirection.COUNTER_CLOCKWISE, 40, 0);
+        bounds = pathBuilder.computeTightBounds();
+        canvas.drawRect(bounds, tangentStroke);
+        canvas.drawPath(pathBuilder.detach(), paint);
         canvas.translate(70, 0);
 
         // multi shapes
-        path.reset().setFillMode(PathFillMode.EVEN_ODD);
-        path.arcTo(Rect.makeLTRB(0, 5, 35, 40), 0, 359, true);
-        path.closePath();
-        path.addPoly(new float[] { 5, 0, 35, 0, 35, 30, 5, 30 }, true);
-        path.moveTo(5, 35);
-        path.lineTo(20, 5);
-        path.lineTo(35, 35);
-        path.closePath();
-        canvas.drawPath(path, paint);
+        pathBuilder.setFillMode(PathFillMode.EVEN_ODD);
+        pathBuilder.arcTo(Rect.makeLTRB(0, 5, 35, 40), 0, 359, true);
+        pathBuilder.closePath();
+        pathBuilder.addPolygon(new float[] { 5, 0, 35, 0, 35, 30, 5, 30 }, true);
+        pathBuilder.moveTo(5, 35);
+        pathBuilder.lineTo(20, 5);
+        pathBuilder.lineTo(35, 35);
+        pathBuilder.closePath();
+        canvas.drawPath(pathBuilder.detach(), paint);
         canvas.translate(50, 0);
 
         canvas.restore();
         canvas.translate(0, 50);
+        pathBuilder.close();
     }
 
     private void drawAdds(Canvas canvas) {
         canvas.save();
-        try (var path = new Path();
+        try (var pathBuilder = new PathBuilder();
              var paint = new Paint().setColor(0xFF437AA0).setMode(PaintMode.STROKE).setStrokeWidth(1f)) {
 
             // addRect
-            path.reset().addRect(Rect.makeLTRB(10, 10, 30, 30), PathDirection.CLOCKWISE, 0).lineTo(20, 20);
-            canvas.drawPath(path, paint);
+            pathBuilder.addRect(Rect.makeLTRB(10, 10, 30, 30), PathDirection.CLOCKWISE, 0).lineTo(20, 20);
+            canvas.drawPath(pathBuilder.detach(), paint);
             canvas.translate(50, 0);
 
-            path.reset().addRect(Rect.makeLTRB(10, 10, 30, 30), PathDirection.COUNTER_CLOCKWISE, 1).lineTo(20, 20);
-            canvas.drawPath(path, paint);
+            pathBuilder.addRect(Rect.makeLTRB(10, 10, 30, 30), PathDirection.COUNTER_CLOCKWISE, 1).lineTo(20, 20);
+            canvas.drawPath(pathBuilder.detach(), paint);
             canvas.translate(50, 0);
 
             // addOval
-            path.reset().addOval(Rect.makeLTRB(10, 0, 30, 40), PathDirection.CLOCKWISE, 0).lineTo(20, 20);
-            canvas.drawPath(path, paint);
+            pathBuilder.addOval(Rect.makeLTRB(10, 0, 30, 40), PathDirection.CLOCKWISE, 0).lineTo(20, 20);
+            canvas.drawPath(pathBuilder.detach(), paint);
             canvas.translate(50, 0);
 
-            path.reset().addOval(Rect.makeLTRB(10, 0, 30, 40), PathDirection.COUNTER_CLOCKWISE, 1).lineTo(20, 20);
-            canvas.drawPath(path, paint);
+            pathBuilder.addOval(Rect.makeLTRB(10, 0, 30, 40), PathDirection.COUNTER_CLOCKWISE, 1).lineTo(20, 20);
+            canvas.drawPath(pathBuilder.detach(), paint);
             canvas.translate(50, 0);
 
             // addCircle
-            path.reset().addCircle(20, 20, 15, PathDirection.CLOCKWISE).lineTo(20, 20);
-            canvas.drawPath(path, paint);
+            pathBuilder.addCircle(20, 20, 15, PathDirection.CLOCKWISE).lineTo(20, 20);
+            canvas.drawPath(pathBuilder.detach(), paint);
             canvas.translate(50, 0);
 
             // addArc
-            path.reset().addArc(Rect.makeLTRB(-40, -40, 40, 40), 0, 90);
-            canvas.drawPath(path, paint);
+            pathBuilder.addArc(Rect.makeLTRB(-40, -40, 40, 40), 0, 90);
+            canvas.drawPath(pathBuilder.detach(), paint);
             canvas.translate(50, 0);
 
             // addRRect
             for (int i = 0; i < 8; ++i) {
-                path.reset().addRRect(RRect.makeLTRB(10, 10, 30, 30, 5), PathDirection.CLOCKWISE, i).lineTo(20, 20);
-                canvas.drawPath(path, paint);
+                pathBuilder.addRRect(RRect.makeLTRB(10, 10, 30, 30, 5), PathDirection.CLOCKWISE, i).lineTo(20, 20);
+                canvas.drawPath(pathBuilder.detach(), paint);
                 canvas.translate(50, 0);
             }
 
             // addPoly
-            path.reset().addPoly(new float[] { 40, 0, 40, 40, 30, 40, 10, 20, 10, 40, 0, 40, 0, 0, 10, 0, 30, 20, 30, 0 }, false);
-            canvas.drawPath(path, paint);
+            pathBuilder.addPolygon(new float[] { 40, 0, 40, 40, 30, 40, 10, 20, 10, 40, 0, 40, 0, 0, 10, 0, 30, 20, 30, 0 }, false);
+            canvas.drawPath(pathBuilder.detach(), paint);
             canvas.translate(50, 0);
 
             // addPath
-            try (Path subpath = new Path().addRect(Rect.makeLTRB(0, 0, 10, 10)).closePath()) {
-                path.reset().addRect(Rect.makeLTRB(0, 0, 40, 40)).addPath(subpath, 10, 10, true);
-                canvas.drawPath(path, paint);
+            try (Path subpath = new PathBuilder().addRect(Rect.makeLTRB(0, 0, 10, 10)).closePath().build()) {
+                pathBuilder.addRect(Rect.makeLTRB(0, 0, 40, 40)).addPath(subpath, 10, 10, true);
+                canvas.drawPath(pathBuilder.detach(), paint);
                 canvas.translate(50, 0);
 
-                path.reset().addRect(Rect.makeLTRB(0, 0, 40, 40)).addPath(subpath, 10, 10, false);
-                canvas.drawPath(path, paint);
+                pathBuilder.addRect(Rect.makeLTRB(0, 0, 40, 40)).addPath(subpath, 10, 10, false);
+                canvas.drawPath(pathBuilder.detach(), paint);
                 canvas.translate(50, 0);
 
-                path.reset().addRect(Rect.makeLTRB(0, 0, 40, 40)).addPath(subpath, Matrix33.makeRotate(-15), true);
-                canvas.drawPath(path, paint);
-                canvas.translate(50, 0);
-
-                path.reset().addRect(Rect.makeLTRB(0, 0, 40, 40)).reverseAddPath(subpath);
-                canvas.drawPath(path, paint);
+                pathBuilder.addRect(Rect.makeLTRB(0, 0, 40, 40)).addPath(subpath, Matrix33.makeRotate(-15), true);
+                canvas.drawPath(pathBuilder.detach(), paint);
                 canvas.translate(50, 0);
             }
         }
@@ -239,38 +239,23 @@ public class PathsScene extends Scene {
 
     private void drawTransforms(Canvas canvas) {
         canvas.save();
-        try (var path = new Path();
+        try (var pathBuilder = new PathBuilder();
              var paint = new Paint().setColor(0xFF437AA0).setMode(PaintMode.STROKE).setStrokeWidth(1f);
              var secondaryPaint = new Paint().setColor(0xFFFAA6B2).setMode(PaintMode.STROKE).setStrokeWidth(1f);) {
 
-            // offsets
-            path.reset().addRRect(RRect.makeLTRB(0, 0, 20, 20, 5));
-            canvas.drawPath(path, secondaryPaint);
-            path.offset(5, 5);
-            canvas.drawPath(path, paint);
+            // offset
+            pathBuilder.addRRect(RRect.makeLTRB(0, 0, 20, 20, 5));
+            canvas.drawPath(pathBuilder.snapshot(), secondaryPaint);
+            pathBuilder.offset(5, 5);
+            canvas.drawPath(pathBuilder.detach(), paint);
             canvas.translate(50, 0);
-
-            try (Path subpath = new Path().addRRect(RRect.makeLTRB(0, 0, 20, 20, 5))) {
-                canvas.drawPath(subpath, secondaryPaint);
-                subpath.offset(5, 5, path);
-                canvas.drawPath(path, paint);
-                canvas.translate(50, 0);
-            }
 
             // transform
-            path.reset().addRRect(RRect.makeLTRB(0, 0, 20, 20, 5));
-            canvas.drawPath(path, secondaryPaint);
-            path.transform(Matrix33.makeRotate(-15));
-            canvas.drawPath(path, paint);
+            pathBuilder.addRRect(RRect.makeLTRB(0, 0, 20, 20, 5));
+            canvas.drawPath(pathBuilder.snapshot(), secondaryPaint);
+            pathBuilder.transform(Matrix33.makeRotate(-15));
+            canvas.drawPath(pathBuilder.detach(), paint);
             canvas.translate(50, 0);
-
-            try (Path subpath = new Path().addRRect(RRect.makeLTRB(0, 0, 20, 20, 5))) {
-                canvas.drawPath(subpath, secondaryPaint);
-                subpath.transform(Matrix33.makeRotate(-15), path);
-                canvas.drawPath(path, paint);
-                canvas.translate(50, 0);
-            }
-
         }
         canvas.restore();
         canvas.translate(0, 50);
@@ -279,7 +264,7 @@ public class PathsScene extends Scene {
     private void drawFillPaths(Canvas canvas) {
         canvas.save();
 
-        try (Path path = new Path().moveTo(20, 5).lineTo(35, 35).lineTo(5, 35).closePath();
+        try (Path path = new PathBuilder().moveTo(20, 5).lineTo(35, 35).lineTo(5, 35).closePath().build();
              Paint stroke1 = new Paint().setColor(0xFF247ba0).setMode(PaintMode.STROKE).setStrokeWidth(1))
         {
             Paint[] paints = new Paint[] {
@@ -290,7 +275,6 @@ public class PathsScene extends Scene {
             };
 
             for (Paint stroke5: paints) {
-
                 canvas.drawPath(path, stroke5);
                 canvas.drawPath(path, stroke1);
                 canvas.translate(50, 0);
@@ -309,7 +293,7 @@ public class PathsScene extends Scene {
             }
         }
 
-        try (Path path = new Path().moveTo(5, 35).lineTo(15, 10).lineTo(25, 30).lineTo(35, 5);
+        try (Path path = new PathBuilder().moveTo(5, 35).lineTo(15, 10).lineTo(25, 30).lineTo(35, 5).build();
              Paint stroke1 = new Paint().setColor(0xFF247ba0).setMode(PaintMode.STROKE).setStrokeWidth(1))
         {
             Paint[] paints = new Paint[] {
@@ -340,16 +324,14 @@ public class PathsScene extends Scene {
                 Paint paint1 = new Paint().setMode(PaintMode.FILL).setColor(0xFF437AA0);
                 Paint paint2 = new Paint().setMode(PaintMode.FILL).setColor(0x80FAA6B2);
                 Paint paint3 = new Paint().setMode(PaintMode.FILL).setColor(0xFFF6BC01);
-                Path one = new Path();
-                Path two = new Path();
+                Path one = new PathBuilder().moveTo(5, 5)
+                                            .conicTo(0, 35, 20, 20, 3)
+                                            .conicTo(35, 0, 35, 35, 2)
+                                            .closePath()
+                                            .build();
+                Path two = new PathBuilder().addRect(Rect.makeLTRB(15, 15, 40, 40))
+                                            .build();
         ) {
-            one.moveTo(5, 5);
-            one.conicTo(0, 35, 20, 20, 3);
-            one.conicTo(35, 0, 35, 35, 2);
-            one.closePath();
-
-            two.addRect(Rect.makeLTRB(15, 15, 40, 40));
-
             canvas.drawPath(one, paint1);
             canvas.drawPath(two, paint2);
 
@@ -369,10 +351,10 @@ public class PathsScene extends Scene {
         float weight = 1f - System.currentTimeMillis() % 500 / 500f;
         long pair = (System.currentTimeMillis() / 500) % 4;
 
-        try (Path p1 = new Path().moveTo(0, 14).lineTo(20, 14).lineTo(20, 0).lineTo(40, 20).lineTo(20, 40).lineTo(20, 26).lineTo(0, 26).lineTo(0, 14).closePath();
-             Path p2 = new Path().moveTo(0, 20).lineTo(14, 20).lineTo(14, 0).lineTo(26, 0).lineTo(26, 20).lineTo(40, 20).lineTo(20, 40).lineTo(0, 20).closePath();
-             Path p3 = new Path().moveTo(0, 20).lineTo(20, 0).lineTo(20, 14).lineTo(40, 14).lineTo(40, 26).lineTo(20, 26).lineTo(20, 40).lineTo(0, 20).closePath();
-             Path p4 = new Path().moveTo(0, 20).lineTo(20, 0).lineTo(40, 20).lineTo(26, 20).lineTo(26, 40).lineTo(14, 40).lineTo(14, 20).lineTo(0, 20).closePath();
+        try (Path p1 = new PathBuilder().moveTo(0, 14).lineTo(20, 14).lineTo(20, 0).lineTo(40, 20).lineTo(20, 40).lineTo(20, 26).lineTo(0, 26).lineTo(0, 14).closePath().build();
+             Path p2 = new PathBuilder().moveTo(0, 20).lineTo(14, 20).lineTo(14, 0).lineTo(26, 0).lineTo(26, 20).lineTo(40, 20).lineTo(20, 40).lineTo(0, 20).closePath().build();
+             Path p3 = new PathBuilder().moveTo(0, 20).lineTo(20, 0).lineTo(20, 14).lineTo(40, 14).lineTo(40, 26).lineTo(20, 26).lineTo(20, 40).lineTo(0, 20).closePath().build();
+             Path p4 = new PathBuilder().moveTo(0, 20).lineTo(20, 0).lineTo(40, 20).lineTo(26, 20).lineTo(26, 40).lineTo(14, 40).lineTo(14, 20).lineTo(0, 20).closePath().build();
              Path target = pair == 0 ? p1.makeLerp(p2, weight)
                          : pair == 1 ? p2.makeLerp(p3, weight)
                          : pair == 2 ? p3.makeLerp(p4, weight)
@@ -392,9 +374,9 @@ public class PathsScene extends Scene {
     private void drawMeasure(Canvas canvas) {
         canvas.save();
 
-        try (var path = new Path().addCircle(20, 20, 20, PathDirection.COUNTER_CLOCKWISE);
+        try (var path = new PathBuilder().addCircle(20, 20, 20, PathDirection.COUNTER_CLOCKWISE).build();
              var measure = new PathMeasure(path, false);
-             var segment = new Path();
+             var segment = new PathBuilder();
              var arcStroke = new Paint().setColor(0xFF437AA0).setMode(PaintMode.STROKE).setStrokeWidth(1);
              var tangentStroke = new Paint().setColor(0xFFFAA6B2).setMode(PaintMode.STROKE).setStrokeWidth(1);)
         {
@@ -402,7 +384,7 @@ public class PathsScene extends Scene {
             canvas.translate(50, 0);
 
             measure.getSegment(50, 100, segment, true);
-            canvas.drawPath(segment, arcStroke);
+            canvas.drawPath(segment.detach(), arcStroke);
 
             for (float d = 50; d < 100; d += 10) {
                 Point position = measure.getPosition(d);

@@ -28,12 +28,11 @@ public class ImageFiltersScene extends Scene {
     private void drawShadowsBlurs(Canvas canvas) {
         canvas.save();
         try (Paint fill = new Paint().setColor(0xFF8E86C9);
-             Path path = new Path())
+             Path path = new PathBuilder().setFillMode(PathFillMode.EVEN_ODD)
+                                          .lineTo(0, 60).lineTo(60, 60).lineTo(60, 0).closePath()
+                                          .moveTo(10, 5).lineTo(55, 10).lineTo(50, 55).lineTo(5, 50).closePath()
+                                          .build();)
         {
-            path.setFillMode(PathFillMode.EVEN_ODD);
-            path.lineTo(0, 60).lineTo(60, 60).lineTo(60, 0).closePath();
-            path.moveTo(10, 5).lineTo(55, 10).lineTo(50, 55).lineTo(5, 50).closePath();
-
             ImageFilter[] filters = new ImageFilter[] {
                 ImageFilter.makeDropShadow(0, 0, 10, 10, 0xFF000000),
                 ImageFilter.makeDropShadow(2, 2, 0, 0, 0xFF000000),
@@ -61,11 +60,10 @@ public class ImageFiltersScene extends Scene {
     private void drawImageFilters(Canvas canvas, float width, float dpi) {
         canvas.save();
         try (Paint fill = new Paint().setColor(0xFFFF9F1B);
-             Path path = new Path())
+             Path path = new PathBuilder().setFillMode(PathFillMode.EVEN_ODD)
+                                          .moveTo(10, 10).rMoveTo(20, 1.6f).rLineTo(11.7f, 36.2f).rLineTo(-30.8f, -22.4f).rLineTo(38.1f, 0f).rLineTo(-30.8f, 22.4f)
+                                          .build();)
         {
-            path.setFillMode(PathFillMode.EVEN_ODD);
-            path.moveTo(10, 10).rMoveTo(20, 1.6f).rLineTo(11.7f, 36.2f).rLineTo(-30.8f, -22.4f).rLineTo(38.1f, 0f).rLineTo(-30.8f, 22.4f);
-
             IRect bb = IRect.makeXYWH(0, 0, 60, 60);
             ImageFilter[] filters = new ImageFilter[] {
                 ImageFilter.makeOffset(0, 0, null, bb),
@@ -97,11 +95,10 @@ public class ImageFiltersScene extends Scene {
     private void drawLights(Canvas canvas) {
         canvas.save();
         try (Paint fill = new Paint().setColor(0xFFFF9F1B);
-             Path path = new Path())
+             Path path = new PathBuilder().setFillMode(PathFillMode.EVEN_ODD)
+                                          .moveTo(10, 10).rMoveTo(20, 1.6f).rLineTo(11.7f, 36.2f).rLineTo(-30.8f, -22.4f).rLineTo(38.1f, 0f).rLineTo(-30.8f, 22.4f)
+                                          .build();)
         {
-            path.setFillMode(PathFillMode.EVEN_ODD);
-            path.moveTo(10, 10).rMoveTo(20, 1.6f).rLineTo(11.7f, 36.2f).rLineTo(-30.8f, -22.4f).rLineTo(38.1f, 0f).rLineTo(-30.8f, 22.4f);
-
             IRect bb = IRect.makeXYWH(0, 0, 60, 60);
             ImageFilter[] filters = new ImageFilter[] {
                 ImageFilter.makeDistantLitDiffuse( 0,  1, 1, 0xFFFF9F1B, 1, 0.5f, null, bb),

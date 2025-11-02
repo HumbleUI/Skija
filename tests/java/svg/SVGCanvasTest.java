@@ -10,6 +10,7 @@ import io.github.humbleui.skija.OutputWStream;
 import io.github.humbleui.skija.Paint;
 import io.github.humbleui.skija.PaintMode;
 import io.github.humbleui.skija.Path;
+import io.github.humbleui.skija.PathBuilder;
 import io.github.humbleui.types.Rect;
 import io.github.humbleui.skija.test.*;
 import io.github.humbleui.skija.test.runner.*;
@@ -66,17 +67,18 @@ public class SVGCanvasTest implements Executable {
 
             canvas.rotate(90);
             paint.setColor(0xFFFFFFFF).setMode(PaintMode.STROKE_AND_FILL);
-            canvas.drawPath(new Path().lineTo(50, 60).lineTo(60, 70).lineTo(70, 50).closePath(), paint);
+            canvas.drawPath(new PathBuilder().lineTo(50, 60).lineTo(60, 70).lineTo(70, 50).closePath().build(), paint);
             canvas.restore();
 
             paint.setColor(0x20000000).setMode(PaintMode.FILL);
             canvas.drawLine(0, 0, 200, 200, paint);
 
             // not supported
-            Path path = new Path().moveTo(253, 216)
+            Path path = new PathBuilder().moveTo(253, 216)
                           .cubicTo(283, 163.5f, 358, 163.5f, 388, 216)
                           .cubicTo(358, 268.5f, 283, 268.5f, 253, 216)
-                          .closePath();
+                          .closePath()
+                          .build();
             canvas.drawPath(path, paint);
         }
     }

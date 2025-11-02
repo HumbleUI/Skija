@@ -32,69 +32,56 @@ public class FigmaScene extends Scene {
         }
         // Typeface uiTypefaceBold = FontMgr.getDefault().matchFamilyStyle("System Font", FontStyle.BOLD);
         
-        icons.put("Search",      new Path().moveTo(0, 0.5f).rLineTo(14, 0).moveTo(0, 5.5f).rLineTo(14, 0).moveTo(0, 10.5f).rLineTo(14, 0));
-        icons.put("Move",        new Path().moveTo(0.5f, 0.5f).lineTo(3, 13).lineTo(6, 9).lineTo(11, 7).closePath());
-        icons.put("Chevron",     new Path().lineTo(3, 3).lineTo(6, 0));
-        icons.put("Frame",       new Path().moveTo(3.5f, 0).lineTo(3.5f, 16).moveTo(12.5f, 0).lineTo(12.5f, 16).moveTo(0, 3.5f).lineTo(16, 3.5f).moveTo(0, 12.5f).lineTo(16, 12.5f));
-        icons.put("Rectangle",   new Path().addRect(Rect.makeXYWH(0.5f, 0.5f, 15, 15)));
-        icons.put("Pen Stroke",  new Path().lineTo(2.5f, 9).rCubicTo(1, 3, 3, 3, 6.5f, 3).lineTo(11, 14).lineTo(14, 11).lineTo(12, 9).rCubicTo(0, -3.5f, 0, -5.5f, -3, -6.5f).lineTo(0, 0).moveTo(0, 0).lineTo(6, 6));
-        icons.put("Pen Fill",    new Path().addCircle(7, 7, 1.5f));
-        icons.put("Text",        new Path().moveTo(0, 4).lineTo(0, 0.5f).lineTo(12.5f, 0.5f).lineTo(12.5f, 4).moveTo(6.5f, 0.5f).lineTo(6.5f, 15.5f).moveTo(3, 15.5f).rLineTo(7, 0));
-        icons.put("Hand Tool",   new Path().moveTo(4.5f, 11).lineTo(2.5f, 10).rCubicTo(-2f, -1f, -3.5f, 1f, -2f, 2.5f).cubicTo(1f, 13f, 7f, 19.5f, 9f, 19.5f).lineTo(12, 19.5f).rCubicTo(2f, 0f, 4.5f, -2.5f, 4.5f, -5f).lineTo(16.5f, 6)
-                                   .rCubicTo(0, -2, -3, -2, -3, 0).lineTo(13.5f, 9).lineTo(13.5f, 3).rCubicTo(0, -2, -3, -2, -3, 0).lineTo(10.5f, 9).lineTo(10.5f, 2).rCubicTo(0, -2, -3, -2, -3, 0)
-                                   .lineTo(7.5f, 9).lineTo(7.5f, 4).rCubicTo(0, -2, -3, -2, -3, 0).closePath());
-        icons.put("Comments",    new Path().moveTo(0, 15.5f).lineTo(5.5f, 14.36f).cubicTo(6.54f, 15.19f, 7.74f, 15.5f, 9, 15.5f).cubicTo(13.14f, 15.5f, 16.5f, 12.14f, 16.5f, 8f)
-                                   .cubicTo(16.5f, 3.86f, 13.14f, 0.5f, 9, 0.5f).cubicTo(4.86f, 0.5f, 1.5f, 3.86f, 1.5f, 8).cubicTo(1.5f, 9.26f, 1.81f, 10.46f, 2.37f, 11.5f).closePath());
-        icons.put("Reset",       new Path().moveTo(28.5f, 19.5f).lineTo(20.5f, 11.5f).lineTo(12.5f, 19.5f).lineTo(20.5f, 27.5f).lineTo(24.5f, 23.5f)
-                                   .moveTo(21, 17).lineTo(18.5f, 19.5f).lineTo(21, 22)
-                                   .moveTo(18.5f, 19.5f).lineTo(22, 19.5f).cubicTo(26, 19.5f, 29.5f, 24.5f, 26, 29));
-        icons.put("Component",   new Path().moveTo(23, 15).rLineTo(-3, -3).rLineTo(-3, 3).rLineTo(3, 3).closePath()
-                                   .moveTo(18, 20).rLineTo(-3, -3).rLineTo(-3, 3).rLineTo(3, 3).closePath()
-                                   .moveTo(23, 25).rLineTo(-3, -3).rLineTo(-3, 3).rLineTo(3, 3).closePath()
-                                   .moveTo(28, 20).rLineTo(-3, -3).rLineTo(-3, 3).rLineTo(3, 3).closePath());
-        icons.put("Mask Stroke", new Path().addCircle(20, 20, 7.5f));
-        icons.put("Mask Fill",   new Path().moveTo(16.75f, 13.24f).cubicTo(14.24f, 14.45f, 12.5f, 17.02f, 12.5f, 20).cubicTo(12.5f, 22.98f, 14.24f, 25.55f, 16.75f, 26.76f)
-                                   .cubicTo(19.26f, 25.55f, 21, 22.98f, 21, 20).cubicTo(21, 17.02f, 19.26f, 14.45f, 16.75f, 13.24f));
-        icons.put("Union",       new Path().moveTo(13, 12).lineTo(13, 23).lineTo(18, 23).lineTo(18, 28).lineTo(29, 28).lineTo(29, 17).lineTo(24, 17).lineTo(24, 12).closePath());
+        icons.put("Search",                 new PathBuilder().moveTo(0, 0.5f).rLineTo(14, 0).moveTo(0, 5.5f).rLineTo(14, 0).moveTo(0, 10.5f).rLineTo(14, 0).build());
+        icons.put("Move",                   new PathBuilder().moveTo(0.5f, 0.5f).lineTo(3, 13).lineTo(6, 9).lineTo(11, 7).closePath().build());
+        icons.put("Chevron",                new PathBuilder().lineTo(3, 3).lineTo(6, 0).build());
+        icons.put("Frame",                  new PathBuilder().moveTo(3.5f, 0).lineTo(3.5f, 16).moveTo(12.5f, 0).lineTo(12.5f, 16).moveTo(0, 3.5f).lineTo(16, 3.5f).moveTo(0, 12.5f).lineTo(16, 12.5f).build());
+        icons.put("Rectangle",              new PathBuilder().addRect(Rect.makeXYWH(0.5f, 0.5f, 15, 15)).build());
+        icons.put("Pen Stroke",             new PathBuilder().lineTo(2.5f, 9).rCubicTo(1, 3, 3, 3, 6.5f, 3).lineTo(11, 14).lineTo(14, 11).lineTo(12, 9).rCubicTo(0, -3.5f, 0, -5.5f, -3, -6.5f).lineTo(0, 0).moveTo(0, 0).lineTo(6, 6).build());
+        icons.put("Pen Fill",               new PathBuilder().addCircle(7, 7, 1.5f).build());
+        icons.put("Text",                   new PathBuilder().moveTo(0, 4).lineTo(0, 0.5f).lineTo(12.5f, 0.5f).lineTo(12.5f, 4).moveTo(6.5f, 0.5f).lineTo(6.5f, 15.5f).moveTo(3, 15.5f).rLineTo(7, 0).build());
+        icons.put("Hand Tool",              new PathBuilder().moveTo(4.5f, 11).lineTo(2.5f, 10).rCubicTo(-2f, -1f, -3.5f, 1f, -2f, 2.5f).cubicTo(1f, 13f, 7f, 19.5f, 9f, 19.5f).lineTo(12, 19.5f).rCubicTo(2f, 0f, 4.5f, -2.5f, 4.5f, -5f).lineTo(16.5f, 6).rCubicTo(0, -2, -3, -2, -3, 0).lineTo(13.5f, 9).lineTo(13.5f, 3).rCubicTo(0, -2, -3, -2, -3, 0).lineTo(10.5f, 9).lineTo(10.5f, 2).rCubicTo(0, -2, -3, -2, -3, 0).lineTo(7.5f, 9).lineTo(7.5f, 4).rCubicTo(0, -2, -3, -2, -3, 0).closePath().build());
+        icons.put("Comments",               new PathBuilder().moveTo(0, 15.5f).lineTo(5.5f, 14.36f).cubicTo(6.54f, 15.19f, 7.74f, 15.5f, 9, 15.5f).cubicTo(13.14f, 15.5f, 16.5f, 12.14f, 16.5f, 8f).cubicTo(16.5f, 3.86f, 13.14f, 0.5f, 9, 0.5f).cubicTo(4.86f, 0.5f, 1.5f, 3.86f, 1.5f, 8).cubicTo(1.5f, 9.26f, 1.81f, 10.46f, 2.37f, 11.5f).closePath().build());
+        icons.put("Reset",                  new PathBuilder().moveTo(28.5f, 19.5f).lineTo(20.5f, 11.5f).lineTo(12.5f, 19.5f).lineTo(20.5f, 27.5f).lineTo(24.5f, 23.5f).moveTo(21, 17).lineTo(18.5f, 19.5f).lineTo(21, 22).moveTo(18.5f, 19.5f).lineTo(22, 19.5f).cubicTo(26, 19.5f, 29.5f, 24.5f, 26, 29).build());
+        icons.put("Component",              new PathBuilder().moveTo(23, 15).rLineTo(-3, -3).rLineTo(-3, 3).rLineTo(3, 3).closePath().moveTo(18, 20).rLineTo(-3, -3).rLineTo(-3, 3).rLineTo(3, 3).closePath().moveTo(23, 25).rLineTo(-3, -3).rLineTo(-3, 3).rLineTo(3, 3).closePath().moveTo(28, 20).rLineTo(-3, -3).rLineTo(-3, 3).rLineTo(3, 3).closePath().build());
+        icons.put("Mask Stroke",            new PathBuilder().addCircle(20, 20, 7.5f).build());
+        icons.put("Mask Fill",              new PathBuilder().moveTo(16.75f, 13.24f).cubicTo(14.24f, 14.45f, 12.5f, 17.02f, 12.5f, 20).cubicTo(12.5f, 22.98f, 14.24f, 25.55f, 16.75f, 26.76f).cubicTo(19.26f, 25.55f, 21, 22.98f, 21, 20).cubicTo(21, 17.02f, 19.26f, 14.45f, 16.75f, 13.24f).build());
+        icons.put("Union",                  new PathBuilder().moveTo(13, 12).lineTo(13, 23).lineTo(18, 23).lineTo(18, 28).lineTo(29, 28).lineTo(29, 17).lineTo(24, 17).lineTo(24, 12).closePath().build());
         avatar = Image.makeDeferredFromEncodedBytes(Files.readAllBytes(java.nio.file.Path.of(file("images/IMG_5563.png"))));
-        icons.put("Present",     new Path().moveTo(15.5f, 15).lineTo(15.5f, 25).lineTo(23, 20).closePath());
-        icons.put("Layer Frame", new Path().moveTo(3.5f, 0.5f).lineTo(3.5f, 11.5f).moveTo(8.5f, 0.5f).lineTo(8.5f, 11.5f).moveTo(0.5f, 3.5f).lineTo(11.5f, 3.5f).moveTo(0.5f, 8.5f).lineTo(11.5f, 8.5f));
-        icons.put("Layer Image", new Path().addRRect(RRect.makeXYWH(0.5f, 0.5f, 11, 11, 1)).addCircle(8, 4, 1.5f).moveTo(0.5f, 8.5f).lineTo(3.5f, 5.5f).lineTo(9.5f, 11.5f));
-        icons.put("Layer Rect",  new Path().addRect(Rect.makeLTRB(1.5f, 4, 10.5f, 8)));
-        icons.put("Layer Comp",  new Path().moveTo(6, 0.5f).lineTo(11.5f, 6).lineTo(6, 11.5f).lineTo(0.5f, 6).closePath());
-        icons.put("Align Left Stroke", new Path().moveTo(2.5f, 1.5f).lineTo(2.5f, 14.5f));
-        icons.put("Align Left Fill",   new Path().addRect(Rect.makeLTRB(5, 4.5f, 15, 6.5f)).addRect(Rect.makeLTRB(5, 9.5f, 11, 11.5f)));
-        icons.put("Align Center Stroke", new Path().moveTo(8, 1.5f).lineTo(8, 14.5f));
-        icons.put("Align Center Fill",   new Path().addRect(Rect.makeLTRB(2.5f, 4.5f, 13.5f, 6.5f)).addRect(Rect.makeLTRB(4.5f, 9.5f, 11, 11.5f)));
-        icons.put("Align Right Stroke", new Path().moveTo(14.5f, 1.5f).lineTo(14.5f, 14.5f));
-        icons.put("Align Right Fill",   new Path().addRect(Rect.makeLTRB(2, 4.5f, 12, 6.5f)).addRect(Rect.makeLTRB(6, 9.5f, 12, 11.5f)));
-        icons.put("Align Top Stroke", new Path().moveTo(1.5f, 2.5f).lineTo(14.5f, 2.5f));
-        icons.put("Align Top Fill",   new Path().addRect(Rect.makeLTRB(4.5f, 5f, 6.5f, 15f)).addRect(Rect.makeLTRB(9.5f, 5f, 11.5f, 11f)));
-        icons.put("Align Middle Stroke", new Path().moveTo(1.5f, 8f).lineTo(14.5f, 8f));
-        icons.put("Align Middle Fill",   new Path().addRect(Rect.makeLTRB(4.5f, 2.5f, 6.5f, 13.5f)).addRect(Rect.makeLTRB(9.5f, 4.5f, 11.5f, 11.5f)));
-        icons.put("Align Bottom Stroke", new Path().moveTo(1.5f, 14.5f).lineTo(14.5f, 14.5f));
-        icons.put("Align Bottom Fill",   new Path().addRect(Rect.makeLTRB(4.5f, 2f, 6.5f, 12f)).addRect(Rect.makeLTRB(9.5f, 6f, 11.5f, 12f)));
-        icons.put("Align More Stroke", new Path().moveTo(2.5f, 1.5f).lineTo(2.5f, 14.5f).moveTo(13.5f, 1.5f).lineTo(13.5f, 14.5f));
-        icons.put("Align More Fill",   new Path().addRect(Rect.makeLTRB(7, 4.5f, 9, 11.5f)));
+        icons.put("Present",                new PathBuilder().moveTo(15.5f, 15).lineTo(15.5f, 25).lineTo(23, 20).closePath().build());
+        icons.put("Layer Frame",            new PathBuilder().moveTo(3.5f, 0.5f).lineTo(3.5f, 11.5f).moveTo(8.5f, 0.5f).lineTo(8.5f, 11.5f).moveTo(0.5f, 3.5f).lineTo(11.5f, 3.5f).moveTo(0.5f, 8.5f).lineTo(11.5f, 8.5f).build());
+        icons.put("Layer Image",            new PathBuilder().addRRect(RRect.makeXYWH(0.5f, 0.5f, 11, 11, 1)).addCircle(8, 4, 1.5f).moveTo(0.5f, 8.5f).lineTo(3.5f, 5.5f).lineTo(9.5f, 11.5f).build());
+        icons.put("Layer Rect",             new PathBuilder().addRect(Rect.makeLTRB(1.5f, 4, 10.5f, 8)).build());
+        icons.put("Layer Comp",             new PathBuilder().moveTo(6, 0.5f).lineTo(11.5f, 6).lineTo(6, 11.5f).lineTo(0.5f, 6).closePath().build());
+        icons.put("Align Left Stroke",      new PathBuilder().moveTo(2.5f, 1.5f).lineTo(2.5f, 14.5f).build());
+        icons.put("Align Left Fill",        new PathBuilder().addRect(Rect.makeLTRB(5, 4.5f, 15, 6.5f)).addRect(Rect.makeLTRB(5, 9.5f, 11, 11.5f)).build());
+        icons.put("Align Center Stroke",    new PathBuilder().moveTo(8, 1.5f).lineTo(8, 14.5f).build());
+        icons.put("Align Center Fill",      new PathBuilder().addRect(Rect.makeLTRB(2.5f, 4.5f, 13.5f, 6.5f)).addRect(Rect.makeLTRB(4.5f, 9.5f, 11, 11.5f)).build());
+        icons.put("Align Right Stroke",     new PathBuilder().moveTo(14.5f, 1.5f).lineTo(14.5f, 14.5f).build());
+        icons.put("Align Right Fill",       new PathBuilder().addRect(Rect.makeLTRB(2, 4.5f, 12, 6.5f)).addRect(Rect.makeLTRB(6, 9.5f, 12, 11.5f)).build());
+        icons.put("Align Top Stroke",       new PathBuilder().moveTo(1.5f, 2.5f).lineTo(14.5f, 2.5f).build());
+        icons.put("Align Top Fill",         new PathBuilder().addRect(Rect.makeLTRB(4.5f, 5f, 6.5f, 15f)).addRect(Rect.makeLTRB(9.5f, 5f, 11.5f, 11f)).build());
+        icons.put("Align Middle Stroke",    new PathBuilder().moveTo(1.5f, 8f).lineTo(14.5f, 8f).build());
+        icons.put("Align Middle Fill",      new PathBuilder().addRect(Rect.makeLTRB(4.5f, 2.5f, 6.5f, 13.5f)).addRect(Rect.makeLTRB(9.5f, 4.5f, 11.5f, 11.5f)).build());
+        icons.put("Align Bottom Stroke",    new PathBuilder().moveTo(1.5f, 14.5f).lineTo(14.5f, 14.5f).build());
+        icons.put("Align Bottom Fill",      new PathBuilder().addRect(Rect.makeLTRB(4.5f, 2f, 6.5f, 12f)).addRect(Rect.makeLTRB(9.5f, 6f, 11.5f, 12f)).build());
+        icons.put("Align More Stroke",      new PathBuilder().moveTo(2.5f, 1.5f).lineTo(2.5f, 14.5f).moveTo(13.5f, 1.5f).lineTo(13.5f, 14.5f).build());
+        icons.put("Align More Fill",        new PathBuilder().addRect(Rect.makeLTRB(7, 4.5f, 9, 11.5f)).build());
 
-        icons.put("Angle",  new Path().moveTo(4.5f, 4).lineTo(4.5f, 11.5f).lineTo(12, 11.5f).moveTo(4.5f, 7.5f).cubicTo(7, 7.5f, 8.5f, 9, 8.5f, 11.5f));
-        icons.put("Radius", new Path().moveTo(13, 4.5f).lineTo(9f, 4.5f).cubicTo(6.5f, 4.5f, 4.5f, 6.5f, 4.5f, 9f).lineTo(4.5f, 13));
-        icons.put("Constrain", new Path().moveTo(10.5f, 6f).lineTo(10.5f, 4f).cubicTo(10.5f, 2.62f, 9.38f, 1.5f, 8f, 1.5f).cubicTo(6.62f, 1.5f, 5.5f, 2.62f, 5.5f, 4).lineTo(5.5f, 6)
-                                         .moveTo(5.5f, 10).lineTo(5.5f, 12).cubicTo(5.5f, 13.38f, 6.62f, 14.5f, 8, 14.5f).cubicTo(9.38f, 14.5f, 10.5f, 13.38f, 10.5f, 12).lineTo(10.5f, 10));
-        icons.put("Corners", new Path().moveTo(6, 3.5f).lineTo(3.5f, 3.5f).lineTo(3.5f, 6).moveTo(3.5f, 10).lineTo(3.5f, 12.5f).lineTo(6, 12.5f)
-                                       .moveTo(10, 12.5f).lineTo(12.5f, 12.5f).lineTo(12.5f, 10).moveTo(12.5f, 6).lineTo(12.5f, 3.5f).lineTo(10, 3.5f));
-        icons.put("Unchecked", new Path().addRRect(RRect.makeXYWH(2.5f, 2.5f, 11, 11, 2)));
-        icons.put("Constraints Horizontal", new Path().moveTo(6f, 6.5f).lineTo(4.5f, 8.5f).lineTo(6, 10.5f).moveTo(4.5f, 8.5f).lineTo(12.5f, 8.5f).moveTo(11, 6.5f).lineTo(12.5f, 8.5f).lineTo(11, 10.5f));
-        icons.put("Constraints Vertical", new Path().moveTo(6.5f, 6f).lineTo(8.5f, 4.5f).lineTo(10.5f, 6).moveTo(8.5f, 4.5f).lineTo(8.5f, 12.5f).moveTo(6.5f, 11).lineTo(8.5f, 12.5f).lineTo(10.5f, 11));
-        icons.put("Plus", new Path().moveTo(8, 2.5f).lineTo(8, 13.5f).moveTo(2.5f, 8).lineTo(13.5f, 8));
-        icons.put("Transparency", new Path().moveTo(8, 4).cubicTo(6.5f, 5.5f, 4.5f, 7.07f, 4.5f, 9).cubicTo(4.5f, 10.93f, 6.07f, 12.5f, 8, 12.5f).cubicTo(9.93f, 12.5f, 11.5f, 10.93f, 11.5f, 9)
-                                            .cubicTo(11.5f, 7.07f, 9.5f, 5.5f, 8, 4).closePath());
-        icons.put("Eye Stroke", new Path().moveTo(2, 8).cubicTo(5.5f, 3.5f, 10.5f, 3.5f, 14, 8).cubicTo(10.5f, 12.5f, 5.5f, 12.5f, 2, 8).closePath());
-        icons.put("Eye Fill",   new Path().addCircle(8, 8, 2));
-        icons.put("Style",      new Path().addCircle(5, 5, 1.5f).addCircle(11, 5, 1.5f).addCircle(5, 11, 1.5f).addCircle(11, 11, 1.5f));
-        icons.put("Eye Closed", new Path().moveTo(14, 8).cubicTo(10.5f, 12.5f, 5.5f, 12.5f, 2, 8).moveTo(3.4f, 9.5f).lineTo(1.5f, 11.5f).moveTo(6.5f, 11.19f).lineTo(5.5f, 14)
-                                          .moveTo(9.5f, 11.19f).lineTo(10.5f, 14).moveTo(12.6f, 9.5f).lineTo(14.5f, 11.5f));
-        icons.put("Minus",      new Path().moveTo(2.5f, 8).lineTo(13.5f, 8));
+        icons.put("Angle",                  new PathBuilder().moveTo(4.5f, 4).lineTo(4.5f, 11.5f).lineTo(12, 11.5f).moveTo(4.5f, 7.5f).cubicTo(7, 7.5f, 8.5f, 9, 8.5f, 11.5f).build());
+        icons.put("Radius",                 new PathBuilder().moveTo(13, 4.5f).lineTo(9f, 4.5f).cubicTo(6.5f, 4.5f, 4.5f, 6.5f, 4.5f, 9f).lineTo(4.5f, 13).build());
+        icons.put("Constrain",              new PathBuilder().moveTo(10.5f, 6f).lineTo(10.5f, 4f).cubicTo(10.5f, 2.62f, 9.38f, 1.5f, 8f, 1.5f).cubicTo(6.62f, 1.5f, 5.5f, 2.62f, 5.5f, 4).lineTo(5.5f, 6).moveTo(5.5f, 10).lineTo(5.5f, 12).cubicTo(5.5f, 13.38f, 6.62f, 14.5f, 8, 14.5f).cubicTo(9.38f, 14.5f, 10.5f, 13.38f, 10.5f, 12).lineTo(10.5f, 10).build());
+        icons.put("Corners",                new PathBuilder().moveTo(6, 3.5f).lineTo(3.5f, 3.5f).lineTo(3.5f, 6).moveTo(3.5f, 10).lineTo(3.5f, 12.5f).lineTo(6, 12.5f).moveTo(10, 12.5f).lineTo(12.5f, 12.5f).lineTo(12.5f, 10).moveTo(12.5f, 6).lineTo(12.5f, 3.5f).lineTo(10, 3.5f).build());
+        icons.put("Unchecked",              new PathBuilder().addRRect(RRect.makeXYWH(2.5f, 2.5f, 11, 11, 2)).build());
+        icons.put("Constraints Horizontal", new PathBuilder().moveTo(6f, 6.5f).lineTo(4.5f, 8.5f).lineTo(6, 10.5f).moveTo(4.5f, 8.5f).lineTo(12.5f, 8.5f).moveTo(11, 6.5f).lineTo(12.5f, 8.5f).lineTo(11, 10.5f).build());
+        icons.put("Constraints Vertical",   new PathBuilder().moveTo(6.5f, 6f).lineTo(8.5f, 4.5f).lineTo(10.5f, 6).moveTo(8.5f, 4.5f).lineTo(8.5f, 12.5f).moveTo(6.5f, 11).lineTo(8.5f, 12.5f).lineTo(10.5f, 11).build());
+        icons.put("Plus",                   new PathBuilder().moveTo(8, 2.5f).lineTo(8, 13.5f).moveTo(2.5f, 8).lineTo(13.5f, 8).build());
+        icons.put("Transparency",           new PathBuilder().moveTo(8, 4).cubicTo(6.5f, 5.5f, 4.5f, 7.07f, 4.5f, 9).cubicTo(4.5f, 10.93f, 6.07f, 12.5f, 8, 12.5f).cubicTo(9.93f, 12.5f, 11.5f, 10.93f, 11.5f, 9).cubicTo(11.5f, 7.07f, 9.5f, 5.5f, 8, 4).closePath().build());
+        icons.put("Eye Stroke",             new PathBuilder().moveTo(2, 8).cubicTo(5.5f, 3.5f, 10.5f, 3.5f, 14, 8).cubicTo(10.5f, 12.5f, 5.5f, 12.5f, 2, 8).closePath().build());
+        icons.put("Eye Fill",               new PathBuilder().addCircle(8, 8, 2).build());
+        icons.put("Style",                  new PathBuilder().addCircle(5, 5, 1.5f).addCircle(11, 5, 1.5f).addCircle(5, 11, 1.5f).addCircle(11, 11, 1.5f).build());
+        icons.put("Eye Closed",             new PathBuilder().moveTo(14, 8).cubicTo(10.5f, 12.5f, 5.5f, 12.5f, 2, 8).moveTo(3.4f, 9.5f).lineTo(1.5f, 11.5f).moveTo(6.5f, 11.19f).lineTo(5.5f, 14).moveTo(9.5f, 11.19f).lineTo(10.5f, 14).moveTo(12.6f, 9.5f).lineTo(14.5f, 11.5f).build());
+        icons.put("Minus",                  new PathBuilder().moveTo(2.5f, 8).lineTo(13.5f, 8).build());
     }
 
     @Override

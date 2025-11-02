@@ -30,6 +30,7 @@ def main():
     '-Djava.awt.headless=true',
     '-enableassertions',
     '-enablesystemassertions',
+    '--enable-native-access=ALL-UNNAMED',
     '-Xcheck:jni',
     '-Dskija.logLevel=DEBUG',
     'io.github.humbleui.skija.test.TestSuite'])

@@ -78,8 +78,9 @@ find_path(SKIA_SKRESOURCES_INCLUDE_DIR SkResources.h HINTS "${SKIA_DIR}/modules/
 
 # SKOTTIE
 find_library(SKIA_SKOTTIE_LIBRARY skottie PATH "${SKIA_LIBRARY_DIR}")
+find_library(SKIA_JSONREADER_LIBRARY jsonreader PATH "${SKIA_LIBRARY_DIR}")
 add_library(skottie INTERFACE)
-target_link_libraries(skottie INTERFACE ${SKIA_SKOTTIE_LIBRARY})
+target_link_libraries(skottie INTERFACE ${SKIA_SKOTTIE_LIBRARY} ${SKIA_JSONREADER_LIBRARY})
 find_path(SKIA_SKOTTIE_INCLUDE_DIR Skottie.h HINTS "${SKIA_DIR}/modules/skottie/include")
 
 # SKSG

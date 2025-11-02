@@ -41,7 +41,7 @@ public class SquircleScene extends Scene {
     }
 
     public Path squircle(float w, float h, float r) {
-        Path p = new Path();
+        PathBuilder p = new PathBuilder();
         r = Math.min(w / 3.2f, Math.min(h / 3.2f, r));
         p.moveTo(0, 1.6f * r);
         p.cubicTo(0, 1.04f * r, 0, 0.76f * r, 0.109f * r, 0.546f * r);
@@ -52,7 +52,7 @@ public class SquircleScene extends Scene {
         p.cubicTo(w - 1.04f * r, 0, w - 0.76f * r, 0, w - 0.546f * r, 0.109f * r);
         p.cubicTo(w - 0.358f * r, 0.205f * r, w - 0.205f * r, 0.358f * r, w - 0.109f * r, 0.546f * r);
         p.cubicTo(w, 0.76f * r, w, 1.04f * r, w, 1.6f * r);
-        
+
         p.lineTo(w, h - 1.6f * r);
         p.cubicTo(w, h - 1.04f * r, w, h - 0.76f * r, w - 0.109f * r, h - 0.546f * r);
         p.cubicTo(w - 0.205f * r, h - 0.358f * r, w - 0.358f * r, h - 0.205f * r, w - 0.546f * r, h - 0.109f * r);
@@ -65,6 +65,6 @@ public class SquircleScene extends Scene {
 
         p.closePath();
 
-        return p;
+        return p.build();
     }
 }

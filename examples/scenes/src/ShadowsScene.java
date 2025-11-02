@@ -71,8 +71,8 @@ public class ShadowsScene extends Scene {
         canvas.translate(0, 100);
         canvas.drawString("Shadow Utils", 350, 50, inter13, blackFill);
         try (var paint = new Paint().setColor(0xFFE54322);
-             var path = new Path().addRect(Rect.makeWH(50, 50));
-             var path2 = new Path().addRRect(RRect.makeXYWH(0, 0, 50, 50, 20));)
+             var path = new PathBuilder().addRect(Rect.makeWH(50, 50)).build();
+             var path2 = new PathBuilder().addRRect(RRect.makeXYWH(0, 0, 50, 50, 20)).build();)
         {
             var zPlaneParams = new Point3(0, 0, 100);
             var lightPos = new Point3(width / 2 * dpi, 0, 3000);

@@ -70,7 +70,7 @@ public class TextBlobScene extends Scene {
 
         float radius = 50;
 
-        try (Path path = new Path().addCircle(0, 0, radius);
+        try (Path path = new PathBuilder().addCircle(0, 0, radius).build();
              PathMeasure measure = new PathMeasure(path);
              Paint fill = new Paint().setColor(0xffffba08);
              Paint stroke = new Paint().setColor(0xff3a86ff).setMode(PaintMode.STROKE).setStrokeWidth(1f);)

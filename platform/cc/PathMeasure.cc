@@ -87,7 +87,7 @@ extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_PathMeasure__
 extern "C" JNIEXPORT jboolean JNICALL Java_io_github_humbleui_skija_PathMeasure__1nGetSegment
   (JNIEnv* env, jclass jclass, jlong ptr, jfloat startD, jfloat endD, jlong dstPtr, jboolean startWithMoveTo) {
     SkPathMeasure* instance = reinterpret_cast<SkPathMeasure*>(static_cast<uintptr_t>(ptr));
-    SkPath* dst = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(dstPtr));
+    SkPathBuilder* dst = reinterpret_cast<SkPathBuilder*>(static_cast<uintptr_t>(dstPtr));
     return instance->getSegment(startD, endD, dst, startWithMoveTo);
 }
 

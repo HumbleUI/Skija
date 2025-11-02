@@ -1,5 +1,5 @@
 #! /usr/bin/env python3
-import argparse, base64, functools, glob, hashlib, itertools, json, os, pathlib, platform, random, re, shutil, subprocess, tempfile, time, urllib.request, zipfile
+import argparse, base64, collections, functools, glob, hashlib, itertools, json, os, pathlib, platform, random, re, shutil, subprocess, tempfile, time, urllib.request, zipfile
 from typing import List, Tuple
 
 def get_arg(name):
@@ -192,13 +192,25 @@ def jdk_version() -> Tuple[int, int, int]:
       patch = 0
   return (major, minor, patch)
 
+def javac_sources(sources):
+  groups = collections.defaultdict(list)
+  for path in sources:
+    groups[os.path.dirname(path)].append(os.path.basename(path))
+  sorted_keys = sorted(groups.keys(), key=str.lower)
+  lines = []
+  for key in sorted_keys:
+    sorted_values = sorted(groups[key], key=str.lower)
+    lines.append(f"  {key}/{' '.join(sorted_values)}")
+
+  return '\n'.join(lines)
+
 def javac(sources, target, classpath = [], modulepath = [], add_modules = [], release = '11', opts=[]):
   makedirs(target)
   classes = {path.stem: path.stat().st_mtime for path in pathlib.Path(target).rglob('*.class') if '$' not in path.stem}
   newer = lambda path: path.stem not in classes or path.stat().st_mtime > classes.get(path.stem)
   new_sources = sorted([path for path in sources if newer(pathlib.Path(path))], key=str.lower)
   if new_sources:
-    print('Compiling', len(new_sources), 'java files to', target + ':\n ', '\n  '.join(new_sources), flush=True)
+    print('Compiling', len(new_sources), 'java files to', target + ':\n' + javac_sources(new_sources), flush=True)
     subprocess.check_call([
       'javac',
       '-encoding', 'UTF8',
