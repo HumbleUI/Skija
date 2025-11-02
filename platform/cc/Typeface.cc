@@ -65,22 +65,11 @@ extern "C" JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_Typeface__1nEqua
 }
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Typeface__1nMakeClone
-  (JNIEnv* env, jclass jclass, jlong typefacePtr, jobjectArray variations, jint collectionIndex) {
+  (JNIEnv* env, jclass jclass, jlong typefacePtr, jobject fontArgumentsObj) {
     SkTypeface* typeface = reinterpret_cast<SkTypeface*>(static_cast<uintptr_t>(typefacePtr));
-    int variationCount = env->GetArrayLength(variations);
-    std::vector<SkFontArguments::VariationPosition::Coordinate> coordinates(variationCount);
-    for (int i=0; i < variationCount; ++i) {
-        jobject jvar = env->GetObjectArrayElement(variations, i);
-        coordinates[i] = {
-            static_cast<SkFourByteTag>(env->GetIntField(jvar, skija::FontVariation::tag)),
-            env->GetFloatField(jvar, skija::FontVariation::value)
-        };
-        env->DeleteLocalRef(jvar);
-    }
-    SkFontArguments arg = SkFontArguments()
-                            .setCollectionIndex(collectionIndex)
-                            .setVariationDesignPosition({coordinates.data(), variationCount});
-    SkTypeface* clone = typeface->makeClone(arg).release();
+    SkFontArguments args = skija::FontArguments::toSkFontArguments(env, fontArgumentsObj);
+    SkTypeface* clone = typeface->makeClone(args).release();
+    skija::FontArguments::freeSkFontArguments(args);
     return reinterpret_cast<jlong>(clone);
 }
 

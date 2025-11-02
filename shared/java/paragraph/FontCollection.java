@@ -89,9 +89,13 @@ public class FontCollection extends RefCnt {
     }
 
     public Typeface defaultFallback(int unicode, FontStyle style, String locale) {
+        return defaultFallback(unicode, style, locale, null);
+    }
+
+    public Typeface defaultFallback(int unicode, FontStyle style, String locale, FontArguments fontArguments) {
         try {
             Stats.onNativeCall();
-            long ptr = _nDefaultFallbackChar(_ptr, unicode, style._value, locale);
+            long ptr = _nDefaultFallbackChar(_ptr, unicode, style._value, locale, fontArguments);
             return ptr == 0 ? null : new Typeface(ptr);
         } finally {
             ReferenceUtil.reachabilityFence(this);
@@ -136,7 +140,7 @@ public class FontCollection extends RefCnt {
     public static native long   _nSetDefaultFontManager(long ptr, long fontManagerPtr, String defaultFamilyName);
     public static native long   _nGetFallbackManager(long ptr);
     public static native long[] _nFindTypefaces(long ptr, String[] familyNames, int fontStyle);
-    public static native long   _nDefaultFallbackChar(long ptr, int unicode, int fontStyle, String locale);
+    public static native long   _nDefaultFallbackChar(long ptr, int unicode, int fontStyle, String locale, FontArguments fontArguments);
     public static native long   _nDefaultFallback(long ptr);
     public static native long   _nSetEnableFallback(long ptr, boolean value);
     public static native long   _nGetParagraphCache(long ptr);

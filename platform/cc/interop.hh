@@ -4,6 +4,7 @@
 #include <memory>
 #include <vector>
 #include "SkCodec.h"
+#include "SkFontArguments.h"
 #include "SkFontMetrics.h"
 #include "SkFontStyle.h"
 #include "SkImageInfo.h"
@@ -131,6 +132,18 @@ namespace skija {
         void onUnload(JNIEnv* env);
     }
 
+    namespace FontArguments {
+        extern jclass cls;
+        extern jfieldID collectionIndex;
+        extern jfieldID variations;
+        extern jfieldID paletteIndex;
+        extern jfieldID paletteOverrides;
+        void onLoad(JNIEnv* env);
+        void onUnload(JNIEnv* env);
+        SkFontArguments toSkFontArguments(JNIEnv* env, jobject fontArgumentsObj);
+        void freeSkFontArguments(SkFontArguments& args);
+    }
+
     namespace FontFeature {
         extern jclass cls;
         extern jmethodID ctor;
@@ -142,6 +155,14 @@ namespace skija {
         void onLoad(JNIEnv* env);
         void onUnload(JNIEnv* env);
         std::vector<SkShaper::Feature> fromJavaArray(JNIEnv* env, jobjectArray featuresArr);
+    }
+
+    namespace FontPaletteOverride {
+        extern jclass cls;
+        extern jfieldID index;
+        extern jfieldID color;
+        void onLoad(JNIEnv* env);
+        void onUnload(JNIEnv* env);
     }
 
     namespace FontMetrics {

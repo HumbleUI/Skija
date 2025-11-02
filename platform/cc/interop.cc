@@ -227,6 +227,84 @@ namespace skija {
         }
     }
 
+    namespace FontArguments {
+        jclass cls;
+        jfieldID collectionIndex;
+        jfieldID variations;
+        jfieldID paletteIndex;
+        jfieldID paletteOverrides;
+
+        void onLoad(JNIEnv* env) {
+            jclass local = env->FindClass("io/github/humbleui/skija/FontArguments");
+            cls = static_cast<jclass>(env->NewGlobalRef(local));
+            collectionIndex = env->GetFieldID(cls, "_collectionIndex", "I");
+            variations = env->GetFieldID(cls, "_variations", "[Lio/github/humbleui/skija/FontVariation;");
+            paletteIndex = env->GetFieldID(cls, "_paletteIndex", "I");
+            paletteOverrides = env->GetFieldID(cls, "_paletteOverrides", "[Lio/github/humbleui/skija/FontPaletteOverride;");
+        }
+
+        void onUnload(JNIEnv* env) {
+            env->DeleteGlobalRef(cls);
+        }
+
+        SkFontArguments toSkFontArguments(JNIEnv* env, jobject fontArgumentsObj) {
+            SkFontArguments args;
+
+            jint collectionIdx = env->GetIntField(fontArgumentsObj, collectionIndex);
+            args.setCollectionIndex(collectionIdx);
+
+            jobjectArray variationsArr = static_cast<jobjectArray>(env->GetObjectField(fontArgumentsObj, variations));
+            jsize variationCount = variationsArr == nullptr ? 0 : env->GetArrayLength(variationsArr);
+            if (variationCount > 0) {
+                // NOTE: heap allocation, call freeSkFontArguments
+                SkFontArguments::VariationPosition::Coordinate* coordinates = new SkFontArguments::VariationPosition::Coordinate[variationCount];
+                for (int i = 0; i < variationCount; ++i) {
+                    jobject jvar = env->GetObjectArrayElement(variationsArr, i);
+                    coordinates[i] = {
+                        static_cast<SkFourByteTag>(env->GetIntField(jvar, skija::FontVariation::tag)),
+                        env->GetFloatField(jvar, skija::FontVariation::value)
+                    };
+                    env->DeleteLocalRef(jvar);
+                }
+                args.setVariationDesignPosition({coordinates, variationCount});
+            }
+
+            jint paletteIdx = env->GetIntField(fontArgumentsObj, paletteIndex);
+            jobjectArray paletteOverridesArr = static_cast<jobjectArray>(env->GetObjectField(fontArgumentsObj, paletteOverrides));
+            jsize overrideCount = paletteOverridesArr == nullptr ? 0 : env->GetArrayLength(paletteOverridesArr);
+
+            if (overrideCount > 0) {
+                // NOTE: heap allocation, call freeSkFontArguments
+                SkFontArguments::Palette::Override* overrides = new SkFontArguments::Palette::Override[overrideCount];
+                for (int i = 0; i < overrideCount; ++i) {
+                    jobject joverride = env->GetObjectArrayElement(paletteOverridesArr, i);
+                    overrides[i] = {
+                        static_cast<uint16_t>(env->GetIntField(joverride, skija::FontPaletteOverride::index)),
+                        static_cast<SkColor>(env->GetIntField(joverride, skija::FontPaletteOverride::color))
+                    };
+                    env->DeleteLocalRef(joverride);
+                }
+                args.setPalette({paletteIdx, overrides, overrideCount});
+            } else if (paletteIdx != 0) {
+                args.setPalette({paletteIdx, nullptr, 0});
+            }
+
+            return args;
+        }
+
+        void freeSkFontArguments(SkFontArguments& args) {
+            auto variationPosition = args.getVariationDesignPosition();
+            if (variationPosition.coordinates != nullptr) {
+                delete[] variationPosition.coordinates;
+            }
+
+            auto palette = args.getPalette();
+            if (palette.overrides != nullptr) {
+                delete[] palette.overrides;
+            }
+        }
+    }
+
     namespace FontFeature {
         jclass cls;
         jmethodID ctor;
@@ -260,6 +338,23 @@ namespace skija {
                                static_cast<size_t>(env->GetLongField(featureObj.get(), skija::FontFeature::end))};
             }
             return features;
+        }
+    }
+
+    namespace FontPaletteOverride {
+        jclass cls;
+        jfieldID index;
+        jfieldID color;
+
+        void onLoad(JNIEnv* env) {
+            jclass local = env->FindClass("io/github/humbleui/skija/FontPaletteOverride");
+            cls = static_cast<jclass>(env->NewGlobalRef(local));
+            index = env->GetFieldID(cls, "_index", "I");
+            color = env->GetFieldID(cls, "_color", "I");
+        }
+
+        void onUnload(JNIEnv* env) {
+            env->DeleteGlobalRef(cls);
         }
     }
 
@@ -543,10 +638,12 @@ namespace skija {
         AnimationFrameInfo::onLoad(env);
         Color4f::onLoad(env);
         Drawable::onLoad(env);
+        FontArguments::onLoad(env);
         FontFamilyName::onLoad(env);
         FontFeature::onLoad(env);
         FontMetrics::onLoad(env);
         FontMgr::onLoad(env);
+        FontPaletteOverride::onLoad(env);
         FontVariation::onLoad(env);
         FontVariationAxis::onLoad(env);
         ImageInfo::onLoad(env);
@@ -555,7 +652,7 @@ namespace skija {
         PaintFilterCanvas::onLoad(env);
         RSXform::onLoad(env);
         SurfaceProps::onLoad(env);
-        
+
         impl::Native::onLoad(env);
     }
 
@@ -568,9 +665,11 @@ namespace skija {
         ImageInfo::onUnload(env);
         FontVariationAxis::onUnload(env);
         FontVariation::onUnload(env);
+        FontPaletteOverride::onUnload(env);
         FontMgr::onUnload(env);
         FontMetrics::onUnload(env);
         FontFeature::onUnload(env);
+        FontArguments::onUnload(env);
         FontFamilyName::onUnload(env);
         Drawable::onUnload(env);
         Color4f::onUnload(env);

@@ -36,6 +36,7 @@ public class Typeface extends RefCnt {
 
     /** 
      * This is a style bit, advance widths may vary even if this returns true.
+     *
      * @return  true if the typeface claims to be fixed-pitch
      */
     public boolean isFixedPitch() {
@@ -49,6 +50,7 @@ public class Typeface extends RefCnt {
 
     /**
      * It is possible the number of axes can be retrieved but actual position cannot.
+     *
      * @return  the variation coordinates describing the position of this typeface in design variation space, null if there’s no variations
      */
     @Nullable
@@ -63,6 +65,7 @@ public class Typeface extends RefCnt {
 
         /**
      * It is possible the number of axes can be retrieved but actual position cannot.
+     *
      * @return  the variation coordinates describing the position of this typeface in design variation space, null if there’s no variations
      */
     @Nullable
@@ -104,41 +107,48 @@ public class Typeface extends RefCnt {
      * Return a new typeface based on this typeface but parameterized as specified in the
      * variation. If the variation does not supply an argument for a parameter
      * in the font then the value from this typeface will be used as the value for that argument.
+     *
+     * @param   variation  axis position
      * @return  same typeface if variation already matches, new typeface otherwise
      * @throws IllegalArgumentException  on failure
      */
     public Typeface makeClone(FontVariation variation) {
-        return makeClone(new FontVariation[] { variation }, 0);
+        return makeClone(FontArguments.DEFAULT.withVariations(new FontVariation[] { variation }));
     }
 
     /**
      * Return a new typeface based on this typeface but parameterized as specified in the
      * variations. If the variations does not supply an argument for a parameter
      * in the font then the value from this typeface will be used as the value for that argument.
+     *
+     * @param   variation  axis positions
      * @return  same typeface if all variation already match, new typeface otherwise
      * @throws IllegalArgumentException  on failure
      */
     public Typeface makeClone(FontVariation[] variations) {
-        return makeClone(variations, 0);
+        return makeClone(FontArguments.DEFAULT.withVariations(variations));
     }
 
     /**
      * Return a new typeface based on this typeface but parameterized as specified in the
-     * variations. If the variations does not supply an argument for a parameter
+     * font arguments. If the arguments does not supply a value for a parameter
      * in the font then the value from this typeface will be used as the value for that argument.
-     * @return  same typeface if all variation already match, new typeface otherwise
+     *
+     * @param   fontArguments  new typeface parameters
+     * @return  same typeface if all arguments already match, new typeface otherwise
      * @throws IllegalArgumentException  on failure
      */
-    public Typeface makeClone(FontVariation[] variations, int collectionIndex) {
+    public Typeface makeClone(FontArguments fontArguments) {
         try {
-            if (variations.length == 0)
+            if (fontArguments.equals(FontArguments.DEFAULT))
                 return this;
             Stats.onNativeCall();
-            long ptr = _nMakeClone(_ptr, variations, collectionIndex);
+            long ptr = _nMakeClone(_ptr, fontArguments);
             if (ptr == 0)
-                throw new IllegalArgumentException("Failed to clone Typeface " + this + " with " + Arrays.toString(variations));
+                throw new IllegalArgumentException("Failed to clone Typeface " + this + " with " + fontArguments);
             return new Typeface(ptr);
         } finally {
+            ReferenceUtil.reachabilityFence(fontArguments);
             ReferenceUtil.reachabilityFence(this);
         }
     }
@@ -354,7 +364,7 @@ public class Typeface extends RefCnt {
     @ApiStatus.Internal public static native long     _nMakeFromName(String name, int fontStyle);
     @ApiStatus.Internal public static native long     _nMakeFromFile(String path, int index);
     @ApiStatus.Internal public static native long     _nMakeFromData(long dataPtr, int index);
-    @ApiStatus.Internal public static native long     _nMakeClone(long ptr, FontVariation[] variations, int collectionIndex);
+    @ApiStatus.Internal public static native long     _nMakeClone(long ptr, FontArguments fontArguments);
     @ApiStatus.Internal public static native short[]  _nGetUTF32Glyphs(long ptr, int[] uni);
     @ApiStatus.Internal public static native short    _nGetUTF32Glyph(long ptr, int unichar);
     @ApiStatus.Internal public static native int      _nGetGlyphsCount(long ptr);

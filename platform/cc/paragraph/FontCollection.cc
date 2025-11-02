@@ -1,5 +1,6 @@
 #include <iostream>
 #include <jni.h>
+#include <optional>
 #include "../interop.hh"
 #include "SkRefCnt.h"
 #include "FontCollection.h"
@@ -82,9 +83,18 @@ extern "C" JNIEXPORT jlongArray JNICALL Java_io_github_humbleui_skija_paragraph_
 }
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_paragraph_FontCollection__1nDefaultFallbackChar
-  (JNIEnv* env, jclass jclass, jlong ptr, jint unicode, jint fontStyle, jstring locale) {
+  (JNIEnv* env, jclass jclass, jlong ptr, jint unicode, jint fontStyle, jstring locale, jobject fontArgumentsObj) {
     FontCollection* instance = reinterpret_cast<FontCollection*>(static_cast<uintptr_t>(ptr));
-    return reinterpret_cast<jlong>(instance->defaultFallback(unicode, skija::FontStyle::fromJava(fontStyle), skString(env, locale)).release());
+
+    optional<SkFontArguments> fontArgs;
+    if (fontArgumentsObj == nullptr) {
+      return reinterpret_cast<jlong>(instance->defaultFallback(unicode, skija::FontStyle::fromJava(fontStyle), skString(env, locale), fontArgs).release());
+    }
+
+    fontArgs = skija::FontArguments::toSkFontArguments(env, fontArgumentsObj);
+    jlong result = reinterpret_cast<jlong>(instance->defaultFallback(unicode, skija::FontStyle::fromJava(fontStyle), skString(env, locale), fontArgs).release());
+    skija::FontArguments::freeSkFontArguments(fontArgs.value());
+    return result;
 }
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_paragraph_FontCollection__1nDefaultFallback
