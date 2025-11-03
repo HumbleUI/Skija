@@ -16,6 +16,7 @@ public class PathsScene extends Scene {
             drawPaths(canvas, paint);
         }
 
+        drawMakes(canvas);
         drawAdds(canvas);
         drawTransforms(canvas);
         drawFillPaths(canvas);
@@ -31,19 +32,22 @@ public class PathsScene extends Scene {
             canvas.save();
 
             // moveTo, lineTo, close
-            for (var fillMode: PathFillMode.values()) {
-                canvas.save();
-                canvas.clipRect(Rect.makeLTRB(0, 0, 40, 40));
-                pathBuilder.setFillMode(fillMode);
-                pathBuilder.moveTo(20, 1.6f);
-                pathBuilder.lineTo(31.7f, 37.8f);
-                pathBuilder.lineTo(0.9f, 15.4f);
-                pathBuilder.lineTo(39f, 15.4f);
-                pathBuilder.lineTo(8.2f, 37.8f);
-                pathBuilder.closePath();
-                canvas.drawPathOnce(pathBuilder.detach(), paint);
-                canvas.restore();
-                canvas.translate(50, 0);
+            try (var path = pathBuilder.setFillMode(PathFillMode.WINDING)
+                                       .moveTo(20, 1.6f)
+                                       .lineTo(31.7f, 37.8f)
+                                       .lineTo(0.9f, 15.4f)
+                                       .lineTo(39f, 15.4f)
+                                       .lineTo(8.2f, 37.8f)
+                                       .closePath()
+                                       .detach();)
+            {
+                for (var fillMode: PathFillMode.values()) {
+                    canvas.save();
+                    canvas.clipRect(Rect.makeLTRB(0, 0, 40, 40));
+                    canvas.drawPathOnce(path.makeWithFillMode(fillMode), paint);
+                    canvas.restore();
+                    canvas.translate(50, 0);
+                }
             }
 
             // rMoveTo, rLineTo
@@ -176,6 +180,171 @@ public class PathsScene extends Scene {
             canvas.restore();
             canvas.translate(0, 50);
         }
+    }
+
+    private void drawMakes(Canvas canvas) {
+        canvas.save();
+        try (var paint = new Paint().setColor(0xFF437AA0).setMode(PaintMode.STROKE).setStrokeWidth(1f)) {
+
+            try (Path path = Path.makeFromSVGString("M4.886 3.21a1 1 0 0 1 .812-.19l7.698 1.56.338.076a7.67 7.67 0 0 1 5.806 7.266v.346l-.008.329 1.197 1.197a1 1 0 0 1 0 1.414l-5.523 5.522a1 1 0 0 1-1.413 0l-1.198-1.197-.328.008a7.67 7.67 0 0 1-7.612-5.806l-.077-.338L3.02 5.7a1 1 0 0 1 .274-.906l1.5-1.5zm.674 9.99a6.666 6.666 0 0 0 6.383 5.342h.3l.756-.018 1.5 1.5 5.523-5.522-1.5-1.5.018-.756a6.67 6.67 0 0 0-5.048-6.619l-.295-.066L5.5 4l-.396.397 5.16 5.16A3 3 0 0 1 12 9.001 3.001 3.001 0 0 1 12 15a3 3 0 0 1-2.444-4.737l-5.16-5.16L4 5.5zM12 10.001a2 2 0 0 0-2 2l.01.204a2 2 0 0 0 1.786 1.785L12 14a2 2 0 0 0 1.989-1.795l.01-.204a2 2 0 0 0-1.795-1.99z");) {
+                canvas.drawPath(path, paint);
+                canvas.translate(50, 0);
+            }
+
+            // makeRaw(points, verbs, conicWeights, fillMode) - triangle with line
+            try (Path path = Path.makeRaw(
+                new Point[] {
+                    new Point(20, 5),
+                    new Point(35, 35),
+                    new Point(5, 35)
+                },
+                new PathVerb[] {
+                    PathVerb.MOVE,
+                    PathVerb.LINE,
+                    PathVerb.LINE,
+                    PathVerb.CLOSE
+                },
+                new float[] {},
+                PathFillMode.WINDING
+            )) {
+                canvas.drawPath(path, paint);
+                canvas.translate(50, 0);
+            }
+
+            // makeRaw(points, verbs, conicWeights, fillMode, isVolatile) - quad curve
+            try (Path path = Path.makeRaw(
+                new Point[] {
+                    new Point(0, 20),
+                    new Point(20, 0),
+                    new Point(40, 20)
+                },
+                new PathVerb[] {
+                    PathVerb.MOVE,
+                    PathVerb.QUAD
+                },
+                new float[] {},
+                PathFillMode.WINDING,
+                true
+            )) {
+                canvas.drawPath(path, paint);
+                canvas.translate(50, 0);
+            }
+
+            // makeRect(rect)
+            try (Path path = Path.makeRect(Rect.makeLTRB(10, 10, 30, 30))) {
+                canvas.drawPath(path, paint);
+                canvas.translate(50, 0);
+            }
+
+            // makeRect(rect, dir)
+            try (Path path = Path.makeRect(Rect.makeLTRB(10, 10, 30, 30), PathDirection.CLOCKWISE)) {
+                canvas.drawPath(path, paint);
+                canvas.translate(50, 0);
+            }
+
+            // makeRect(rect, dir, startIndex)
+            try (Path path = Path.makeRect(Rect.makeLTRB(10, 10, 30, 30), PathDirection.COUNTER_CLOCKWISE, 2)) {
+                canvas.drawPath(path, paint);
+                canvas.translate(50, 0);
+            }
+
+            // makeOval(oval)
+            try (Path path = Path.makeOval(Rect.makeLTRB(10, 0, 30, 40))) {
+                canvas.drawPath(path, paint);
+                canvas.translate(50, 0);
+            }
+
+            // makeOval(oval, dir)
+            try (Path path = Path.makeOval(Rect.makeLTRB(10, 0, 30, 40), PathDirection.COUNTER_CLOCKWISE)) {
+                canvas.drawPath(path, paint);
+                canvas.translate(50, 0);
+            }
+
+            // makeCircle(x, y, radius)
+            try (Path path = Path.makeCircle(20, 20, 15)) {
+                canvas.drawPath(path, paint);
+                canvas.translate(50, 0);
+            }
+
+            // makeCircle(x, y, radius, dir)
+            try (Path path = Path.makeCircle(20, 20, 15, PathDirection.COUNTER_CLOCKWISE)) {
+                canvas.drawPath(path, paint);
+                canvas.translate(50, 0);
+            }
+
+            // makeRRect(rrect)
+            try (Path path = Path.makeRRect(RRect.makeLTRB(10, 10, 30, 30, 5))) {
+                canvas.drawPath(path, paint);
+                canvas.translate(50, 0);
+            }
+
+            // makeRRect(rrect, dir)
+            try (Path path = Path.makeRRect(RRect.makeLTRB(10, 10, 30, 30, 5), PathDirection.COUNTER_CLOCKWISE)) {
+                canvas.drawPath(path, paint);
+                canvas.translate(50, 0);
+            }
+
+            // makeRRect(rrect, dir, startIndex)
+            try (Path path = Path.makeRRect(RRect.makeLTRB(10, 10, 30, 30, 5), PathDirection.CLOCKWISE, 4)) {
+                canvas.drawPath(path, paint);
+                canvas.translate(50, 0);
+            }
+
+            // makePolygon(pts, isClosed)
+            try (Path path = Path.makePolygon(new Point[] {
+                new Point(40, 0),
+                new Point(40, 40),
+                new Point(30, 40),
+                new Point(10, 20),
+                new Point(10, 40),
+                new Point(0, 40),
+                new Point(0, 0),
+                new Point(10, 0),
+                new Point(30, 20),
+                new Point(30, 0)
+            }, false)) {
+                canvas.drawPath(path, paint);
+                canvas.translate(50, 0);
+            }
+
+            // makePolygon(pts, isClosed, fillMode)
+            try (Path path = Path.makePolygon(new Point[] {
+                new Point(20, 0),
+                new Point(40, 40),
+                new Point(0, 15),
+                new Point(40, 15),
+                new Point(0, 40)
+            }, true, PathFillMode.EVEN_ODD)) {
+                canvas.drawPath(path, paint);
+                canvas.translate(50, 0);
+            }
+
+            // makePolygon(pts, isClosed, fillMode, isVolatile)
+            try (Path path = Path.makePolygon(new Point[] {
+                new Point(20, 0),
+                new Point(40, 40),
+                new Point(0, 15),
+                new Point(40, 15),
+                new Point(0, 40)
+            }, true, PathFillMode.WINDING, true)) {
+                canvas.drawPath(path, paint);
+                canvas.translate(50, 0);
+            }
+
+            // makeLine(point, point)
+            try (Path path = Path.makeLine(new Point(10, 10), new Point(30, 30))) {
+                canvas.drawPath(path, paint);
+                canvas.translate(50, 0);
+            }
+
+            // makeLine(x0, y0, x1, y1)
+            try (Path path = Path.makeLine(10, 30, 30, 10)) {
+                canvas.drawPath(path, paint);
+                canvas.translate(50, 0);
+            }
+        }
+        canvas.restore();
+        canvas.translate(0, 50);
     }
 
     private void drawAdds(Canvas canvas) {
@@ -360,18 +529,18 @@ public class PathsScene extends Scene {
              Path p2 = new PathBuilder().moveTo(0, 20).lineTo(14, 20).lineTo(14, 0).lineTo(26, 0).lineTo(26, 20).lineTo(40, 20).lineTo(20, 40).lineTo(0, 20).closePath().build();
              Path p3 = new PathBuilder().moveTo(0, 20).lineTo(20, 0).lineTo(20, 14).lineTo(40, 14).lineTo(40, 26).lineTo(20, 26).lineTo(20, 40).lineTo(0, 20).closePath().build();
              Path p4 = new PathBuilder().moveTo(0, 20).lineTo(20, 0).lineTo(40, 20).lineTo(26, 20).lineTo(26, 40).lineTo(14, 40).lineTo(14, 20).lineTo(0, 20).closePath().build();
-             Path target = pair == 0 ? p1.makeLerp(p2, weight)
-                         : pair == 1 ? p2.makeLerp(p3, weight)
-                         : pair == 2 ? p3.makeLerp(p4, weight)
-                         : p4.makeLerp(p1, weight);
+             Path target = pair == 0 ? p1.makeInterpolate(p2, weight)
+                         : pair == 1 ? p2.makeInterpolate(p3, weight)
+                         : pair == 2 ? p3.makeInterpolate(p4, weight)
+                         : p4.makeInterpolate(p1, weight);
+             Path targetV = target.makeWithVolatile(true);
              Paint stroke = new Paint().setColor(0xFF437AA0).setMode(PaintMode.STROKE).setStrokeWidth(1);)
         {
-            target.setVolatile(true);
             assert p1.isInterpolatable(p2);
             assert p1.isInterpolatable(p3);
             assert p1.isInterpolatable(p4);
 
-            canvas.drawPath(target, stroke);
+            canvas.drawPath(targetV, stroke);
             canvas.translate(0, 50);
         }
     }

@@ -69,6 +69,20 @@ public class PathBuilder extends Managed {
     }
 
     /**
+     * Compares fonts, and returns true if they are equivalent.
+     * May return false if Typeface has identical contents but different pointers.
+     */
+    @ApiStatus.Internal @Override
+    public boolean _nativeEquals(Native other) {
+        try {
+            return _nEquals(_ptr, Native.getPtr(other));
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(other);
+        }
+    }
+
+    /**
      * Returns {@link PathFillMode}, the rule used to fill {@link Path}.
      *
      * @return  current {@link PathFillMode} setting
@@ -1586,6 +1600,7 @@ public class PathBuilder extends Managed {
     public static native long    _nMakeFromFillMode(int fillMode);
     public static native long    _nMakeFromPathBuilder(long builderPtr);
     public static native long    _nMakeFromPath(long pathPtr);
+    public static native boolean _nEquals(long ptr, long otherPtr);
     public static native int     _nGetFillMode(long ptr);
     public static native Rect    _nComputeFiniteBounds(long ptr);
     public static native Rect    _nComputeTightBounds(long ptr);

@@ -30,14 +30,99 @@ public class Path extends Managed implements Iterable<PathSegment> {
     public static class _FinalizerHolder {
         public static final long PTR = _nGetFinalizer();
     }
-    
-    /**
-     * Constructs an empty Path. By default, Path has no verbs, no {@link Point}, and no weights.
-     * FillMode is set to {@link PathFillMode#WINDING}.
-     */
-    public Path() {
-        this(_nMake());
+
+    public static Path makeRaw(Point[] points, PathVerb[] verbs, float[] conicWeights, PathFillMode fillMode) {
+        return makeRaw(points, verbs, conicWeights, fillMode, false);
+    }
+
+    public static Path makeRaw(Point[] points, PathVerb[] verbs, float[] conicWeights, PathFillMode fillMode, boolean isVolatile) {
         Stats.onNativeCall();
+        int[] verbOrdinals = new int[verbs.length];
+        for (int i = 0; i < verbs.length; i++) {
+            verbOrdinals[i] = verbs[i].ordinal();
+        }
+        float[] coords = new float[points.length * 2];
+        for (int i = 0; i < points.length; i++) {
+            coords[i * 2] = points[i]._x;
+            coords[i * 2 + 1] = points[i]._y;
+        }
+        return new Path(_nMakeRaw(coords, verbOrdinals, conicWeights, fillMode.ordinal(), isVolatile));
+    }
+
+    public static Path makeRect(Rect rect) {
+        return makeRect(rect, PathDirection.CLOCKWISE, 0);
+    }
+
+    public static Path makeRect(Rect rect, PathDirection dir) {
+        return makeRect(rect, dir, 0);
+    }
+
+    public static Path makeRect(Rect rect, PathDirection dir, int startIndex) {
+        Stats.onNativeCall();
+        return new Path(_nMakeRect(rect._left, rect._top, rect._right, rect._bottom, dir.ordinal(), startIndex));
+    }
+
+    public static Path makeOval(Rect oval) {
+        return makeOval(oval, PathDirection.CLOCKWISE);
+    }
+
+    public static Path makeOval(Rect oval, PathDirection dir) {
+        Stats.onNativeCall();
+        return new Path(_nMakeOval(oval._left, oval._top, oval._right, oval._bottom, dir.ordinal()));
+    }
+
+    public static Path makeCircle(float x, float y, float radius) {
+        return makeCircle(x, y, radius, PathDirection.CLOCKWISE);
+    }
+
+    public static Path makeCircle(float x, float y, float radius, PathDirection dir) {
+        Stats.onNativeCall();
+        return new Path(_nMakeCircle(x, y, radius, dir.ordinal()));
+    }
+
+    public static Path makeRRect(RRect rrect) {
+        return makeRRect(rrect, PathDirection.CLOCKWISE, 0);
+    }
+
+    public static Path makeRRect(RRect rrect, PathDirection dir) {
+        return makeRRect(rrect, dir, 0);
+    }
+
+    public static Path makeRRect(RRect rrect, PathDirection dir, int startIndex) {
+        try {
+            Stats.onNativeCall();
+            return new Path(_nMakeRRect(rrect._left, rrect._top, rrect._right, rrect._bottom,
+                                        rrect._radii, dir.ordinal(), startIndex));
+        } finally {
+            ReferenceUtil.reachabilityFence(rrect);
+        }
+    }
+
+    public static Path makePolygon(Point[] pts, boolean isClosed) {
+        return makePolygon(pts, isClosed, PathFillMode.WINDING, false);
+    }
+
+    public static Path makePolygon(Point[] pts, boolean isClosed, PathFillMode fillMode) {
+        return makePolygon(pts, isClosed, fillMode, false);
+    }
+
+    public static Path makePolygon(Point[] pts, boolean isClosed, PathFillMode fillMode, boolean isVolatile) {
+        Stats.onNativeCall();
+        float[] coords = new float[pts.length * 2];
+        for (int i = 0; i < pts.length; i++) {
+            coords[i * 2] = pts[i]._x;
+            coords[i * 2 + 1] = pts[i]._y;
+        }
+        return new Path(_nMakePolygon(coords, isClosed, fillMode.ordinal(), isVolatile));
+    }
+
+    public static Path makeLine(Point a, Point b) {
+        return makeLine(a._x, a._y, b._x, b._y);
+    }
+
+    public static Path makeLine(float x0, float y0, float x1, float y1) {
+        Stats.onNativeCall();
+        return new Path(_nMakeLine(x0, y0, x1, y1));
     }
 
     @NotNull
@@ -47,6 +132,51 @@ public class Path extends Managed implements Iterable<PathSegment> {
             throw new IllegalArgumentException("Failed to parse SVG Path string: " + svg);
         else
             return new Path(res);
+    }
+
+    /**
+     * <p>Returns Path that is the result of applying the Op to the first path and the second path.
+     * <p>The resulting path will be constructed from non-overlapping contours.
+     * <p>The curve order is reduced where possible so that cubics may be turned
+     * into quadratics, and quadratics maybe turned into lines.
+     *
+     * @param one The first operand (for difference, the minuend)
+     * @param two The second operand (for difference, the subtrahend)
+     * @param op  The operator to apply.
+     * @return    Path if operation was able to produce a result, null otherwise
+     */
+    @Nullable
+    public static Path makeCombining(@NotNull Path one, @NotNull Path two, PathOp op) {
+        try {
+            Stats.onNativeCall();
+            long ptr = _nMakeCombining(Native.getPtr(one), Native.getPtr(two), op.ordinal());
+            return ptr == 0 ? null : new Path(ptr);
+        } finally {
+            ReferenceUtil.reachabilityFence(one);
+            ReferenceUtil.reachabilityFence(two);
+        }
+    }
+
+    /**
+     * Constructs an empty Path. By default, Path has no verbs, no {@link Point}, and no weights.
+     * FillMode is set to {@link PathFillMode#WINDING}.
+     *
+     * @see <a href="https://fiddle.skia.org/c/@Path_empty_constructor">https://fiddle.skia.org/c/@Path_empty_constructor</a>
+     */
+    public Path() {
+        this(_nMake(PathFillMode.WINDING.ordinal()));
+        Stats.onNativeCall();
+    }
+
+    public Path(@NotNull PathFillMode fillMode) {
+        this(_nMake(fillMode.ordinal()));
+        Stats.onNativeCall();
+    }
+
+    public Path(@NotNull Path path) {
+        this(_nMakeCopy(Native.getPtr(path)));
+        ReferenceUtil.reachabilityFence(path);
+        Stats.onNativeCall();
     }
 
     /**
@@ -111,10 +241,10 @@ public class Path extends Managed implements Iterable<PathSegment> {
      *
      * @see <a href="https://fiddle.skia.org/c/@Path_interpolate">https://fiddle.skia.org/c/@Path_interpolate</a>
      */
-    public Path makeLerp(Path ending, float weight) {
+    public Path makeInterpolate(Path ending, float weight) {
         try {
             Stats.onNativeCall();
-            long ptr = _nMakeLerp(_ptr, Native.getPtr(ending), weight);
+            long ptr = _nMakeInterpolate(_ptr, Native.getPtr(ending), weight);
             if (ptr == 0)
                 throw new IllegalArgumentException("Point array is not the same size as ending Point array");
             return new Path(ptr);
@@ -133,10 +263,31 @@ public class Path extends Managed implements Iterable<PathSegment> {
         }
     }
 
-    public Path setFillMode(PathFillMode fillMode) {
-        Stats.onNativeCall();
-        _nSetFillMode(_ptr, fillMode.ordinal());
-        return this;
+    public Path makeWithFillMode(PathFillMode fillMode) {
+        try {
+            Stats.onNativeCall();
+            return new Path(_nMakeWithFillMode(_ptr, fillMode.ordinal()));
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    public boolean isInverseFillType() {
+        try {
+            Stats.onNativeCall();
+            return _nIsInverseFillType(_ptr);
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    public Path makeToggleInverseFillType() {
+        try {
+            Stats.onNativeCall();
+            return new Path(_nMakeToggleInverseFillType(_ptr));
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
     }
 
     /**
@@ -185,21 +336,6 @@ public class Path extends Managed implements Iterable<PathSegment> {
         }
     }
 
-    /**
-     * <p>Sets Path to its initial state.</p>
-     * 
-     * <p>Removes verb array, Point array, and weights, and sets FillMode to {@link PathFillMode#WINDING}.
-     * Internal storage associated with Path is released.</p>
-     *
-     * @return  this
-     *
-     * @see <a href="https://fiddle.skia.org/c/@Path_reset">https://fiddle.skia.org/c/@Path_reset</a>
-     */
-    public Path reset() {
-        Stats.onNativeCall();
-        _nReset(_ptr);
-        return this;
-    }
 
     /**
      * <p>Returns if Path is empty.</p>
@@ -270,27 +406,13 @@ public class Path extends Managed implements Iterable<PathSegment> {
         }
     }
 
-    /**
-     * <p>Specifies whether Path is volatile; whether it will be altered or discarded
-     * by the caller after it is drawn. Path by default have volatile set false, allowing
-     * SkBaseDevice to attach a cache of data which speeds repeated drawing.</p>
-     *
-     * <p>Mark temporary paths, discarded or modified after use, as volatile
-     * to inform SkBaseDevice that the path need not be cached.</p>
-     *
-     * <p>Mark animating Path volatile to improve performance.
-     * Mark unchanging Path non-volatile to improve repeated rendering.</p>
-     *
-     * <p>raster surface Path draws are affected by volatile for some shadows.
-     * GPU surface Path draws are affected by volatile for some shadows and concave geometries.</p>
-     *
-     * @param isVolatile  true if caller will alter Path after drawing
-     * @return            this
-     */
-    public Path setVolatile(boolean isVolatile) {
-        Stats.onNativeCall();
-        _nSetVolatile(_ptr, isVolatile);
-        return this;
+    public Path makeWithVolatile(boolean isVolatile) {
+        try {
+            Stats.onNativeCall();
+            return new Path(_nMakeWithVolatile(_ptr, isVolatile));
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
     }
 
     /**
@@ -369,6 +491,38 @@ public class Path extends Managed implements Iterable<PathSegment> {
         }
     }
 
+    public Point[] getPoints() {
+        try {
+            Stats.onNativeCall();
+            return _nGetPoints(_ptr);
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    public PathVerb[] getVerbs() {
+        try {
+            Stats.onNativeCall();
+            int[] verbOrdinals = _nGetVerbs(_ptr);
+            PathVerb[] verbs = new PathVerb[verbOrdinals.length];
+            for (int i = 0; i < verbOrdinals.length; i++) {
+                verbs[i] = PathVerb._values[verbOrdinals[i]];
+            }
+            return verbs;
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    public float[] getConicWeights() {
+        try {
+            Stats.onNativeCall();
+            return _nGetConicWeights(_ptr);
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
     /**
      * Returns the number of points in Path.
      * Point count is initially zero.
@@ -403,6 +557,16 @@ public class Path extends Managed implements Iterable<PathSegment> {
         }
     }
 
+    @Nullable
+    public Point getLastPt() {
+        try {
+            Stats.onNativeCall();
+            return _nGetLastPt(_ptr);
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
     /**
      * Returns the approximate byte size of the Path in memory.
      *
@@ -418,28 +582,8 @@ public class Path extends Managed implements Iterable<PathSegment> {
     }
 
     /**
-     * <p>Exchanges the verb array, Point array, weights, and FillMode with other.
-     * Cached state is also exchanged. swap() internally exchanges pointers, so
-     * it is lightweight and does not allocate memory.</p>
-     *
-     * @param   other  Path exchanged by value
-     * @return  this
-     *
-     * @see <a href="https://fiddle.skia.org/c/@Path_swap">https://fiddle.skia.org/c/@Path_swap</a>
-     */
-    public Path swap(Path other) {
-        try {
-            Stats.onNativeCall();
-            _nSwap(_ptr, Native.getPtr(other));
-            return this;
-        } finally {
-            ReferenceUtil.reachabilityFence(other);
-        }
-    }
-
-    /** 
      * <p>Returns minimum and maximum axes values of Point array.</p>
-     * 
+     *
      * <p>Returns (0, 0, 0, 0) if Path contains no points. Returned bounds width and height may
      * be larger or smaller than area affected when Path is drawn.</p>
      *
@@ -524,11 +668,10 @@ public class Path extends Managed implements Iterable<PathSegment> {
         }
     }
 
-
     /**
      * <p>Approximates conic with quad array. Conic is constructed from start Point p0,
      * control Point p1, end Point p2, and weight w.</p>
-     * 
+     *
      * <p>Quad array is stored in pts; this storage is supplied by caller.</p>
      *
      * <p>Maximum quad count is 2 to the pow2.</p>
@@ -578,6 +721,40 @@ public class Path extends Managed implements Iterable<PathSegment> {
         }
     }
 
+    @Nullable
+    public Path makeTransform(Matrix33 matrix) {
+        try {
+            Stats.onNativeCall();
+            long ptr = _nMakeTransform(_ptr, matrix._mat);
+            return ptr == 0 ? null : new Path(ptr);
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(matrix);
+        }
+    }
+
+    @Nullable
+    public Path makeOffset(float dx, float dy) {
+        try {
+            Stats.onNativeCall();
+            long ptr = _nMakeOffset(_ptr, dx, dy);
+            return ptr == 0 ? null : new Path(ptr);
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    @Nullable
+    public Path makeScale(float sx, float sy) {
+        try {
+            Stats.onNativeCall();
+            long ptr = _nMakeScale(_ptr, sx, sy);
+            return ptr == 0 ? null : new Path(ptr);
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
     /**
      * <p>Returns a mask, where each set bit corresponds to a SegmentMask constant
      * if Path contains one or more verbs of that type.</p>
@@ -600,6 +777,71 @@ public class Path extends Managed implements Iterable<PathSegment> {
         } finally {
             ReferenceUtil.reachabilityFence(this);
         }
+    }
+
+    /**
+     * <p>Specifies whether Path is volatile; whether it will be altered or discarded
+     * by the caller after it is drawn. Path by default have volatile set false, allowing
+     * SkBaseDevice to attach a cache of data which speeds repeated drawing.</p>
+     *
+     * <p>Mark temporary paths, discarded or modified after use, as volatile
+     * to inform SkBaseDevice that the path need not be cached.</p>
+     *
+     * <p>Mark animating Path volatile to improve performance.
+     * Mark unchanging Path non-volatile to improve repeated rendering.</p>
+     *
+     * <p>raster surface Path draws are affected by volatile for some shadows.
+     * GPU surface Path draws are affected by volatile for some shadows and concave geometries.</p>
+     *
+     * @param isVolatile  true if caller will alter Path after drawing
+     * @return            this
+     */
+    public Path setVolatile(boolean isVolatile) {
+        Stats.onNativeCall();
+        _nSetVolatile(_ptr, isVolatile);
+        return this;
+    }
+
+    /**
+     * <p>Exchanges the verb array, Point array, weights, and FillMode with other.
+     * Cached state is also exchanged. swap() internally exchanges pointers, so
+     * it is lightweight and does not allocate memory.</p>
+     *
+     * @param   other  Path exchanged by value
+     * @return  this
+     *
+     * @see <a href="https://fiddle.skia.org/c/@Path_swap">https://fiddle.skia.org/c/@Path_swap</a>
+     */
+    public Path swap(Path other) {
+        try {
+            Stats.onNativeCall();
+            _nSwap(_ptr, Native.getPtr(other));
+            return this;
+        } finally {
+            ReferenceUtil.reachabilityFence(other);
+        }
+    }
+
+    public Path setFillMode(PathFillMode fillMode) {
+        Stats.onNativeCall();
+        _nSetFillMode(_ptr, fillMode.ordinal());
+        return this;
+    }
+
+    /**
+     * <p>Sets Path to its initial state.</p>
+     *
+     * <p>Removes verb array, Point array, and weights, and sets FillMode to {@link PathFillMode#WINDING}.
+     * Internal storage associated with Path is released.</p>
+     *
+     * @return  this
+     *
+     * @see <a href="https://fiddle.skia.org/c/@Path_reset">https://fiddle.skia.org/c/@Path_reset</a>
+     */
+    public Path reset() {
+        Stats.onNativeCall();
+        _nReset(_ptr);
+        return this;
     }
 
     @Override
@@ -700,29 +942,6 @@ public class Path extends Managed implements Iterable<PathSegment> {
     }
 
     /**
-     * <p>Returns Path that is the result of applying the Op to the first path and the second path.
-     * <p>The resulting path will be constructed from non-overlapping contours.
-     * <p>The curve order is reduced where possible so that cubics may be turned
-     * into quadratics, and quadratics maybe turned into lines.
-     *
-     * @param one The first operand (for difference, the minuend)
-     * @param two The second operand (for difference, the subtrahend)
-     * @param op  The operator to apply.
-     * @return    Path if operation was able to produce a result, null otherwise
-     */
-    @Nullable
-    public static Path makeCombining(@NotNull Path one, @NotNull Path two, PathOp op) {
-        try {
-            Stats.onNativeCall();
-            long ptr = _nMakeCombining(Native.getPtr(one), Native.getPtr(two), op.ordinal());
-            return ptr == 0 ? null : new Path(ptr);
-        } finally {
-            ReferenceUtil.reachabilityFence(one);
-            ReferenceUtil.reachabilityFence(two);
-        }
-    }
-
-    /**
      * <p>Initializes Path from byte buffer. Returns null if the buffer is
      * data is inconsistent, or the length is too small.</p>
      *
@@ -787,12 +1006,23 @@ public class Path extends Managed implements Iterable<PathSegment> {
     }
 
     public static native long    _nGetFinalizer();
-    public static native long    _nMake();
+    public static native long    _nMakeRaw(float[] coords, int[] verbs, float[] conicWeights, int fillMode, boolean isVolatile);
+    public static native long    _nMakeRect(float l, float t, float r, float b, int dir, int startIndex);
+    public static native long    _nMakeOval(float l, float t, float r, float b, int dir);
+    public static native long    _nMakeCircle(float x, float y, float radius, int dir);
+    public static native long    _nMakeRRect(float l, float t, float r, float b, float[] radii, int dir, int startIndex);
+    public static native long    _nMakePolygon(float[] coords, boolean isClosed, int fillMode, boolean isVolatile);
+    public static native long    _nMakeLine(float x0, float y0, float x1, float y1);
+    public static native long    _nMake(int fillMode);
+    public static native long    _nMakeCopy(long ptr);
     public static native long    _nMakeFromSVGString(String s);
     public static native boolean _nEquals(long aPtr, long bPtr);
     public static native boolean _nIsInterpolatable(long ptr, long comparePtr);
-    public static native long    _nMakeLerp(long ptr, long endingPtr, float weight);
+    public static native long    _nMakeInterpolate(long ptr, long endingPtr, float weight);
     public static native int     _nGetFillMode(long ptr);
+    public static native long    _nMakeWithFillMode(long ptr, int fillMode);
+    public static native boolean _nIsInverseFillType(long ptr);
+    public static native long    _nMakeToggleInverseFillType(long ptr);
     public static native void    _nSetFillMode(long ptr, int fillMode);
     public static native boolean _nIsConvex(long ptr);
     public static native Rect    _nIsOval(long ptr);
@@ -802,13 +1032,18 @@ public class Path extends Managed implements Iterable<PathSegment> {
     public static native boolean _nIsLastContourClosed(long ptr);
     public static native boolean _nIsFinite(long ptr);
     public static native boolean _nIsVolatile(long ptr);
+    public static native long    _nMakeWithVolatile(long ptr, boolean isVolatile);
     public static native void    _nSetVolatile(long ptr, boolean isVolatile);
     public static native boolean _nIsLineDegenerate(float x0, float y0, float x1, float y1, boolean exact);
     public static native boolean _nIsQuadDegenerate(float x0, float y0, float x1, float y1, float x2, float y2, boolean exact);
     public static native boolean _nIsCubicDegenerate(float x0, float y0, float x1, float y1, float x2, float y2, float x3, float y3, boolean exact);
     public static native Point[] _nMaybeGetAsLine(long ptr);
+    public static native Point[] _nGetPoints(long ptr);
+    public static native int[]   _nGetVerbs(long ptr);
+    public static native float[] _nGetConicWeights(long ptr);
     public static native int     _nGetPointsCount(long ptr);
     public static native int     _nCountVerbs(long ptr);
+    public static native Point   _nGetLastPt(long ptr);
     public static native long    _nApproximateBytesUsed(long ptr);
     public static native void    _nSwap(long ptr, long otherPtr);
     public static native Rect    _nGetBounds(long ptr);
@@ -817,6 +1052,9 @@ public class Path extends Managed implements Iterable<PathSegment> {
     public static native boolean _nConservativelyContainsRect(long ptr, float l, float t, float r, float b);
     public static native Point[] _nConvertConicToQuads(float x0, float y0, float x1, float y1, float x2, float y2, float w, int pow2);
     public static native Rect    _nIsRect(long ptr);
+    public static native long    _nMakeTransform(long ptr, float[] matrix);
+    public static native long    _nMakeOffset(long ptr, float dx, float dy);
+    public static native long    _nMakeScale(long ptr, float sx, float sy);
     public static native int     _nGetSegmentMasks(long ptr);
     public static native boolean _nContains(long ptr, float x, float y);
     public static native void    _nDump(long ptr);

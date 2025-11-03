@@ -39,6 +39,13 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_PathBuilder__1n
     return reinterpret_cast<jlong>(obj);
 }
 
+extern "C" JNIEXPORT jboolean JNICALL Java_io_github_humbleui_skija_PathBuilder__1nEquals
+  (JNIEnv* env, jclass jclass, jlong ptr, jlong otherPtr) {
+    SkPathBuilder* instance = reinterpret_cast<SkPathBuilder*>(static_cast<uintptr_t>(ptr));
+    SkPathBuilder* other = reinterpret_cast<SkPathBuilder*>(static_cast<uintptr_t>(otherPtr));
+    return *instance == *other;
+}
+
 extern "C" JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_PathBuilder__1nGetFillMode(JNIEnv* env, jclass jclass, jlong ptr) {
     SkPathBuilder* instance = reinterpret_cast<SkPathBuilder*>(static_cast<uintptr_t>(ptr));
     return static_cast<jint>(instance->fillType());
