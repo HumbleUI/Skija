@@ -70,7 +70,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
      * <p>Returns true if Path contain equal verbs and equal weights.
      * If Path contain one or more conics, the weights must match.</p>
      *
-     * <p>{@link #conicTo(float, float, float, float, float)} may add different verbs
+     * <p>{@link PathBuilder#conicTo(float, float, float, float, float)} may add different verbs
      * depending on conic weight, so it is not trivial to interpolate a pair of Path
      * containing conics with different conic weight values.</p>
      *
@@ -221,7 +221,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
     /**
      * <p>Returns if contour is closed.</p>
      * 
-     * <p>Contour is closed if Path Verb array was last modified by {@link #closePath()}. When stroked,
+     * <p>Contour is closed if Path Verb array was last modified by {@link PathBuilder#closePath()}. When stroked,
      * closed contour draws {@link PaintStrokeJoin} instead of {@link PaintStrokeCap} at first and last Point.</p>
      *
      * @return  true if the last contour ends with a {@link PathVerb#CLOSE}

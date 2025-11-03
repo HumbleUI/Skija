@@ -121,7 +121,7 @@ public class Typeface extends RefCnt {
      * variations. If the variations does not supply an argument for a parameter
      * in the font then the value from this typeface will be used as the value for that argument.
      *
-     * @param   variation  axis positions
+     * @param  variations  axis positions
      * @return  same typeface if all variation already match, new typeface otherwise
      * @throws IllegalArgumentException  on failure
      */

@@ -243,8 +243,10 @@ def delombok(dirs: List[str], target: str, classpath: List[str] = [], modulepath
   sources = files(*[dir + "/**/*.java" for dir in dirs])
   if has_newer(sources, files(target + "/**")):
     print("Delomboking", *dirs, "to", target, flush=True)
-    subprocess.check_call(["java",
+    subprocess.check_call([
+      "java",
       "-Dfile.encoding=UTF8",
+      *(['--sun-misc-unsafe-memory-access=allow'] if jdk_version()[0] >= 23 else []),
       "-jar", lombok(),
       "delombok",
       *dirs,
