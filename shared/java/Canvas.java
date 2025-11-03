@@ -424,6 +424,22 @@ public class Canvas extends Managed {
         return this;
     }
 
+    /**
+     * Draws path and closes it immediately
+     */
+    @NotNull @Contract("_, _, _ -> this")
+    public Canvas drawPathOnce(@NotNull Path path, @NotNull Paint paint) {
+        assert _ptr != 0 : "Canvas is closed";
+        assert path != null : "Can’t drawPath with path == null";
+        assert paint != null : "Can’t drawPath with paint == null";
+        path.setVolatile(true);
+        Stats.onNativeCall();
+        _nDrawPath(_ptr, Native.getPtr(path), Native.getPtr(paint));
+        ReferenceUtil.reachabilityFence(paint);
+        path.close();
+        return this;
+    }
+
     @NotNull @Contract("_, _, _ -> this")
     public Canvas drawImage(@NotNull Image image, float left, float top) {
         return drawImageRect(image, Rect.makeWH(image.getWidth(), image.getHeight()), Rect.makeXYWH(left, top, image.getWidth(), image.getHeight()), SamplingMode.DEFAULT, null, true);
