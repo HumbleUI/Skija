@@ -12,6 +12,7 @@
 
 #if defined(SK_BUILD_FOR_UNIX)
 #include "include/ports/SkFontMgr_fontconfig.h"
+#include "include/ports/SkFontScanner_FreeType.h"
 #endif
 
 namespace skija {
@@ -29,7 +30,7 @@ public:
 #elif defined(SK_BUILD_FOR_MAC)
             mgr = SkFontMgr_New_CoreText(nullptr);
 #elif defined(SK_BUILD_FOR_UNIX)
-            mgr = SkFontMgr_New_FontConfig(nullptr);
+            mgr = SkFontMgr_New_FontConfig(nullptr, SkFontScanner_Make_FreeType());
 #endif
             singleton = mgr;
         });

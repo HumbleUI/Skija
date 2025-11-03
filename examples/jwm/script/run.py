@@ -44,12 +44,11 @@ def main():
   # Java
   subprocess.check_call([
     'java',
-    '-classpath', build_utils.classpath_join(['target/classes'] + classpath)
-  ] + [
+    '-classpath', build_utils.classpath_join(['target/classes'] + classpath),
     '-Djava.awt.headless=true',
     '-enableassertions',
     '-enablesystemassertions',
-    '--enable-native-access=ALL-UNNAMED',
+    *(['--enable-native-access=ALL-UNNAMED'] if build_utils.jdk_version()[0] >= 24 else []),
     '-Xcheck:jni',
     '-Dskija.logLevel=DEBUG',
     'io.github.humbleui.skija.examples.jwm.Main'

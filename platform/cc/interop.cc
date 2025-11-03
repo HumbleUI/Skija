@@ -1113,42 +1113,6 @@ jlong packISize(SkISize p) {
     return packTwoInts(p.fWidth, p.fHeight);
 }
 
-jbyteArray javaByteArray(JNIEnv* env, const std::vector<jbyte>& bytes) {
-    jbyteArray res = env->NewByteArray((jsize) bytes.size());
-    env->SetByteArrayRegion(res, 0, (jsize) bytes.size(), bytes.data());
-    return res;
-}
-
-jshortArray javaShortArray(JNIEnv* env, const std::vector<uint16_t>& shorts) {
-    jshortArray res = env->NewShortArray((jsize) shorts.size());
-    env->SetShortArrayRegion(res, 0, (jsize) shorts.size(), reinterpret_cast<const jshort*>(shorts.data()));
-    return res;
-}
-
-jintArray javaIntArray(JNIEnv* env, const std::vector<int32_t>& ints) {
-    jintArray res = env->NewIntArray((jsize) ints.size());
-    env->SetIntArrayRegion(res, 0, (jsize) ints.size(), reinterpret_cast<const jint*>(ints.data()));
-    return res;
-}
-
-jintArray javaIntArray(JNIEnv* env, const std::vector<uint32_t>& ints) {
-    jintArray res = env->NewIntArray((jsize) ints.size());
-    env->SetIntArrayRegion(res, 0, (jsize) ints.size(), reinterpret_cast<const jint*>(ints.data()));
-    return res;
-}
-
-jlongArray javaLongArray(JNIEnv* env, const std::vector<jlong>& longs) {
-    jlongArray res = env->NewLongArray((jsize) longs.size());
-    env->SetLongArrayRegion(res, 0, (jsize) longs.size(), longs.data());
-    return res;
-}
-
-jfloatArray javaFloatArray(JNIEnv* env, SkSpan<const float> floats) {
-    jfloatArray res = env->NewFloatArray((jsize) floats.size());
-    env->SetFloatArrayRegion(res, 0, (jsize) floats.size(), floats.data());
-    return res;
-}
-
 std::vector<SkString> skStringVector(JNIEnv* env, jobjectArray arr) {
     if (arr == nullptr) {
         return std::vector<SkString>(0);

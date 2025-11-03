@@ -1,5 +1,5 @@
 #! /usr/bin/env python3
-import argparse, base64, collections, functools, glob, hashlib, itertools, json, os, pathlib, platform, random, re, shutil, subprocess, tempfile, time, urllib.request, zipfile
+import argparse, base64, collections, functools, glob, hashlib, itertools, json, os, pathlib, platform, random, re, shutil, subprocess, sys, tempfile, time, urllib.request, zipfile
 from typing import List, Tuple
 
 def get_arg(name):
@@ -200,7 +200,7 @@ def javac_sources(sources):
   lines = []
   for key in sorted_keys:
     sorted_values = sorted(groups[key], key=str.lower)
-    lines.append(f"  {key}/{' '.join(sorted_values)}")
+    lines.append('  ' + key + '/ ' + ' '.join(sorted_values))
 
   return '\n'.join(lines)
 

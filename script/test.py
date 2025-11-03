@@ -24,13 +24,14 @@ def main():
   sources = build_utils.files('java/**/*.java')
   build_utils.javac(sources, 'target/classes', classpath = classpath)
 
-  subprocess.check_call(['java',
+  subprocess.check_call([
+    'java',
     '--class-path', build_utils.classpath_join(classpath + ['target/classes']),
     *(['-XstartOnFirstThread'] if 'macos' == build_utils.system else []),
     '-Djava.awt.headless=true',
     '-enableassertions',
     '-enablesystemassertions',
-    '--enable-native-access=ALL-UNNAMED',
+    *(['--enable-native-access=ALL-UNNAMED'] if build_utils.jdk_version()[0] >= 24 else []),
     '-Xcheck:jni',
     '-Dskija.logLevel=DEBUG',
     'io.github.humbleui.skija.test.TestSuite'])

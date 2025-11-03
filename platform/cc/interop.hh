@@ -369,12 +369,50 @@ jlong packTwoInts(int32_t a, int32_t b);
 jlong packIPoint(SkIPoint p);
 jlong packISize(SkISize s);
 
-jbyteArray   javaByteArray  (JNIEnv* env, const std::vector<jbyte>& bytes);
-jshortArray  javaShortArray (JNIEnv* env, const std::vector<uint16_t>& shorts);
-jintArray    javaIntArray   (JNIEnv* env, const std::vector<int32_t>& ints);
-jintArray    javaIntArray   (JNIEnv* env, const std::vector<uint32_t>& ints);
-jlongArray   javaLongArray  (JNIEnv* env, const std::vector<jlong>& longs);
-jfloatArray  javaFloatArray (JNIEnv* env, SkSpan<const float> floats);
+template <typename T>
+jbyteArray javaByteArray(JNIEnv* env, const std::vector<T>& bytes) {
+    jbyteArray res = env->NewByteArray((jsize) bytes.size());
+    env->SetByteArrayRegion(res, 0, (jsize) bytes.size(), bytes.data());
+    return res;
+}
+
+template <typename T>
+jshortArray javaShortArray(JNIEnv* env, const std::vector<T>& shorts) {
+    jshortArray res = env->NewShortArray((jsize) shorts.size());
+    env->SetShortArrayRegion(res, 0, (jsize) shorts.size(), reinterpret_cast<const jshort*>(shorts.data()));
+    return res;
+}
+
+template <typename T>
+jintArray javaIntArray(JNIEnv* env, const std::vector<T>& ints) {
+    jintArray res = env->NewIntArray((jsize) ints.size());
+    env->SetIntArrayRegion(res, 0, (jsize) ints.size(), reinterpret_cast<const jint*>(ints.data()));
+    return res;
+}
+
+template <typename T>
+jlongArray javaLongArray(JNIEnv* env, const std::vector<T>& longs) {
+    jlongArray res = env->NewLongArray((jsize) longs.size());
+    env->SetLongArrayRegion(res, 0, (jsize) longs.size(), longs.data());
+    return res;
+}
+
+template <typename T>
+jfloatArray javaFloatArray(JNIEnv* env, SkSpan<const T> floats) {
+    jfloatArray res = env->NewFloatArray((jsize) floats.size());
+    env->SetFloatArrayRegion(res, 0, (jsize) floats.size(), floats.data());
+    return res;
+}
+
+template <typename T>
+jfloatArray javaFloatArray(JNIEnv* env, const std::vector<T>& floats) {
+    return javaFloatArray(env, SkSpan(floats.data(), floats.size()));
+}
+
+template <typename T>
+jfloatArray javaFloatArray(JNIEnv* env, std::initializer_list<T> floats) {
+    return javaFloatArray(env, SkSpan(floats.begin(), floats.size()));
+}
 
 std::vector<SkString> skStringVector(JNIEnv* env, jobjectArray arr);
 jobjectArray javaStringArray(JNIEnv* env, const std::vector<SkString>& strings);
