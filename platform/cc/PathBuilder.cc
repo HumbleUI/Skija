@@ -39,14 +39,54 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_PathBuilder__1n
     return reinterpret_cast<jlong>(obj);
 }
 
-extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_PathBuilder__1nSetFillMode(JNIEnv* env, jclass jclass, jlong ptr, jint fillMode) {
-    SkPathBuilder* instance = reinterpret_cast<SkPathBuilder*>(static_cast<uintptr_t>(ptr));
-    instance->setFillType(static_cast<SkPathFillType>(fillMode));
-}
-
 extern "C" JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_PathBuilder__1nGetFillMode(JNIEnv* env, jclass jclass, jlong ptr) {
     SkPathBuilder* instance = reinterpret_cast<SkPathBuilder*>(static_cast<uintptr_t>(ptr));
     return static_cast<jint>(instance->fillType());
+}
+
+extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_PathBuilder__1nComputeFiniteBounds
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkPathBuilder* instance = reinterpret_cast<SkPathBuilder*>(static_cast<uintptr_t>(ptr));
+    std::optional<SkRect> bounds = instance->computeFiniteBounds();
+    return bounds ? types::Rect::fromSkRect(env, *bounds) : nullptr;
+}
+
+extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_PathBuilder__1nComputeTightBounds
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkPathBuilder* instance = reinterpret_cast<SkPathBuilder*>(static_cast<uintptr_t>(ptr));
+    std::optional<SkRect> bounds = instance->computeTightBounds();
+    return bounds ? types::Rect::fromSkRect(env, *bounds) : nullptr;
+}
+
+extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_PathBuilder__1nSnapshot
+  (JNIEnv* env, jclass jclass, jlong ptr, jfloatArray matrixArr) {
+    SkPathBuilder* instance = reinterpret_cast<SkPathBuilder*>(static_cast<uintptr_t>(ptr));
+    SkPath* path;
+    if (matrixArr == nullptr) {
+      path = new SkPath(instance->snapshot());
+    } else {
+      std::unique_ptr<SkMatrix> matrix = skMatrix(env, matrixArr);
+      path = new SkPath(instance->snapshot(matrix.get()));
+    }
+    return reinterpret_cast<jlong>(path);
+}
+
+extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_PathBuilder__1nDetach
+  (JNIEnv* env, jclass jclass, jlong ptr, jfloatArray matrixArr) {
+    SkPathBuilder* instance = reinterpret_cast<SkPathBuilder*>(static_cast<uintptr_t>(ptr));
+    SkPath* path;
+    if (matrixArr == nullptr) {
+      path = new SkPath(instance->detach());
+    } else {
+      std::unique_ptr<SkMatrix> matrix = skMatrix(env, matrixArr);
+      path = new SkPath(instance->detach(matrix.get()));
+    }
+    return reinterpret_cast<jlong>(path);
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_PathBuilder__1nSetFillMode(JNIEnv* env, jclass jclass, jlong ptr, jint fillMode) {
+    SkPathBuilder* instance = reinterpret_cast<SkPathBuilder*>(static_cast<uintptr_t>(ptr));
+    instance->setFillType(static_cast<SkPathFillType>(fillMode));
 }
 
 extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_PathBuilder__1nSetVolatile(JNIEnv* env, jclass jclass, jlong ptr, jboolean isVolatile) {
@@ -54,9 +94,10 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_PathBuilder__1nS
     instance->setIsVolatile(isVolatile);
 }
 
-extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_PathBuilder__1nIncReserve(JNIEnv* env, jclass jclass, jlong ptr, jint extraPtCount, jint extraVerbCount, jint extraConicCount) {
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_PathBuilder__1nReset
+  (JNIEnv* env, jclass jclass, jlong ptr) {
     SkPathBuilder* instance = reinterpret_cast<SkPathBuilder*>(static_cast<uintptr_t>(ptr));
-    instance->incReserve(extraPtCount, extraVerbCount, extraConicCount);
+    instance->reset();
 }
 
 extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_PathBuilder__1nMoveTo(JNIEnv* env, jclass jclass, jlong ptr, jfloat x, jfloat y) {
@@ -64,19 +105,9 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_PathBuilder__1nM
     instance->moveTo(x, y);
 }
 
-extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_PathBuilder__1nRMoveTo(JNIEnv* env, jclass jclass, jlong ptr, jfloat dx, jfloat dy) {
-    SkPathBuilder* instance = reinterpret_cast<SkPathBuilder*>(static_cast<uintptr_t>(ptr));
-    instance->rMoveTo({dx, dy});
-}
-
 extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_PathBuilder__1nLineTo(JNIEnv* env, jclass jclass, jlong ptr, jfloat x, jfloat y) {
     SkPathBuilder* instance = reinterpret_cast<SkPathBuilder*>(static_cast<uintptr_t>(ptr));
     instance->lineTo(x, y);
-}
-
-extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_PathBuilder__1nRLineTo(JNIEnv* env, jclass jclass, jlong ptr, jfloat dx, jfloat dy) {
-    SkPathBuilder* instance = reinterpret_cast<SkPathBuilder*>(static_cast<uintptr_t>(ptr));
-    instance->rLineTo(dx, dy);
 }
 
 extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_PathBuilder__1nQuadTo(JNIEnv* env, jclass jclass, jlong ptr, jfloat x1, jfloat y1, jfloat x2, jfloat y2) {
@@ -84,19 +115,9 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_PathBuilder__1nQ
     instance->quadTo(x1, y1, x2, y2);
 }
 
-extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_PathBuilder__1nRQuadTo(JNIEnv* env, jclass jclass, jlong ptr, jfloat dx1, jfloat dy1, jfloat dx2, jfloat dy2) {
-    SkPathBuilder* instance = reinterpret_cast<SkPathBuilder*>(static_cast<uintptr_t>(ptr));
-    instance->rQuadTo(dx1, dy1, dx2, dy2);
-}
-
 extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_PathBuilder__1nConicTo(JNIEnv* env, jclass jclass, jlong ptr, jfloat x1, jfloat y1, jfloat x2, jfloat y2, jfloat w) {
     SkPathBuilder* instance = reinterpret_cast<SkPathBuilder*>(static_cast<uintptr_t>(ptr));
     instance->conicTo(x1, y1, x2, y2, w);
-}
-
-extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_PathBuilder__1nRConicTo(JNIEnv* env, jclass jclass, jlong ptr, jfloat dx1, jfloat dy1, jfloat dx2, jfloat dy2, jfloat w) {
-    SkPathBuilder* instance = reinterpret_cast<SkPathBuilder*>(static_cast<uintptr_t>(ptr));
-    instance->rConicTo(dx1, dy1, dx2, dy2, w);
 }
 
 extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_PathBuilder__1nCubicTo(JNIEnv* env, jclass jclass, jlong ptr, jfloat x1, jfloat y1, jfloat x2, jfloat y2, jfloat x3, jfloat y3) {
@@ -104,9 +125,45 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_PathBuilder__1nC
     instance->cubicTo(x1, y1, x2, y2, x3, y3);
 }
 
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_PathBuilder__1nClosePath(JNIEnv* env, jclass jclass, jlong ptr) {
+    SkPathBuilder* instance = reinterpret_cast<SkPathBuilder*>(static_cast<uintptr_t>(ptr));
+    instance->close();
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_PathBuilder__1nPolylineTo
+  (JNIEnv* env, jclass jclass, jlong ptr, jfloatArray coords) {
+    SkPathBuilder* instance = reinterpret_cast<SkPathBuilder*>(static_cast<uintptr_t>(ptr));
+    jsize len = env->GetArrayLength(coords);
+    jfloat* arr = env->GetFloatArrayElements(coords, 0);
+    instance->polylineTo(SkSpan(reinterpret_cast<SkPoint*>(arr), len / 2));
+    env->ReleaseFloatArrayElements(coords, arr, JNI_ABORT);
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_PathBuilder__1nRMoveTo(JNIEnv* env, jclass jclass, jlong ptr, jfloat dx, jfloat dy) {
+    SkPathBuilder* instance = reinterpret_cast<SkPathBuilder*>(static_cast<uintptr_t>(ptr));
+    instance->rMoveTo({dx, dy});
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_PathBuilder__1nRLineTo(JNIEnv* env, jclass jclass, jlong ptr, jfloat dx, jfloat dy) {
+    SkPathBuilder* instance = reinterpret_cast<SkPathBuilder*>(static_cast<uintptr_t>(ptr));
+    instance->rLineTo(dx, dy);
+}
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_PathBuilder__1nRQuadTo(JNIEnv* env, jclass jclass, jlong ptr, jfloat dx1, jfloat dy1, jfloat dx2, jfloat dy2) {
+    SkPathBuilder* instance = reinterpret_cast<SkPathBuilder*>(static_cast<uintptr_t>(ptr));
+    instance->rQuadTo(dx1, dy1, dx2, dy2);
+}
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_PathBuilder__1nRConicTo(JNIEnv* env, jclass jclass, jlong ptr, jfloat dx1, jfloat dy1, jfloat dx2, jfloat dy2, jfloat w) {
+    SkPathBuilder* instance = reinterpret_cast<SkPathBuilder*>(static_cast<uintptr_t>(ptr));
+    instance->rConicTo(dx1, dy1, dx2, dy2, w);
+}
 extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_PathBuilder__1nRCubicTo(JNIEnv* env, jclass jclass, jlong ptr, jfloat dx1, jfloat dy1, jfloat dx2, jfloat dy2, jfloat dx3, jfloat dy3) {
     SkPathBuilder* instance = reinterpret_cast<SkPathBuilder*>(static_cast<uintptr_t>(ptr));
     instance->rCubicTo(dx1, dy1, dx2, dy2, dx3, dy3);
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_PathBuilder__1nREllipticalArcTo(JNIEnv* env, jclass jclass, jlong ptr, jfloat rx, jfloat ry, jfloat xAxisRotate, jint size, jint direction, jfloat dx, float dy) {
+    SkPathBuilder* instance = reinterpret_cast<SkPathBuilder*>(static_cast<uintptr_t>(ptr));
+    instance->rArcTo({rx, ry}, xAxisRotate, static_cast<SkPathBuilder::ArcSize>(size), static_cast<SkPathDirection>(direction), {dx, dy});
 }
 
 extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_PathBuilder__1nArcTo(JNIEnv* env, jclass jclass, jlong ptr, jfloat left, jfloat top, jfloat right, jfloat bottom, jfloat startAngle, jfloat sweepAngle, jboolean forceMoveTo) {
@@ -124,23 +181,10 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_PathBuilder__1nE
     instance->arcTo({rx, ry}, xAxisRotate, static_cast<SkPathBuilder::ArcSize>(size), static_cast<SkPathDirection>(direction), {x, y});
 }
 
-extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_PathBuilder__1nREllipticalArcTo(JNIEnv* env, jclass jclass, jlong ptr, jfloat rx, jfloat ry, jfloat xAxisRotate, jint size, jint direction, jfloat dx, float dy) {
+extern "C" JNIEXPORT void Java_io_github_humbleui_skija_PathBuilder__1nAddArc
+  (JNIEnv* env, jclass jclass, jlong ptr, jfloat l, jfloat t, jfloat r, jfloat b, jfloat startAngle, jfloat sweepAngle) {
     SkPathBuilder* instance = reinterpret_cast<SkPathBuilder*>(static_cast<uintptr_t>(ptr));
-    instance->rArcTo({rx, ry}, xAxisRotate, static_cast<SkPathBuilder::ArcSize>(size), static_cast<SkPathDirection>(direction), {dx, dy});
-}
-
-extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_PathBuilder__1nClosePath(JNIEnv* env, jclass jclass, jlong ptr) {
-    SkPathBuilder* instance = reinterpret_cast<SkPathBuilder*>(static_cast<uintptr_t>(ptr));
-    instance->close();
-}
-
-extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_PathBuilder__1nPolylineTo
-  (JNIEnv* env, jclass jclass, jlong ptr, jfloatArray coords) {
-    SkPathBuilder* instance = reinterpret_cast<SkPathBuilder*>(static_cast<uintptr_t>(ptr));
-    jsize len = env->GetArrayLength(coords);
-    jfloat* arr = env->GetFloatArrayElements(coords, 0);
-    instance->polylineTo(SkSpan(reinterpret_cast<SkPoint*>(arr), len / 2));
-    env->ReleaseFloatArrayElements(coords, arr, JNI_ABORT);
+    instance->addArc({l, t, r, b}, startAngle, sweepAngle);
 }
 
 extern "C" JNIEXPORT void Java_io_github_humbleui_skija_PathBuilder__1nAddRect
@@ -157,25 +201,19 @@ extern "C" JNIEXPORT void Java_io_github_humbleui_skija_PathBuilder__1nAddOval
     instance->addOval({l, t, r, b}, dir, start);
 }
 
-extern "C" JNIEXPORT void Java_io_github_humbleui_skija_PathBuilder__1nAddCircle
-  (JNIEnv* env, jclass jclass, jlong ptr, jfloat x, jfloat y, jfloat r, jint dirInt) {
-    SkPathBuilder* instance = reinterpret_cast<SkPathBuilder*>(static_cast<uintptr_t>(ptr));
-    SkPathDirection dir = static_cast<SkPathDirection>(dirInt);
-    instance->addCircle(x, y, r, dir);
-}
-
-extern "C" JNIEXPORT void Java_io_github_humbleui_skija_PathBuilder__1nAddArc
-  (JNIEnv* env, jclass jclass, jlong ptr, jfloat l, jfloat t, jfloat r, jfloat b, jfloat startAngle, jfloat sweepAngle) {
-    SkPathBuilder* instance = reinterpret_cast<SkPathBuilder*>(static_cast<uintptr_t>(ptr));
-    instance->addArc({l, t, r, b}, startAngle, sweepAngle);
-}
-
 extern "C" JNIEXPORT void Java_io_github_humbleui_skija_PathBuilder__1nAddRRect
   (JNIEnv* env, jclass jclass, jlong ptr, jfloat l, jfloat t, jfloat r, jfloat b, jfloatArray radii, jint dirInt, jint start) {
     SkPathBuilder* instance = reinterpret_cast<SkPathBuilder*>(static_cast<uintptr_t>(ptr));
     SkRRect rrect = types::RRect::toSkRRect(env, l, t, r, b, radii);
     SkPathDirection dir = static_cast<SkPathDirection>(dirInt);
     instance->addRRect(rrect, dir, start);
+}
+
+extern "C" JNIEXPORT void Java_io_github_humbleui_skija_PathBuilder__1nAddCircle
+  (JNIEnv* env, jclass jclass, jlong ptr, jfloat x, jfloat y, jfloat r, jint dirInt) {
+    SkPathBuilder* instance = reinterpret_cast<SkPathBuilder*>(static_cast<uintptr_t>(ptr));
+    SkPathDirection dir = static_cast<SkPathDirection>(dirInt);
+    instance->addCircle(x, y, r, dir);
 }
 
 extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_PathBuilder__1nAddPolygon
@@ -210,6 +248,11 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_PathBuilder__1nA
     std::unique_ptr<SkMatrix> matrix = skMatrix(env, matrixArr);
     SkPath::AddPathMode mode = extend ? SkPath::AddPathMode::kExtend_AddPathMode : SkPath::AddPathMode::kAppend_AddPathMode;
     instance->addPath(*src, *matrix, mode);
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_PathBuilder__1nIncReserve(JNIEnv* env, jclass jclass, jlong ptr, jint extraPtCount, jint extraVerbCount, jint extraConicCount) {
+    SkPathBuilder* instance = reinterpret_cast<SkPathBuilder*>(static_cast<uintptr_t>(ptr));
+    instance->incReserve(extraPtCount, extraVerbCount, extraConicCount);
 }
 
 extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_PathBuilder__1nOffset
@@ -302,54 +345,4 @@ extern "C" JNIEXPORT jfloatArray JNICALL Java_io_github_humbleui_skija_PathBuild
     SkPathBuilder* instance = reinterpret_cast<SkPathBuilder*>(static_cast<uintptr_t>(ptr));
     SkSpan<const float> weights = instance->conicWeights();
     return javaFloatArray(env, weights);
-}
-
-extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_PathBuilder__1nComputeFiniteBounds
-  (JNIEnv* env, jclass jclass, jlong ptr) {
-    SkPathBuilder* instance = reinterpret_cast<SkPathBuilder*>(static_cast<uintptr_t>(ptr));
-    std::optional<SkRect> bounds = instance->computeFiniteBounds();
-    return bounds ? types::Rect::fromSkRect(env, *bounds) : nullptr;
-}
-
-extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_PathBuilder__1nComputeTightBounds
-  (JNIEnv* env, jclass jclass, jlong ptr) {
-    SkPathBuilder* instance = reinterpret_cast<SkPathBuilder*>(static_cast<uintptr_t>(ptr));
-    std::optional<SkRect> bounds = instance->computeTightBounds();
-    return bounds ? types::Rect::fromSkRect(env, *bounds) : nullptr;
-}
-
-extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_PathBuilder__1nSnapshot
-  (JNIEnv* env, jclass jclass, jlong ptr) {
-    SkPathBuilder* instance = reinterpret_cast<SkPathBuilder*>(static_cast<uintptr_t>(ptr));
-    SkPath path = instance->snapshot();
-    return reinterpret_cast<jlong>(new SkPath(path));
-}
-
-extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_PathBuilder__1nSnapshotTransform
-  (JNIEnv* env, jclass jclass, jlong ptr, jfloatArray matrixArr) {
-    SkPathBuilder* instance = reinterpret_cast<SkPathBuilder*>(static_cast<uintptr_t>(ptr));
-    std::unique_ptr<SkMatrix> matrix = skMatrix(env, matrixArr);
-    SkPath path = instance->snapshot(matrix.get());
-    return reinterpret_cast<jlong>(new SkPath(path));
-}
-
-extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_PathBuilder__1nReset
-  (JNIEnv* env, jclass jclass, jlong ptr) {
-    SkPathBuilder* instance = reinterpret_cast<SkPathBuilder*>(static_cast<uintptr_t>(ptr));
-    instance->reset();
-}
-
-extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_PathBuilder__1nDetach
-  (JNIEnv* env, jclass jclass, jlong ptr) {
-    SkPathBuilder* instance = reinterpret_cast<SkPathBuilder*>(static_cast<uintptr_t>(ptr));
-    SkPath path = instance->detach();
-    return reinterpret_cast<jlong>(new SkPath(path));
-}
-
-extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_PathBuilder__1nDetachTransform
-  (JNIEnv* env, jclass jclass, jlong ptr, jfloatArray matrixArr) {
-    SkPathBuilder* instance = reinterpret_cast<SkPathBuilder*>(static_cast<uintptr_t>(ptr));
-    std::unique_ptr<SkMatrix> matrix = skMatrix(env, matrixArr);
-    SkPath path = instance->detach(matrix.get());
-    return reinterpret_cast<jlong>(new SkPath(path));
 }

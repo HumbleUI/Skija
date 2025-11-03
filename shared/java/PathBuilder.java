@@ -24,8 +24,9 @@ public class PathBuilder extends Managed {
     }
 
     /**
-     * Constructs an empty PathBuilder. By default, PathBuilder has no verbs, no {@link Point}, and no weights.
-     * FillMode is set to {@link PathFillMode#WINDING}.
+     * Constructs an empty PathBuilder. By default, PathBuilder has no verbs, no
+     * {@link Point}, and no weights. FillMode is set to
+     * {@link PathFillMode#WINDING}.
      */
     public PathBuilder() {
         this(_nMake(), _FinalizerHolder.PTR);
@@ -33,7 +34,8 @@ public class PathBuilder extends Managed {
     }
 
     /**
-     * Constructs a PathBuilder with the specified fill mode.
+     * Constructs an empty PathBuilder with the specified fill mode. By default,
+     * PathBuilder has no verbs, no {@link Point}, and no weights.
      *
      * @param fillMode  fill mode for paths created by this builder
      */
@@ -54,9 +56,11 @@ public class PathBuilder extends Managed {
     }
 
     /**
-     * Constructs a PathBuilder from an existing Path, copying its contents.
+     * Constructs an {@link PathBuilder} that is a copy of an existing
+     * {@link Path}. Copies the FillType and replays all of the verbs from the
+     * {@link Path} into the {@link PathBuilder}.
      *
-     * @param path  Path to copy into this builder
+     * @param path  {@link Path} to copy
      */
     public PathBuilder(Path path) {
         this(_nMakeFromPath(Native.getPtr(path)), _FinalizerHolder.PTR);
@@ -69,6 +73,7 @@ public class PathBuilder extends Managed {
      *
      * @return  current {@link PathFillMode} setting
      */
+    @NotNull
     public PathFillMode getFillMode() {
         try {
             Stats.onNativeCall();
@@ -125,10 +130,11 @@ public class PathBuilder extends Managed {
      *
      * @return  {@link Path} representing the current state of the builder.
      */
+    @NotNull
     public Path snapshot() {
         try {
             Stats.onNativeCall();
-            return new Path(_nSnapshot(_ptr));
+            return new Path(_nSnapshot(_ptr, null));
         } finally {
             ReferenceUtil.reachabilityFence(this);
         }
@@ -142,10 +148,11 @@ public class PathBuilder extends Managed {
      *                are copied into the resulting path.
      * @return        {@link Path} representing the current state of the builder.
      */
-    public Path snapshot(Matrix33 matrix) {
+    @NotNull
+    public Path snapshot(@NotNull Matrix33 matrix) {
         try {
             Stats.onNativeCall();
-            return new Path(_nSnapshotTransform(_ptr, matrix._mat));
+            return new Path(_nSnapshot(_ptr, matrix._mat));
         } finally {
             ReferenceUtil.reachabilityFence(this);
             ReferenceUtil.reachabilityFence(matrix);
@@ -155,14 +162,16 @@ public class PathBuilder extends Managed {
     /**
      * Returns an immutable Path representing the current state of the builder,
      * and resets the builder to empty. This is more efficient than calling
-     * {@link #snapshot()} followed by {@link #reset()} if you don't need to preserve the builder state.
+     * {@link #snapshot()} followed by {@link #reset()} if you don't need to
+     * preserve the builder state.
      *
      * @return  immutable {@link Path}
      */
+    @NotNull
     public Path detach() {
         try {
             Stats.onNativeCall();
-            return new Path(_nDetach(_ptr));
+            return new Path(_nDetach(_ptr, null));
         } finally {
             ReferenceUtil.reachabilityFence(this);
         }
@@ -175,10 +184,11 @@ public class PathBuilder extends Managed {
      * @param matrix  transformation matrix to apply
      * @return        immutable {@link Path}
      */
-    public Path detach(Matrix33 matrix) {
+    @NotNull
+    public Path detach(@NotNull Matrix33 matrix) {
         try {
             Stats.onNativeCall();
-            return new Path(_nDetachTransform(_ptr, matrix._mat));
+            return new Path(_nDetach(_ptr, matrix._mat));
         } finally {
             ReferenceUtil.reachabilityFence(this);
             ReferenceUtil.reachabilityFence(matrix);
@@ -191,10 +201,11 @@ public class PathBuilder extends Managed {
      *
      * @return  immutable Path
      */
+    @NotNull
     public Path build() {
         try {
             Stats.onNativeCall();
-            return new Path(_nSnapshot(_ptr));
+            return new Path(_nSnapshot(_ptr, null));
         } finally {
             ReferenceUtil.reachabilityFence(this);
             close();
@@ -217,7 +228,8 @@ public class PathBuilder extends Managed {
     /**
      * <p>Specifies whether {@link Path} is volatile; whether it will be altered
      * or discarded by the caller after it is drawn. {@link Path} by default
-     * have volatile set false, allowing Skia to attach a cache of data which speeds repeated drawing.</p>
+     * have volatile set false, allowing Skia to attach a cache of data which
+     * speeds repeated drawing.</p>
      *
      * <p>Mark temporary paths, discarded or modified after use, as volatile
      * to inform Skia that the path need not be cached.</p>
@@ -486,7 +498,20 @@ public class PathBuilder extends Managed {
     }
 
     /**
-     * Append a series of lineTo(...)
+     * Append a series of {@link #lineTo(float, float)}
+     *
+     * @param pts  array of coordinates (x1, y1, x2, y2, ...)
+     * @return     reference to PathBuilder.
+     */
+    @NotNull @Contract("_ -> this")
+    public PathBuilder polylineTo(@NotNull float[] pts) {
+        Stats.onNativeCall();
+        _nPolylineTo(_ptr, pts);
+        return this;
+    }
+
+    /**
+     * Append a series of {@link #lineTo(Point)}
      *
      * @param pts  array of {@link Point}
      * @return     reference to PathBuilder.
@@ -499,19 +524,6 @@ public class PathBuilder extends Managed {
             coords[i * 2 + 1] = pts[i]._y;
         }
         return polylineTo(coords);
-    }
-
-    /**
-     * Append a series of lineTo(...)
-     *
-     * @param pts  array of coordinates (x1, y1, x2, y2, ...)
-     * @return     reference to PathBuilder.
-     */
-    @NotNull @Contract("_ -> this")
-    public PathBuilder polylineTo(@NotNull float[] pts) {
-        Stats.onNativeCall();
-        _nPolylineTo(_ptr, pts);
-        return this;
     }
 
     /**
@@ -951,6 +963,11 @@ public class PathBuilder extends Managed {
         return this;
     }
 
+    @NotNull @Contract("_, _, _, _ -> this")
+    public PathBuilder addLine(float x1, float y1, float x2, float y2) {
+        return moveTo(x1, y1).lineTo(x2, y2);
+    }
+
     @NotNull @Contract("_, _ -> this")
     public PathBuilder addLine(@NotNull Point a, @NotNull Point b) {
         return moveTo(a).lineTo(b);
@@ -979,7 +996,8 @@ public class PathBuilder extends Managed {
      * @param dir   winding direction for the rectangle
      * @return      reference to PathBuilder
      */
-    public PathBuilder addRect(Rect rect, PathDirection dir) {
+    @NotNull @Contract("_, _ -> this")
+    public PathBuilder addRect(@NotNull Rect rect, @NotNull PathDirection dir) {
         return addRect(rect, dir, 0);
     }
 
@@ -1007,7 +1025,8 @@ public class PathBuilder extends Managed {
      * @param start  initial corner of the rectangle (0-3)
      * @return       reference to PathBuilder
      */
-    public PathBuilder addRect(Rect rect, PathDirection dir, int start) {
+    @NotNull @Contract("_, _, _ -> this")
+    public PathBuilder addRect(@NotNull Rect rect, @NotNull PathDirection dir, int start) {
         Stats.onNativeCall();
         _nAddRect(_ptr, rect._left, rect._top, rect._right, rect._bottom, dir.ordinal(), start);
         return this;
@@ -1019,7 +1038,8 @@ public class PathBuilder extends Managed {
      * @param oval  rectangle bounding the oval
      * @return      reference to PathBuilder
      */
-    public PathBuilder addOval(Rect oval) {
+    @NotNull @Contract("_ -> this")
+    public PathBuilder addOval(@NotNull Rect oval) {
         return addOval(oval, PathDirection.COUNTER_CLOCKWISE, 1);
     }
 
@@ -1030,7 +1050,8 @@ public class PathBuilder extends Managed {
      * @param dir   winding direction for the oval
      * @return      reference to PathBuilder
      */
-    public PathBuilder addOval(Rect oval, PathDirection dir) {
+    @NotNull @Contract("_, _ -> this")
+    public PathBuilder addOval(@NotNull Rect oval, @NotNull PathDirection dir) {
         return addOval(oval, dir, 1);
     }
 
@@ -1043,7 +1064,8 @@ public class PathBuilder extends Managed {
      * @param start  starting point index (0-3)
      * @return       reference to PathBuilder
      */
-    public PathBuilder addOval(Rect oval, PathDirection dir, int start) {
+    @NotNull @Contract("_, _, _ -> this")
+    public PathBuilder addOval(@NotNull Rect oval, @NotNull PathDirection dir, int start) {
         Stats.onNativeCall();
         _nAddOval(_ptr, oval._left, oval._top, oval._right, oval._bottom, dir.ordinal(), start);
         return this;
@@ -1055,7 +1077,8 @@ public class PathBuilder extends Managed {
      * @param rrect  rounded rectangle to add
      * @return       reference to PathBuilder
      */
-    public PathBuilder addRRect(RRect rrect) {
+    @NotNull @Contract("_ -> this")
+    public PathBuilder addRRect(@NotNull RRect rrect) {
         return addRRect(rrect, PathDirection.COUNTER_CLOCKWISE);
     }
 
@@ -1066,7 +1089,8 @@ public class PathBuilder extends Managed {
      * @param dir    winding direction
      * @return       reference to PathBuilder
      */
-    public PathBuilder addRRect(RRect rrect, PathDirection dir) {
+    @NotNull @Contract("_, _ -> this")
+    public PathBuilder addRRect(@NotNull RRect rrect, @NotNull PathDirection dir) {
         return addRRect(rrect, dir, 0);
     }
 
@@ -1079,7 +1103,8 @@ public class PathBuilder extends Managed {
      * @param start  starting point index
      * @return       reference to PathBuilder
      */
-    public PathBuilder addRRect(RRect rrect, PathDirection dir, int start) {
+    @NotNull @Contract("_, _, _ -> this")
+    public PathBuilder addRRect(@NotNull RRect rrect, @NotNull PathDirection dir, int start) {
         Stats.onNativeCall();
         _nAddRRect(_ptr, rrect._left, rrect._top, rrect._right, rrect._bottom, rrect._radii, dir.ordinal(), start);
         return this;
@@ -1093,8 +1118,21 @@ public class PathBuilder extends Managed {
      * @param radius  radius of the circle
      * @return        reference to PathBuilder
      */
+    @NotNull @Contract("_, _, _ -> this")
     public PathBuilder addCircle(float x, float y, float radius) {
         return addCircle(x, y, radius, PathDirection.COUNTER_CLOCKWISE);
+    }
+
+    /**
+     * Adds a circle to the path, as a new contour.
+     *
+     * @param center  center point
+     * @param radius  radius of the circle
+     * @return        reference to PathBuilder
+     */
+    @NotNull @Contract("_, _ -> this")
+    public PathBuilder addCircle(@NotNull Point center, float radius) {
+        return addCircle(center._x, center._y, radius, PathDirection.COUNTER_CLOCKWISE);
     }
 
     /**
@@ -1106,9 +1144,25 @@ public class PathBuilder extends Managed {
      * @param dir     winding direction for the circle
      * @return        reference to PathBuilder
      */
-    public PathBuilder addCircle(float x, float y, float radius, PathDirection dir) {
+    @NotNull @Contract("_, _, _ -> this")
+    public PathBuilder addCircle(float x, float y, float radius, @NotNull PathDirection dir) {
         Stats.onNativeCall();
         _nAddCircle(_ptr, x, y, radius, dir.ordinal());
+        return this;
+    }
+
+    /**
+     * Adds a circle to the path, as a new contour, with the specified winding direction.
+     *
+     * @param center  center point
+     * @param radius  radius of the circle
+     * @param dir     winding direction for the circle
+     * @return        reference to PathBuilder
+     */
+    @NotNull @Contract("_, _, _ -> this")
+    public PathBuilder addCircle(@NotNull Point center, float radius, @NotNull PathDirection dir) {
+        Stats.onNativeCall();
+        _nAddCircle(_ptr, center._x, center._y, radius, dir.ordinal());
         return this;
     }
 
@@ -1119,7 +1173,8 @@ public class PathBuilder extends Managed {
      * @param close  if true, close the contour
      * @return       reference to PathBuilder
      */
-    public PathBuilder addPolygon(Point[] pts, boolean close) {
+    @NotNull @Contract("_, _ -> this")
+    public PathBuilder addPolygon(@NotNull Point[] pts, boolean close) {
         float[] coords = new float[pts.length * 2];
         for (int i = 0; i < pts.length; i++) {
             coords[i * 2] = pts[i]._x;
@@ -1135,7 +1190,8 @@ public class PathBuilder extends Managed {
      * @param close  if true, close the contour
      * @return       reference to PathBuilder
      */
-    public PathBuilder addPolygon(float[] pts, boolean close) {
+    @NotNull @Contract("_, _ -> this")
+    public PathBuilder addPolygon(@NotNull float[] pts, boolean close) {
         Stats.onNativeCall();
         _nAddPolygon(_ptr, pts, close);
         return this;
@@ -1147,7 +1203,8 @@ public class PathBuilder extends Managed {
      * @param src  path to add
      * @return     reference to PathBuilder
      */
-    public PathBuilder addPath(Path src) {
+    @NotNull @Contract("_ -> this")
+    public PathBuilder addPath(@NotNull Path src) {
         return addPath(src, false);
     }
 
@@ -1158,7 +1215,8 @@ public class PathBuilder extends Managed {
      * @param extend  if true, extend the last contour of this builder with the first contour of src
      * @return        reference to PathBuilder
      */
-    public PathBuilder addPath(Path src, boolean extend) {
+    @NotNull @Contract("_, _ -> this")
+    public PathBuilder addPath(@NotNull Path src, boolean extend) {
         try {
             Stats.onNativeCall();
             _nAddPath(_ptr, Native.getPtr(src), extend);
@@ -1176,8 +1234,21 @@ public class PathBuilder extends Managed {
      * @param dy   y-axis offset
      * @return     reference to PathBuilder
      */
-    public PathBuilder addPath(Path src, float dx, float dy) {
+    @NotNull @Contract("_, _, _ -> this")
+    public PathBuilder addPath(@NotNull Path src, float dx, float dy) {
         return addPath(src, dx, dy, false);
+    }
+
+    /**
+     * Adds a copy of the specified path's contents to this builder, offset.
+     *
+     * @param src     path to add
+     * @param offset  offset
+     * @return        reference to PathBuilder
+     */
+    @NotNull @Contract("_, _, _ -> this")
+    public PathBuilder addPath(@NotNull Path src, @NotNull Point offset) {
+        return addPath(src, offset._x, offset._y, false);
     }
 
     /**
@@ -1186,10 +1257,13 @@ public class PathBuilder extends Managed {
      * @param src     path to add
      * @param dx      x-axis offset
      * @param dy      y-axis offset
-     * @param extend  if true, extend the last contour of this builder with the first contour of src
+     * @param extend  if false, src verb array, {@link Point} array, and conic
+     *                weights are added unaltered. If true, add line before
+     *                appending verbs, {@link Point}, and conic weights.
      * @return        reference to PathBuilder
      */
-    public PathBuilder addPath(Path src, float dx, float dy, boolean extend) {
+    @NotNull @Contract("_, _, _, _ -> this")
+    public PathBuilder addPath(@NotNull Path src, float dx, float dy, boolean extend) {
         try {
             Stats.onNativeCall();
             _nAddPathOffset(_ptr, Native.getPtr(src), dx, dy, extend);
@@ -1200,13 +1274,29 @@ public class PathBuilder extends Managed {
     }
 
     /**
+     * Adds a copy of the specified path's contents to this builder, offset.
+     *
+     * @param src     path to add
+     * @param offset  offset
+     * @param extend  if false, src verb array, {@link Point} array, and conic
+     *                weights are added unaltered. If true, add line before
+     *                appending verbs, {@link Point}, and conic weights.
+     * @return        reference to PathBuilder
+     */
+    @NotNull @Contract("_, _, _ -> this")
+    public PathBuilder addPath(@NotNull Path src, @NotNull Point offset, boolean extend) {
+        return addPath(src, offset._x, offset._y, extend);
+    }
+
+    /**
      * Adds a copy of the specified path's contents to this builder, transformed by the matrix.
      *
      * @param src     path to add
      * @param matrix  transformation matrix
      * @return        reference to PathBuilder
      */
-    public PathBuilder addPath(Path src, Matrix33 matrix) {
+    @NotNull @Contract("_, _ -> this")
+    public PathBuilder addPath(@NotNull Path src, @NotNull Matrix33 matrix) {
         return addPath(src, matrix, false);
     }
 
@@ -1215,10 +1305,13 @@ public class PathBuilder extends Managed {
      *
      * @param src     path to add
      * @param matrix  transformation matrix
-     * @param extend  if true, extend the last contour of this builder with the first contour of src
+     * @param extend  if false, src verb array, {@link Point} array, and conic
+     *                weights are added unaltered. If true, add line before
+     *                appending verbs, {@link Point}, and conic weights.
      * @return        reference to PathBuilder
      */
-    public PathBuilder addPath(Path src, Matrix33 matrix, boolean extend) {
+    @NotNull @Contract("_, _, _ -> this")
+    public PathBuilder addPath(@NotNull Path src, @NotNull Matrix33 matrix, boolean extend) {
         try {
             Stats.onNativeCall();
             _nAddPathTransform(_ptr, Native.getPtr(src), matrix._mat, extend);
@@ -1239,6 +1332,7 @@ public class PathBuilder extends Managed {
      * @param extraConicCount  number of additional conic weights
      * @return                 reference to PathBuilder
      */
+    @NotNull @Contract("_, _ ,_ -> this")
     public PathBuilder incReserve(int extraPtCount, int extraVerbCount, int extraConicCount) {
         Stats.onNativeCall();
         _nIncReserve(_ptr, extraPtCount, extraVerbCount, extraConicCount);
@@ -1253,6 +1347,7 @@ public class PathBuilder extends Managed {
      * @param extraPtCount  number of additional {@link Point} and verbs to allocate
      * @return              reference to PathBuilder
      */
+    @NotNull @Contract("_ -> this")
     public PathBuilder incReserve(int extraPtCount) {
         return incReserve(extraPtCount, extraPtCount, 0);
     }
@@ -1264,9 +1359,23 @@ public class PathBuilder extends Managed {
      * @param dy  y-axis offset
      * @return    reference to PathBuilder
      */
+    @NotNull @Contract("_, _ -> this")
     public PathBuilder offset(float dx, float dy) {
         Stats.onNativeCall();
         _nOffset(_ptr, dx, dy);
+        return this;
+    }
+
+    /**
+     * Offsets all points in the builder.
+     *
+     * @param   offset offset
+     * @return  reference to PathBuilder
+     */
+    @NotNull @Contract("_ -> this")
+    public PathBuilder offset(@NotNull Point offset) {
+        Stats.onNativeCall();
+        _nOffset(_ptr, offset._x, offset._y);
         return this;
     }
 
@@ -1276,7 +1385,8 @@ public class PathBuilder extends Managed {
      * @param matrix  transformation matrix
      * @return        reference to PathBuilder
      */
-    public PathBuilder transform(Matrix33 matrix) {
+    @NotNull @Contract("_ -> this")
+    public PathBuilder transform(@NotNull Matrix33 matrix) {
         try {
             Stats.onNativeCall();
             _nTransform(_ptr, matrix._mat);
@@ -1305,6 +1415,7 @@ public class PathBuilder extends Managed {
      *
      * @return  reference to PathBuilder
      */
+    @NotNull @Contract("-> this")
     public PathBuilder toggleInverseFillType() {
         Stats.onNativeCall();
         _nToggleInverseFillType(_ptr);
@@ -1312,7 +1423,10 @@ public class PathBuilder extends Managed {
     }
 
     /**
-     * Returns true if the builder is empty (contains no verbs).
+     * Returns if {@link Path} is empty. Empty {@link PathBuilder} may have
+     * {@link PathFillMode} but has no {@link Point}, {@link PathVerb}, or conic
+     * weight. {@link PathBuilder()} constructs empty {@link PathBuilder};
+     * {@link #reset()} makes {@link Path} empty.
      *
      * @return  true if the builder is empty
      */
@@ -1326,7 +1440,8 @@ public class PathBuilder extends Managed {
     }
 
     /**
-     * Returns the last point in the builder, or null if the builder is empty.
+     * Returns the last point in the builder, or null if {@link Point} array is
+     * empty.
      *
      * @return  last point, or null if empty
      */
@@ -1348,9 +1463,11 @@ public class PathBuilder extends Managed {
      * @param x      x-coordinate
      * @param y      y-coordinate
      */
-    public void setPoint(int index, float x, float y) {
+    @NotNull @Contract("_, _, _ -> this")
+    public PathBuilder setPoint(int index, float x, float y) {
         Stats.onNativeCall();
         _nSetPoint(_ptr, index, x, y);
+        return this;
     }
 
     /**
@@ -1360,17 +1477,21 @@ public class PathBuilder extends Managed {
      * @param index  which point to replace
      * @param p      the new point value
      */
-    public void setPoint(int index, @NotNull Point p) {
+    @NotNull @Contract("_, _ -> this")
+    public PathBuilder setPoint(int index, @NotNull Point p) {
         setPoint(index, p._x, p._y);
+        return this;
     }
 
     /**
-     * Sets the last point in the builder.
+     * Sets the last point on the path. If {@link Point} array is empty, append
+     * {@link PathVerb#MOVE} to verb array and append p to {@link Point} array.
      *
      * @param x  x-coordinate
      * @param y  y-coordinate
      * @return   reference to PathBuilder
      */
+    @NotNull @Contract("_, _ -> this")
     public PathBuilder setLastPt(float x, float y) {
         Stats.onNativeCall();
         _nSetLastPt(_ptr, x, y);
@@ -1378,19 +1499,22 @@ public class PathBuilder extends Managed {
     }
 
     /**
-     * Sets the last point in the builder.
+     * Sets the last point on the path. If {@link Point} array is empty, append
+     * {@link PathVerb#MOVE} to verb array and append p to {@link Point} array.
      *
      * @param p  point to set
      * @return   reference to PathBuilder
      */
-    public PathBuilder setLastPt(Point p) {
+    @NotNull @Contract("_ -> this")
+    public PathBuilder setLastPt(@NotNull Point p) {
         return setLastPt(p._x, p._y);
     }
 
     /**
-     * Returns the number of points in the builder.
+     * Returns the number of points in the builder. {@link Point} count is
+     * initially zero.
      *
-     * @return  number of points
+     * @return  PathBuilder Point array length
      */
     public int countPoints() {
         try {
@@ -1402,9 +1526,11 @@ public class PathBuilder extends Managed {
     }
 
     /**
-     * Returns true if the fill mode is inverse.
+     * Returns if {@link PathFillMode} describes area outside {@link Path}
+     * geometry. The inverse fill area extends indefinitely.
      *
-     * @return  true if fill mode is inverse
+     * @return  true if fill mode is {@link PathFillMode#INVERSE_WINDING} or
+     *          {@link PathFillMode#INVERSE_EVEN_ODD}
      */
     public boolean isInverseFillType() {
         try {
@@ -1415,11 +1541,6 @@ public class PathBuilder extends Managed {
         }
     }
 
-    /**
-     * Returns array of points in the builder.
-     *
-     * @return  array of points
-     */
     @NotNull
     public Point[] getPoints() {
         try {
@@ -1430,11 +1551,6 @@ public class PathBuilder extends Managed {
         }
     }
 
-    /**
-     * Returns array of verbs in the builder.
-     *
-     * @return  array of verbs
-     */
     @NotNull
     public PathVerb[] getVerbs() {
         try {
@@ -1450,11 +1566,6 @@ public class PathBuilder extends Managed {
         }
     }
 
-    /**
-     * Returns array of conic weights in the builder.
-     *
-     * @return  array of conic weights
-     */
     @NotNull
     public float[] getConicWeights() {
         try {
@@ -1478,41 +1589,37 @@ public class PathBuilder extends Managed {
     public static native int     _nGetFillMode(long ptr);
     public static native Rect    _nComputeFiniteBounds(long ptr);
     public static native Rect    _nComputeTightBounds(long ptr);
-    public static native long    _nSnapshot(long ptr);
-    public static native long    _nSnapshotTransform(long ptr, float[] matrix);
-    public static native long    _nDetach(long ptr);
-    public static native long    _nDetachTransform(long ptr, float[] matrix);
+    public static native long    _nSnapshot(long ptr, float[] matrix);
+    public static native long    _nDetach(long ptr, float[] matrix);
     public static native void    _nSetFillMode(long ptr, int fillMode);
     public static native void    _nSetVolatile(long ptr, boolean isVolatile);
     public static native void    _nReset(long ptr);
-
-
-    public static native void    _nIncReserve(long ptr, int extraPtCount, int extraVerbCount, int extraConicCount);
     public static native void    _nMoveTo(long ptr, float x, float y);
-    public static native void    _nRMoveTo(long ptr, float dx, float dy);
     public static native void    _nLineTo(long ptr, float x, float y);
-    public static native void    _nRLineTo(long ptr, float dx, float dy);
     public static native void    _nQuadTo(long ptr, float x1, float y1, float x2, float y2);
-    public static native void    _nRQuadTo(long ptr, float dx1, float dy1, float dx2, float dy2);
     public static native void    _nConicTo(long ptr, float x1, float y1, float x2, float y2, float w);
-    public static native void    _nRConicTo(long ptr, float dx1, float dy1, float dx2, float dy2, float w);
     public static native void    _nCubicTo(long ptr, float x1, float y1, float x2, float y2, float x3, float y3);
+    public static native void    _nClosePath(long ptr);
+    public static native void    _nPolylineTo(long ptr, float[] coords);
+    public static native void    _nRMoveTo(long ptr, float dx, float dy);
+    public static native void    _nRLineTo(long ptr, float dx, float dy);
+    public static native void    _nRQuadTo(long ptr, float dx1, float dy1, float dx2, float dy2);
+    public static native void    _nRConicTo(long ptr, float dx1, float dy1, float dx2, float dy2, float w);
     public static native void    _nRCubicTo(long ptr, float dx1, float dy1, float dx2, float dy2, float dx3, float dy3);
+    public static native void    _nREllipticalArcTo(long ptr, float rx, float ry, float xAxisRotate, int size, int direction, float dx, float dy);
     public static native void    _nArcTo(long ptr, float left, float top, float right, float bottom, float startAngle, float sweepAngle, boolean forceMoveTo);
     public static native void    _nTangentArcTo(long ptr, float x1, float y1, float x2, float y2, float radius);
     public static native void    _nEllipticalArcTo(long ptr, float rx, float ry, float xAxisRotate, int size, int direction, float x, float y);
-    public static native void    _nREllipticalArcTo(long ptr, float rx, float ry, float xAxisRotate, int size, int direction, float dx, float dy);
-    public static native void    _nClosePath(long ptr);
-    public static native void    _nPolylineTo(long ptr, float[] coords);
+    public static native void    _nAddArc(long ptr, float l, float t, float r, float b, float startAngle, float sweepAngle);
     public static native void    _nAddRect(long ptr, float l, float t, float r, float b, int dir, int start);
     public static native void    _nAddOval(long ptr, float l, float t, float r, float b, int dir, int start);
-    public static native void    _nAddCircle(long ptr, float x, float y, float r, int dir);
-    public static native void    _nAddArc(long ptr, float l, float t, float r, float b, float startAngle, float sweepAngle);
     public static native void    _nAddRRect(long ptr, float l, float t, float r, float b, float[] radii, int dir, int start);
+    public static native void    _nAddCircle(long ptr, float x, float y, float r, int dir);
     public static native void    _nAddPolygon(long ptr, float[] coords, boolean close);
     public static native void    _nAddPath(long ptr, long srcPtr, boolean extend);
     public static native void    _nAddPathOffset(long ptr, long srcPtr, float dx, float dy, boolean extend);
     public static native void    _nAddPathTransform(long ptr, long srcPtr, float[] matrix, boolean extend);
+    public static native void    _nIncReserve(long ptr, int extraPtCount, int extraVerbCount, int extraConicCount);
     public static native void    _nOffset(long ptr, float dx, float dy);
     public static native void    _nTransform(long ptr, float[] matrix);
     public static native boolean _nIsFinite(long ptr);
