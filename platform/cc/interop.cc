@@ -450,12 +450,27 @@ namespace skija {
         }
     }
 
+    namespace Image {
+        jclass cls;
+        jmethodID ctor;
+
+        void onLoad(JNIEnv* env) {
+            jclass local = env->FindClass("io/github/humbleui/skija/Image");
+            cls  = static_cast<jclass>(env->NewGlobalRef(local));
+            ctor = env->GetMethodID(cls, "<init>", "(J)V");
+        }
+
+        void onUnload(JNIEnv* env) {
+            env->DeleteGlobalRef(cls);
+        }
+    }
+
     namespace ImageInfo {
         jclass cls;
         jmethodID ctor;
 
         void onLoad(JNIEnv* env) {
-            jclass local = env->FindClass("io/github/humbleui/skija/ImageInfo");    
+            jclass local = env->FindClass("io/github/humbleui/skija/ImageInfo");
             cls   = static_cast<jclass>(env->NewGlobalRef(local));
             ctor = env->GetMethodID(cls, "<init>", "(IIIIJ)V");
         }
@@ -471,6 +486,28 @@ namespace skija {
                 static_cast<jint>(info.colorType()),
                 static_cast<jint>(info.alphaType()),
                 reinterpret_cast<jlong>(info.refColorSpace().release()));
+        }
+    }
+
+    namespace ImageWithFilterResult {
+        jclass cls;
+        jmethodID ctor;
+
+        void onLoad(JNIEnv* env) {
+            jclass local = env->FindClass("io/github/humbleui/skija/ImageWithFilterResult");
+            cls  = static_cast<jclass>(env->NewGlobalRef(local));
+            ctor = env->GetMethodID(cls, "<init>", "(Lio/github/humbleui/skija/Image;Lio/github/humbleui/types/IRect;Lio/github/humbleui/types/IPoint;)V");
+        }
+
+        void onUnload(JNIEnv* env) {
+            env->DeleteGlobalRef(cls);
+        }
+
+        jobject make(JNIEnv* env, SkImage* image, const SkIRect& subset, const SkIPoint& offset) {
+            jobject imageObj = env->NewObject(skija::Image::cls, skija::Image::ctor, reinterpret_cast<jlong>(image));
+            jobject subsetObj = types::IRect::fromSkIRect(env, subset);
+            jobject offsetObj = types::IPoint::fromSkIPoint(env, offset);
+            return env->NewObject(cls, ctor, imageObj, subsetObj, offsetObj);
         }
     }
 
@@ -646,7 +683,9 @@ namespace skija {
         FontPaletteOverride::onLoad(env);
         FontVariation::onLoad(env);
         FontVariationAxis::onLoad(env);
+        Image::onLoad(env);
         ImageInfo::onLoad(env);
+        ImageWithFilterResult::onLoad(env);
         Path::onLoad(env);
         PathSegment::onLoad(env);
         PaintFilterCanvas::onLoad(env);
@@ -662,7 +701,9 @@ namespace skija {
         PaintFilterCanvas::onUnload(env);
         PathSegment::onUnload(env);
         Path::onUnload(env);
+        ImageWithFilterResult::onUnload(env);
         ImageInfo::onUnload(env);
+        Image::onUnload(env);
         FontVariationAxis::onUnload(env);
         FontVariation::onUnload(env);
         FontPaletteOverride::onUnload(env);

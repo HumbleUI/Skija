@@ -3,6 +3,7 @@ package io.github.humbleui.skija;
 import java.nio.*;
 import org.jetbrains.annotations.*;
 import io.github.humbleui.skija.impl.*;
+import io.github.humbleui.types.*;
 
 public class Image extends RefCnt implements IHasImageInfo {
     static { Library.staticLoad(); }
@@ -411,11 +412,97 @@ public class Image extends RefCnt implements IHasImageInfo {
 
     public boolean scalePixels(@NotNull Pixmap dst, SamplingMode samplingMode, boolean cache) {
         try {
-            assert dst != null : "Can’t scalePixels with dst == null";
+            assert dst != null : "Can't scalePixels with dst == null";
             return _nScalePixels(_ptr, Native.getPtr(dst), samplingMode._pack(), cache);
         } finally {
             ReferenceUtil.reachabilityFence(this);
             ReferenceUtil.reachabilityFence(dst);
+        }
+    }
+
+    /**
+     * <p>Creates a filtered Image on the CPU. The filter processes the src image, potentially changing
+     * the color, position, and size. The subset parameter defines the bounds of src that are processed
+     * by the filter. The clipBounds parameter specifies the expected bounds of the filtered Image.
+     * The result includes the actual bounds of the filtered Image and a translation offset.</p>
+     *
+     * <p>Returns null if a filtered result could not be created.</p>
+     *
+     * <p>Useful for animation of ImageFilter that varies size from frame to frame.
+     * The returned subset describes the valid bounds of the filtered image. The offset translates
+     * the returned Image to keep subsequent animation frames aligned with respect to each other.</p>
+     *
+     * @param filter       the image filter to be applied
+     * @param subset       bounds of Image processed by filter
+     * @param clipBounds   expected bounds of filtered Image
+     * @return             ImageWithFilterResult containing the filtered Image (or null), actual bounds, and offset
+     */
+    @Nullable @Contract("_, _, _ -> new")
+    public static ImageWithFilterResult makeWithFilter(@NotNull ImageFilter filter,
+                                                       @NotNull Image src,
+                                                       @NotNull IRect subset,
+                                                       @NotNull IRect clipBounds) {
+        try {
+            assert filter != null : "Can't makeWithFilter with filter == null";
+            assert src != null : "Can't makeWithFilter with src == null";
+            assert subset != null : "Can't makeWithFilter with subset == null";
+            assert clipBounds != null : "Can't makeWithFilter with clipBounds == null";
+            Stats.onNativeCall();
+            return _nMakeWithFilter(Native.getPtr(src),
+                                    Native.getPtr(filter),
+                                    subset._left, subset._top, subset._right, subset._bottom,
+                                    clipBounds._left, clipBounds._top, clipBounds._right, clipBounds._bottom);
+        } finally {
+            ReferenceUtil.reachabilityFence(filter);
+            ReferenceUtil.reachabilityFence(src);
+        }
+    }
+
+    /**
+     * <p>Creates a filtered Image on the GPU. The filter processes the src image, potentially changing
+     * color, position, and size. The subset parameter defines the bounds of src that are processed
+     * by the filter. The clipBounds parameter specifies the expected bounds of the filtered Image.
+     * The result includes the actual bounds of the filtered Image and a translation offset.</p>
+     *
+     * <p>Returns null if Image could not be created or if the recording context provided doesn't
+     * match the GPU context in which the image was created.</p>
+     *
+     * <p>Useful for animation of ImageFilter that varies size from frame to frame.
+     * Returned Image is created larger than required by filter so that GPU texture
+     * can be reused with different sized effects. The returned subset describes the valid bounds
+     * of GPU texture returned. The offset translates the returned Image to keep subsequent
+     * animation frames aligned with respect to each other.</p>
+     *
+     * @param context      the DirectContext in play - if it exists
+     * @param filter       the image filter to be applied
+     * @param subset       bounds of Image processed by filter
+     * @param clipBounds   expected bounds of filtered Image
+     * @return             ImageWithFilterResult containing the filtered Image (or null), actual bounds, and offset
+     *
+     * @see ImageWithFilterResult
+     */
+    @Nullable @Contract("_, _, _, _, _ -> new")
+    public static ImageWithFilterResult makeWithFilter(@NotNull DirectContext context,
+                                                       @NotNull ImageFilter filter,
+                                                       @NotNull Image src,
+                                                       @NotNull IRect subset,
+                                                       @NotNull IRect clipBounds) {
+        try {
+            assert context != null : "Can't makeWithFilter with context == null";
+            assert filter != null : "Can't makeWithFilter with filter == null";
+            assert src != null : "Can't makeWithFilter with src == null";
+            assert subset != null : "Can't makeWithFilter with subset == null";
+            assert clipBounds != null : "Can't makeWithFilter with clipBounds == null";
+            Stats.onNativeCall();
+            return _nMakeWithFilterContext(Native.getPtr(context),
+                                           Native.getPtr(src),
+                                           Native.getPtr(filter),
+                                           subset._left, subset._top, subset._right, subset._bottom,
+                                           clipBounds._left, clipBounds._top, clipBounds._right, clipBounds._bottom);
+        } finally {
+            ReferenceUtil.reachabilityFence(context);
+            ReferenceUtil.reachabilityFence(filter);
+            ReferenceUtil.reachabilityFence(src);
         }
     }
 
@@ -432,4 +519,6 @@ public class Image extends RefCnt implements IHasImageInfo {
     @ApiStatus.Internal public static native boolean _nScalePixels(long ptr, long pixmapPtr, long samplingOptions, boolean cache);
     @ApiStatus.Internal public static native boolean _nReadPixelsBitmap(long ptr, long contextPtr, long bitmapPtr, int srcX, int srcY, boolean cache);
     @ApiStatus.Internal public static native boolean _nReadPixelsPixmap(long ptr, long pixmapPtr, int srcX, int srcY, boolean cache);
+    @ApiStatus.Internal public static native ImageWithFilterResult _nMakeWithFilter(long srcPtr, long filterPtr, int subsetL, int subsetT, int subsetR, int subsetB, int clipBoundsL, int clipBoundsT, int clipBoundsR, int clipBoundsB);
+    @ApiStatus.Internal public static native ImageWithFilterResult _nMakeWithFilterContext(long contextPtr, long srcPtr, long filterPtr, int subsetL, int subsetT, int subsetR, int subsetB, int clipBoundsL, int clipBoundsT, int clipBoundsR, int clipBoundsB);
 }

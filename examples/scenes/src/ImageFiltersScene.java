@@ -8,10 +8,12 @@ import io.github.humbleui.types.*;
 
 public class ImageFiltersScene extends Scene {
     protected final Image image;
+    protected final Image image2;
 
     public ImageFiltersScene() {
         try {
             image = Image.makeDeferredFromEncodedBytes(Files.readAllBytes(java.nio.file.Path.of(file("images/circus.jpg"))));
+            image2 = Image.makeDeferredFromEncodedBytes(Files.readAllBytes(java.nio.file.Path.of(file("images/skia_fiddle/2.png"))));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -21,7 +23,8 @@ public class ImageFiltersScene extends Scene {
     public void draw(Canvas canvas, int width, int height, float dpi, int xpos, int ypos) {
         canvas.translate(20, 20);
         drawShadowsBlurs(canvas);
-        drawImageFilters(canvas, width, dpi); 
+        drawImageFilters(canvas, width, dpi);
+        drawImageWithFilters(canvas);
         drawLights(canvas);
     }
 
@@ -90,6 +93,36 @@ public class ImageFiltersScene extends Scene {
         }
         canvas.restore();
         canvas.translate(0, 70);
+    }
+
+    private void drawImageWithFilters(Canvas canvas) {
+        canvas.save();
+
+        try (ImageFilter shadowFilter = ImageFilter.makeDropShadow(-10.0f * phase(), 5.0f * phase(), 3.0f, 3.0f, 0xFF0000FF);
+             ImageFilter offsetFilter = ImageFilter.makeOffset(40, 40, shadowFilter, null);
+             Paint paint = new Paint().setAntiAlias(true).setStroke(true))
+        {
+            int w = image2.getImageInfo().getWidth();
+            int h = image2.getImageInfo().getHeight();
+            IRect subset = IRect.makeXYWH(0, 0, w, h);
+            IRect clipBounds = IRect.makeXYWH(-60, -60, w + 120, h + 120);
+            DirectContext context = ((Surface) canvas._owner)._context;
+            for (ImageWithFilterResult result: new ImageWithFilterResult[] {
+                Image.makeWithFilter(context, offsetFilter, image2, subset, clipBounds),
+                Image.makeWithFilter(offsetFilter, image2, subset, clipBounds)
+            }) {
+                IPoint offset = result.getOffset();
+                canvas.drawLine(0, 0, offset.getX(), offset.getY(), paint);
+                canvas.translate(offset.getX(), offset.getY());
+                canvas.drawImage(result.getImage(), 0, 0);
+                canvas.drawRect(result.getSubset().toRect(), paint);
+                result.close();
+                canvas.translate(100, 0);
+            }
+        }
+
+        canvas.restore();
+        canvas.translate(0, 200);
     }
 
     private void drawLights(Canvas canvas) {

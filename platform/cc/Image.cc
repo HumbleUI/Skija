@@ -3,6 +3,7 @@
 #include "include/core/SkBitmap.h"
 #include "include/core/SkData.h"
 #include "include/core/SkImage.h"
+#include "include/core/SkImageFilter.h"
 #include "include/core/SkShader.h"
 #include "include/gpu/ganesh/GrBackendSurface.h"
 #include "include/gpu/ganesh/GrDirectContext.h"
@@ -144,4 +145,29 @@ extern "C" JNIEXPORT jboolean JNICALL Java_io_github_humbleui_skija_Image__1nSca
     SkPixmap* pixmap = reinterpret_cast<SkPixmap*>(static_cast<uintptr_t>(pixmapPtr));
     auto cachingHint = cache ? SkImage::CachingHint::kAllow_CachingHint : SkImage::CachingHint::kDisallow_CachingHint;
     return instance->scalePixels(*pixmap, skija::SamplingMode::unpack(samplingOptions), cachingHint);
+}
+
+extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_Image__1nMakeWithFilter
+  (JNIEnv* env, jclass jclass, jlong srcPtr, jlong filterPtr, jint subsetL, jint subsetT, jint subsetR, jint subsetB, jint clipBoundsL, jint clipBoundsT, jint clipBoundsR, jint clipBoundsB) {
+    SkImage* src = reinterpret_cast<SkImage*>(static_cast<uintptr_t>(srcPtr));
+    SkImageFilter* filter = reinterpret_cast<SkImageFilter*>(static_cast<uintptr_t>(filterPtr));
+    SkIRect subset = SkIRect::MakeLTRB(subsetL, subsetT, subsetR, subsetB);
+    SkIRect clipBounds = SkIRect::MakeLTRB(clipBoundsL, clipBoundsT, clipBoundsR, clipBoundsB);
+    SkIRect outSubset;
+    SkIPoint offset;
+    sk_sp<SkImage> image = SkImages::MakeWithFilter(sk_ref_sp<SkImage>(src), filter, subset, clipBounds, &outSubset, &offset);
+    return image ? skija::ImageWithFilterResult::make(env, image.release(), outSubset, offset) : nullptr;
+}
+
+extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_Image__1nMakeWithFilterContext
+  (JNIEnv* env, jclass jclass, jlong contextPtr, jlong srcPtr, jlong filterPtr, jint subsetL, jint subsetT, jint subsetR, jint subsetB, jint clipBoundsL, jint clipBoundsT, jint clipBoundsR, jint clipBoundsB) {
+    GrRecordingContext* context = reinterpret_cast<GrRecordingContext*>(static_cast<uintptr_t>(contextPtr));
+    SkImage* src = reinterpret_cast<SkImage*>(static_cast<uintptr_t>(srcPtr));
+    SkImageFilter* filter = reinterpret_cast<SkImageFilter*>(static_cast<uintptr_t>(filterPtr));
+    SkIRect subset = SkIRect::MakeLTRB(subsetL, subsetT, subsetR, subsetB);
+    SkIRect clipBounds = SkIRect::MakeLTRB(clipBoundsL, clipBoundsT, clipBoundsR, clipBoundsB);
+    SkIRect outSubset;
+    SkIPoint offset;
+    sk_sp<SkImage> image = SkImages::MakeWithFilter(context, sk_ref_sp<SkImage>(src), filter, subset, clipBounds, &outSubset, &offset);
+    return image ? skija::ImageWithFilterResult::make(env, image.release(), outSubset, offset) : nullptr;
 }

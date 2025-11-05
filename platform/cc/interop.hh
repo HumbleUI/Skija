@@ -200,12 +200,27 @@ namespace skija {
         void onUnload(JNIEnv* env);
     }
 
+    namespace Image {
+        extern jclass cls;
+        extern jmethodID ctor;
+        void onLoad(JNIEnv* env);
+        void onUnload(JNIEnv* env);
+    }
+
     namespace ImageInfo {
         extern jclass cls;
         extern jmethodID ctor;
         void onLoad(JNIEnv* env);
         void onUnload(JNIEnv* env);
         jobject toJava(JNIEnv* env, const SkImageInfo& imageInfo);
+    }
+
+    namespace ImageWithFilterResult {
+        extern jclass cls;
+        extern jmethodID ctor;
+        void onLoad(JNIEnv* env);
+        void onUnload(JNIEnv* env);
+        jobject make(JNIEnv* env, SkImage* image, const SkIRect& subset, const SkIPoint& offset);
     }
 
     namespace Path {
