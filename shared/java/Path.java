@@ -31,11 +31,13 @@ public class Path extends Managed implements Iterable<PathSegment> {
         public static final long PTR = _nGetFinalizer();
     }
 
-    public static Path makeRaw(Point[] points, PathVerb[] verbs, float[] conicWeights, PathFillMode fillMode) {
+    @NotNull @Contract("_, _, _, _ -> new")
+    public static Path makeRaw(@NotNull Point[] points, @NotNull PathVerb[] verbs, @NotNull float[] conicWeights, @NotNull PathFillMode fillMode) {
         return makeRaw(points, verbs, conicWeights, fillMode, false);
     }
 
-    public static Path makeRaw(Point[] points, PathVerb[] verbs, float[] conicWeights, PathFillMode fillMode, boolean isVolatile) {
+    @NotNull @Contract("_, _, _, _, _ -> new")
+    public static Path makeRaw(@NotNull Point[] points, @NotNull PathVerb[] verbs, @NotNull float[] conicWeights, @NotNull PathFillMode fillMode, boolean isVolatile) {
         Stats.onNativeCall();
         int[] verbOrdinals = new int[verbs.length];
         for (int i = 0; i < verbs.length; i++) {
@@ -49,46 +51,56 @@ public class Path extends Managed implements Iterable<PathSegment> {
         return new Path(_nMakeRaw(coords, verbOrdinals, conicWeights, fillMode.ordinal(), isVolatile));
     }
 
-    public static Path makeRect(Rect rect) {
+    @NotNull @Contract("_ -> new")
+    public static Path makeRect(@NotNull Rect rect) {
         return makeRect(rect, PathDirection.CLOCKWISE, 0);
     }
 
-    public static Path makeRect(Rect rect, PathDirection dir) {
+    @NotNull @Contract("_, _ -> new")
+    public static Path makeRect(@NotNull Rect rect, @NotNull PathDirection dir) {
         return makeRect(rect, dir, 0);
     }
 
-    public static Path makeRect(Rect rect, PathDirection dir, int startIndex) {
+    @NotNull @Contract("_, _, _ -> new")
+    public static Path makeRect(@NotNull Rect rect, @NotNull PathDirection dir, int startIndex) {
         Stats.onNativeCall();
         return new Path(_nMakeRect(rect._left, rect._top, rect._right, rect._bottom, dir.ordinal(), startIndex));
     }
 
-    public static Path makeOval(Rect oval) {
+    @NotNull @Contract("_ -> new")
+    public static Path makeOval(@NotNull Rect oval) {
         return makeOval(oval, PathDirection.CLOCKWISE);
     }
 
-    public static Path makeOval(Rect oval, PathDirection dir) {
+    @NotNull @Contract("_, _ -> new")
+    public static Path makeOval(@NotNull Rect oval, @NotNull PathDirection dir) {
         Stats.onNativeCall();
         return new Path(_nMakeOval(oval._left, oval._top, oval._right, oval._bottom, dir.ordinal()));
     }
 
+    @NotNull @Contract("_, _, _ -> new")
     public static Path makeCircle(float x, float y, float radius) {
         return makeCircle(x, y, radius, PathDirection.CLOCKWISE);
     }
 
-    public static Path makeCircle(float x, float y, float radius, PathDirection dir) {
+    @NotNull @Contract("_, _, _, _ -> new")
+    public static Path makeCircle(float x, float y, float radius, @NotNull PathDirection dir) {
         Stats.onNativeCall();
         return new Path(_nMakeCircle(x, y, radius, dir.ordinal()));
     }
 
-    public static Path makeRRect(RRect rrect) {
+    @NotNull @Contract("_ -> new")
+    public static Path makeRRect(@NotNull RRect rrect) {
         return makeRRect(rrect, PathDirection.CLOCKWISE, 0);
     }
 
-    public static Path makeRRect(RRect rrect, PathDirection dir) {
+    @NotNull @Contract("_, _ -> new")
+    public static Path makeRRect(@NotNull RRect rrect, @NotNull PathDirection dir) {
         return makeRRect(rrect, dir, 0);
     }
 
-    public static Path makeRRect(RRect rrect, PathDirection dir, int startIndex) {
+    @NotNull @Contract("_, _, _ -> new")
+    public static Path makeRRect(@NotNull RRect rrect, @NotNull PathDirection dir, int startIndex) {
         try {
             Stats.onNativeCall();
             return new Path(_nMakeRRect(rrect._left, rrect._top, rrect._right, rrect._bottom,
@@ -98,15 +110,18 @@ public class Path extends Managed implements Iterable<PathSegment> {
         }
     }
 
-    public static Path makePolygon(Point[] pts, boolean isClosed) {
+    @NotNull @Contract("_, _ -> new")
+    public static Path makePolygon(@NotNull Point[] pts, boolean isClosed) {
         return makePolygon(pts, isClosed, PathFillMode.WINDING, false);
     }
 
-    public static Path makePolygon(Point[] pts, boolean isClosed, PathFillMode fillMode) {
+    @NotNull @Contract("_, _, _ -> new")
+    public static Path makePolygon(@NotNull Point[] pts, boolean isClosed, @NotNull PathFillMode fillMode) {
         return makePolygon(pts, isClosed, fillMode, false);
     }
 
-    public static Path makePolygon(Point[] pts, boolean isClosed, PathFillMode fillMode, boolean isVolatile) {
+    @NotNull @Contract("_, _, _, _ -> new")
+    public static Path makePolygon(@NotNull Point[] pts, boolean isClosed, @NotNull PathFillMode fillMode, boolean isVolatile) {
         Stats.onNativeCall();
         float[] coords = new float[pts.length * 2];
         for (int i = 0; i < pts.length; i++) {
@@ -116,17 +131,20 @@ public class Path extends Managed implements Iterable<PathSegment> {
         return new Path(_nMakePolygon(coords, isClosed, fillMode.ordinal(), isVolatile));
     }
 
-    public static Path makeLine(Point a, Point b) {
+    @NotNull @Contract("_, _ -> new")
+    public static Path makeLine(@NotNull Point a, @NotNull Point b) {
         return makeLine(a._x, a._y, b._x, b._y);
     }
 
+    @NotNull @Contract("_, _, _, _ -> new")
     public static Path makeLine(float x0, float y0, float x1, float y1) {
         Stats.onNativeCall();
         return new Path(_nMakeLine(x0, y0, x1, y1));
     }
 
-    @NotNull
-    public static Path makeFromSVGString(String svg) {
+    @NotNull @Contract("_ -> new")
+    public static Path makeFromSVGString(@NotNull String svg) {
+        Stats.onNativeCall();
         long res = _nMakeFromSVGString(svg);
         if (res == 0)
             throw new IllegalArgumentException("Failed to parse SVG Path string: " + svg);
@@ -145,8 +163,8 @@ public class Path extends Managed implements Iterable<PathSegment> {
      * @param op  The operator to apply.
      * @return    Path if operation was able to produce a result, null otherwise
      */
-    @Nullable
-    public static Path makeCombining(@NotNull Path one, @NotNull Path two, PathOp op) {
+    @Nullable @Contract("_, _, _ -> new")
+    public static Path makeCombining(@NotNull Path one, @NotNull Path two, @NotNull PathOp op) {
         try {
             Stats.onNativeCall();
             long ptr = _nMakeCombining(Native.getPtr(one), Native.getPtr(two), op.ordinal());
@@ -168,11 +186,28 @@ public class Path extends Managed implements Iterable<PathSegment> {
         Stats.onNativeCall();
     }
 
+    /**
+     * Constructs an empty {@link Path} with specified {@link PathFillMode}.
+     * By default, {@link Path} has no verbs, no {@link Point}, and no weights.
+     */
     public Path(@NotNull PathFillMode fillMode) {
         this(_nMake(fillMode.ordinal()));
         Stats.onNativeCall();
     }
 
+    /**
+     * <p>Constructs a copy of an existing path. Copy constructor makes two
+     * paths identical by value. Internally, path and the returned result share
+     * pointer values. The underlying verb array, {@link Point} array and
+     * weights are copied when modified.</p>
+     *
+     * <p>Creating a {@link Path} copy is very efficient and never allocates
+     * memory. {@link Path} are always copied by value from the interface; the
+     * underlying shared pointers are not exposed.</p>
+     *
+     * @param path  Path to copy by value
+     * @see <a href="https://fiddle.skia.org/c/@Path_copy_const_SkPath">https://fiddle.skia.org/c/@Path_copy_const_SkPath</a>
+     */
     public Path(@NotNull Path path) {
         this(_nMakeCopy(Native.getPtr(path)));
         ReferenceUtil.reachabilityFence(path);
@@ -187,7 +222,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
      * @return   true if this and Path are equivalent
     */
     @ApiStatus.Internal @Override
-    public boolean _nativeEquals(Native other) {
+    public boolean _nativeEquals(@NotNull Native other) {
         try {
             return _nEquals(_ptr, Native.getPtr(other));
         } finally {
@@ -206,10 +241,11 @@ public class Path extends Managed implements Iterable<PathSegment> {
      *
      * @param compare  Path to compare
      * @return         true if Path verb array and weights are equivalent
-     * 
+     *
      * @see <a href="https://fiddle.skia.org/c/@Path_isInterpolatable">https://fiddle.skia.org/c/@Path_isInterpolatable</a>
      */
-    public boolean isInterpolatable(Path compare) {
+    @Contract(pure = true)
+    public boolean isInterpolatable(@NotNull Path compare) {
         try {
             Stats.onNativeCall();
             return _nIsInterpolatable(_ptr, Native.getPtr(compare));
@@ -219,7 +255,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
         }
     }
 
-    /** 
+    /**
      * <p>Interpolates between Path with {@link Point} array of equal size.
      * Copy verb array and weights to out, and set out Point array to a weighted
      * average of this Point array and ending Point array, using the formula:
@@ -241,7 +277,8 @@ public class Path extends Managed implements Iterable<PathSegment> {
      *
      * @see <a href="https://fiddle.skia.org/c/@Path_interpolate">https://fiddle.skia.org/c/@Path_interpolate</a>
      */
-    public Path makeInterpolate(Path ending, float weight) {
+    @NotNull @Contract("_, _ -> new")
+    public Path makeInterpolate(@NotNull Path ending, float weight) {
         try {
             Stats.onNativeCall();
             long ptr = _nMakeInterpolate(_ptr, Native.getPtr(ending), weight);
@@ -254,6 +291,12 @@ public class Path extends Managed implements Iterable<PathSegment> {
         }
     }
 
+    /**
+     * Returns {@link PathFillMode}, the rule used to fill {@link Path}.
+     *
+     * @return  current {@link PathFillMode} setting
+     */
+    @NotNull @Contract(pure = true)
     public PathFillMode getFillMode() {
         try {
             Stats.onNativeCall();
@@ -263,7 +306,14 @@ public class Path extends Managed implements Iterable<PathSegment> {
         }
     }
 
-    public Path makeWithFillMode(PathFillMode fillMode) {
+    /**
+     * Creates an {@link Path} with the same properties and data, and with
+     * {@link PathFillMode} set to fillMode.
+     *
+     * @return  new {@link Path}
+     */
+    @NotNull @Contract("_ -> new")
+    public Path makeWithFillMode(@NotNull PathFillMode fillMode) {
         try {
             Stats.onNativeCall();
             return new Path(_nMakeWithFillMode(_ptr, fillMode.ordinal()));
@@ -272,6 +322,14 @@ public class Path extends Managed implements Iterable<PathSegment> {
         }
     }
 
+   /**
+    * Returns if {@link PathFillMode} describes area outside {@link Path}
+    * geometry. The inverse fill area extends indefinitely.
+    *
+    * @return  true if {@link PathFillMode} is {@link PathFillMode#INVERSE_WINDING}
+    *          or {@link PathFillMode#INVERSE_EVEN_ODD}
+    */
+    @Contract(pure = true)
     public boolean isInverseFillType() {
         try {
             Stats.onNativeCall();
@@ -281,6 +339,15 @@ public class Path extends Managed implements Iterable<PathSegment> {
         }
     }
 
+    /**
+     * Creates an {@link Path} with the same properties and data, and with
+     * {@link PathFillMode} replaced with its inverse. The inverse of
+     * {@link PathFillMode} describes the area unmodified by the original
+     * {@link PathFillMode}.
+     *
+     * @return  new {@link Path}
+     */
+    @NotNull @Contract("-> new")
     public Path makeToggleInverseFillType() {
         try {
             Stats.onNativeCall();
@@ -295,6 +362,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
      *
      * @return  true or false
      */
+    @Contract(pure = true)
     public boolean isConvex() {
         try {
             Stats.onNativeCall();
@@ -306,11 +374,12 @@ public class Path extends Managed implements Iterable<PathSegment> {
 
     /**
      * Returns oval bounds if this path is recognized as an oval or circle.
-     * 
+     *
      * @return  bounds is recognized as an oval or circle, null otherwise
-     * 
+     *
      * @see <a href="https://fiddle.skia.org/c/@Path_isOval">https://fiddle.skia.org/c/@Path_isOval</a>
      */
+    @Nullable @Contract(pure = true)
     public Rect isOval() {
         try {
             Stats.onNativeCall();
@@ -322,11 +391,12 @@ public class Path extends Managed implements Iterable<PathSegment> {
 
     /**
      * Returns {@link RRect} if this path is recognized as an oval, circle or RRect.
-     * 
+     *
      * @return  bounds is recognized as an oval, circle or RRect, null otherwise
-     * 
+     *
      * @see <a href="https://fiddle.skia.org/c/@Path_isRRect">https://fiddle.skia.org/c/@Path_isRRect</a>
      */
+    @Nullable @Contract(pure = true)
     public RRect isRRect() {
         try {
             Stats.onNativeCall();
@@ -339,12 +409,13 @@ public class Path extends Managed implements Iterable<PathSegment> {
 
     /**
      * <p>Returns if Path is empty.</p>
-     * 
+     *
      * <p>Empty Path may have FillMode but has no {@link Point}, {@link PathVerb}, or conic weight.
      * {@link Path()} constructs empty Path; {@link #reset()} make Path empty.</p>
      *
      * @return  true if the path contains no Verb array
      */
+    @Contract(pure = true)
     public boolean isEmpty() {
         try {
             Stats.onNativeCall();
@@ -356,7 +427,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
 
     /**
      * <p>Returns if contour is closed.</p>
-     * 
+     *
      * <p>Contour is closed if Path Verb array was last modified by {@link PathBuilder#closePath()}. When stroked,
      * closed contour draws {@link PaintStrokeJoin} instead of {@link PaintStrokeCap} at first and last Point.</p>
      *
@@ -364,6 +435,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
      *
      * @see <a href="https://fiddle.skia.org/c/@Path_isLastContourClosed">https://fiddle.skia.org/c/@Path_isLastContourClosed</a>
      */
+    @Contract(pure = true)
     public boolean isLastContourClosed() {
         try {
             Stats.onNativeCall();
@@ -380,6 +452,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
      *
      * @return  true if all Point values are finite
      */
+    @Contract(pure = true)
     public boolean isFinite() {
         try {
             Stats.onNativeCall();
@@ -397,6 +470,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
      *
      * @return  true if caller will alter Path after drawing
      */
+    @Contract(pure = true)
     public boolean isVolatile() {
         try {
             Stats.onNativeCall();
@@ -406,6 +480,26 @@ public class Path extends Managed implements Iterable<PathSegment> {
         }
     }
 
+    /**
+     * <p>Return a copy of {@link Path} with isVolatile indicating whether it
+     * will be altered or discarded by the caller after it is drawn. {@link Path}
+     * by default have volatile set false, allowing Skia to attach a cache of
+     * data which speeds repeated drawing.</p>
+     *
+     * <p>Mark temporary paths, discarded or modified after use, as volatile
+     * to inform Skia that the path need not be cached.</p>
+     *
+     * <p>Mark animating {@link Path} volatile to improve performance. Mark
+     * unchanging {@link Path} non-volatile to improve repeated rendering.</p>
+     *
+     * <p>raster surface {@link Path} draws are affected by volatile for some
+     * shadows. GPU surface {@link Path} draws are affected by volatile for some
+     * shadows and concave geometries.</p>
+     *
+     * @param isVolatile  true if caller will alter {@link Path} after drawing
+     * @return            new {@link Path}
+     */
+    @NotNull @Contract("_ -> new")
     public Path makeWithVolatile(boolean isVolatile) {
         try {
             Stats.onNativeCall();
@@ -417,7 +511,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
 
     /**
      * <p>Tests if line between Point pair is degenerate.</p>
-     * 
+     *
      * <p>Line with no length or that moves a very short distance is degenerate; it is
      * treated as a point.</p>
      *
@@ -431,7 +525,8 @@ public class Path extends Managed implements Iterable<PathSegment> {
      *
      * @see <a href="https://fiddle.skia.org/c/@Path_IsLineDegenerate">https://fiddle.skia.org/c/@Path_IsLineDegenerate</a>
      */
-    public static boolean isLineDegenerate(Point p1, Point p2, boolean exact) {
+    @Contract(pure = true)
+    public static boolean isLineDegenerate(@NotNull Point p1, @NotNull Point p2, boolean exact) {
         Stats.onNativeCall();
         return _nIsLineDegenerate(p1._x, p1._y, p2._x, p2._y, exact);
     }
@@ -449,14 +544,15 @@ public class Path extends Managed implements Iterable<PathSegment> {
      *               if false, returns true if p1, p2, and p3 are equal or nearly equal
      * @return       true if quad is degenerate; its length is effectively zero
      */
-    public static boolean isQuadDegenerate(Point p1, Point p2, Point p3, boolean exact) {
+    @Contract(pure = true)
+    public static boolean isQuadDegenerate(@NotNull Point p1, @NotNull Point p2, @NotNull Point p3, boolean exact) {
         Stats.onNativeCall();
         return _nIsQuadDegenerate(p1._x, p1._y, p2._x, p2._y, p3._x, p3._y, exact);
     }
 
     /**
      * <p>Tests if cubic is degenerate.</p>
-     * 
+     *
      * <p>Cubic with no length or that moves a very short distance is degenerate; it is
      * treated as a point.</p>
      *
@@ -468,7 +564,8 @@ public class Path extends Managed implements Iterable<PathSegment> {
      *               if false, returns true if p1, p2, p3, and p4 are equal or nearly equal
      * @return       true if cubic is degenerate; its length is effectively zero
      */
-    public static boolean isCubicDegenerate(Point p1, Point p2, Point p3, Point p4, boolean exact) {
+    @Contract(pure = true)
+    public static boolean isCubicDegenerate(@NotNull Point p1, @NotNull Point p2, @NotNull Point p3, @NotNull Point p4, boolean exact) {
         Stats.onNativeCall();
         return _nIsCubicDegenerate(p1._x, p1._y, p2._x, p2._y, p3._x, p3._y, p4._x, p4._y, exact);
     }
@@ -482,6 +579,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
      *
      * @see <a href="https://fiddle.skia.org/c/@Path_isLine">https://fiddle.skia.org/c/@Path_isLine</a>
      */
+    @Nullable @Contract(pure = true)
     public Point[] getAsLine() {
         try {
             Stats.onNativeCall();
@@ -491,6 +589,12 @@ public class Path extends Managed implements Iterable<PathSegment> {
         }
     }
 
+    /**
+     * Return a read-only view into the path's points.
+     *
+     * @return  array of {@link Point}s
+     */
+    @NotNull @Contract(pure = true)
     public Point[] getPoints() {
         try {
             Stats.onNativeCall();
@@ -500,6 +604,12 @@ public class Path extends Managed implements Iterable<PathSegment> {
         }
     }
 
+    /**
+     * Return a read-only view into the path's verbs.
+     *
+     * @return  array of {@link PathVerb}s
+     */
+    @NotNull @Contract(pure = true)
     public PathVerb[] getVerbs() {
         try {
             Stats.onNativeCall();
@@ -514,6 +624,12 @@ public class Path extends Managed implements Iterable<PathSegment> {
         }
     }
 
+    /**
+     * Return a read-only view into the path's conic-weights.
+     *
+     * @return  array of conic weights.
+     */
+    @NotNull @Contract(pure = true)
     public float[] getConicWeights() {
         try {
             Stats.onNativeCall();
@@ -531,6 +647,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
      *
      * @see <a href="https://fiddle.skia.org/c/@Path_countPoints">https://fiddle.skia.org/c/@Path_countPoints</a>
      */
+    @Contract(pure = true)
     public int getPointsCount() {
         try {
             Stats.onNativeCall();
@@ -548,6 +665,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
      *
      * @see <a href="https://fiddle.skia.org/c/@Path_countVerbs">https://fiddle.skia.org/c/@Path_countVerbs</a>
      */
+    @Contract(pure = true)
     public int getVerbsCount() {
         try {
             Stats.onNativeCall();
@@ -557,7 +675,14 @@ public class Path extends Managed implements Iterable<PathSegment> {
         }
     }
 
-    @Nullable
+    /**
+     * Return the last point, or null.
+     *
+     * @return  The last if the path contains one or more {@link Point}, else
+     *          returns null
+     * @see     <a href="https://fiddle.skia.org/c/@Path_getLastPt">https://fiddle.skia.org/c/@Path_getLastPt</a>
+     */
+    @Nullable @Contract(pure = true)
     public Point getLastPt() {
         try {
             Stats.onNativeCall();
@@ -572,6 +697,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
      *
      * @return  approximate size
      */
+    @Contract(pure = true)
     public long getApproximateBytesUsed() {
         try {
             Stats.onNativeCall();
@@ -592,6 +718,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
      *
      * @return  bounds of all Point in Point array
      */
+    @NotNull @Contract(pure = true)
     public Rect getBounds() {
         try {
             Stats.onNativeCall();
@@ -612,6 +739,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
      *
      * @return  this
      */
+    @NotNull @Contract("-> this")
     public Path updateBoundsCache() {
         Stats.onNativeCall();
         _nUpdateBoundsCache(_ptr);
@@ -636,6 +764,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
      *
      * @see <a href="https://fiddle.skia.org/c/@Path_computeTightBounds">https://fiddle.skia.org/c/@Path_computeTightBounds</a>
      */
+    @NotNull @Contract(pure = true)
     public Rect computeTightBounds() {
         try {
             Stats.onNativeCall();
@@ -659,7 +788,8 @@ public class Path extends Managed implements Iterable<PathSegment> {
      *
      * @see <a href="https://fiddle.skia.org/c/@Path_conservativelyContainsRect">https://fiddle.skia.org/c/@Path_conservativelyContainsRect</a>
      */
-    public boolean conservativelyContainsRect(Rect rect) {
+    @Contract(pure = true)
+    public boolean conservativelyContainsRect(@NotNull Rect rect) {
         try {
             Stats.onNativeCall();
             return _nConservativelyContainsRect(_ptr, rect._left, rect._top, rect._right, rect._bottom);
@@ -697,7 +827,8 @@ public class Path extends Managed implements Iterable<PathSegment> {
      * @param pow2  quad count, as power of two, normally 0 to 5 (1 to 32 quad curves)
      * @return      number of quad curves written to pts
      */
-    public static Point[] convertConicToQuads(Point p0, Point p1, Point p2, float w, int pow2) {
+    @NotNull @Contract(pure = true)
+    public static Point[] convertConicToQuads(@NotNull Point p0, @NotNull Point p1, @NotNull Point p2, float w, int pow2) {
         Stats.onNativeCall();
         return _nConvertConicToQuads(p0._x, p0._y, p1._x, p1._y, p2._x, p2._y, w, pow2);
     }
@@ -712,6 +843,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
      *
      * @see <a href="https://fiddle.skia.org/c/@Path_isRect">https://fiddle.skia.org/c/@Path_isRect</a>
      */
+    @Nullable @Contract(pure = true)
     public Rect isRect() {
         try {
             Stats.onNativeCall();
@@ -721,19 +853,35 @@ public class Path extends Managed implements Iterable<PathSegment> {
         }
     }
 
-    @Nullable
-    public Path makeTransform(Matrix33 matrix) {
+    /**
+     * <p>Return a copy of {@link Path} with verb array, {@link Point} array,
+     * and weight transformed by matrix. {@link #makeTransform(Matrix33)} may
+     * change verbs and increase their number.</p>
+     *
+     * <p>If the resulting path has any non-finite values, returns null.</p>
+     *
+     * @param matrix  {@link Matrix33} to apply to {@link Path}
+     * @return        {@link Path} if finite, or null
+     */
+    @Nullable @Contract("_ -> new")
+    public Path makeTransform(@NotNull Matrix33 matrix) {
         try {
             Stats.onNativeCall();
             long ptr = _nMakeTransform(_ptr, matrix._mat);
             return ptr == 0 ? null : new Path(ptr);
         } finally {
             ReferenceUtil.reachabilityFence(this);
-            ReferenceUtil.reachabilityFence(matrix);
         }
     }
 
-    @Nullable
+    /**
+     * Returns {@link Path} with {@link Point} array offset by (dx, dy).
+     *
+     * @param dx  offset added to {@link Point} array x-axis coordinates
+     * @param dy  offset added to {@link Point} array y-axis coordinates
+     * @return    new {@link Path}
+     */
+    @Nullable @Contract("_, _ -> new")
     public Path makeOffset(float dx, float dy) {
         try {
             Stats.onNativeCall();
@@ -744,7 +892,25 @@ public class Path extends Managed implements Iterable<PathSegment> {
         }
     }
 
-    @Nullable
+    /**
+     * Returns {@link Path} with {@link Point} array scaled by s.
+     *
+     * @param s  scale applied to {@link Point} array coordinates
+     * @return   new {@link Path}
+     */
+    @Nullable @Contract("_ -> new")
+    public Path makeScale(float s) {
+        return makeScale(s, s);
+    }
+
+    /**
+     * Returns {@link Path} with {@link Point} array scaled by (sx, sy).
+     *
+     * @param sx  scale applied to {@link Point} array x-axis coordinates
+     * @param sy  scale applied to {@link Point} array y-axis coordinates
+     * @return    new {@link Path}
+     */
+    @Nullable @Contract("_, _ -> new")
     public Path makeScale(float sx, float sy) {
         try {
             Stats.onNativeCall();
@@ -770,6 +936,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
      * @see PathSegmentMask#CONIC
      * @see PathSegmentMask#CUBIC
      */
+    @Contract(pure = true)
     public int getSegmentMasks() {
         try {
             Stats.onNativeCall();
@@ -796,6 +963,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
      * @param isVolatile  true if caller will alter Path after drawing
      * @return            this
      */
+    @NotNull @Contract("_ -> this")
     public Path setVolatile(boolean isVolatile) {
         Stats.onNativeCall();
         _nSetVolatile(_ptr, isVolatile);
@@ -812,7 +980,8 @@ public class Path extends Managed implements Iterable<PathSegment> {
      *
      * @see <a href="https://fiddle.skia.org/c/@Path_swap">https://fiddle.skia.org/c/@Path_swap</a>
      */
-    public Path swap(Path other) {
+    @NotNull @Contract("_ -> this")
+    public Path swap(@NotNull Path other) {
         try {
             Stats.onNativeCall();
             _nSwap(_ptr, Native.getPtr(other));
@@ -822,7 +991,13 @@ public class Path extends Managed implements Iterable<PathSegment> {
         }
     }
 
-    public Path setFillMode(PathFillMode fillMode) {
+    /**
+     * Sets {@link PathFillMode}, the rule used to fill {@link Path}
+     *
+     * @return this
+     */
+    @NotNull @Contract("_ -> this")
+    public Path setFillMode(@NotNull PathFillMode fillMode) {
         Stats.onNativeCall();
         _nSetFillMode(_ptr, fillMode.ordinal());
         return this;
@@ -838,17 +1013,33 @@ public class Path extends Managed implements Iterable<PathSegment> {
      *
      * @see <a href="https://fiddle.skia.org/c/@Path_reset">https://fiddle.skia.org/c/@Path_reset</a>
      */
+    @NotNull @Contract("-> this")
     public Path reset() {
         Stats.onNativeCall();
         _nReset(_ptr);
         return this;
     }
 
-    @Override
+    /**
+     * Iterates through verb array, and associated {@link Point} array and conic
+     * weight.
+     *
+     * @return  {@link PathSegmentIterator}
+     */
+    @NotNull @Override
     public PathSegmentIterator iterator() {
         return iterator(false);
     }
 
+    /**
+     * Iterates through verb array, and associated {@link Point} array and conic
+     * weight. Provides options to treat open contours as closed, and to ignore
+     * degenerate data.
+     *
+     * @param forceClose  true if open contours generate {@link PathVerb#CLOSE}
+     * @return            {@link PathSegmentIterator}
+     */
+    @NotNull @Contract("_ -> new")
     public PathSegmentIterator iterator(boolean forceClose) {
         return PathSegmentIterator.make(this, forceClose);
     }
@@ -863,6 +1054,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
      *
      * @see <a href="https://fiddle.skia.org/c/@Path_contains">https://fiddle.skia.org/c/@Path_contains</a>
      */
+    @Contract(pure = true)
     public boolean contains(float x, float y) {
         try {
             Stats.onNativeCall();
@@ -881,7 +1073,8 @@ public class Path extends Managed implements Iterable<PathSegment> {
      *
      * @see <a href="https://fiddle.skia.org/c/@Path_contains">https://fiddle.skia.org/c/@Path_contains</a>
      */
-    public boolean contains(Point p) {
+    @Contract(pure = true)
+    public boolean contains(@NotNull Point p) {
         return contains(p._x, p._y);
     }
 
@@ -895,6 +1088,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
      *
      * @see <a href="https://fiddle.skia.org/c/@Path_dump_2">https://fiddle.skia.org/c/@Path_dump_2</a>
      */
+    @NotNull @Contract("-> this")
     public Path dump() {
         Stats.onNativeCall();
         _nDump(_ptr);
@@ -913,6 +1107,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
      *
      * @see <a href="https://fiddle.skia.org/c/@Path_dumpHex">https://fiddle.skia.org/c/@Path_dumpHex</a>
      */
+    @NotNull @Contract("-> this")
     public Path dumpHex() {
         Stats.onNativeCall();
         _nDumpHex(_ptr);
@@ -932,6 +1127,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
      *
      * @see <a href="https://fiddle.skia.org/c/@Path_writeToMemory">https://fiddle.skia.org/c/@Path_writeToMemory</a>
      */
+    @NotNull @Contract(pure = true)
     public byte[] serializeToBytes() {
         try {
             Stats.onNativeCall();
@@ -952,16 +1148,18 @@ public class Path extends Managed implements Iterable<PathSegment> {
      * the format used for Path in memory is not guaranteed.</p>
      *
      * @param data  storage for Path
-     * @return      reconstructed Path
+     * @return      reconstructed Path, or null if data is invalid
      *
      * @see <a href="https://fiddle.skia.org/c/@Path_readFromMemory">https://fiddle.skia.org/c/@Path_readFromMemory</a>
      */
-    public static Path makeFromBytes(byte[] data) {
+    @Nullable @Contract("_ -> new")
+    public static Path makeFromBytes(@NotNull byte[] data) {
         Stats.onNativeCall();
-        return new Path(_nMakeFromBytes(data));
+        long ptr = _nMakeFromBytes(data);
+        return ptr == 0 ? null : new Path(ptr);
     }
 
-    /** 
+    /**
      * <p>Returns a non-zero, globally unique value. A different value is returned
      * if verb array, Point array, or conic weight changes.</p>
      *
@@ -975,6 +1173,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
      * @see <a href="https://fiddle.skia.org/c/@Path_getGenerationID">https://fiddle.skia.org/c/@Path_getGenerationID</a>
      * @see <a href="https://bugs.chromium.org/p/skia/issues/detail?id=1762">https://bugs.chromium.org/p/skia/issues/detail?id=1762</a>
      */
+    @Contract(pure = true)
     public int getGenerationId() {
         try {
             Stats.onNativeCall();
@@ -982,7 +1181,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
         } finally {
             ReferenceUtil.reachabilityFence(this);
         }
-    }    
+    }
 
     /**
      * Returns if Path data is consistent. Corrupt Path data is detected if
@@ -991,6 +1190,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
      *
      * @return  true if Path data is consistent
      */
+    @Contract(pure = true)
     public boolean isValid() {
         try {
             Stats.onNativeCall();
@@ -1013,9 +1213,10 @@ public class Path extends Managed implements Iterable<PathSegment> {
     public static native long    _nMakeRRect(float l, float t, float r, float b, float[] radii, int dir, int startIndex);
     public static native long    _nMakePolygon(float[] coords, boolean isClosed, int fillMode, boolean isVolatile);
     public static native long    _nMakeLine(float x0, float y0, float x1, float y1);
+    public static native long    _nMakeFromSVGString(String s);
     public static native long    _nMake(int fillMode);
     public static native long    _nMakeCopy(long ptr);
-    public static native long    _nMakeFromSVGString(String s);
+    public static native long    _nMakeCombining(long onePtr, long twoPtr, int op);
     public static native boolean _nEquals(long aPtr, long bPtr);
     public static native boolean _nIsInterpolatable(long ptr, long comparePtr);
     public static native long    _nMakeInterpolate(long ptr, long endingPtr, float weight);
@@ -1023,17 +1224,14 @@ public class Path extends Managed implements Iterable<PathSegment> {
     public static native long    _nMakeWithFillMode(long ptr, int fillMode);
     public static native boolean _nIsInverseFillType(long ptr);
     public static native long    _nMakeToggleInverseFillType(long ptr);
-    public static native void    _nSetFillMode(long ptr, int fillMode);
     public static native boolean _nIsConvex(long ptr);
     public static native Rect    _nIsOval(long ptr);
     public static native RRect   _nIsRRect(long ptr);
-    public static native void    _nReset(long ptr);
     public static native boolean _nIsEmpty(long ptr);
     public static native boolean _nIsLastContourClosed(long ptr);
     public static native boolean _nIsFinite(long ptr);
     public static native boolean _nIsVolatile(long ptr);
     public static native long    _nMakeWithVolatile(long ptr, boolean isVolatile);
-    public static native void    _nSetVolatile(long ptr, boolean isVolatile);
     public static native boolean _nIsLineDegenerate(float x0, float y0, float x1, float y1, boolean exact);
     public static native boolean _nIsQuadDegenerate(float x0, float y0, float x1, float y1, float x2, float y2, boolean exact);
     public static native boolean _nIsCubicDegenerate(float x0, float y0, float x1, float y1, float x2, float y2, float x3, float y3, boolean exact);
@@ -1045,7 +1243,6 @@ public class Path extends Managed implements Iterable<PathSegment> {
     public static native int     _nCountVerbs(long ptr);
     public static native Point   _nGetLastPt(long ptr);
     public static native long    _nApproximateBytesUsed(long ptr);
-    public static native void    _nSwap(long ptr, long otherPtr);
     public static native Rect    _nGetBounds(long ptr);
     public static native void    _nUpdateBoundsCache(long ptr);
     public static native Rect    _nComputeTightBounds(long ptr);
@@ -1056,11 +1253,14 @@ public class Path extends Managed implements Iterable<PathSegment> {
     public static native long    _nMakeOffset(long ptr, float dx, float dy);
     public static native long    _nMakeScale(long ptr, float sx, float sy);
     public static native int     _nGetSegmentMasks(long ptr);
+    public static native void    _nSetVolatile(long ptr, boolean isVolatile);
+    public static native void    _nSwap(long ptr, long otherPtr);
+    public static native void    _nSetFillMode(long ptr, int fillMode);
+    public static native void    _nReset(long ptr);
     public static native boolean _nContains(long ptr, float x, float y);
     public static native void    _nDump(long ptr);
     public static native void    _nDumpHex(long ptr);
     public static native byte[]  _nSerializeToBytes(long ptr);
-    public static native long    _nMakeCombining(long onePtr, long twoPtr, int op);
     public static native long    _nMakeFromBytes(byte[] data);
     public static native int     _nGetGenerationId(long ptr);
     public static native boolean _nIsValid(long ptr);

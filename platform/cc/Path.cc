@@ -92,6 +92,29 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Path__1nMakeLin
     return reinterpret_cast<jlong>(obj);
 }
 
+extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Path__1nMakeFromSVGString
+  (JNIEnv* env, jclass jclass, jstring d) {
+    SkString s = skString(env, d);
+    std::optional<SkPath> path = SkParsePath::FromSVGString(s.c_str());
+    if (path)
+        return reinterpret_cast<jlong>(new SkPath(*path));
+    else {
+        return 0;
+    }
+}
+
+extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Path__1nMakeCombining
+  (JNIEnv* env, jclass jclass, jlong aPtr, jlong bPtr, jint jop) {
+    SkPath* a = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(aPtr));
+    SkPath* b = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(bPtr));
+    SkPathOp op = static_cast<SkPathOp>(jop);
+    auto res = std::make_unique<SkPath>();
+    if (Op(*a, *b, op, res.get()))
+        return reinterpret_cast<jlong>(res.release());
+    else
+        return 0;
+}
+
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Path__1nMake
   (JNIEnv* env, jclass jclass, jint fillMode) {
     SkPath* obj = new SkPath(static_cast<SkPathFillType>(fillMode));
@@ -104,16 +127,6 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Path__1nMakeCop
     return reinterpret_cast<jlong>(obj);
 }
 
-extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Path__1nMakeFromSVGString
-  (JNIEnv* env, jclass jclass, jstring d) {
-    SkString s = skString(env, d);
-    std::optional<SkPath> path = SkParsePath::FromSVGString(s.c_str());
-    if (path)
-        return reinterpret_cast<jlong>(new SkPath(*path));
-    else {
-        return 0;
-    }
-}
 
 extern "C" JNIEXPORT jboolean JNICALL Java_io_github_humbleui_skija_Path__1nEquals(JNIEnv* env, jclass jclass, jlong aPtr, jlong bPtr) {
     SkPath* a = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(aPtr));
@@ -160,11 +173,6 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Path__1nMakeTog
     return reinterpret_cast<jlong>(obj);
 }
 
-extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Path__1nSetFillMode(JNIEnv* env, jclass jclass, jlong ptr, jint fillMode) {
-    SkPath* instance = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(ptr));
-    instance->setFillType(static_cast<SkPathFillType>(fillMode));
-}
-
 extern "C" JNIEXPORT jboolean JNICALL Java_io_github_humbleui_skija_Path__1nIsConvex(JNIEnv* env, jclass jclass, jlong ptr) {
     SkPath* instance = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(ptr));
     return instance->isConvex();
@@ -186,11 +194,6 @@ extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_Path__1nIsRRe
         return types::RRect::fromSkRRect(env, rrect);
     else
         return nullptr;
-}
-
-extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Path__1nReset(JNIEnv* env, jclass jclass, jlong ptr) {
-    SkPath* instance = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(ptr));
-    instance->reset();
 }
 
 extern "C" JNIEXPORT jboolean JNICALL Java_io_github_humbleui_skija_Path__1nIsEmpty(JNIEnv* env, jclass jclass, jlong ptr) {
@@ -217,11 +220,6 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Path__1nMakeWit
     SkPath* instance = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(ptr));
     SkPath* obj = new SkPath(instance->makeIsVolatile(isVolatile));
     return reinterpret_cast<jlong>(obj);
-}
-
-extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Path__1nSetVolatile(JNIEnv* env, jclass jclass, jlong ptr, jboolean isVolatile) {
-    SkPath* instance = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(ptr));
-    instance->setIsVolatile(isVolatile);
 }
 
 extern "C" JNIEXPORT jboolean JNICALL Java_io_github_humbleui_skija_Path__1nIsLineDegenerate(JNIEnv* env, jclass jclass, jfloat x0, jfloat y0, jfloat x1, jfloat y1, jboolean exact) {
@@ -307,12 +305,6 @@ extern "C" JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_Path__1nApproxim
     return (jint) instance->approximateBytesUsed();
 }
 
-extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Path__1nSwap(JNIEnv* env, jclass jclass, jlong ptr, jlong otherPtr) {
-    SkPath* instance = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(ptr));
-    SkPath* other = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(otherPtr));
-    instance->swap(*other);
-}
-
 extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_Path__1nGetBounds(JNIEnv* env, jclass jclass, jlong ptr) {
     SkPath* instance = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(ptr));
     return types::Rect::fromSkRect(env, instance->getBounds());
@@ -333,7 +325,6 @@ extern "C" JNIEXPORT jboolean JNICALL Java_io_github_humbleui_skija_Path__1nCons
     SkRect rect {l, t, r, b};
     return instance->conservativelyContainsRect(rect);
 }
-
 
 extern "C" JNIEXPORT jobjectArray Java_io_github_humbleui_skija_Path__1nConvertConicToQuads
   (JNIEnv* env, jclass jclass, jfloat x0, jfloat y0, jfloat x1, jfloat y1, jfloat x2, jfloat y2, jfloat w, jint pow2) {
@@ -390,6 +381,27 @@ extern "C" JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_Path__1nGetSegme
     return instance->getSegmentMasks();
 }
 
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Path__1nSetVolatile(JNIEnv* env, jclass jclass, jlong ptr, jboolean isVolatile) {
+    SkPath* instance = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(ptr));
+    instance->setIsVolatile(isVolatile);
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Path__1nSwap(JNIEnv* env, jclass jclass, jlong ptr, jlong otherPtr) {
+    SkPath* instance = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(ptr));
+    SkPath* other = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(otherPtr));
+    instance->swap(*other);
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Path__1nSetFillMode(JNIEnv* env, jclass jclass, jlong ptr, jint fillMode) {
+    SkPath* instance = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(ptr));
+    instance->setFillType(static_cast<SkPathFillType>(fillMode));
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Path__1nReset(JNIEnv* env, jclass jclass, jlong ptr) {
+    SkPath* instance = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(ptr));
+    instance->reset();
+}
+
 extern "C" JNIEXPORT jboolean JNICALL Java_io_github_humbleui_skija_Path__1nContains
   (JNIEnv* env, jclass jclass, jlong ptr, jfloat x, jfloat y) {
     SkPath* instance = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(ptr));
@@ -417,18 +429,6 @@ extern "C" JNIEXPORT jbyteArray JNICALL Java_io_github_humbleui_skija_Path__1nSe
     instance->writeToMemory(bytes);
     env->ReleaseByteArrayElements(bytesArray, bytes, 0);
     return bytesArray;
-}
-
-extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Path__1nMakeCombining
-  (JNIEnv* env, jclass jclass, jlong aPtr, jlong bPtr, jint jop) {
-    SkPath* a = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(aPtr));
-    SkPath* b = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(bPtr));
-    SkPathOp op = static_cast<SkPathOp>(jop);
-    auto res = std::make_unique<SkPath>();
-    if (Op(*a, *b, op, res.get()))
-        return reinterpret_cast<jlong>(res.release());
-    else
-        return 0;
 }
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Path__1nMakeFromBytes
