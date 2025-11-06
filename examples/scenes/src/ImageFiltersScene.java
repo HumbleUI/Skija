@@ -59,7 +59,9 @@ public class ImageFiltersScene extends Scene {
                 ImageFilter.makeDropShadow(0, 0, 10, 10, 0xFF000000),
                 ImageFilter.makeDropShadow(2, 2, 0, 0, 0xFF000000),
                 ImageFilter.makeDropShadow(0, 0, 10, 10, 0xFFF42372),
+                ImageFilter.makeDropShadow(0, 0, 10, 10, new Color4f(0xFFF42372), null, null),
                 ImageFilter.makeDropShadowOnly(0, 0, 2, 2, 0xFFCC3333),
+                ImageFilter.makeDropShadowOnly(0, 0, 2, 2, new Color4f(0xFFCC3333), null, null),
                 ImageFilter.makeDropShadow(0, 0, 2, 2, 0xFFCC3333, null, IRect.makeXYWH(30, 30, 30, 30)),
                 ImageFilter.makeDropShadow(2, 2, 2, 2, 0xFF3333CC, inner),
                 ImageFilter.makeBlur(2, 2, FilterTileMode.CLAMP),
@@ -94,15 +96,14 @@ public class ImageFiltersScene extends Scene {
                 ImageFilter.makeMagnifier(Rect.makeXYWH(0 * dpi, 0 * dpi, 60 * dpi, 60 * dpi),  5f,  5f, SamplingMode.MITCHELL, null, bb),
                 ImageFilter.makeMagnifier(Rect.makeXYWH(0 * dpi, 0 * dpi, 60 * dpi, 60 * dpi), 10f, 10f, SamplingMode.MITCHELL, null, bb),
                 ImageFilter.makeMagnifier(Rect.makeXYWH(0 * dpi, 0 * dpi, 60 * dpi, 60 * dpi), 20f, 20f, SamplingMode.MITCHELL, null, bb),
-                ImageFilter.makeOffset(10, 10, null, bb),
-                ImageFilter.makeTile(Rect.makeXYWH(10, 10, 40, 40), Rect.makeXYWH(0, 0, 60, 60), null),
+                ImageFilter.makeTile(Rect.makeXYWH(20, 20, 20, 20), Rect.makeXYWH(0, 0, 60, 60), null),
                 ImageFilter.makeDilate(2, 2, null, bb),
                 ImageFilter.makeErode(2, 2, null, bb),
                 ImageFilter.makeColorFilter(cf, im, bb),
                 ImageFilter.makeImage(image, Rect.makeXYWH(200, 200, 200, 200), Rect.makeXYWH(10, 10, 40, 40), CubicResampler.MITCHELL),
                 ImageFilter.makePicture(pic),
                 ImageFilter.makePicture(pic, Rect.makeXYWH(20, 20, 20, 20)),
-                ImageFilter.makeShader(sh, Rect.makeXYWH(0, 0, 60, 60))
+                ImageFilter.makeShader(sh, bb)
             };
 
             for (var filter: filters) {

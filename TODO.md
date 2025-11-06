@@ -1,0 +1,28 @@
+# 0.143.0
+
+- [x] Add PathBuilder contracts
+- [x] Check PathBuilder javadoc
+- [x] Add point versions of all methods to PathBuilder
+- [x] Reorder native methods in java
+- [x] Simplify _nSnapshotTransform, _nDetachTransform
+- [x] Reorder native fns in cc
+- [x] PathBuilder equals
+- [x] Add missing Path methods
+- [x] Check Path contracts
+- [x] Check Path reachability
+- [x] Check Path javadoc
+- [x] Sort native java Path methods
+- [x] Sort native cc Path methods
+- [x] Fix PathsScene to not leak objects
+- [ ] Go through RELEASE_NOTES and add all new stuff
+  - [ ] SkRuntimeEffect
+  - [ ] SkRuntimeEffectBuilder
+  - [ ] SkImageFilters::RuntimeShader
+  - [ ] SkBlender, ImageFilters::makeBlend(Blender)
+  - [x] ImageFilters::makeDropShadow with Color4f & ColorSpace
+- [x] ImageFilter javadoc
+- [ ] ImageInfo allocates ColorSpace ptr
+- [ ] Write CHANGELOG
+- [ ] Update JWM to run on latest Skia
+- [ ] Check if graphite is worth migrating to
+- [ ] See what Text/Unicode advancements are there

@@ -90,11 +90,29 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_ImageFilter__1n
     return reinterpret_cast<jlong>(ptr);
 }
 
+extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_ImageFilter__1nMakeDropShadowCS
+  (JNIEnv* env, jclass jclass, jfloat dx, jfloat dy, jfloat sigmaX, jfloat sigmaY, jfloat r, jfloat g, jfloat b, jfloat a, jlong colorSpacePtr, jlong inputPtr, jobject cropObj) {
+    SkImageFilter* input = reinterpret_cast<SkImageFilter*>(static_cast<uintptr_t>(inputPtr));
+    SkColorSpace* colorSpace = reinterpret_cast<SkColorSpace*>(static_cast<uintptr_t>(colorSpacePtr));
+    SkImageFilters::CropRect crop = toCropRect(env, cropObj);
+    SkImageFilter* ptr = SkImageFilters::DropShadow(dx, dy, sigmaX, sigmaY, SkColor4f{r, g, b, a}, sk_ref_sp(colorSpace), sk_ref_sp(input), crop).release();
+    return reinterpret_cast<jlong>(ptr);
+}
+
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_ImageFilter__1nMakeDropShadow
   (JNIEnv* env, jclass jclass, jfloat dx, jfloat dy, jfloat sigmaX, jfloat sigmaY, jint color, jlong inputPtr, jobject cropObj) {
     SkImageFilter* input = reinterpret_cast<SkImageFilter*>(static_cast<uintptr_t>(inputPtr));
     SkImageFilters::CropRect crop = toCropRect(env, cropObj);
     SkImageFilter* ptr = SkImageFilters::DropShadow(dx, dy, sigmaX, sigmaY, color, sk_ref_sp(input), crop).release();
+    return reinterpret_cast<jlong>(ptr);
+}
+
+extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_ImageFilter__1nMakeDropShadowOnlyCS
+  (JNIEnv* env, jclass jclass, jfloat dx, jfloat dy, jfloat sigmaX, jfloat sigmaY, jfloat r, jfloat g, jfloat b, jfloat a, jlong colorSpacePtr, jlong inputPtr, jobject cropObj) {
+    SkImageFilter* input = reinterpret_cast<SkImageFilter*>(static_cast<uintptr_t>(inputPtr));
+    SkColorSpace* colorSpace = reinterpret_cast<SkColorSpace*>(static_cast<uintptr_t>(colorSpacePtr));
+    SkImageFilters::CropRect crop = toCropRect(env, cropObj);
+    SkImageFilter* ptr = SkImageFilters::DropShadowOnly(dx, dy, sigmaX, sigmaY, SkColor4f{r, g, b, a}, sk_ref_sp(colorSpace), sk_ref_sp(input), crop).release();
     return reinterpret_cast<jlong>(ptr);
 }
 
