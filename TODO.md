@@ -18,7 +18,7 @@
   - [x] SkRuntimeEffect
   - [ ] SkRuntimeEffectBuilder
   - [ ] SkImageFilters::RuntimeShader
-  - [ ] SkRuntimeBlender
+  - [x] SkRuntimeBlender
   - [x] SkBlender, ImageFilters::makeBlend(Blender)
   - [x] ImageFilters::makeDropShadow with Color4f & ColorSpace
 - [x] ImageFilter javadoc

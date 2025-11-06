@@ -42,6 +42,17 @@ public class Blender extends RuntimeEffectChild {
         return new Blender(_nMakeArithmetic(k1, k2, k3, k4, enforcePremul));
     }
 
+    @NotNull @Contract("_, _, _ -> new")
+    public static <T extends RuntimeEffectChild> Blender makeRuntime(@NotNull RuntimeEffect effect, @Nullable Data uniforms, @Nullable T[] children) {
+        Stats.onNativeCall();
+        int childCount = children == null ? 0 : children.length;
+        long[] childrenPtrs = new long[childCount];
+        for (int i = 0; i < childCount; i++) {
+            childrenPtrs[i] = Native.getPtr(children[i]);
+        }
+        return new Blender(_nMakeRuntime(Native.getPtr(effect), Native.getPtr(uniforms), childrenPtrs));
+    }
+
     @ApiStatus.Internal
     public Blender(long ptr) {
         super(ptr);
@@ -49,4 +60,5 @@ public class Blender extends RuntimeEffectChild {
 
     public static native long _nMakeWithMode(int blendMode);
     public static native long _nMakeArithmetic(float k1, float k2, float k3, float k4, boolean enforcePremul);
+    public static native long _nMakeRuntime(long effectPtr, long uniformsPtr, long[] childrenPtrs);
 }
