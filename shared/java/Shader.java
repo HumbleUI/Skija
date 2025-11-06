@@ -192,6 +192,68 @@ public class Shader extends RefCnt {
         }
     }
 
+    // Perlin Noise
+
+    /**
+     * <p>Creates a shader that generates fractal Perlin noise.</p>
+     *
+     * @param baseFrequencyX Base frequency in the X direction; usually in the range [0..1]
+     * @param baseFrequencyY Base frequency in the Y direction; usually in the range [0..1]
+     * @param numOctaves     Number of octaves of noise to add together; should be fairly small (limit of 255)
+     * @param seed           Random seed value
+     * @param tileSize       If non-null, modifies frequencies to make tileable noise for the given tile size
+     * @return               Shader that generates fractal Perlin noise
+     */
+    @NotNull
+    public static Shader makeFractalNoise(float baseFrequencyX, float baseFrequencyY, int numOctaves, float seed, @Nullable IPoint tileSize) {
+        Stats.onNativeCall();
+        return new Shader(_nMakeFractalNoise(baseFrequencyX, baseFrequencyY, numOctaves, seed, tileSize == null ? 0 : tileSize.getX(), tileSize == null ? 0 : tileSize.getY()));
+    }
+
+    /**
+     * <p>Creates a shader that generates fractal Perlin noise without tiling.</p>
+     *
+     * @param baseFrequencyX Base frequency in the X direction; usually in the range [0..1]
+     * @param baseFrequencyY Base frequency in the Y direction; usually in the range [0..1]
+     * @param numOctaves     Number of octaves of noise to add together; should be fairly small (limit of 255)
+     * @param seed           Random seed value
+     * @return               Shader that generates fractal Perlin noise
+     */
+    @NotNull
+    public static Shader makeFractalNoise(float baseFrequencyX, float baseFrequencyY, int numOctaves, float seed) {
+        return makeFractalNoise(baseFrequencyX, baseFrequencyY, numOctaves, seed, null);
+    }
+
+    /**
+     * <p>Creates a shader that generates turbulence using Perlin noise.</p>
+     *
+     * @param baseFrequencyX Base frequency in the X direction; usually in the range [0..1]
+     * @param baseFrequencyY Base frequency in the Y direction; usually in the range [0..1]
+     * @param numOctaves     Number of octaves of noise to add together; should be fairly small (limit of 255)
+     * @param seed           Random seed value
+     * @param tileSize       If non-null, modifies frequencies to make tileable noise for the given tile size
+     * @return               Shader that generates turbulent Perlin noise
+     */
+    @NotNull
+    public static Shader makeTurbulence(float baseFrequencyX, float baseFrequencyY, int numOctaves, float seed, @Nullable IPoint tileSize) {
+        Stats.onNativeCall();
+        return new Shader(_nMakeTurbulence(baseFrequencyX, baseFrequencyY, numOctaves, seed, tileSize == null ? 0 : tileSize.getX(), tileSize == null ? 0 : tileSize.getY()));
+    }
+
+    /**
+     * <p>Creates a shader that generates turbulence using Perlin noise without tiling.</p>
+     *
+     * @param baseFrequencyX Base frequency in the X direction; usually in the range [0..1]
+     * @param baseFrequencyY Base frequency in the Y direction; usually in the range [0..1]
+     * @param numOctaves     Number of octaves of noise to add together; should be fairly small (limit of 255)
+     * @param seed           Random seed value
+     * @return               Shader that generates turbulent Perlin noise
+     */
+    @NotNull
+    public static Shader makeTurbulence(float baseFrequencyX, float baseFrequencyY, int numOctaves, float seed) {
+        return makeTurbulence(baseFrequencyX, baseFrequencyY, numOctaves, seed, null);
+    }
+
     //
 
     public static Shader makeEmpty() {
@@ -237,6 +299,8 @@ public class Shader extends RefCnt {
     public static native long _nMakeTwoPointConicalGradientCS(float x0, float y0, float r0, float x1, float y1, float r1, float[] colors, long colorSpacePtr, float[] positions, int tileType, int flags, float[] matrix);
     public static native long _nMakeSweepGradient(float x, float y, float startAngle, float endAngle, int[] colors, float[] positions, int tileType, int flags, float[] matrix);
     public static native long _nMakeSweepGradientCS(float x, float y, float startAngle, float endAngle, float[] colors, long colorSpacePtr, float[] positions, int tileType, int flags, float[] matrix);
+    public static native long _nMakeFractalNoise(float baseFrequencyX, float baseFrequencyY, int numOctaves, float seed, int tileSizeX, int tileSizeY);
+    public static native long _nMakeTurbulence(float baseFrequencyX, float baseFrequencyY, int numOctaves, float seed, int tileSizeX, int tileSizeY);
     public static native long _nMakeEmpty();
     public static native long _nMakeColor(int color);
     public static native long _nMakeColorCS(float r, float g, float b, float a, long colorSpacePtr);

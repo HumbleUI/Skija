@@ -9,11 +9,28 @@ import io.github.humbleui.types.*;
 public class ImageFiltersScene extends Scene {
     protected final Image image;
     protected final Image image2;
+    protected final Path star;
+    protected final Picture pic;
 
     public ImageFiltersScene() {
         try {
             image = Image.makeDeferredFromEncodedBytes(Files.readAllBytes(java.nio.file.Path.of(file("images/circus.jpg"))));
             image2 = Image.makeDeferredFromEncodedBytes(Files.readAllBytes(java.nio.file.Path.of(file("images/skia_fiddle/2.png"))));
+            star = new PathBuilder().setFillMode(PathFillMode.EVEN_ODD)
+                                    .moveTo(10, 10)
+                                    .rMoveTo(20, 1.6f)
+                                    .rLineTo(11.7f, 36.2f)
+                                    .rLineTo(-30.8f, -22.4f)
+                                    .rLineTo(38.1f, 0f)
+                                    .rLineTo(-30.8f, 22.4f)
+                                    .build();
+            try (PictureRecorder recorder = new PictureRecorder();
+                 Paint fill = new Paint().setColor(0xFFFF9F1B);)
+            {
+                Canvas rc = recorder.beginRecording(Rect.makeXYWH(0, 0, 60, 60));
+                rc.drawPath(star, fill);
+                pic = recorder.finishRecordingAsPicture();
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -30,19 +47,21 @@ public class ImageFiltersScene extends Scene {
 
     private void drawShadowsBlurs(Canvas canvas) {
         canvas.save();
-        try (Paint fill = new Paint().setColor(0xFF8E86C9);
-             Path path = new PathBuilder().setFillMode(PathFillMode.EVEN_ODD)
-                                          .lineTo(0, 60).lineTo(60, 60).lineTo(60, 0).closePath()
-                                          .moveTo(10, 5).lineTo(55, 10).lineTo(50, 55).lineTo(5, 50).closePath()
-                                          .build();)
-        {
+        try (
+            Paint fill = new Paint().setColor(0xFF8E86C9);
+            Path path = new PathBuilder().setFillMode(PathFillMode.EVEN_ODD)
+                                         .lineTo(0, 60).lineTo(60, 60).lineTo(60, 0).closePath()
+                                         .moveTo(10, 5).lineTo(55, 10).lineTo(50, 55).lineTo(5, 50).closePath()
+                                         .build();
+            ImageFilter inner = ImageFilter.makeDropShadow(-2, -2, 2, 2, 0xFFCC3333);
+        ) {
             ImageFilter[] filters = new ImageFilter[] {
                 ImageFilter.makeDropShadow(0, 0, 10, 10, 0xFF000000),
                 ImageFilter.makeDropShadow(2, 2, 0, 0, 0xFF000000),
                 ImageFilter.makeDropShadow(0, 0, 10, 10, 0xFFF42372),
                 ImageFilter.makeDropShadowOnly(0, 0, 2, 2, 0xFFCC3333),
                 ImageFilter.makeDropShadow(0, 0, 2, 2, 0xFFCC3333, null, IRect.makeXYWH(30, 30, 30, 30)),
-                ImageFilter.makeDropShadow(2, 2, 2, 2, 0xFF3333CC, ImageFilter.makeDropShadow(-2, -2, 2, 2, 0xFFCC3333), null),
+                ImageFilter.makeDropShadow(2, 2, 2, 2, 0xFF3333CC, inner),
                 ImageFilter.makeBlur(2, 2, FilterTileMode.CLAMP),
                 ImageFilter.makeBlur(2, 2, FilterTileMode.REPEAT),
                 ImageFilter.makeBlur(2, 2, FilterTileMode.MIRROR),
@@ -62,14 +81,16 @@ public class ImageFiltersScene extends Scene {
 
     private void drawImageFilters(Canvas canvas, float width, float dpi) {
         canvas.save();
-        try (Paint fill = new Paint().setColor(0xFFFF9F1B);
-             Path path = new PathBuilder().setFillMode(PathFillMode.EVEN_ODD)
-                                          .moveTo(10, 10).rMoveTo(20, 1.6f).rLineTo(11.7f, 36.2f).rLineTo(-30.8f, -22.4f).rLineTo(38.1f, 0f).rLineTo(-30.8f, 22.4f)
-                                          .build();)
-        {
+        try (
+            Paint fill     = new Paint().setColor(0xFFFF9F1B);
+            ColorFilter cf = ColorFilter.makeBlend(0x800000FF, BlendMode.SRC_OVER);
+            ImageFilter im = ImageFilter.makeDropShadow(0, 0, 10, 10, 0xFF000000);
+            Shader sh      = Shader.makeTurbulence(0.01f, 0.01f, 2, 0.f);
+        ) {
             IRect bb = IRect.makeXYWH(0, 0, 60, 60);
             ImageFilter[] filters = new ImageFilter[] {
                 ImageFilter.makeOffset(0, 0, null, bb),
+                ImageFilter.makeCrop(Rect.makeXYWH(20, 20, 20, 20), null),
                 ImageFilter.makeMagnifier(Rect.makeXYWH(0 * dpi, 0 * dpi, 60 * dpi, 60 * dpi),  5f,  5f, SamplingMode.MITCHELL, null, bb),
                 ImageFilter.makeMagnifier(Rect.makeXYWH(0 * dpi, 0 * dpi, 60 * dpi, 60 * dpi), 10f, 10f, SamplingMode.MITCHELL, null, bb),
                 ImageFilter.makeMagnifier(Rect.makeXYWH(0 * dpi, 0 * dpi, 60 * dpi, 60 * dpi), 20f, 20f, SamplingMode.MITCHELL, null, bb),
@@ -77,16 +98,16 @@ public class ImageFiltersScene extends Scene {
                 ImageFilter.makeTile(Rect.makeXYWH(10, 10, 40, 40), Rect.makeXYWH(0, 0, 60, 60), null),
                 ImageFilter.makeDilate(2, 2, null, bb),
                 ImageFilter.makeErode(2, 2, null, bb),
-                ImageFilter.makeColorFilter(
-                    ColorFilter.makeBlend(0x800000FF, BlendMode.SRC_OVER),
-                    ImageFilter.makeDropShadow(0, 0, 10, 10, 0xFF000000),
-                    bb),
+                ImageFilter.makeColorFilter(cf, im, bb),
                 ImageFilter.makeImage(image, Rect.makeXYWH(200, 200, 200, 200), Rect.makeXYWH(10, 10, 40, 40), CubicResampler.MITCHELL),
+                ImageFilter.makePicture(pic),
+                ImageFilter.makePicture(pic, Rect.makeXYWH(20, 20, 20, 20)),
+                ImageFilter.makeShader(sh, Rect.makeXYWH(0, 0, 60, 60))
             };
 
             for (var filter: filters) {
                 fill.setImageFilter(filter);
-                canvas.drawPath(path, fill);
+                canvas.drawPath(star, fill);
                 canvas.translate(70, 0);
                 filter.close();
             }
@@ -98,10 +119,11 @@ public class ImageFiltersScene extends Scene {
     private void drawImageWithFilters(Canvas canvas) {
         canvas.save();
 
-        try (ImageFilter shadowFilter = ImageFilter.makeDropShadow(-10.0f * phase(), 5.0f * phase(), 3.0f, 3.0f, 0xFF0000FF);
-             ImageFilter offsetFilter = ImageFilter.makeOffset(40, 40, shadowFilter, null);
-             Paint paint = new Paint().setAntiAlias(true).setStroke(true))
-        {
+        try (
+            ImageFilter shadowFilter = ImageFilter.makeDropShadow(-10.0f * phase(), 5.0f * phase(), 3.0f, 3.0f, 0xFF0000FF);
+            ImageFilter offsetFilter = ImageFilter.makeOffset(40, 40, shadowFilter);
+            Paint paint = new Paint().setAntiAlias(true).setStroke(true)
+        ) {
             int w = image2.getImageInfo().getWidth();
             int h = image2.getImageInfo().getHeight();
             IRect subset = IRect.makeXYWH(0, 0, w, h);
@@ -114,6 +136,7 @@ public class ImageFiltersScene extends Scene {
                 IPoint offset = result.getOffset();
                 canvas.drawLine(0, 0, offset.getX(), offset.getY(), paint);
                 canvas.translate(offset.getX(), offset.getY());
+                result.getImage().getImageInfo();
                 canvas.drawImage(result.getImage(), 0, 0);
                 canvas.drawRect(result.getSubset().toRect(), paint);
                 result.close();

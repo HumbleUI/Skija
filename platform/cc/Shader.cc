@@ -3,6 +3,7 @@
 #include "SkColorFilter.h"
 #include "SkShader.h"
 #include "SkGradientShader.h"
+#include "SkPerlinNoiseShader.h"
 #include "interop.hh"
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Shader__1nMakeWithColorFilter
@@ -116,6 +117,20 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Shader__1nMakeS
     SkShader* ptr = SkGradientShader::MakeSweep(x, y, reinterpret_cast<SkColor4f*>(colors), colorSpace, pos, env->GetArrayLength(colorsArray), tileMode, start, end, static_cast<uint32_t>(flags), localMatrix.get()).release();
     env->ReleaseFloatArrayElements(colorsArray, colors, 0);
     env->ReleaseFloatArrayElements(posArray, pos, 0);
+    return reinterpret_cast<jlong>(ptr);
+}
+
+extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Shader__1nMakeFractalNoise
+  (JNIEnv* env, jclass jclass, jfloat baseFrequencyX, jfloat baseFrequencyY, jint numOctaves, jfloat seed, jint tileSizeX, jint tileSizeY) {
+    SkISize tileSize = SkISize{tileSizeX, tileSizeY};
+    SkShader* ptr = SkShaders::MakeFractalNoise(baseFrequencyX, baseFrequencyY, numOctaves, seed, &tileSize).release();
+    return reinterpret_cast<jlong>(ptr);
+}
+
+extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Shader__1nMakeTurbulence
+  (JNIEnv* env, jclass jclass, jfloat baseFrequencyX, jfloat baseFrequencyY, jint numOctaves, jfloat seed, jint tileSizeX, jint tileSizeY) {
+    SkISize tileSize = SkISize{tileSizeX, tileSizeY};
+    SkShader* ptr = SkShaders::MakeTurbulence(baseFrequencyX, baseFrequencyY, numOctaves, seed, &tileSize).release();
     return reinterpret_cast<jlong>(ptr);
 }
 

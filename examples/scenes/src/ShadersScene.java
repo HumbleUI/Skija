@@ -9,6 +9,7 @@ public class ShadersScene extends Scene {
         canvas.translate(20, 20);
         drawColors(canvas);
         drawShaders(canvas);
+        drawNoise(canvas);
         drawGradients(canvas);
         drawLinearCS(canvas);
         drawBlending(canvas);
@@ -71,6 +72,35 @@ public class ShadersScene extends Scene {
             Shader.makeBlend(BlendMode.DARKEN, Shader.makeColor(0xFFFF0000), Shader.makeColor(0x9000FF00)),
             Shader.makeBlend(BlendMode.LIGHTEN, Shader.makeColor(0xFFFF0000), Shader.makeColor(0x9000FF00)),
             Shader.makeLinearGradient(0, 0, 60, 0, new int[] { 0xFF247ba0, 0xFFf3ffbd }).makeWithColorFilter(ColorFilter.makeBlend(0xFFCC3333, BlendMode.SCREEN)),
+        };
+
+        try (Paint fill = new Paint()) {
+            for (Shader sh: shaders) {
+                fill.setShader(sh);
+                canvas.drawRect(Rect.makeXYWH(0, 0, 60, 60), fill);
+                canvas.translate(70, 0);
+                sh.close();
+            }
+        }
+
+        canvas.restore();
+        canvas.translate(0, 70);
+    }
+
+    private void drawNoise(Canvas canvas) {
+        canvas.save();
+
+        IPoint tileSize = new IPoint(10, 10);
+
+        Shader[] shaders = new Shader[] {
+            Shader.makeTurbulence(0.01f, 0.01f, 2, 0.0f),
+            Shader.makeFractalNoise(0.05f, 0.05f, 4, 0.0f),
+            Shader.makeTurbulence(0.05f, 0.05f, 1, 0.0f),
+            Shader.makeFractalNoise(0.1f, 0.1f, 2, 0.0f),
+            Shader.makeTurbulence(0.1f, 0.1f, 3, 123.0f),
+            Shader.makeFractalNoise(0.02f, 0.02f, 6, 456.0f),
+            Shader.makeTurbulence(0.05f, 0.05f, 2, 0.0f, tileSize),
+            Shader.makeFractalNoise(0.1f, 0.1f, 3, 0.0f, tileSize),
         };
 
         try (Paint fill = new Paint()) {
