@@ -77,6 +77,37 @@ public class ImageFilter extends RefCnt {
     }
 
     /**
+     * This filter takes a Blender and uses it to composite the two filters together.
+     *
+     * @param blender  The blender that defines the compositing operation
+     * @param bg       The Dst pixels used in blending, if null the source bitmap is used
+     * @param fg       The Src pixels used in blending, if null the source bitmap is used
+     * @param crop     Optional rectangle to crop input and output
+     * @return         filter that blends the two inputs
+     */
+    @NotNull @Contract("_, _, _, _ -> new")
+    public static ImageFilter makeBlend(@NotNull Blender blender, @Nullable ImageFilter bg, @Nullable ImageFilter fg, @Nullable Rect crop) {
+        try {
+            Stats.onNativeCall();
+            return new ImageFilter(_nMakeBlendBlender(Native.getPtr(blender), Native.getPtr(bg), Native.getPtr(fg), crop));
+        } finally {
+            ReferenceUtil.reachabilityFence(blender);
+            ReferenceUtil.reachabilityFence(bg);
+            ReferenceUtil.reachabilityFence(fg);
+        }
+    }
+
+    @NotNull @Contract("_, _, _, _ -> new")
+    public static ImageFilter makeBlend(@NotNull Blender blender, @Nullable ImageFilter bg, @Nullable ImageFilter fg, @Nullable IRect crop) {
+        return makeBlend(blender, bg, fg, crop == null ? null : crop.toRect());
+    }
+
+    @NotNull @Contract("_, _, _ -> new")
+    public static ImageFilter makeBlend(@NotNull Blender blender, @Nullable ImageFilter bg, @Nullable ImageFilter fg) {
+        return makeBlend(blender, bg, fg, (Rect) null);
+    }
+
+    /**
      * Create a filter that blurs its input by the separate X and Y sigmas. The provided tile mode
      * is used when the blur kernel goes outside the input image.
      *
@@ -960,6 +991,7 @@ public class ImageFilter extends RefCnt {
     
     public static native long _nMakeArithmetic(float k1, float k2, float k3, float k4, boolean enforcePMColor, long bg, long fg, Rect crop);
     public static native long _nMakeBlend(int blendMode, long bg, long fg, Rect crop);
+    public static native long _nMakeBlendBlender(long blenderPtr, long bg, long fg, Rect crop);
     public static native long _nMakeBlur(float sigmaX, float sigmaY, int tileMode, long input, Rect crop);
     public static native long _nMakeColorFilter(long colorFilterPtr, long input, Rect crop);
     public static native long _nMakeCompose(long outer, long inner);

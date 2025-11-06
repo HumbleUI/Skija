@@ -1,6 +1,7 @@
 #include <iostream>
 #include <jni.h>
 #include "interop.hh"
+#include "SkBlender.h"
 #include "SkColorFilter.h"
 #include "SkImageFilter.h"
 #include "SkImageFilters.h"
@@ -41,6 +42,16 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_ImageFilter__1n
     SkImageFilter* fg = reinterpret_cast<SkImageFilter*>(static_cast<uintptr_t>(fgPtr));
     SkImageFilters::CropRect crop = toCropRect(env, cropObj);
     SkImageFilter* ptr = SkImageFilters::Blend(blendMode, sk_ref_sp(bg), sk_ref_sp(fg), crop).release();
+    return reinterpret_cast<jlong>(ptr);
+}
+
+extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_ImageFilter__1nMakeBlendBlender
+  (JNIEnv* env, jclass jclass, jlong blenderPtr, jlong bgPtr, jlong fgPtr, jobject cropObj) {
+    SkBlender* blender = reinterpret_cast<SkBlender*>(static_cast<uintptr_t>(blenderPtr));
+    SkImageFilter* bg = reinterpret_cast<SkImageFilter*>(static_cast<uintptr_t>(bgPtr));
+    SkImageFilter* fg = reinterpret_cast<SkImageFilter*>(static_cast<uintptr_t>(fgPtr));
+    SkImageFilters::CropRect crop = toCropRect(env, cropObj);
+    SkImageFilter* ptr = SkImageFilters::Blend(sk_ref_sp(blender), sk_ref_sp(bg), sk_ref_sp(fg), crop).release();
     return reinterpret_cast<jlong>(ptr);
 }
 

@@ -86,7 +86,8 @@ public class ImageFiltersScene extends Scene {
         try (
             Paint fill     = new Paint().setColor(0xFFFF9F1B);
             ColorFilter cf = ColorFilter.makeBlend(0x800000FF, BlendMode.SRC_OVER);
-            ImageFilter im = ImageFilter.makeDropShadow(0, 0, 10, 10, 0xFF000000);
+            ImageFilter ds = ImageFilter.makeDropShadow(0, 0, 10, 10, 0xFF000000);
+            ImageFilter im = ImageFilter.makeImage(image, Rect.makeXYWH(200, 200, 200, 200), Rect.makeXYWH(10, 10, 40, 40), CubicResampler.MITCHELL);
             Shader sh      = Shader.makeTurbulence(0.01f, 0.01f, 2, 0.f);
         ) {
             IRect bb = IRect.makeXYWH(0, 0, 60, 60);
@@ -99,8 +100,12 @@ public class ImageFiltersScene extends Scene {
                 ImageFilter.makeTile(Rect.makeXYWH(20, 20, 20, 20), Rect.makeXYWH(0, 0, 60, 60), null),
                 ImageFilter.makeDilate(2, 2, null, bb),
                 ImageFilter.makeErode(2, 2, null, bb),
-                ImageFilter.makeColorFilter(cf, im, bb),
+                ImageFilter.makeColorFilter(cf, ds, bb),
                 ImageFilter.makeImage(image, Rect.makeXYWH(200, 200, 200, 200), Rect.makeXYWH(10, 10, 40, 40), CubicResampler.MITCHELL),
+                ImageFilter.makeArithmetic(-0.25f, 0.5f, 0.5f, 0f, true, im, null),
+                ImageFilter.makeBlend(Blender.makeArithmetic(-0.25f, 0.5f, 0.5f, 0f, true), im, null),
+                ImageFilter.makeBlend(BlendMode.SCREEN, im, null),
+                ImageFilter.makeBlend(Blender.makeWithMode(BlendMode.SCREEN), im, null),
                 ImageFilter.makePicture(pic),
                 ImageFilter.makePicture(pic, Rect.makeXYWH(20, 20, 20, 20)),
                 ImageFilter.makeShader(sh, bb)
