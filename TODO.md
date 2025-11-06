@@ -15,9 +15,10 @@
 - [x] Sort native cc Path methods
 - [x] Fix PathsScene to not leak objects
 - [ ] Go through RELEASE_NOTES and add all new stuff
-  - [ ] SkRuntimeEffect
+  - [x] SkRuntimeEffect
   - [ ] SkRuntimeEffectBuilder
   - [ ] SkImageFilters::RuntimeShader
+  - [ ] SkRuntimeBlender
   - [x] SkBlender, ImageFilters::makeBlend(Blender)
   - [x] ImageFilters::makeDropShadow with Color4f & ColorSpace
 - [x] ImageFilter javadoc

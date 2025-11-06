@@ -528,6 +528,39 @@ public class Paint extends Managed {
     }
 
     /**
+     * Returns optional Blender.
+     *
+     * @return  Blender if previously set, null otherwise
+     */
+    @Nullable
+    public Blender getBlender() {
+        try {
+            Stats.onNativeCall();
+            long blenderPtr = _nGetBlender(_ptr);
+            return blenderPtr == 0 ? null : new Blender(blenderPtr);
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    /**
+     * Sets Blender to blender, decreasing reference count of the previous Blender.
+     *
+     * @param blender  Blender to apply to Paint
+     * @return         this Paint object
+     */
+    @NotNull @Contract("_ -> this")
+    public Paint setBlender(@Nullable Blender blender) {
+        try {
+            Stats.onNativeCall();
+            _nSetBlender(_ptr, Native.getPtr(blender));
+            return this;
+        } finally {
+            ReferenceUtil.reachabilityFence(blender);
+        }
+    }
+
+    /**
      * Returns BlendMode. By default, returns {@link BlendMode#SRC_OVER}.
      *
      * @return  mode used to combine source color with destination color
@@ -709,6 +742,8 @@ public class Paint extends Managed {
     public static native void  _nSetShader(long ptr, long shaderPtr);
     public static native long  _nGetColorFilter(long ptr);
     public static native void  _nSetColorFilter(long ptr, long colorFilterPtr);
+    public static native long  _nGetBlender(long ptr);
+    public static native void  _nSetBlender(long ptr, long blenderPtr);
     public static native int   _nGetBlendMode(long ptr);
     public static native void  _nSetBlendMode(long ptr, int mode);
     public static native long  _nGetPathEffect(long ptr);

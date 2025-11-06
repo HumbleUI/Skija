@@ -1,5 +1,6 @@
 #include <iostream>
 #include <jni.h>
+#include "SkBlender.h"
 #include "SkBlendMode.h"
 #include "SkColorFilter.h"
 #include "SkImageFilter.h"
@@ -257,6 +258,19 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Paint__1nSetColo
     SkPaint* instance = reinterpret_cast<SkPaint*>(static_cast<uintptr_t>(ptr));
     SkColorFilter* colorFilter = reinterpret_cast<SkColorFilter*>(static_cast<uintptr_t>(colorFilterPtr));
     instance->setColorFilter(sk_ref_sp<SkColorFilter>(colorFilter));
+}
+
+extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Paint__1nGetBlender
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkPaint* instance = reinterpret_cast<SkPaint*>(static_cast<uintptr_t>(ptr));
+    return reinterpret_cast<jlong>(instance->refBlender().release());
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Paint__1nSetBlender
+  (JNIEnv* env, jclass jclass, jlong ptr, jlong blenderPtr) {
+    SkPaint* instance = reinterpret_cast<SkPaint*>(static_cast<uintptr_t>(ptr));
+    SkBlender* blender = reinterpret_cast<SkBlender*>(static_cast<uintptr_t>(blenderPtr));
+    instance->setBlender(sk_ref_sp<SkBlender>(blender));
 }
 
 extern "C" JNIEXPORT jboolean JNICALL Java_io_github_humbleui_skija_Paint__1nHasNothingToDraw

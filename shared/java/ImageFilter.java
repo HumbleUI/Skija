@@ -6,7 +6,7 @@ import io.github.humbleui.types.*;
 
 import java.util.Arrays;
 
-public class ImageFilter extends RefCnt {
+public class ImageFilter extends RefCnt implements Flattenable {
     static { Library.staticLoad(); }
 
     /**

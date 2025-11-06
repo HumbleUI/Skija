@@ -8,7 +8,7 @@ import io.github.humbleui.skija.impl.*;
  * A blender combines a source color (the result of our paint) and destination
  * color (from the canvas) into a final color.
  */
-public class Blender extends RefCnt {
+public class Blender extends RuntimeEffectChild {
     static { Library.staticLoad(); }
 
     /**

@@ -12,7 +12,7 @@ import io.github.humbleui.types.*;
  * allow for clients of the drawable that may want to cache the results, the drawable must
  * change its generation id whenever its internal state changes such that it will draw differently.</p>
  */
-public abstract class Drawable extends RefCnt {
+public abstract class Drawable extends RefCnt implements Flattenable {
     static { Library.staticLoad(); }
     
     @ApiStatus.Internal

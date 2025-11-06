@@ -3,7 +3,7 @@ package io.github.humbleui.skija;
 import org.jetbrains.annotations.*;
 import io.github.humbleui.skija.impl.*;
 
-public class PathEffect extends RefCnt {
+public class PathEffect extends RefCnt implements Flattenable {
     static { Library.staticLoad(); }
     
     public enum Style {

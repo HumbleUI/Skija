@@ -3,7 +3,7 @@ package io.github.humbleui.skija;
 import org.jetbrains.annotations.*;
 import io.github.humbleui.skija.impl.*;
 
-public class ColorFilter extends RefCnt {
+public class ColorFilter extends RuntimeEffectChild {
     static { Library.staticLoad(); }
     
     public static ColorFilter makeComposed(ColorFilter outer, ColorFilter inner) {

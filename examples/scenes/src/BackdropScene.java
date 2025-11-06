@@ -100,7 +100,7 @@ public class BackdropScene extends Scene {
             0,     0,     0,     1, 0
         );
         try (var colorFilter = ColorFilter.makeMatrix(grayscaleMatrix);
-             var backdrop = ImageFilter.makeColorFilter(colorFilter, null, null);)
+             var backdrop = ImageFilter.makeColorFilter(colorFilter, null);)
         {
             Rect rect = Rect.makeXYWH(xpos - 310, ypos - 100, 200, 200).intersect(screen);
             if (rect != null) {

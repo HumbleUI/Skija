@@ -4,7 +4,7 @@ import org.jetbrains.annotations.*;
 import io.github.humbleui.skija.impl.*;
 import io.github.humbleui.types.*;
 
-public class Shader extends RefCnt {
+public class Shader extends RuntimeEffectChild {
     static { Library.staticLoad(); }
     
     public Shader makeWithColorFilter(ColorFilter f) {

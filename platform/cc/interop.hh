@@ -258,6 +258,20 @@ namespace skija {
         void onUnload(JNIEnv* env);
     }
 
+    namespace RuntimeEffectUniformInfo {
+        extern jclass cls;
+        extern jmethodID ctor;
+        void onLoad(JNIEnv* env);
+        void onUnload(JNIEnv* env);
+    }
+
+    namespace RuntimeEffectChildInfo {
+        extern jclass cls;
+        extern jmethodID ctor;
+        void onLoad(JNIEnv* env);
+        void onUnload(JNIEnv* env);
+    }
+
     namespace SamplingMode {
         SkSamplingOptions unpack(jlong val);
     }
@@ -378,6 +392,8 @@ SkString skString(JNIEnv* env, jstring str);
 jstring javaString(JNIEnv* env, const SkString& str);
 jstring javaString(JNIEnv* env, const char* chars, size_t len);
 jstring javaString(JNIEnv* env, const char* chars);
+jstring javaString(JNIEnv* env, const std::string& str);
+jstring javaString(JNIEnv* env, std::string_view str);
 
 jobject javaFloat(JNIEnv* env, SkScalar val);
 jlong packTwoInts(int32_t a, int32_t b);

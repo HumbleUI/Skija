@@ -3,7 +3,7 @@ package io.github.humbleui.skija;
 import org.jetbrains.annotations.*;
 import io.github.humbleui.skija.impl.*;
 
-public class MaskFilter extends RefCnt {
+public class MaskFilter extends RefCnt implements Flattenable {
     static { Library.staticLoad(); }
     
     public static MaskFilter makeBlur(FilterBlurMode mode, float sigma) {

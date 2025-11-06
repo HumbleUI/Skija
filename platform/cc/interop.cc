@@ -599,6 +599,36 @@ namespace skija {
         }
     }
 
+    namespace RuntimeEffectUniformInfo {
+        jclass cls;
+        jmethodID ctor;
+
+        void onLoad(JNIEnv* env) {
+            jclass local = env->FindClass("io/github/humbleui/skija/RuntimeEffectUniformInfo");
+            cls  = static_cast<jclass>(env->NewGlobalRef(local));
+            ctor = env->GetMethodID(cls, "<init>", "(Ljava/lang/String;IIII)V");
+        }
+
+        void onUnload(JNIEnv* env) {
+            env->DeleteGlobalRef(cls);
+        }
+    }
+
+    namespace RuntimeEffectChildInfo {
+        jclass cls;
+        jmethodID ctor;
+
+        void onLoad(JNIEnv* env) {
+            jclass local = env->FindClass("io/github/humbleui/skija/RuntimeEffectChildInfo");
+            cls  = static_cast<jclass>(env->NewGlobalRef(local));
+            ctor = env->GetMethodID(cls, "<init>", "(Ljava/lang/String;II)V");
+        }
+
+        void onUnload(JNIEnv* env) {
+            env->DeleteGlobalRef(cls);
+        }
+    }
+
     namespace SamplingMode {
         SkSamplingOptions unpack(jlong val) {
             if (0x8000000000000000 & val) {
@@ -690,6 +720,8 @@ namespace skija {
         PathSegment::onLoad(env);
         PaintFilterCanvas::onLoad(env);
         RSXform::onLoad(env);
+        RuntimeEffectUniformInfo::onLoad(env);
+        RuntimeEffectChildInfo::onLoad(env);
         SurfaceProps::onLoad(env);
 
         impl::Native::onLoad(env);
@@ -697,6 +729,8 @@ namespace skija {
 
     void onUnload(JNIEnv* env) {
         SurfaceProps::onUnload(env);
+        RuntimeEffectChildInfo::onUnload(env);
+        RuntimeEffectUniformInfo::onUnload(env);
         RSXform::onUnload(env);
         PaintFilterCanvas::onUnload(env);
         PathSegment::onUnload(env);
@@ -1136,6 +1170,14 @@ jstring javaString(JNIEnv* env, const char* chars, size_t len) {
 
 jstring javaString(JNIEnv* env, const char* chars) {
     return chars ? javaString(env, chars, strlen(chars)) : nullptr;
+}
+
+jstring javaString(JNIEnv* env, const std::string& str) {
+    return javaString(env, str.c_str(), str.size());
+}
+
+jstring javaString(JNIEnv* env, std::string_view str) {
+    return javaString(env, str.data(), str.size());
 }
 
 jobject javaFloat(JNIEnv* env, SkScalar val) {
