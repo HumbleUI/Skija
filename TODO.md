@@ -17,7 +17,7 @@
 - [ ] Go through RELEASE_NOTES and add all new stuff
   - [x] SkRuntimeEffect
   - [x] SkRuntimeEffectBuilder
-  - [ ] SkImageFilters::RuntimeShader
+  - [x] SkImageFilters::RuntimeShader
   - [x] SkRuntimeBlender
   - [x] SkBlender, ImageFilters::makeBlend(Blender)
   - [x] ImageFilters::makeDropShadow with Color4f & ColorSpace

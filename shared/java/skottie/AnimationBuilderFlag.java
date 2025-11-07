@@ -23,4 +23,12 @@ public enum AnimationBuilderFlag {
     AnimationBuilderFlag(int flag) {
         this._flag = flag;
     }
+
+    @ApiStatus.Internal
+    public static int _collect(AnimationBuilderFlag... flags) {
+        int value = 0;
+        for (AnimationBuilderFlag flag: flags)
+            value |= flag._flag;
+        return value;
+    }
 }

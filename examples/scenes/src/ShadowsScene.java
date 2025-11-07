@@ -82,15 +82,15 @@ public class ShadowsScene extends Scene {
 
             canvas.save();
             canvas.translate(50, 25);
-            ShadowUtils.drawShadow(canvas, path, new Point3(0, 0, 100), lightPos, 1000, 0x40000000, spotColor, false, false);
+            ShadowUtils.drawShadow(canvas, path, new Point3(0, 0, 100), lightPos, 1000, 0x40000000, spotColor);
             canvas.drawPath(path, paint);
 
             canvas.translate(100, 0);
-            ShadowUtils.drawShadow(canvas, path2, new Point3(0, 0, 50), lightPos, 100, 0xFF000000, spotColor, false, false);
+            ShadowUtils.drawShadow(canvas, path2, new Point3(0, 0, 50), lightPos, 100, 0xFF000000, spotColor);
             canvas.drawPath(path2, paint);
 
             canvas.translate(100, 0);
-            ShadowUtils.drawShadow(canvas, path, new Point3(0, 0, 25), lightPos, 10, 0xFF000000, spotColor, false, false);
+            ShadowUtils.drawShadow(canvas, path, new Point3(0, 0, 25), lightPos, 10, 0xFF000000, spotColor);
             canvas.drawPath(path, paint);
 
             canvas.restore();

@@ -22,9 +22,7 @@ public class ShadowUtils {
      * @param lightRadius          The radius of the disc light.
      * @param ambientColor         The color of the ambient shadow.
      * @param spotColor            The color of the spot shadow.
-     * @param transparentOccluder  The occluding object is not opaque. Knowing that the occluder is opaque allows
-     *                             us to cull shadow geometry behind it and improve performance.
-     * @param geometricOnly        Don't try to use analytic shadows.
+     * @param flags                See {@link ShadowUtilsFlag}
      */
     public static void drawShadow(@NotNull Canvas canvas,
                                   @NotNull Path path,
@@ -33,17 +31,10 @@ public class ShadowUtils {
                                   float lightRadius,
                                   int ambientColor,
                                   int spotColor,
-                                  boolean transparentOccluder,
-                                  boolean geometricOnly)
+                                  ShadowUtilsFlag... flags)
     {
         Stats.onNativeCall();
-        int flags = 0;
-        if (transparentOccluder)
-            flags |= 1;
-        if (geometricOnly)
-            flags |= 2;
-        _nDrawShadow(Native.getPtr(canvas), Native.getPtr(path), zPlaneParams._x, zPlaneParams._y, zPlaneParams._z,
-            lightPos._x, lightPos._y, lightPos._z, lightRadius, ambientColor, spotColor, flags);
+        _nDrawShadow(Native.getPtr(canvas), Native.getPtr(path), zPlaneParams._x, zPlaneParams._y, zPlaneParams._z, lightPos._x, lightPos._y, lightPos._z, lightRadius, ambientColor, spotColor, ShadowUtilsFlag._collect(flags));
     }
 
     /**
@@ -54,8 +45,7 @@ public class ShadowUtils {
      * @return               Modified ambient color
      */
     public static int computeTonalAmbientColor(int ambientColor, int spotColor) {
-        Stats.onNativeCall();
-        return _nComputeTonalAmbientColor(ambientColor, spotColor);
+        return computeTonalColor(ambientColor, spotColor)[0];
     }
 
     /**
@@ -66,12 +56,14 @@ public class ShadowUtils {
      * @return               Modified spot color
      */
     public static int computeTonalSpotColor(int ambientColor, int spotColor) {
-        Stats.onNativeCall();
-        return _nComputeTonalSpotColor(ambientColor, spotColor);
+        return computeTonalColor(ambientColor, spotColor)[1];
+    }
+
+    public static int[] computeTonalColor(int ambientColor, int spotColor) {
+        return _nComputeTonalColor(ambientColor, spotColor);
     }
 
     @ApiStatus.Internal public static native void _nDrawShadow(long canvasPtr, long pathPtr, float zPlaneX, float zPlaneY, float zPlaneZ,
         float lightPosX, float lightPosY, float lightPosZ, float lightRadius, int ambientColor, int spotColor, int flags);
-    @ApiStatus.Internal public static native int _nComputeTonalAmbientColor(int ambientColor, int spotColor);
-    @ApiStatus.Internal public static native int _nComputeTonalSpotColor(int ambientColor, int spotColor);
+    @ApiStatus.Internal public static native int[] _nComputeTonalColor(int ambientColor, int spotColor);
 }

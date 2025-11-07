@@ -23,16 +23,8 @@ public class AnimationBuilder extends Managed {
     }
 
     public AnimationBuilder(AnimationBuilderFlag... builderFlags) {
-        this(_nMake(_flagsToInt(builderFlags)));
+        this(_nMake(AnimationBuilderFlag._collect(builderFlags)));
         Stats.onNativeCall();
-    }
-
-    @ApiStatus.Internal
-    public static int _flagsToInt(AnimationBuilderFlag... builderFlags) {
-        int flags = 0;
-        for (AnimationBuilderFlag flag: builderFlags)
-            flags |= flag._flag;
-        return flags;
     }
 
     /**

@@ -11,16 +11,9 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_ShadowUtils__1nD
     SkShadowUtils::DrawShadow(canvas, *path, {zPlaneX, zPlaneY, zPlaneZ}, {lightPosX, lightPosY, lightPosZ}, lightRadius, ambientColor, spotColor, flags);
 }
 
-extern "C" JNIEXPORT int JNICALL Java_io_github_humbleui_skija_ShadowUtils__1nComputeTonalAmbientColor
+extern "C" JNIEXPORT jintArray JNICALL Java_io_github_humbleui_skija_ShadowUtils__1nComputeTonalColor
   (JNIEnv* env, jclass jclass, jint ambientColor, jint spotColor) {
-    SkColor outAmbientColor, outSpotColor;
-    SkShadowUtils::ComputeTonalColors(ambientColor, spotColor, &outAmbientColor, &outSpotColor);
-    return outAmbientColor;
-}
-
-extern "C" JNIEXPORT int JNICALL Java_io_github_humbleui_skija_ShadowUtils__1nComputeTonalSpotColor
-  (JNIEnv* env, jclass jclass, jint ambientColor, jint spotColor) {
-    SkColor outAmbientColor, outSpotColor;
-    SkShadowUtils::ComputeTonalColors(ambientColor, spotColor, &outAmbientColor, &outSpotColor);
-    return outSpotColor;
+    std::vector<SkColor> colors(2);
+    SkShadowUtils::ComputeTonalColors(ambientColor, spotColor, &colors[0], &colors[1]);
+    return javaIntArray(env, colors);
 }
