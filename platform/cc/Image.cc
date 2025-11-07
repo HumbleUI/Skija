@@ -147,6 +147,19 @@ extern "C" JNIEXPORT jboolean JNICALL Java_io_github_humbleui_skija_Image__1nSca
     return instance->scalePixels(*pixmap, skija::SamplingMode::unpack(samplingOptions), cachingHint);
 }
 
+extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Image__1nMakeScaled
+  (JNIEnv* env, jclass jclass, jlong ptr, jint width, jint height, jint colorType, jint alphaType, jlong colorSpacePtr, jlong samplingOptions) {
+    SkImage* instance = reinterpret_cast<SkImage*>(static_cast<uintptr_t>(ptr));
+    SkColorSpace* colorSpace = reinterpret_cast<SkColorSpace*>(static_cast<uintptr_t>(colorSpacePtr));
+    SkImageInfo imageInfo = SkImageInfo::Make(width,
+                                              height,
+                                              static_cast<SkColorType>(colorType),
+                                              static_cast<SkAlphaType>(alphaType),
+                                              sk_ref_sp<SkColorSpace>(colorSpace));
+    sk_sp<SkImage> image = instance->makeScaled(imageInfo, skija::SamplingMode::unpack(samplingOptions));
+    return image ? ptrToJlong(image.release()) : 0;
+}
+
 extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_Image__1nMakeWithFilter
   (JNIEnv* env, jclass jclass, jlong srcPtr, jlong filterPtr, jint subsetL, jint subsetT, jint subsetR, jint subsetB, jint clipBoundsL, jint clipBoundsT, jint clipBoundsR, jint clipBoundsB) {
     SkImage* src = reinterpret_cast<SkImage*>(static_cast<uintptr_t>(srcPtr));

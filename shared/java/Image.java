@@ -421,6 +421,34 @@ public class Image extends RefCnt implements IHasImageInfo {
     }
 
     /**
+     * Create a new image by copying this image and scaling to fit the
+     * ImageInfo's dimensions and converting the pixels into the ImageInfo's
+     * ColorInfo. This is done retaining the domain (backend) of the image
+     * (e.g. gpu, raster)
+     *
+     * @param   imageInfo    New image dimensions
+     * @param   samplingMode sampling mode to use
+     * @return  null if the requested ColorInfo is not supported, its dimesions
+     *          are out of range
+     */
+    @Nullable
+    public Image makeScaled(@NotNull ImageInfo imageInfo, @NotNull SamplingMode samplingMode) {
+        try {
+            long ptr = _nMakeScaled(_ptr,
+                                    imageInfo._width,
+                                    imageInfo._height,
+                                    imageInfo._colorInfo._colorType.ordinal(),
+                                    imageInfo._colorInfo._alphaType.ordinal(),
+                                    Native.getPtr(imageInfo._colorInfo._colorSpace),
+                                    samplingMode._pack());
+            return ptr == 0 ? null : new Image(ptr);
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(imageInfo);
+        }
+    }
+
+    /**
      * <p>Creates a filtered Image on the CPU. The filter processes the src image, potentially changing
      * the color, position, and size. The subset parameter defines the bounds of src that are processed
      * by the filter. The clipBounds parameter specifies the expected bounds of the filtered Image.
@@ -517,6 +545,7 @@ public class Image extends RefCnt implements IHasImageInfo {
     @ApiStatus.Internal public static native ByteBuffer _nPeekPixels(long ptr);
     @ApiStatus.Internal public static native boolean _nPeekPixelsToPixmap(long ptr, long pixmapPtr);
     @ApiStatus.Internal public static native boolean _nScalePixels(long ptr, long pixmapPtr, long samplingOptions, boolean cache);
+    @ApiStatus.Internal public static native long    _nMakeScaled(long ptr, int width, int height, int colorType, int alphaType, long colorSpacePtr, long samplingOptions);
     @ApiStatus.Internal public static native boolean _nReadPixelsBitmap(long ptr, long contextPtr, long bitmapPtr, int srcX, int srcY, boolean cache);
     @ApiStatus.Internal public static native boolean _nReadPixelsPixmap(long ptr, long pixmapPtr, int srcX, int srcY, boolean cache);
     @ApiStatus.Internal public static native ImageWithFilterResult _nMakeWithFilter(long srcPtr, long filterPtr, int subsetL, int subsetT, int subsetR, int subsetB, int clipBoundsL, int clipBoundsT, int clipBoundsR, int clipBoundsB);

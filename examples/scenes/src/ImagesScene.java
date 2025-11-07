@@ -42,6 +42,7 @@ public class ImagesScene extends Scene {
         canvas.drawImageRect(circusCropped, Rect.makeXYWH(0, 0, 320, 320), Rect.makeXYWH(0, 0, 160, 160), null, true);
         canvas.translate(170, 0);
         canvas.drawImageRect(cloud, Rect.makeXYWH(0, 0, 666, 456), Rect.makeXYWH(0, 0, 160, 110), null, true);
+        canvas.translate(170, 0);
         canvas.drawImageRect(cloud, Rect.makeXYWH(0, 0, 666, 456), Rect.makeXYWH(0, 50, 160, 110), null, true);
         canvas.translate(170, 0);
         canvas.drawImageRect(ducks, Rect.makeXYWH(0, 0, 640, 640), Rect.makeXYWH(0, 0, 80, 160), null, true);
@@ -64,7 +65,10 @@ public class ImagesScene extends Scene {
             SamplingMode mode = pair.getSecond();
 
             canvas.drawImageRect(circus, Rect.makeXYWH(0, 0, 320, 640), Rect.makeXYWH(0, 0, 80, 160), mode, null, false);
-            canvas.drawImageRect(circus, Rect.makeXYWH(200, 220, 60, 100), Rect.makeXYWH(80, 0, 80, 160), mode, null, false);
+            canvas.drawImageRect(circus, Rect.makeXYWH(200, 220, 60, 50), Rect.makeXYWH(80, 0, 80, 80), mode, null, false);
+            try (var image = circus.makeScaled(ImageInfo.makeN32(180, 180, ColorAlphaType.OPAQUE), mode);) {
+                canvas.drawImageRect(image, Rect.makeXYWH(0, 0, 180, 180), Rect.makeXYWH(80, 80, 80, 80), mode, null, false);
+            }
             canvas.drawString(name, 0, 175, inter13, blackFill);
             canvas.translate(170, 0);
         }
