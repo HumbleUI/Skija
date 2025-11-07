@@ -62,6 +62,13 @@ extern "C" JNIEXPORT jboolean JNICALL Java_io_github_humbleui_skija_Bitmap__1nSe
     return instance->setAlphaType(static_cast<SkAlphaType>(alphaType));
 }
 
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Bitmap__1nSetColorSpace
+  (JNIEnv* env, jclass jclass, jlong ptr, jlong colorSpacePtr) {
+    SkBitmap* instance = reinterpret_cast<SkBitmap*>(static_cast<uintptr_t>(ptr));
+    SkColorSpace* colorSpace = reinterpret_cast<SkColorSpace*>(static_cast<uintptr_t>(colorSpacePtr));
+    instance->setColorSpace(sk_ref_sp<SkColorSpace>(colorSpace));
+}
+
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Bitmap__1nComputeByteSize
   (JNIEnv* env, jclass jclass, jlong ptr) {
     SkBitmap* instance = reinterpret_cast<SkBitmap*>(static_cast<uintptr_t>(ptr));

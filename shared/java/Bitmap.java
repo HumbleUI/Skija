@@ -194,6 +194,31 @@ public class Bitmap extends Managed implements IHasImageInfo {
     }
 
     /**
+     * <p>Sets the {@link ColorSpace} associated with this {@link Bitmap}.</p>
+     *
+     * <p>The raw pixel data is not altered by this call; no conversion is
+     * performed.</p>
+     *
+     * <p>This changes {@link ColorSpace} in {@link PixelRef}; all bitmaps
+     * sharing {@link PixelRef} are affected.
+     *
+     * @param colorSpace  {@link ColorSpace} to set
+     * @return            this
+     */
+    @NotNull @Contract("_ -> this")
+    public Bitmap setColorSpace(@Nullable ColorSpace colorSpace) {
+        try {
+            Stats.onNativeCall();
+            _imageInfo = null;
+            _nSetColorSpace(_ptr, Native.getPtr(colorSpace));
+            return this;
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(colorSpace);
+        }
+    }
+
+    /**
      * Returns minimum memory required for pixel storage.
      * Does not include unused memory on last row when getRowBytesAsPixels() exceeds getWidth().
      * Returns zero if height() or width() is 0.
@@ -1055,6 +1080,7 @@ public class Bitmap extends Managed implements IHasImageInfo {
     @ApiStatus.Internal public static native boolean _nIsNull(long ptr);
     @ApiStatus.Internal public static native long    _nGetRowBytes(long ptr);
     @ApiStatus.Internal public static native boolean _nSetAlphaType(long ptr, int alphaType);
+    @ApiStatus.Internal public static native void    _nSetColorSpace(long ptr, long colorSpacePtr);
     @ApiStatus.Internal public static native long    _nComputeByteSize(long ptr);
     @ApiStatus.Internal public static native boolean _nIsImmutable(long ptr);
     @ApiStatus.Internal public static native void    _nSetImmutable(long ptr);
