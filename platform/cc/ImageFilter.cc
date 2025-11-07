@@ -7,6 +7,7 @@
 #include "SkImageFilters.h"
 #include "SkPoint3.h"
 #include "SkRect.h"
+#include "SkRuntimeEffect.h"
 #include "interop.hh"
 
 static SkImageFilters::CropRect toCropRect(JNIEnv* env, jobject rectObj) {
@@ -213,6 +214,45 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_ImageFilter__1n
     return reinterpret_cast<jlong>(ptr);
 }
 
+extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_ImageFilter__1nMakeRuntimeShader
+  (JNIEnv* env, jclass jclass, jlong builderPtr, jfloat maxSampleRadius, jobjectArray childShaderNamesArr, jlongArray inputsArr) {
+    SkRuntimeEffectBuilder* builder = jlongToPtr<SkRuntimeEffectBuilder*>(builderPtr);
+    jsize count = env->GetArrayLength(childShaderNamesArr);
+
+    std::vector<std::string> nameStrings;
+    for (jsize i = 0; i < count; i++) {
+        jstring jname = (jstring) env->GetObjectArrayElement(childShaderNamesArr, i);
+        SkString skName = skString(env, jname);
+        std::string s = std::string(skName.c_str());
+        nameStrings.push_back(s);
+        env->DeleteLocalRef(jname);
+    }
+
+    std::vector<std::string_view> childShaderNames;
+    for (auto& s : nameStrings) {
+      childShaderNames.push_back(s);
+    }
+
+
+    jlong* inputPtrs = env->GetLongArrayElements(inputsArr, nullptr);
+    std::vector<sk_sp<SkImageFilter>> inputs;
+    for (jsize i = 0; i < count; i++) {
+        SkImageFilter* input = jlongToPtr<SkImageFilter*>(inputPtrs[i]);
+        inputs.push_back(sk_ref_sp(input));
+    }
+    env->ReleaseLongArrayElements(inputsArr, inputPtrs, JNI_ABORT);
+
+    SkImageFilter* ptr = SkImageFilters::RuntimeShader(
+        *builder,
+        maxSampleRadius,
+        childShaderNames.data(),
+        inputs.data(),
+        count
+    ).release();
+
+    return ptrToJlong(ptr);
+}
+
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_ImageFilter__1nMakeShader
   (JNIEnv* env, jclass jclass, jlong shaderPtr, jboolean dither, jobject crop) {
     SkShader* shader = reinterpret_cast<SkShader*>(static_cast<uintptr_t>(shaderPtr));
@@ -291,3 +331,4 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_ImageFilter__1n
     SkImageFilter* ptr = SkImageFilters::SpotLitSpecular(SkPoint3{x0, y0, z0}, SkPoint3{x1, y1, z1}, falloffExponent, cutoffAngle, lightColor, surfaceScale, ks, shininess, sk_ref_sp(input), crop).release();
     return reinterpret_cast<jlong>(ptr);
 }
+

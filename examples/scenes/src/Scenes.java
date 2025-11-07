@@ -6,7 +6,7 @@ import io.github.humbleui.skija.*;
 
 public class Scenes {
     public static TreeMap<String, Scene> scenes;
-    public static String currentScene = "Runtime Effect";
+    public static String currentScene = "Image Filters";
     public static HUD hud = new HUD();
     public static boolean stats = true;
 

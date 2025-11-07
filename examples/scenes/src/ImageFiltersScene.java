@@ -41,6 +41,7 @@ public class ImageFiltersScene extends Scene {
         canvas.translate(20, 20);
         drawShadowsBlurs(canvas);
         drawImageFilters(canvas, width, dpi);
+        drawRuntimeShader(canvas);
         drawImageWithFilters(canvas);
         drawLights(canvas);
     }
@@ -116,6 +117,75 @@ public class ImageFiltersScene extends Scene {
                 canvas.drawPath(star, fill);
                 canvas.translate(70, 0);
                 filter.close();
+            }
+        }
+        canvas.restore();
+        canvas.translate(0, 70);
+    }
+
+    private void drawRuntimeShader(Canvas canvas) {
+        canvas.save();
+        try (Paint fill = new Paint().setColor(0xFFFF9F1B);) {
+            IRect bb = IRect.makeXYWH(0, 0, 60, 60);
+
+            // Distortion shader - warps coordinates horizontally
+            String distortSksl =
+                "uniform shader child;\n" +
+                "uniform float phase;\n" +
+                "half4 main(float2 coord) {\n" +
+                "    coord.x += sin(phase + coord.y / 3) * 4;\n" +
+                "    return child.eval(coord);\n" +
+                "}";
+
+            try (
+                RuntimeEffect        effect  = RuntimeEffect.makeForShader(distortSksl);
+                RuntimeEffectBuilder builder = new RuntimeEffectBuilder(effect).setUniform("phase", (float) (2f * Math.PI * phase()));
+                ImageFilter          filter  = ImageFilter.makeRuntimeShader(builder, 4, "", null)
+            ) {
+                fill.setImageFilter(filter);
+                canvas.drawPath(star, fill);
+                canvas.translate(70, 0);
+            }
+
+            // Pixelate shader - samples at coarser grid
+            String pixelateSksl =
+                "uniform shader child;\n" +
+                "uniform float scale;\n" +
+                "half4 main(float2 coord) {\n" +
+                "    coord = floor(coord / scale) * scale;\n" +
+                "    return child.eval(coord);\n" +
+                "}";
+
+            try (
+                RuntimeEffect        effect  = RuntimeEffect.makeForShader(pixelateSksl);
+                RuntimeEffectBuilder builder = new RuntimeEffectBuilder(effect).setUniform("scale", 1f + phase() * 3f);
+                ImageFilter pixelateFilter = ImageFilter.makeRuntimeShader(builder, "child", null);
+            ) {
+                fill.setImageFilter(pixelateFilter);
+                canvas.drawPath(star, fill);
+                canvas.translate(70, 0);
+            }
+
+            // Unsharp mask - sharpens using difference between original and blurred
+            String unsharpSksl =
+                "uniform shader content;\n" +
+                "uniform shader blurred;\n" +
+                "vec4 main(vec2 coord) {\n" +
+                "    vec4 c = content.eval(coord);\n" +
+                "    vec4 b = blurred.eval(coord);\n" +
+                "    return c + (c - b) * 4;\n" +
+                "}";
+
+            try (
+                RuntimeEffect        effect  = RuntimeEffect.makeForShader(unsharpSksl);
+                RuntimeEffectBuilder builder = new RuntimeEffectBuilder(effect);
+                ImageFilter          input   = ImageFilter.makeBlur(1, 1, FilterTileMode.CLAMP);
+                ImageFilter          filter  = ImageFilter.makeRuntimeShader(builder, new String[] { "content", "blurred" },
+ new ImageFilter[] { null, input });
+            ) {
+                fill.setImageFilter(filter);
+                canvas.drawPath(star, fill);
+                canvas.translate(70, 0);
             }
         }
         canvas.restore();

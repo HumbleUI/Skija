@@ -636,6 +636,85 @@ public class ImageFilter extends RefCnt implements Flattenable {
     }
 
     /**
+     * Create a filter that produces a runtime shader effect. The runtime shader is evaluated per-pixel
+     * and the result fills the output. The childShaderName is used to bind the input filter to a shader
+     * child in the builder, or uses the source bitmap when input is null.
+     *
+     * @param builder          The RuntimeEffectBuilder that defines the shader
+     * @param childShaderName  The name of the child shader in the builder to bind the input to
+     * @param input            The input filter, or uses the source bitmap when null
+     * @return                 filter that applies the runtime shader
+     */
+    @NotNull @Contract("_, _, _ -> new")
+    public static ImageFilter makeRuntimeShader(@NotNull RuntimeEffectBuilder builder, @Nullable String childShaderName, @Nullable ImageFilter input) {
+        return makeRuntimeShader(builder, 0.0f, childShaderName, input);
+    }
+
+    /**
+     * Create a filter that produces a runtime shader effect with a sample radius. The runtime shader
+     * is evaluated per-pixel and the result fills the output. The sampleRadius defines how far
+     * from the output pixel coordinate the child shader may be sampled.
+     *
+     * @param builder          The RuntimeEffectBuilder that defines the shader
+     * @param sampleRadius     Maximum distance (in pixels) that the child shader may be sampled from the output coordinate
+     * @param childShaderName  The name of the child shader in the builder to bind the input to
+     * @param input            The input filter, or uses the source bitmap when null
+     * @return                 filter that applies the runtime shader
+     */
+    @NotNull @Contract("_, _, _, _ -> new")
+    public static ImageFilter makeRuntimeShader(@NotNull RuntimeEffectBuilder builder, float sampleRadius, @Nullable String childShaderName, @Nullable ImageFilter input) {
+        if (childShaderName == null || "".equals(childShaderName)) {
+            RuntimeEffectChildInfo[] children = builder._effect.getChildren();
+            assert children.length == 1 : "Expected 1 child, got " + children.length;
+            childShaderName = children[0]._name;
+        }
+        return makeRuntimeShader(builder, sampleRadius, new String[] { childShaderName }, new ImageFilter[] { input });
+    }
+
+    /**
+     * Create a filter that produces a runtime shader effect with multiple child shaders. Each child
+     * shader name is bound to the corresponding input filter, or uses the source bitmap when the input is null.
+     *
+     * @param builder           The RuntimeEffectBuilder that defines the shader
+     * @param childShaderNames  The names of the child shaders in the builder to bind the inputs to
+     * @param inputs            The input filters corresponding to each child shader name
+     * @return                  filter that applies the runtime shader
+     */
+    @NotNull @Contract("_, _, _ -> new")
+    public static ImageFilter makeRuntimeShader(@NotNull RuntimeEffectBuilder builder, @NotNull String[] childShaderNames, @Nullable ImageFilter[] inputs) {
+        return makeRuntimeShader(builder, 0.0f, childShaderNames, inputs);
+    }
+
+    /**
+     * Create a filter that produces a runtime shader effect with multiple child shaders and a maximum
+     * sample radius. The maxSampleRadius defines how far from the output pixel coordinate any child
+     * shader may be sampled.
+     *
+     * @param builder           The RuntimeEffectBuilder that defines the shader
+     * @param maxSampleRadius   Maximum distance (in pixels) that any child shader may be sampled from the output coordinate
+     * @param childShaderNames  The names of the child shaders in the builder to bind the inputs to
+     * @param inputs            The input filters corresponding to each child shader name
+     * @return                  filter that applies the runtime shader
+     */
+    @NotNull @Contract("_, _, _, _ -> new")
+    public static ImageFilter makeRuntimeShader(@NotNull RuntimeEffectBuilder builder, float maxSampleRadius, @NotNull String[] childShaderNames, @Nullable ImageFilter[] inputs) {
+        try {
+            Stats.onNativeCall();
+            long[] inputPtrs = new long[inputs.length];
+            for (int i = 0; i < inputs.length; i++) {
+                inputPtrs[i] = Native.getPtr(inputs[i]);
+            }
+            return new ImageFilter(_nMakeRuntimeShader(Native.getPtr(builder), maxSampleRadius, childShaderNames, inputPtrs));
+        } finally {
+            ReferenceUtil.reachabilityFence(builder);
+            ReferenceUtil.reachabilityFence(inputs);
+            for (ImageFilter input: inputs) {
+                ReferenceUtil.reachabilityFence(input);
+            }
+        }
+    }
+
+    /**
      * <p>Create a filter that fills the output with the per-pixel evaluation of
      * the shader.</p>
      *
@@ -980,8 +1059,8 @@ public class ImageFilter extends RefCnt implements Flattenable {
     }
 
     @NotNull @Contract("_, _, _, _, _, _, _, _, _, _, _, _, _ -> new")
-    public static ImageFilter makeSpotLitSpecular(float x0, float y0, float z0, float x1, float y1, float z1, float falloffExponent, float cutoffAngle, int lightColor, float surfaceScale, float ks, float shininess, @Nullable ImageFilter input) {
-        return makeSpotLitSpecular(x0, y0, z0, x1, y1, z1, falloffExponent, cutoffAngle, lightColor, surfaceScale, ks, shininess, input, (Rect) null);
+    public static ImageFilter makeSpotLitSpecular(float x0, float y0, float z0, float x1, float y1, float z1, float falloffAngle, float cutoffAngle, int lightColor, float surfaceScale, float ks, float shininess, @Nullable ImageFilter input) {
+        return makeSpotLitSpecular(x0, y0, z0, x1, y1, z1, falloffAngle, cutoffAngle, lightColor, surfaceScale, ks, shininess, input, (Rect) null);
     }
 
     @ApiStatus.Internal
@@ -1020,4 +1099,5 @@ public class ImageFilter extends RefCnt implements Flattenable {
     public static native long _nMakeDistantLitSpecular(float x, float y, float z, int lightColor, float surfaceScale, float ks, float shininess, long input, Rect crop);
     public static native long _nMakePointLitSpecular(float x, float y, float z, int lightColor, float surfaceScale, float ks, float shininess, long input, Rect crop);
     public static native long _nMakeSpotLitSpecular(float x0, float y0, float z0, float x1, float y1, float z1, float falloffExponent, float cutoffAngle, int lightColor, float surfaceScale, float ks, float shininess, long input, Rect crop);
+    public static native long _nMakeRuntimeShader(long builderPtr, float maxSampleRadius, String[] childShaderNames, long[] inputs);
 }

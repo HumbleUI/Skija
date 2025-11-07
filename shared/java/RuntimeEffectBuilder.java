@@ -134,15 +134,11 @@ public class RuntimeEffectBuilder extends Managed {
      * @param value  the float value
      * @return       this builder for chaining
      */
-    @NotNull
+    @NotNull @Contract("_, _ -> this")
     public RuntimeEffectBuilder setUniform(@NotNull String name, float value) {
-        try {
-            Stats.onNativeCall();
-            _nSetUniformFloats(_ptr, name, new float[] { value });
-            return this;
-        } finally {
-            ReferenceUtil.reachabilityFence(this);
-        }
+        Stats.onNativeCall();
+        _nSetUniformFloats(_ptr, name, new float[] { value });
+        return this;
     }
 
     /**
@@ -153,15 +149,11 @@ public class RuntimeEffectBuilder extends Managed {
      * @param v2    second float value
      * @return      this builder for chaining
      */
-    @NotNull
+    @NotNull @Contract("_, _, _ -> this")
     public RuntimeEffectBuilder setUniform(@NotNull String name, float v1, float v2) {
-        try {
-            Stats.onNativeCall();
-            _nSetUniformFloats(_ptr, name, new float[] { v1, v2 });
-            return this;
-        } finally {
-            ReferenceUtil.reachabilityFence(this);
-        }
+        Stats.onNativeCall();
+        _nSetUniformFloats(_ptr, name, new float[] { v1, v2 });
+        return this;
     }
 
     /**
@@ -173,15 +165,11 @@ public class RuntimeEffectBuilder extends Managed {
      * @param v3    third float value
      * @return      this builder for chaining
      */
-    @NotNull
+    @NotNull @Contract("_, _, _, _ -> this")
     public RuntimeEffectBuilder setUniform(@NotNull String name, float v1, float v2, float v3) {
-        try {
-            Stats.onNativeCall();
-            _nSetUniformFloats(_ptr, name, new float[] { v1, v2, v3 });
-            return this;
-        } finally {
-            ReferenceUtil.reachabilityFence(this);
-        }
+        Stats.onNativeCall();
+        _nSetUniformFloats(_ptr, name, new float[] { v1, v2, v3 });
+        return this;
     }
 
     /**
@@ -194,15 +182,11 @@ public class RuntimeEffectBuilder extends Managed {
      * @param v4    fourth float value
      * @return      this builder for chaining
      */
-    @NotNull
+    @NotNull @Contract("_, _, _, _, _ -> this")
     public RuntimeEffectBuilder setUniform(@NotNull String name, float v1, float v2, float v3, float v4) {
-        try {
-            Stats.onNativeCall();
-            _nSetUniformFloats(_ptr, name, new float[] { v1, v2, v3, v4 });
-            return this;
-        } finally {
-            ReferenceUtil.reachabilityFence(this);
-        }
+        Stats.onNativeCall();
+        _nSetUniformFloats(_ptr, name, new float[] { v1, v2, v3, v4 });
+        return this;
     }
 
     /**
@@ -212,15 +196,11 @@ public class RuntimeEffectBuilder extends Managed {
      * @param value  the float array
      * @return       this builder for chaining
      */
-    @NotNull
+    @NotNull @Contract("_, _ -> this")
     public RuntimeEffectBuilder setUniform(@NotNull String name, @NotNull float[] value) {
-        try {
-            Stats.onNativeCall();
-            _nSetUniformFloats(_ptr, name, value);
-            return this;
-        } finally {
-            ReferenceUtil.reachabilityFence(this);
-        }
+        Stats.onNativeCall();
+        _nSetUniformFloats(_ptr, name, value);
+        return this;
     }
 
     /**
@@ -230,15 +210,11 @@ public class RuntimeEffectBuilder extends Managed {
      * @param value  the Matrix33 value
      * @return       this builder for chaining
      */
-    @NotNull
+    @NotNull @Contract("_, _ -> this")
     public RuntimeEffectBuilder setUniform(@NotNull String name, @NotNull Matrix33 value) {
-        try {
-            Stats.onNativeCall();
-            _nSetUniformFloats(_ptr, name, value._mat);
-            return this;
-        } finally {
-            ReferenceUtil.reachabilityFence(this);
-        }
+        Stats.onNativeCall();
+        _nSetUniformFloats(_ptr, name, value._mat);
+        return this;
     }
 
     /**
@@ -248,15 +224,11 @@ public class RuntimeEffectBuilder extends Managed {
      * @param value  the Matrix44 value
      * @return       this builder for chaining
      */
-    @NotNull
+    @NotNull @Contract("_, _ -> this")
     public RuntimeEffectBuilder setUniform(@NotNull String name, @NotNull Matrix44 value) {
-        try {
-            Stats.onNativeCall();
-            _nSetUniformFloats(_ptr, name, value._mat);
-            return this;
-        } finally {
-            ReferenceUtil.reachabilityFence(this);
-        }
+        Stats.onNativeCall();
+        _nSetUniformFloats(_ptr, name, value._mat);
+        return this;
     }
 
     /**
@@ -266,15 +238,11 @@ public class RuntimeEffectBuilder extends Managed {
      * @param value  the int value
      * @return       this builder for chaining
      */
-    @NotNull
+    @NotNull @Contract("_, _ -> this")
     public RuntimeEffectBuilder setUniform(@NotNull String name, int value) {
-        try {
-            Stats.onNativeCall();
-            _nSetUniformInts(_ptr, name, new int[] { value });
-            return this;
-        } finally {
-            ReferenceUtil.reachabilityFence(this);
-        }
+        Stats.onNativeCall();
+        _nSetUniformInts(_ptr, name, new int[] { value });
+        return this;
     }
 
     /**
@@ -285,15 +253,11 @@ public class RuntimeEffectBuilder extends Managed {
      * @param v2    second int value
      * @return      this builder for chaining
      */
-    @NotNull
+    @NotNull @Contract("_, _, _ -> this")
     public RuntimeEffectBuilder setUniform(@NotNull String name, int v1, int v2) {
-        try {
-            Stats.onNativeCall();
-            _nSetUniformInts(_ptr, name, new int[] { v1, v2 });
-            return this;
-        } finally {
-            ReferenceUtil.reachabilityFence(this);
-        }
+        Stats.onNativeCall();
+        _nSetUniformInts(_ptr, name, new int[] { v1, v2 });
+        return this;
     }
 
     /**
@@ -305,15 +269,11 @@ public class RuntimeEffectBuilder extends Managed {
      * @param v3    third int value
      * @return      this builder for chaining
      */
-    @NotNull
+    @NotNull @Contract("_, _, _, _ -> this")
     public RuntimeEffectBuilder setUniform(@NotNull String name, int v1, int v2, int v3) {
-        try {
-            Stats.onNativeCall();
-            _nSetUniformInts(_ptr, name, new int[] { v1, v2, v3 });
-            return this;
-        } finally {
-            ReferenceUtil.reachabilityFence(this);
-        }
+        Stats.onNativeCall();
+        _nSetUniformInts(_ptr, name, new int[] { v1, v2, v3 });
+        return this;
     }
 
     /**
@@ -326,15 +286,11 @@ public class RuntimeEffectBuilder extends Managed {
      * @param v4    fourth int value
      * @return      this builder for chaining
      */
-    @NotNull
+    @NotNull @Contract("_, _, _, _, _ -> this")
     public RuntimeEffectBuilder setUniform(@NotNull String name, int v1, int v2, int v3, int v4) {
-        try {
-            Stats.onNativeCall();
-            _nSetUniformInts(_ptr, name, new int[] { v1, v2, v3, v4 });
-            return this;
-        } finally {
-            ReferenceUtil.reachabilityFence(this);
-        }
+        Stats.onNativeCall();
+        _nSetUniformInts(_ptr, name, new int[] { v1, v2, v3, v4 });
+        return this;
     }
 
     /**
@@ -344,15 +300,11 @@ public class RuntimeEffectBuilder extends Managed {
      * @param value  the int array
      * @return       this builder for chaining
      */
-    @NotNull
+    @NotNull @Contract("_, _ -> this")
     public RuntimeEffectBuilder setUniform(@NotNull String name, @NotNull int[] value) {
-        try {
-            Stats.onNativeCall();
-            _nSetUniformInts(_ptr, name, value);
-            return this;
-        } finally {
-            ReferenceUtil.reachabilityFence(this);
-        }
+        Stats.onNativeCall();
+        _nSetUniformInts(_ptr, name, value);
+        return this;
     }
 
     /**
@@ -362,14 +314,13 @@ public class RuntimeEffectBuilder extends Managed {
      * @param child  the child effect (Shader, ColorFilter, or Blender), or null to unset
      * @return       this builder for chaining
      */
-    @NotNull
+    @NotNull @Contract("_, _ -> this")
     public RuntimeEffectBuilder setChild(@NotNull String name, @Nullable RuntimeEffectChild child) {
         try {
             Stats.onNativeCall();
             _nSetChild(_ptr, name, Native.getPtr(child));
             return this;
         } finally {
-            ReferenceUtil.reachabilityFence(this);
             ReferenceUtil.reachabilityFence(child);
         }
     }
