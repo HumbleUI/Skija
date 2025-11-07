@@ -14,7 +14,7 @@
 - [x] Sort native java Path methods
 - [x] Sort native cc Path methods
 - [x] Fix PathsScene to not leak objects
-- [ ] Go through RELEASE_NOTES and add all new stuff
+- [x] Go through RELEASE_NOTES and add all new stuff
   - [x] SkRuntimeEffect
   - [x] SkRuntimeEffectBuilder
   - [x] SkImageFilters::RuntimeShader
@@ -23,7 +23,7 @@
   - [x] ImageFilters::makeDropShadow with Color4f & ColorSpace
 - [x] ImageFilter javadoc
 - [ ] ImageInfo allocates ColorSpace ptr
-- [ ] Write CHANGELOG
+- [x] Write CHANGELOG
 - [ ] Update JWM to run on latest Skia
 - [ ] Check if graphite is worth migrating to
 - [ ] See what Text/Unicode advancements are there

@@ -1,8 +1,34 @@
-# WIP
+# 0.143.0 - Nov 7, 2025
 
 Changed:
 
 - Skia version m132-9ab7c2064b -> m143-da51f0d60e
+- Region::getBoundaryPath now returns new Path instead of accepting one and modifying it
+- Most ImageFilter ctors now accept an optional cropRect
+- [ BREAKING ] ShadowUtils::drawShadow now accepts ShadowUtilsFlag...
+
+Added:
+
+- PathBuilder
+- Path.make*
+- Canvas::drawPathOnce (convenience, draws path and closes it immediately)
+- RuntimeEffect
+- RuntimeEffectBuilder
+- Image::makeWithFilter, makeScaled
+- ImageFilter::makeCrop, makeEmpty, makePicture, makeShader, makeBlend, makeRuntimeShader
+- Blender
+- Paint::getBlender, setBlender
+- Shader::isOpaque, getImage, makeWithLocalMatrix, makeWithWorkingColorSpace, makeFractalNoise, makeTurbulence
+- FontArguments
+- Typeface::makeClone(FontArguments)
+- FontCollection::defaultFallback(int, FontStyle, String, FontArguments)
+- Bitmap::setColorSpace
+- SaveLayerRec: FilterTileMode and ColorSpace
+- Codec::isAnimated
+
+Removed:
+
+- [ BREAKING ] Most of mutable methods on Path (moved to PathBuilder)
 
 # 0.132.0 - Oct 30, 2025
 
