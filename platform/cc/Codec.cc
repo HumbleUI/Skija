@@ -61,6 +61,12 @@ extern "C" JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_Codec__1nGetFram
     return instance->getFrameCount();
 }
 
+extern "C" JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_Codec__1nIsAnimated
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkCodec* instance = reinterpret_cast<SkCodec*>(static_cast<uintptr_t>(ptr));
+    return static_cast<jint>(instance->isAnimated());
+}
+
 extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_Codec__1nGetFrameInfo
   (JNIEnv* env, jclass jclass, jlong ptr, jint frame) {
     SkCodec* instance = reinterpret_cast<SkCodec*>(static_cast<uintptr_t>(ptr));

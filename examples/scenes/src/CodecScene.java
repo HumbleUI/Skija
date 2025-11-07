@@ -116,6 +116,7 @@ public class CodecScene extends Scene {
             var label = pair.getFirst();
             var animation = pair.getSecond();
             var codec = animation.codec;
+            assert codec.isAnimated() : codec.isAnimated();
 
             int duration = 0;
             int frame = 0;

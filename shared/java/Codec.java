@@ -289,6 +289,40 @@ public class Codec extends Managed implements IHasImageInfo {
         }
     }
 
+    /**
+     * <p>{@link #isAnimated} returns whether the full input is expected to contain an
+     * animated image (i.e. more than 1 image frame).  This can be used to
+     * disambiguate the meaning of {@link #getRepetitionCount} returning 0</p>
+     *
+     * <p>Note that in some codecs {@link #getFrameCount()} only returns the number of
+     * frames for which all the metadata has been already successfully decoded.
+     * Therefore for a partial input {@link #isAnimated()} may return true, even
+     * though {@link #getFrameCount()} may temporarily return 1 until more of the
+     * input is available.</p>
+     *
+     * <p>When handling partial input, some codecs may not know until later (e.g.
+     * until encountering additional image frames) whether the given image has
+     * more than one frame.  Such codecs may initially return null and only later
+     * give a definitive true or false answer. GIF format is one example where
+     * this may happen.</p>
+     *
+     * <p>Other codecs may be able to decode the information from the metadata
+     * present before the first image frame.  Such codecs should be able to give
+     * a definitive true or false answer as soon as they are constructed.  PNG
+     * format is one example where this happens.</p>
+     *
+     * @return  true/false/null (unknown)
+     */
+    public Boolean isAnimated() {
+        try {
+            Stats.onNativeCall();
+            int res = _nIsAnimated(_ptr);
+            return res == 0 ? true : res == 1 ? false : null;
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
     @ApiStatus.Internal
     public static void _validateResult(int result) {
         switch (result) {
@@ -334,6 +368,7 @@ public class Codec extends Managed implements IHasImageInfo {
     @ApiStatus.Internal public static native int _nGetEncodedImageFormat(long ptr);
     @ApiStatus.Internal public static native int _nReadPixels(long ptr, long bitmapPtr, int frame, int priorFrame);
     @ApiStatus.Internal public static native int _nGetFrameCount(long ptr);
+    @ApiStatus.Internal public static native int _nIsAnimated(long ptr);
     @ApiStatus.Internal public static native AnimationFrameInfo _nGetFrameInfo(long ptr, int frame);
     @ApiStatus.Internal public static native AnimationFrameInfo[] _nGetFramesInfo(long ptr);
     @ApiStatus.Internal public static native int _nGetRepetitionCount(long ptr);
