@@ -24,6 +24,7 @@ public class TestSuite {
 
         TestRunner.testClass(SVGCanvasTest.class);
         TestRunner.testClass(StreamAssetTest.class);
+        TestRunner.testClass(RuntimeEffectBuilderTest.class);
 
         // TestRunner.testClass(TestTest.class);
         int res = TestRunner.finishTesting();

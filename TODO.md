@@ -16,7 +16,7 @@
 - [x] Fix PathsScene to not leak objects
 - [ ] Go through RELEASE_NOTES and add all new stuff
   - [x] SkRuntimeEffect
-  - [ ] SkRuntimeEffectBuilder
+  - [x] SkRuntimeEffectBuilder
   - [ ] SkImageFilters::RuntimeShader
   - [x] SkRuntimeBlender
   - [x] SkBlender, ImageFilters::makeBlend(Blender)
