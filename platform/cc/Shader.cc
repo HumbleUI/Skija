@@ -1,10 +1,45 @@
 #include <iostream>
 #include <jni.h>
 #include "SkColorFilter.h"
+#include "SkImage.h"
 #include "SkShader.h"
 #include "SkGradientShader.h"
 #include "SkPerlinNoiseShader.h"
 #include "interop.hh"
+
+extern "C" JNIEXPORT jboolean JNICALL Java_io_github_humbleui_skija_Shader__1nIsOpaque
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkShader* instance = reinterpret_cast<SkShader*>(static_cast<uintptr_t>(ptr));
+    return instance->isOpaque();
+}
+
+extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Shader__1nGetImage
+  (JNIEnv* env, jclass jclass, jlong ptr) {
+    SkShader* instance = reinterpret_cast<SkShader*>(static_cast<uintptr_t>(ptr));
+    SkImage* image = instance->isAImage(nullptr, nullptr);
+    if (image) {
+        image->ref();
+        return reinterpret_cast<jlong>(image);
+    }
+    return 0;
+}
+
+extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Shader__1nMakeWithLocalMatrix
+  (JNIEnv* env, jclass jclass, jlong ptr, jfloatArray matrixArray) {
+    SkShader* instance = reinterpret_cast<SkShader*>(static_cast<uintptr_t>(ptr));
+    std::unique_ptr<SkMatrix> localMatrix = skMatrix(env, matrixArray);
+    SkShader* newPtr = instance->makeWithLocalMatrix(*localMatrix).release();
+    return reinterpret_cast<jlong>(newPtr);
+}
+
+extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Shader__1nMakeWithWorkingColorSpace
+  (JNIEnv* env, jclass jclass, jlong ptr, jlong inputColorSpacePtr, jlong outputColorSpacePtr) {
+    SkShader* instance = reinterpret_cast<SkShader*>(static_cast<uintptr_t>(ptr));
+    sk_sp<SkColorSpace> inputCS = sk_ref_sp<SkColorSpace>(reinterpret_cast<SkColorSpace*>(static_cast<uintptr_t>(inputColorSpacePtr)));
+    sk_sp<SkColorSpace> outputCS = sk_ref_sp<SkColorSpace>(reinterpret_cast<SkColorSpace*>(static_cast<uintptr_t>(outputColorSpacePtr)));
+    SkShader* newPtr = instance->makeWithWorkingColorSpace(inputCS, outputCS).release();
+    return reinterpret_cast<jlong>(newPtr);
+}
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Shader__1nMakeWithColorFilter
   (JNIEnv* env, jclass jclass, jlong ptr, jlong filterPtr) {

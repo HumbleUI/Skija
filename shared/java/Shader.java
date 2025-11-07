@@ -7,6 +7,105 @@ import io.github.humbleui.types.*;
 public class Shader extends RuntimeEffectChild {
     static { Library.staticLoad(); }
     
+    /**
+     * Returns true if the shader is guaranteed to produce only opaque
+     * colors, subject to the {@link Paint} using the shader to apply an opaque
+     * alpha value. Subclasses should override this to allow some
+     * optimizations.
+     */
+    public boolean isOpaque() {
+        try {
+            Stats.onNativeCall();
+            return _nIsOpaque(_ptr);
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    /**
+     * Iff this shader is backed by a single {@link Image}, return its ptr (the caller must ref this
+     * if they want to keep it longer than the lifetime of the shader). If not, return nullptr.
+     */
+    @Nullable
+    public Image getImage() {
+        try {
+            Stats.onNativeCall();
+            long ptr = _nGetImage(_ptr);
+            return ptr == 0 ? null : new Image(ptr);
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    /**
+     * Return a shader that will apply the specified localMatrix to this shader.
+     * The specified matrix will be applied before any matrix associated with this shader.
+     */
+    @NotNull @Contract("_ -> new")
+    public Shader makeWithLocalMatrix(@NotNull Matrix33 localMatrix) {
+        try {
+            Stats.onNativeCall();
+            return new Shader(_nMakeWithLocalMatrix(_ptr, localMatrix._mat));
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    /**
+     * Return a shader that will compute this shader in a context such that any child shaders
+     * return RGBA values converted to the {@code input} colorspace.
+     *
+     * <p>It is then assumed that the RGBA values returned by this shader have been transformed into
+     * {@code input} by the shader being wrapped.  By default, shaders are assumed to return values
+     * in the destination colorspace and premultiplied. Using a different output than input
+     * allows custom shaders to replace the color management Skia normally performs w/o forcing
+     * authors to otherwise manipulate surface/image color info to avoid unnecessary or incorrect
+     * work.
+     *
+     * <p>A null input is assumed to be the destination CS.
+     *
+     * @param input the {@link ColorSpace} to use for input
+     */
+    @NotNull @Contract("_ -> new")
+    public Shader makeWithWorkingColorSpace(@Nullable ColorSpace input) {
+        return makeWithWorkingColorSpace(input, null);
+    }
+
+    /**
+     * Return a shader that will compute this shader in a context such that any child shaders
+     * return RGBA values converted to the {@code input} colorspace.
+     *
+     * <p>It is then assumed that the RGBA values returned by this shader have been transformed into
+     * {@code output} by the shader being wrapped.  By default, shaders are assumed to return values
+     * in the destination colorspace and premultiplied. Using a different output than input
+     * allows custom shaders to replace the color management Skia normally performs w/o forcing
+     * authors to otherwise manipulate surface/image color info to avoid unnecessary or incorrect
+     * work.
+     *
+     * <p>If the shader is not performing colorspace conversion but needs to operate in the {@code input}
+     * then it should have {@code output} be the same as {@code input}. Regardless of the {@code output} here,
+     * the RGBA values of the returned {@link Shader} are always converted from {@code output} to the
+     * destination surface color space.
+     *
+     * <p>A null input is assumed to be the destination CS.
+     * A null output is assumed to be the input.
+     *
+     * @param input the {@link ColorSpace} to use for input
+     * @param output the {@link ColorSpace} to use for output, or null
+     */
+    @NotNull @Contract("_, _ -> new")
+    public Shader makeWithWorkingColorSpace(@Nullable ColorSpace input, @Nullable ColorSpace output) {
+        try {
+            Stats.onNativeCall();
+            return new Shader(_nMakeWithWorkingColorSpace(_ptr, Native.getPtr(input), Native.getPtr(output)));
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(input);
+            ReferenceUtil.reachabilityFence(output);
+        }
+    }
+
+    @NotNull @Contract("_ -> new")
     public Shader makeWithColorFilter(ColorFilter f) {
         try {
             return new Shader(_nMakeWithColorFilter(_ptr, Native.getPtr(f)));
@@ -290,6 +389,10 @@ public class Shader extends RuntimeEffectChild {
         super(ptr);
     }
 
+    public static native boolean _nIsOpaque(long ptr);
+    public static native long _nGetImage(long ptr);
+    public static native long _nMakeWithLocalMatrix(long ptr, float[] matrix);
+    public static native long _nMakeWithWorkingColorSpace(long ptr, long inputColorSpacePtr, long outputColorSpacePtr);
     public static native long _nMakeWithColorFilter(long ptr, long colorFilterPtr);
     public static native long _nMakeLinearGradient(float x0, float y0, float x1, float y1, int[] colors, float[] positions, int tileType, int flags, float[] matrix);
     public static native long _nMakeLinearGradientCS(float x0, float y0, float x1, float y1, float[] colors, long colorSpacePtr, float[] positions, int tileType, int flags, float[] matrix);
