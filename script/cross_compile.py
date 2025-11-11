@@ -1,5 +1,5 @@
 #! /usr/bin/env python3
-import build_utils, subprocess
+import build_utils, os, subprocess
 from typing import List
 
 def extract_deb(url: str, name: str, native_build_dir: str):
@@ -10,7 +10,7 @@ def extract_deb(url: str, name: str, native_build_dir: str):
   return target
 
 def setup_linux_arm64(native_build_dir: str, cmake_args: List[str]):
-  deps_dir = f'{native_build_dir}/deps'
+  deps_dir = os.path.abspath(f'{native_build_dir}/deps')
   build_utils.makedirs(deps_dir)
 
   # libfreetype.so
@@ -46,10 +46,24 @@ def setup_linux_arm64(native_build_dir: str, cmake_args: List[str]):
     f'{deps_dir}/libfontconfig.so'
   )
 
+  # libEGL.so
+  libegl1 = extract_deb(
+    'http://ftp.us.debian.org/debian/pool/main/libg/libglvnd/libegl1_1.3.2-1_arm64.deb',
+    'libegl1',
+    native_build_dir
+  )
+  build_utils.copy_newer(
+    f'{libegl1}/usr/lib/aarch64-linux-gnu/libEGL.so.1.1.0',
+    f'{deps_dir}/libEGL.so'
+  )
+
   cmake_args += [
     '-DCMAKE_SYSTEM_NAME=Linux',
     '-DCMAKE_SYSTEM_PROCESSOR=aarch64',
-    '-DCMAKE_C_COMPILER=/usr/bin/aarch64-linux-gnu-gcc-9',
-    '-DCMAKE_CXX_COMPILER=/usr/bin/aarch64-linux-gnu-g++-9',
-    '-DDEPS_DIR=' + deps_dir
+    '-DCMAKE_C_COMPILER=/usr/bin/aarch64-linux-gnu-gcc-10',
+    '-DCMAKE_CXX_COMPILER=/usr/bin/aarch64-linux-gnu-g++-10',
+    '-DFREETYPE_LIBRARY=' + f'{deps_dir}/libfreetype.so',
+    '-DFONTCONFIG_LIBRARY=' + f'{deps_dir}/libfontconfig.so',
+    '-DSKIA_EGL_LIBRARY=' + f'{deps_dir}/libEGL.so',
+    '-DSKIA_GL_LIBRARY=' + f'{deps_dir}/libGL.so'
   ]

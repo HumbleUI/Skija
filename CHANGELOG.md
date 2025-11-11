@@ -1,3 +1,9 @@
+# 0.143.1 - Nov 11, 2025
+
+Changed:
+
+- Re-enabled linux ARM build, thanks to @Eatgrapes #88
+
 # 0.143.0 - Nov 7, 2025
 
 Changed:

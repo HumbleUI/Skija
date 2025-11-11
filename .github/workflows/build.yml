@@ -35,6 +35,7 @@ jobs:
       - run: |
           echo "JAVA_HOME=$JAVA_HOME_11_arm64" >> $GITHUB_ENV
           echo "$JAVA_HOME_11_arm64/bin" >> $GITHUB_PATH
+      # x64
       - run: python3 script/build.py --arch x64
       - run: python3 script/test.py
       - run: python3 script/package_platform.py --arch x64
@@ -42,6 +43,7 @@ jobs:
         with:
           name: macos-x64-jars
           path: target/skija-macos-x64-*
+      # arm64
       - run: python3 script/clean.py
       - run: python3 script/build.py --arch arm64
       - run: python3 script/test.py
@@ -58,12 +60,13 @@ jobs:
           echo "JAVA_HOME=$JAVA_HOME_11_X64" >> $GITHUB_ENV
           echo "$JAVA_HOME_11_X64/bin" >> $GITHUB_PATH
           sudo apt-get update
-          sudo apt-get --quiet --yes install ninja-build libglu1-mesa-dev libegl-dev g\+\+-9-aarch64-linux-gnu libwayland-dev libglvnd-dev libegl1-mesa libegl1-mesa-dev
-          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 60 --slave /usr/bin/g++ g++ /usr/bin/g++-9
+          sudo apt-get --quiet --yes install ninja-build libglu1-mesa-dev libegl-dev g\+\+-10-aarch64-linux-gnu libwayland-dev libglvnd-dev libegl1-mesa libegl1-mesa-dev
+          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 60 --slave /usr/bin/g++ g++ /usr/bin/g++-10
           sudo update-alternatives --config gcc
       - uses: actions/checkout@v5
         with:
           fetch-depth: 0
+      # x64
       - run: python3 script/build.py
       - run: python3 script/package_shared.py
       - uses: actions/upload-artifact@v4
@@ -76,14 +79,14 @@ jobs:
         with:
           name: linux-x64-jars
           path: target/skija-linux-x64-*
-      # Disabled until https://github.com/HumbleUI/SkiaBuild/issues/8
-      # - run: python3 script/clean.py
-      # - run: python3 script/build.py --arch arm64
-      # - run: python3 script/package_platform.py --arch arm64
-      # - uses: actions/upload-artifact@v4
-      #   with:
-      #     name: linux-arm64-jars
-      #     path: target/skija-linux-arm64-*
+      # arm64
+      - run: python3 script/clean.py
+      - run: python3 script/build.py --arch arm64
+      - run: python3 script/package_platform.py --arch arm64
+      - uses: actions/upload-artifact@v4
+        with:
+          name: linux-arm64-jars
+          path: target/skija-linux-arm64-*
 
   build_windows:
     runs-on: windows-2022
@@ -130,10 +133,10 @@ jobs:
         with:
           name: linux-x64-jars
           path: target
-      # - uses: actions/download-artifact@v4
-      #   with:
-      #     name: linux-arm64-jars
-      #     path: target
+      - uses: actions/download-artifact@v4
+        with:
+          name: linux-arm64-jars
+          path: target
       - uses: actions/download-artifact@v4
         with:
           name: windows-x64-jars
