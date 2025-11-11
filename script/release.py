@@ -6,7 +6,7 @@ def main():
 
   build_utils.release_notes(common.version)
 
-  for name in ['skija-shared', 'skija-windows-x64', 'skija-linux-x64', 'skija-macos-x64', 'skija-macos-arm64']: # 'linux-arm64'
+  for name in ['skija-shared', 'skija-windows-x64', 'skija-linux-x64', 'skija-linux-arm64', 'skija-macos-x64', 'skija-macos-arm64']:
     jars = [f"target/{name}-{common.version}{classifier}.jar" for classifier in ["", "-sources", "-javadoc"]]
     build_utils.collect_jars('io.github.humbleui', name, common.version, jars, 'target/release')
 
