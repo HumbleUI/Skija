@@ -1,5 +1,9 @@
 # 0.143.3 - Nov 15, 2025
 
+Changed:
+
+- `Managed::close` does not throw now on non-managed or already closed objects
+
 Added:
 
 - `ColorSpace::makeFromICCProfile`
