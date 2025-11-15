@@ -9,6 +9,7 @@ public class TestSuite {
         TestRunner.startTesting();
         TestRunner.testClass(BitmapTest.class);
         TestRunner.testClass(ColorTest.class);
+        TestRunner.testClass(ColorSpaceTest.class);
         TestRunner.testClass(DataTest.class);
         TestRunner.testClass(FontMgrTest.class);
         TestRunner.testClass(ImageTest.class);

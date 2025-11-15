@@ -1,6 +1,7 @@
 #include <iostream>
 #include <jni.h>
 #include "SkColorSpace.h"
+#include "modules/skcms/skcms.h"
 #include "interop.hh"
 
 static void unrefColorSpace(SkColorSpace* ptr) {
@@ -61,4 +62,22 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_ColorSpace__1nI
   (JNIEnv* env, jclass jclass, jlong ptr) {
     SkColorSpace* instance = reinterpret_cast<SkColorSpace*>(static_cast<uintptr_t>(ptr));
     return instance->isSRGB();
+}
+
+extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_ColorSpace__1nMakeFromICCProfile
+  (JNIEnv* env, jclass jclass, jbyteArray bytesArray) {
+    jbyte* bytes = env->GetByteArrayElements(bytesArray, 0);
+    jsize length = env->GetArrayLength(bytesArray);
+
+    skcms_ICCProfile profile;
+    bool parsed = skcms_Parse(bytes, length, &profile);
+
+    sk_sp<SkColorSpace> colorSpace;
+    if (parsed) {
+        colorSpace = SkColorSpace::Make(profile);
+    }
+
+    env->ReleaseByteArrayElements(bytesArray, bytes, JNI_ABORT);
+
+    return colorSpace ? reinterpret_cast<jlong>(colorSpace.release()) : 0;
 }

@@ -1,3 +1,9 @@
+# 0.143.3 - Nov 15, 2025
+
+Added:
+
+- `ColorSpace::makeFromICCProfile`
+
 # 0.143.2 - Nov 11, 2025
 
 Changed:
@@ -9,9 +15,9 @@ Changed:
 Changed:
 
 - Skia version m132-9ab7c2064b -> m143-da51f0d60e
-- Region::getBoundaryPath now returns new Path instead of accepting one and modifying it
+- `Region::getBoundaryPath` now returns new Path instead of accepting one and modifying it
 - Most ImageFilter ctors now accept an optional cropRect
-- [ BREAKING ] ShadowUtils::drawShadow now accepts ShadowUtilsFlag...
+- [ BREAKING ] `ShadowUtils::drawShadow` now accepts `ShadowUtilsFlag...`
 
 Added:
 

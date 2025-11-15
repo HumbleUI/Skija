@@ -96,7 +96,20 @@ public class ColorSpace extends Managed {
             ReferenceUtil.reachabilityFence(this);
         }
     }
-    
+
+    /**
+     * Create a ColorSpace from ICC profile bytes.
+     *
+     * @param bytes  ICC profile data
+     * @return       ColorSpace instance, or null if the profile could not be parsed
+     */
+    @Nullable
+    public static ColorSpace makeFromICCProfile(byte[] bytes) {
+        Stats.onNativeCall();
+        long ptr = _nMakeFromICCProfile(bytes);
+        return ptr == 0 ? null : new ColorSpace(ptr);
+    }
+
     @ApiStatus.Internal
     public static class _FinalizerHolder {
         public static final long PTR = _nGetFinalizer();
@@ -110,4 +123,5 @@ public class ColorSpace extends Managed {
     public static native boolean _nIsGammaCloseToSRGB(long ptr);
     public static native boolean _nIsGammaLinear(long ptr);
     public static native boolean _nIsSRGB(long ptr);
+    public static native long _nMakeFromICCProfile(byte[] bytes);
 }
