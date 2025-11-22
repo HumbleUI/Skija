@@ -33,13 +33,15 @@ public class ParagraphBuilder extends Managed {
         return this;
     }
 
-    public ParagraphBuilder addText(String text) {
+    public ParagraphBuilder addText(@NotNull String text) {
+        assert text != null : "Can't addText with text == null";
         Stats.onNativeCall();
         _nAddText(_ptr, text);
-        if (_text == null)
+        if (_text == null) {
             _text = new ManagedString(text);
-        else
+        } else {
             _text.append(text);
+        }
         return this;
     }
 

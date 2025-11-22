@@ -1,3 +1,9 @@
+# 0.143.4 - Nov 22, 2025
+
+Fixed:
+
+- `FontMgr::matchFamily*(null)` now returns default font
+
 # 0.143.3 - Nov 15, 2025
 
 Changed:

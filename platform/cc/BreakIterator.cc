@@ -14,13 +14,8 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_BreakIterator__
   (JNIEnv* env, jclass jclass, jint type, jstring localeStr) {
     UErrorCode status = U_ZERO_ERROR;
     UBreakIterator* instance;
-    if (localeStr == nullptr)
-      instance = ubrk_open(static_cast<UBreakIteratorType>(type), uloc_getDefault(), nullptr, 0, &status);
-    else {
-      SkString locale = skString(env, localeStr);
-      instance = ubrk_open(static_cast<UBreakIteratorType>(type), locale.c_str(), nullptr, 0, &status);
-    }
-    
+    std::optional<SkString> locale = skString(env, localeStr);
+    instance = ubrk_open(static_cast<UBreakIteratorType>(type), locale ? locale->c_str() : uloc_getDefault(), nullptr, 0, &status);
     if (U_FAILURE(status)) {
       env->ThrowNew(java::lang::RuntimeException::cls, u_errorName(status));
       return 0;

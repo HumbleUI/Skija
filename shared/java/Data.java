@@ -60,9 +60,12 @@ public class Data extends Managed {
      *  Create a new dataref the file with the specified path.
      *  If the file cannot be opened, this returns null.
      */
-    public static Data makeFromFileName(String path) {
+    @Nullable
+    public static Data makeFromFileName(@NotNull String path) {
+        assert path != null : "Can’t makeFromFileName with path == null";
         Stats.onNativeCall();
-        return new Data(_nMakeFromFileName(path));
+        long ptr = _nMakeFromFileName(path);
+        return ptr == 0 ? null : new Data(ptr);
     }
 
     /**

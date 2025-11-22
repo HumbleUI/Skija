@@ -36,6 +36,7 @@ public class RuntimeEffect extends RefCnt {
      */
     @NotNull @Contract("_, _ -> new")
     public static RuntimeEffect makeForColorFilter(@NotNull String sksl, @NotNull RuntimeEffectOptions options) {
+        assert sksl != null : "Can't makeForColorFilter with sksl == null";
         Stats.onNativeCall();
         return new RuntimeEffect(_nMakeForColorFilter(sksl, options._forceUnoptimized, options._name));
     }
@@ -60,6 +61,7 @@ public class RuntimeEffect extends RefCnt {
      */
     @NotNull @Contract("_, _ -> new")
     public static RuntimeEffect makeForShader(@NotNull String sksl, @NotNull RuntimeEffectOptions options) {
+        assert sksl != null : "Can't makeForShader with sksl == null";
         Stats.onNativeCall();
         return new RuntimeEffect(_nMakeForShader(sksl, options._forceUnoptimized, options._name));
     }
@@ -82,6 +84,7 @@ public class RuntimeEffect extends RefCnt {
      */
     @NotNull @Contract("_, _ -> new")
     public static RuntimeEffect makeForBlender(@NotNull String sksl, @NotNull RuntimeEffectOptions options) {
+        assert sksl != null : "Can't makeForBlender with sksl == null";
         Stats.onNativeCall();
         return new RuntimeEffect(_nMakeForBlender(sksl, options._forceUnoptimized, options._name));
     }
@@ -230,6 +233,7 @@ public class RuntimeEffect extends RefCnt {
     @Nullable
     public RuntimeEffectUniformInfo getUniform(@NotNull String name) {
         try {
+            assert name != null : "Can't getUniform with name == null";
             Stats.onNativeCall();
             return _nGetUniform(_ptr, name);
         } finally {
@@ -261,6 +265,7 @@ public class RuntimeEffect extends RefCnt {
     @Nullable
     public RuntimeEffectChildInfo getChild(@NotNull String name) {
         try {
+            assert name != null : "Can't getChild with name == null";
             Stats.onNativeCall();
             return _nGetChild(_ptr, name);
         } finally {

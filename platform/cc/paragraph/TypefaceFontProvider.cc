@@ -16,8 +16,10 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_paragraph_Typefa
   (JNIEnv* env, jclass jclass, jlong ptr, jlong typefacePtr, jstring aliasStr) {
     TypefaceFontProvider* instance = reinterpret_cast<TypefaceFontProvider*>(static_cast<uintptr_t>(ptr));
     SkTypeface* typeface = reinterpret_cast<SkTypeface*>(static_cast<uintptr_t>(typefacePtr));
-    if (aliasStr == nullptr)
+    std::optional<SkString> alias = skString(env, aliasStr);
+    if (alias) {
+        instance->registerTypeface(sk_ref_sp(typeface), *alias);
+    } else {
         instance->registerTypeface(sk_ref_sp(typeface));
-    else
-        instance->registerTypeface(sk_ref_sp(typeface), skString(env, aliasStr));
+    }
 }

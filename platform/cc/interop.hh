@@ -388,7 +388,7 @@ namespace types {
 std::unique_ptr<SkMatrix> skMatrix(JNIEnv* env, jfloatArray arr);
 std::unique_ptr<SkM44> skM44(JNIEnv* env, jfloatArray arr);
 
-SkString skString(JNIEnv* env, jstring str);
+std::optional<SkString> skString(JNIEnv* env, jstring str);
 jstring javaString(JNIEnv* env, const SkString& str);
 jstring javaString(JNIEnv* env, const char* chars, size_t len);
 jstring javaString(JNIEnv* env, const char* chars);

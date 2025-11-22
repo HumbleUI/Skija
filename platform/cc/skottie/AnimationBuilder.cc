@@ -46,7 +46,7 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_skottie_Animatio
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_skottie_AnimationBuilder__1nBuildFromString
   (JNIEnv* env, jclass jclass, jlong ptr, jstring dataStr) {
     Animation::Builder* instance = reinterpret_cast<Animation::Builder*>(static_cast<uintptr_t>(ptr));
-    SkString data = skString(env, dataStr);
+    SkString data = *skString(env, dataStr);
     sk_sp<Animation> animation = instance->make(data.c_str(), data.size());
     return reinterpret_cast<jlong>(animation.release());
 }
@@ -54,7 +54,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_skottie_Animati
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_skottie_AnimationBuilder__1nBuildFromFile
   (JNIEnv* env, jclass jclass, jlong ptr, jstring pathStr) {
     Animation::Builder* instance = reinterpret_cast<Animation::Builder*>(static_cast<uintptr_t>(ptr));
-    SkString path = skString(env, pathStr);
+    SkString path = *skString(env, pathStr);
     sk_sp<Animation> animation = instance->makeFromFile(path.c_str());
     return reinterpret_cast<jlong>(animation.release());
 }

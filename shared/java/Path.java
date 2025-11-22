@@ -144,6 +144,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
 
     @NotNull @Contract("_ -> new")
     public static Path makeFromSVGString(@NotNull String svg) {
+        assert svg != null : "Can't makeFromSVGString with svg == null";
         Stats.onNativeCall();
         long res = _nMakeFromSVGString(svg);
         if (res == 0)

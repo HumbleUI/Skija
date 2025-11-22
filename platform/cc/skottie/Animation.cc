@@ -17,14 +17,14 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_skottie_Animati
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_skottie_Animation__1nMakeFromString
   (JNIEnv* env, jclass jclass, jstring dataStr) {
-    SkString data = skString(env, dataStr);
+    SkString data = *skString(env, dataStr);
     sk_sp<Animation> instance = Animation::Make(data.c_str(), data.size());
     return reinterpret_cast<jlong>(instance.release());
 }
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_skottie_Animation__1nMakeFromFile
   (JNIEnv* env, jclass jclass, jstring pathStr) {
-    SkString path = skString(env, pathStr);
+    SkString path = *skString(env, pathStr);
     sk_sp<Animation> instance = Animation::MakeFromFile(path.c_str());
     return reinterpret_cast<jlong>(instance.release());
 }

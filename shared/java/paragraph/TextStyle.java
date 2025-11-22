@@ -1,8 +1,9 @@
 package io.github.humbleui.skija.paragraph;
 
-import org.jetbrains.annotations.*;
 import io.github.humbleui.skija.*;
 import io.github.humbleui.skija.impl.*;
+import org.jetbrains.annotations.*;
+import java.util.*;
 
 public class TextStyle extends Managed {
     static { Library.staticLoad(); }
@@ -208,6 +209,7 @@ public class TextStyle extends Managed {
     }
 
     public TextStyle setFontFamilies(String[] families) {
+        assert Arrays.stream(families).allMatch(Objects::nonNull) : "Can't setFontFamilies with null families elements";
         Stats.onNativeCall();
         _nSetFontFamilies(_ptr, families);
         return this;
@@ -291,7 +293,9 @@ public class TextStyle extends Managed {
         }
     }
 
-    public TextStyle setLocale(String locale) {
+    @NotNull @Contract("null -> fail; !null -> this;")
+    public TextStyle setLocale(@NotNull String locale) {
+        assert locale != null : "Can't setLocale with locale == null";
         Stats.onNativeCall();
         _nSetLocale(_ptr, locale);
         return this;

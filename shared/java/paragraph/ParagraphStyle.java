@@ -115,7 +115,9 @@ public class ParagraphStyle extends Managed {
         }
     }
 
-    public ParagraphStyle setEllipsis(String ellipsis) {
+    @NotNull @Contract("null -> fail; !null -> this")
+    public ParagraphStyle setEllipsis(@NotNull String ellipsis) {
+        assert ellipsis != null : "Can't setEllipsis with ellipsis == null";
         Stats.onNativeCall();
         _nSetEllipsis(_ptr, ellipsis);
         return this;

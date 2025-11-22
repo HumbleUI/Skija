@@ -1,7 +1,8 @@
 package io.github.humbleui.skija;
 
-import org.jetbrains.annotations.*;
 import io.github.humbleui.skija.impl.*;
+import java.util.*;
+import org.jetbrains.annotations.*;
 
 public class FontMgr extends RefCnt {
     static { Library.staticLoad(); }
@@ -45,7 +46,8 @@ public class FontMgr extends RefCnt {
      * It is possible that this will return a style set not accessible from
      * {@link #makeStyleSet(int)} due to hidden or auto-activated fonts.
      */
-    public FontStyleSet matchFamily(String familyName) {
+    @NotNull
+    public FontStyleSet matchFamily(@Nullable String familyName) {
         try {
             Stats.onNativeCall();
             return new FontStyleSet(_nMatchFamily(_ptr, familyName));
@@ -67,7 +69,7 @@ public class FontMgr extends RefCnt {
      * auto-activated fonts.
      */
     @Nullable
-    public Typeface matchFamilyStyle(String familyName, FontStyle style) {
+    public Typeface matchFamilyStyle(@Nullable String familyName, @NotNull FontStyle style) {
         try {
             Stats.onNativeCall();
             long ptr = _nMatchFamilyStyle(_ptr, familyName, style._value);
@@ -78,11 +80,12 @@ public class FontMgr extends RefCnt {
     }
 
     @Nullable
-    public Typeface matchFamiliesStyle(String[] families, FontStyle style) {
+    public Typeface matchFamiliesStyle(@NotNull String[] families, @NotNull FontStyle style) {
         for (String family: families) {
             Typeface typeface = matchFamilyStyle(family, style);
-            if (typeface != null)
+            if (typeface != null) {
                 return typeface;
+            }
         }
         return null;
     }
@@ -102,7 +105,7 @@ public class FontMgr extends RefCnt {
      * most significant. If no specified bcp47 codes match, any font with the
      * requested character will be matched.
      */
-    public Typeface matchFamilyStyleCharacter(@Nullable String familyName, FontStyle style, @Nullable String[] bcp47, int character) {
+    public Typeface matchFamilyStyleCharacter(@Nullable String familyName, @NotNull FontStyle style, @Nullable String[] bcp47, int character) {
         try {
             Stats.onNativeCall();
             long ptr = _nMatchFamilyStyleCharacter(_ptr, familyName, style._value, bcp47, character);
@@ -113,11 +116,13 @@ public class FontMgr extends RefCnt {
     }
 
     @Nullable
-    public Typeface matchFamiliesStyleCharacter(String[] families, FontStyle style, @Nullable String[] bcp47, int character) {
+    public Typeface matchFamiliesStyleCharacter(@NotNull String[] families, @NotNull FontStyle style, @Nullable String[] bcp47, int character) {
+        assert Arrays.stream(bcp47).allMatch(Objects::nonNull) : "Can't matchFamiliesStyleCharacter with null bcp47 elements";
         for (String family: families) {
             Typeface typeface = matchFamilyStyleCharacter(family, style, bcp47, character);
-            if (typeface != null)
+            if (typeface != null) {
                 return typeface;
+            }
         }
         return null;
     }
@@ -126,7 +131,8 @@ public class FontMgr extends RefCnt {
      * Create a typeface for the specified file name or null if the data is not recognized.
      * The caller must call {@link #close()} on the returned object if it is not null.
      */
-    public Typeface makeFromFile(String path) {
+    @Nullable
+    public Typeface makeFromFile(@NotNull String path) {
         return makeFromFile(path, 0);
     }
 
@@ -135,8 +141,10 @@ public class FontMgr extends RefCnt {
      * or null if the data is not recognized. The caller must call {@link #close()} on
      * the returned object if it is not null.
      */
-    public Typeface makeFromFile(String path, int ttcIndex) {
+    @Nullable
+    public Typeface makeFromFile(@NotNull String path, int ttcIndex) {
         try {
+            assert path != null : "Can’t makeFromFile with path == null";
             Stats.onNativeCall();
             long ptr = _nMakeFromFile(_ptr, path, ttcIndex);
             return ptr == 0 ? null : new Typeface(ptr);
@@ -149,7 +157,8 @@ public class FontMgr extends RefCnt {
      * Create a typeface for the specified data or null if the data is not recognized.
      * The caller must call {@link #close()} on the returned object if it is not null.
      */
-    public Typeface makeFromData(Data data) {
+    @Nullable
+    public Typeface makeFromData(@NotNull Data data) {
         return makeFromData(data, 0);
     }
 
@@ -158,8 +167,10 @@ public class FontMgr extends RefCnt {
      * or null if the data is not recognized. The caller must call {@link #close()} on
      * the returned object if it is not null.
      */
-    public Typeface makeFromData(Data data, int ttcIndex) {
+    @Nullable
+    public Typeface makeFromData(@NotNull Data data, int ttcIndex) {
         try {
+            assert data != null : "Can’t makeFromData with data == null";
             Stats.onNativeCall();
             long ptr = _nMakeFromData(_ptr, Native.getPtr(data), ttcIndex);
             return ptr == 0 ? null : new Typeface(ptr);

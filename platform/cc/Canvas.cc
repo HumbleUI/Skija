@@ -165,7 +165,7 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Canvas__1nDrawRe
 extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Canvas__1nDrawString
   (JNIEnv* env, jclass jclass, jlong canvasPtr, jstring stringObj, jfloat x, jfloat y, jlong skFontPtr, jlong paintPtr) {
     SkCanvas* canvas    = reinterpret_cast<SkCanvas*>   (static_cast<uintptr_t>(canvasPtr));
-    SkString string     = skString(env, stringObj);
+    SkString string     = *skString(env, stringObj);
     SkFont* font        = reinterpret_cast<SkFont*>     (static_cast<uintptr_t>(skFontPtr));
     SkPaint* paint      = reinterpret_cast<SkPaint*>    (static_cast<uintptr_t>(paintPtr));
 

@@ -6,7 +6,7 @@ import common, build, build_utils
 def main():
   parser = argparse.ArgumentParser()
   parser.add_argument('--skija-version')
-  parser.add_argument('--jwm-version', default='0.4.20')
+  parser.add_argument('--jwm-version', default='0.4.21')
   parser.add_argument('--jwm-dir', default=None)
   (args, _) = parser.parse_known_args()
 

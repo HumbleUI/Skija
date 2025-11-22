@@ -1,8 +1,9 @@
 package io.github.humbleui.skija.paragraph;
 
-import org.jetbrains.annotations.*;
 import io.github.humbleui.skija.*;
 import io.github.humbleui.skija.impl.*;
+import org.jetbrains.annotations.*;
+import java.util.*;
 
 public class StrutStyle extends Managed {
     static { Library.staticLoad(); }
@@ -38,6 +39,7 @@ public class StrutStyle extends Managed {
     }
 
     public StrutStyle setFontFamilies(String[] families) {
+        assert Arrays.stream(families).allMatch(Objects::nonNull) : "Can't setFontFamilies with null families elements";
         Stats.onNativeCall();
         _nSetFontFamilies(_ptr, families);
         return this;

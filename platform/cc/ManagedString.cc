@@ -14,7 +14,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_ManagedString__
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_ManagedString__1nMake
   (JNIEnv* env, jclass jclass, jstring textStr) {
-    SkString* text = new SkString(skString(env, textStr));
+    SkString* text = new SkString(*skString(env, textStr));
     return reinterpret_cast<jlong>(text);
 }
 
@@ -28,13 +28,13 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_ManagedString__1
   (JNIEnv* env, jclass jclass, jlong ptr, jint offset, jstring s) {
     SkString* instance = reinterpret_cast<SkString*>(static_cast<uintptr_t>(ptr));
     skija::UtfIndicesConverter conv(*instance);
-    instance->insert(conv.from16To8(offset), skString(env, s));
+    instance->insert(conv.from16To8(offset), *skString(env, s));
 }
 
 extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_ManagedString__1nAppend
   (JNIEnv* env, jclass jclass, jlong ptr, jstring s) {
     SkString* instance = reinterpret_cast<SkString*>(static_cast<uintptr_t>(ptr));
-    instance->append(skString(env, s));
+    instance->append(*skString(env, s));
 }
 
 extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_ManagedString__1nRemoveSuffix

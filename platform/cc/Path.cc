@@ -94,7 +94,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Path__1nMakeLin
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Path__1nMakeFromSVGString
   (JNIEnv* env, jclass jclass, jstring d) {
-    SkString s = skString(env, d);
+    SkString s = *skString(env, d);
     std::optional<SkPath> path = SkParsePath::FromSVGString(s.c_str());
     if (path)
         return reinterpret_cast<jlong>(new SkPath(*path));

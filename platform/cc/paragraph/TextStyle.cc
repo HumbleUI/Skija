@@ -168,7 +168,7 @@ extern "C" JNIEXPORT jobjectArray JNICALL Java_io_github_humbleui_skija_paragrap
 extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_paragraph_TextStyle__1nAddFontFeature
   (JNIEnv* env, jclass jclass, jlong ptr, jstring nameStr, jint value) {
     TextStyle* instance = reinterpret_cast<TextStyle*>(static_cast<uintptr_t>(ptr));
-    instance->addFontFeature(skString(env, nameStr), value);
+    instance->addFontFeature(*skString(env, nameStr), value);
 }
 
 extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_paragraph_TextStyle__1nClearFontFeatures
@@ -260,7 +260,7 @@ extern "C" JNIEXPORT jstring JNICALL Java_io_github_humbleui_skija_paragraph_Tex
 extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_paragraph_TextStyle__1nSetLocale
   (JNIEnv* env, jclass jclass, jlong ptr, jstring locale) {
     TextStyle* instance = reinterpret_cast<TextStyle*>(static_cast<uintptr_t>(ptr));
-    instance->setLocale(skString(env, locale));
+    instance->setLocale(*skString(env, locale));
 }
 
 extern "C" JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_paragraph_TextStyle__1nGetBaselineMode

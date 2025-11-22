@@ -12,7 +12,7 @@ public class ManagedString extends Managed {
         super(ptr, _FinalizerHolder.PTR);
     }
 
-    public ManagedString(String s) {
+    public ManagedString(@NotNull String s) {
         this(_nMake(s));
         Stats.onNativeCall();
     }
@@ -29,6 +29,7 @@ public class ManagedString extends Managed {
 
     @NotNull @Contract("-> this")
     public ManagedString insert(int offset, @NotNull String s) {
+        assert s != null : "Can't insrert with s == null";
         Stats.onNativeCall();
         _nInsert(_ptr, offset, s);
         return this;
@@ -36,6 +37,7 @@ public class ManagedString extends Managed {
 
     @NotNull @Contract("-> this")
     public ManagedString append(@NotNull String s) {
+        assert s != null : "Can't append with s == null";
         Stats.onNativeCall();
         _nAppend(_ptr, s);
         return this;

@@ -50,7 +50,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Data__1nMakeFro
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Data__1nMakeFromFileName
   (JNIEnv* env, jclass jclass, jstring pathStr) {
-    SkString path = skString(env, pathStr);
+    SkString path = *skString(env, pathStr);
     SkData* instance = SkData::MakeFromFileName(path.c_str()).release();
     return reinterpret_cast<jlong>(instance);
 }

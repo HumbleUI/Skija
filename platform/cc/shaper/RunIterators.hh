@@ -118,7 +118,7 @@ public:
 
     jint onConsume(jobject runObj) override {
         jstring langObj = static_cast<jstring>(fEnv->GetObjectField(runObj, skija::shaper::LanguageRun::_language));
-        fLang = skString(fEnv, langObj);
+        fLang = *skString(fEnv, langObj);
         // std::cout << "fLang = " << fLang.c_str() << std::endl;
         return fEnv->GetIntField(runObj, skija::shaper::LanguageRun::_end);
     }

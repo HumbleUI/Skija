@@ -274,6 +274,7 @@ public class BreakIterator extends Managed implements Cloneable {
     /**
      * Returns a new BreakIterator instance for character breaks for the default locale.
      */
+    @NotNull @Contract("_ -> new")
     public static BreakIterator makeCharacterInstance() {
         return makeCharacterInstance(null);
     }
@@ -281,7 +282,8 @@ public class BreakIterator extends Managed implements Cloneable {
     /**
      * Returns a new BreakIterator instance for character breaks for the given locale.
      */
-    public static BreakIterator makeCharacterInstance(String locale) {
+    @NotNull @Contract("_ -> new")
+    public static BreakIterator makeCharacterInstance(@Nullable String locale) {
         Stats.onNativeCall();
         return new BreakIterator(_nMake(0, locale)); // UBRK_CHARACTER
     }

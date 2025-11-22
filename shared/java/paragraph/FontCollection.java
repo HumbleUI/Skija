@@ -3,6 +3,7 @@ package io.github.humbleui.skija.paragraph;
 import org.jetbrains.annotations.*;
 import io.github.humbleui.skija.*;
 import io.github.humbleui.skija.impl.*;
+import java.util.*;
 
 public class FontCollection extends RefCnt {
     static { Library.staticLoad(); }
@@ -65,6 +66,7 @@ public class FontCollection extends RefCnt {
         }
     }
     
+    @Nullable
     public FontMgr getFallbackManager() {
         try {
             Stats.onNativeCall();
@@ -75,25 +77,31 @@ public class FontCollection extends RefCnt {
         }
     }
 
-    public Typeface[] findTypefaces(String[] familyNames, FontStyle style) {
+    @NotNull
+    public Typeface[] findTypefaces(String[] familyNames, @NotNull FontStyle style) {
         try {
+            assert Arrays.stream(familyNames).allMatch(Objects::nonNull) : "Can't findTypefaces with null familyNames elements";
             Stats.onNativeCall();
             long[] ptrs = _nFindTypefaces(_ptr, familyNames, style._value);
             Typeface[] res = new Typeface[ptrs.length];
-            for (int i = 0; i < ptrs.length; ++i)
+            for (int i = 0; i < ptrs.length; ++i) {
                 res[i] = new Typeface(ptrs[i]);
+            }
             return res;
         } finally {
             ReferenceUtil.reachabilityFence(this);
         }
     }
 
+    @Nullable
     public Typeface defaultFallback(int unicode, FontStyle style, String locale) {
         return defaultFallback(unicode, style, locale, null);
     }
 
-    public Typeface defaultFallback(int unicode, FontStyle style, String locale, FontArguments fontArguments) {
+    @Nullable
+    public Typeface defaultFallback(int unicode, @NotNull FontStyle style, @NotNull String locale, @Nullable FontArguments fontArguments) {
         try {
+            assert locale != null : "Can't defaultFallback with locale == null";
             Stats.onNativeCall();
             long ptr = _nDefaultFallbackChar(_ptr, unicode, style._value, locale, fontArguments);
             return ptr == 0 ? null : new Typeface(ptr);

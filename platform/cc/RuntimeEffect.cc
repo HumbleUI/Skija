@@ -5,12 +5,12 @@
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_RuntimeEffect__1nMakeForColorFilter
   (JNIEnv* env, jclass jclass, jstring sksl, jboolean forceUnoptimized, jstring name) {
-    SkString skslProper = skString(env, sksl);
-    SkString nameStr = skString(env, name);
+    SkString skslProper = *skString(env, sksl);
+    std::optional<SkString> nameStr = skString(env, name);
     SkRuntimeEffect::Options options;
     options.forceUnoptimized = forceUnoptimized;
-    if (nameStr.size() > 0) {
-        options.fName = nameStr.c_str();
+    if (nameStr) {
+        options.fName = nameStr->c_str();
     }
     SkRuntimeEffect::Result result = SkRuntimeEffect::MakeForColorFilter(skslProper, options);
     if (result.errorText.isEmpty()) {
@@ -23,12 +23,12 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_RuntimeEffect__
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_RuntimeEffect__1nMakeForShader
   (JNIEnv* env, jclass jclass, jstring sksl, jboolean forceUnoptimized, jstring name) {
-    SkString skslProper = skString(env, sksl);
-    SkString nameStr = skString(env, name);
+    SkString skslProper = *skString(env, sksl);
+    std::optional<SkString> nameStr = skString(env, name);
     SkRuntimeEffect::Options options;
     options.forceUnoptimized = forceUnoptimized;
-    if (nameStr.size() > 0) {
-        options.fName = nameStr.c_str();
+    if (nameStr) {
+        options.fName = nameStr->c_str();
     }
     SkRuntimeEffect::Result result = SkRuntimeEffect::MakeForShader(skslProper, options);
     if (result.errorText.isEmpty()) {
@@ -42,12 +42,12 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_RuntimeEffect__
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_RuntimeEffect__1nMakeForBlender
   (JNIEnv* env, jclass jclass, jstring sksl, jboolean forceUnoptimized, jstring name) {
-    SkString skslProper = skString(env, sksl);
-    SkString nameStr = skString(env, name);
+    SkString skslProper = *skString(env, sksl);
+    std::optional<SkString> nameStr = skString(env, name);
     SkRuntimeEffect::Options options;
     options.forceUnoptimized = forceUnoptimized;
-    if (nameStr.size() > 0) {
-        options.fName = nameStr.c_str();
+    if (nameStr) {
+        options.fName = nameStr->c_str();
     }
     SkRuntimeEffect::Result result = SkRuntimeEffect::MakeForBlender(skslProper, options);
     if (result.errorText.isEmpty()) {
@@ -173,7 +173,7 @@ extern "C" JNIEXPORT jobjectArray JNICALL Java_io_github_humbleui_skija_RuntimeE
 extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_RuntimeEffect__1nGetUniform
   (JNIEnv* env, jclass jclass, jlong ptr, jstring jname) {
     SkRuntimeEffect* runtimeEffect = jlongToPtr<SkRuntimeEffect*>(ptr);
-    SkString name = skString(env, jname);
+    SkString name = *skString(env, jname);
     const SkRuntimeEffect::Uniform* u = runtimeEffect->findUniform(name.c_str());
 
     if (u == nullptr) {
@@ -220,7 +220,7 @@ extern "C" JNIEXPORT jobjectArray JNICALL Java_io_github_humbleui_skija_RuntimeE
 extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_RuntimeEffect__1nGetChild
   (JNIEnv* env, jclass jclass, jlong ptr, jstring jname) {
     SkRuntimeEffect* runtimeEffect = jlongToPtr<SkRuntimeEffect*>(ptr);
-    SkString name = skString(env, jname);
+    SkString name = *skString(env, jname);
     const SkRuntimeEffect::Child* c = runtimeEffect->findChild(name.c_str());
 
     if (c == nullptr) {

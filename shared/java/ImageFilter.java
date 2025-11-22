@@ -1,10 +1,9 @@
 package io.github.humbleui.skija;
 
-import org.jetbrains.annotations.*;
 import io.github.humbleui.skija.impl.*;
 import io.github.humbleui.types.*;
-
-import java.util.Arrays;
+import java.util.*;
+import org.jetbrains.annotations.*;
 
 public class ImageFilter extends RefCnt implements Flattenable {
     static { Library.staticLoad(); }
@@ -700,6 +699,10 @@ public class ImageFilter extends RefCnt implements Flattenable {
     public static ImageFilter makeRuntimeShader(@NotNull RuntimeEffectBuilder builder, float maxSampleRadius, @NotNull String[] childShaderNames, @Nullable ImageFilter[] inputs) {
         try {
             Stats.onNativeCall();
+
+            assert childShaderNames != null : "Can't makeRuntimeShader with childShaderNames == null";
+            assert Arrays.stream(childShaderNames).allMatch(Objects::nonNull) : "Can't makeRuntimeShader with null childShaderNames elements";
+
             long[] inputPtrs = new long[inputs.length];
             for (int i = 0; i < inputs.length; i++) {
                 inputPtrs[i] = Native.getPtr(inputs[i]);

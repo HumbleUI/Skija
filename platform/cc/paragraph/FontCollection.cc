@@ -35,7 +35,7 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_paragraph_FontCo
 }
 
 extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_paragraph_FontCollection__1nSetTestFontManager
-  (JNIEnv* env, jclass jclass, jlong ptr, jlong fontManagerPtr, jstring defaultFamilyNameStr) {
+  (JNIEnv* env, jclass jclass, jlong ptr, jlong fontManagerPtr) {
     FontCollection* instance = reinterpret_cast<FontCollection*>(static_cast<uintptr_t>(ptr));
     SkFontMgr* fontManager = reinterpret_cast<SkFontMgr*>(static_cast<uintptr_t>(fontManagerPtr));
     instance->setTestFontManager(sk_ref_sp(fontManager));
@@ -46,11 +46,11 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_paragraph_FontCo
     FontCollection* instance = reinterpret_cast<FontCollection*>(static_cast<uintptr_t>(ptr));
     SkFontMgr* fontManager = reinterpret_cast<SkFontMgr*>(static_cast<uintptr_t>(fontManagerPtr));
 
-    if (defaultFamilyNameStr == nullptr)
+    std::optional<SkString> defaultFamilyName = skString(env, defaultFamilyNameStr);
+    if (defaultFamilyName) {
+        instance->setDefaultFontManager(sk_ref_sp(fontManager), defaultFamilyName->c_str());
+    } else {
         instance->setDefaultFontManager(sk_ref_sp(fontManager));
-    else {
-        SkString defaultFamilyName = skString(env, defaultFamilyNameStr);
-        instance->setDefaultFontManager(sk_ref_sp(fontManager), defaultFamilyName.c_str());
     }
 }
 
@@ -63,15 +63,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_paragraph_FontC
 extern "C" JNIEXPORT jlongArray JNICALL Java_io_github_humbleui_skija_paragraph_FontCollection__1nFindTypefaces
   (JNIEnv* env, jclass jclass, jlong ptr, jobjectArray familyNamesArray, jint fontStyle) {
     FontCollection* instance = reinterpret_cast<FontCollection*>(static_cast<uintptr_t>(ptr));
-
-    jsize len = env->GetArrayLength(familyNamesArray);
-    vector<SkString> familyNames(len);
-    for (int i = 0; i < len; ++i) {
-        jstring str = static_cast<jstring>(env->GetObjectArrayElement(familyNamesArray, i));
-        familyNames.push_back(skString(env, str));
-        env->DeleteLocalRef(str);
-    }
-
+    vector<SkString> familyNames = skStringVector(env, familyNamesArray);
     vector<sk_sp<SkTypeface>> found = instance->findTypefaces(familyNames, skija::FontStyle::fromJava(fontStyle));
     vector<jlong> res(found.size());
     for (int i = 0; i < found.size(); ++i)
@@ -88,11 +80,11 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_paragraph_FontC
 
     optional<SkFontArguments> fontArgs;
     if (fontArgumentsObj == nullptr) {
-      return reinterpret_cast<jlong>(instance->defaultFallback(unicode, skija::FontStyle::fromJava(fontStyle), skString(env, locale), fontArgs).release());
+      return reinterpret_cast<jlong>(instance->defaultFallback(unicode, skija::FontStyle::fromJava(fontStyle), *skString(env, locale), fontArgs).release());
     }
 
     fontArgs = skija::FontArguments::toSkFontArguments(env, fontArgumentsObj);
-    jlong result = reinterpret_cast<jlong>(instance->defaultFallback(unicode, skija::FontStyle::fromJava(fontStyle), skString(env, locale), fontArgs).release());
+    jlong result = reinterpret_cast<jlong>(instance->defaultFallback(unicode, skija::FontStyle::fromJava(fontStyle), *skString(env, locale), fontArgs).release());
     skija::FontArguments::freeSkFontArguments(fontArgs.value());
     return result;
 }

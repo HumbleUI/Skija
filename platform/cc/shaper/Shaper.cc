@@ -78,7 +78,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_shaper_Shaper__
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_shaper_Shaper__1nShapeBlob
   (JNIEnv* env, jclass jclass, jlong ptr, jstring textObj, jlong fontPtr, jobject opts, jfloat width, jfloat offsetX, jfloat offsetY) {
     SkShaper* instance = reinterpret_cast<SkShaper*>(static_cast<uintptr_t>(ptr));
-    SkString text = skString(env, textObj);
+    SkString text = *skString(env, textObj);
     std::shared_ptr<UBreakIterator> graphemeIter = skija::shaper::graphemeBreakIterator(text);
     if (!graphemeIter) return 0;
     SkFont* font = reinterpret_cast<SkFont*>(static_cast<uintptr_t>(fontPtr));
@@ -116,7 +116,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_shaper_Shaper__
   (JNIEnv* env, jclass jclass, jlong ptr, jstring textObj, jlong fontPtr, jobject opts) {
     SkShaper* instance = reinterpret_cast<SkShaper*>(static_cast<uintptr_t>(ptr));
 
-    SkString text = skString(env, textObj);
+    SkString text = *skString(env, textObj);
     std::shared_ptr<UBreakIterator> graphemeIter = skija::shaper::graphemeBreakIterator(text);
     if (!graphemeIter) return 0;
 

@@ -66,7 +66,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_RuntimeEffectBu
 extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_RuntimeEffectBuilder__1nSetUniformFloats
   (JNIEnv* env, jclass jclass, jlong ptr, jstring jname, jfloatArray jvalues) {
     SkRuntimeEffectBuilder* builder = jlongToPtr<SkRuntimeEffectBuilder*>(ptr);
-    SkString name = skString(env, jname);
+    SkString name = *skString(env, jname);
 
     jsize count = env->GetArrayLength(jvalues);
     jfloat* values = env->GetFloatArrayElements(jvalues, nullptr);
@@ -79,7 +79,7 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_RuntimeEffectBui
 extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_RuntimeEffectBuilder__1nSetUniformInts
   (JNIEnv* env, jclass jclass, jlong ptr, jstring jname, jintArray jvalues) {
     SkRuntimeEffectBuilder* builder = jlongToPtr<SkRuntimeEffectBuilder*>(ptr);
-    SkString name = skString(env, jname);
+    SkString name = *skString(env, jname);
 
     jsize count = env->GetArrayLength(jvalues);
     jint* values = env->GetIntArrayElements(jvalues, nullptr);
@@ -92,7 +92,7 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_RuntimeEffectBui
 extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_RuntimeEffectBuilder__1nSetChild
   (JNIEnv* env, jclass jclass, jlong ptr, jstring jname, jlong childPtr) {
     SkRuntimeEffectBuilder* builder = jlongToPtr<SkRuntimeEffectBuilder*>(ptr);
-    SkString name = skString(env, jname);
+    SkString name = *skString(env, jname);
     SkFlattenable* child = jlongToPtr<SkFlattenable*>(childPtr);
 
     if (child == nullptr) {

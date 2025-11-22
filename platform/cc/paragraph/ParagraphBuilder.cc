@@ -40,7 +40,7 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_paragraph_Paragr
 extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_paragraph_ParagraphBuilder__1nAddText
   (JNIEnv* env, jclass jclass, jlong ptr, jstring textString) {
     ParagraphBuilder* instance = reinterpret_cast<ParagraphBuilder*>(static_cast<uintptr_t>(ptr));
-    SkString text = skString(env, textString);
+    SkString text = *skString(env, textString);
     instance->addText(text.c_str(), text.size());
 }
 

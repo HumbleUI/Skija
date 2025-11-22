@@ -136,6 +136,7 @@ public class RuntimeEffectBuilder extends Managed {
      */
     @NotNull @Contract("_, _ -> this")
     public RuntimeEffectBuilder setUniform(@NotNull String name, float value) {
+        assert name != null : "Can't setUniform with name == null";
         Stats.onNativeCall();
         _nSetUniformFloats(_ptr, name, new float[] { value });
         return this;
@@ -151,6 +152,7 @@ public class RuntimeEffectBuilder extends Managed {
      */
     @NotNull @Contract("_, _, _ -> this")
     public RuntimeEffectBuilder setUniform(@NotNull String name, float v1, float v2) {
+        assert name != null : "Can't setUniform with name == null";
         Stats.onNativeCall();
         _nSetUniformFloats(_ptr, name, new float[] { v1, v2 });
         return this;
@@ -167,6 +169,7 @@ public class RuntimeEffectBuilder extends Managed {
      */
     @NotNull @Contract("_, _, _, _ -> this")
     public RuntimeEffectBuilder setUniform(@NotNull String name, float v1, float v2, float v3) {
+        assert name != null : "Can't setUniform with name == null";
         Stats.onNativeCall();
         _nSetUniformFloats(_ptr, name, new float[] { v1, v2, v3 });
         return this;
@@ -184,6 +187,7 @@ public class RuntimeEffectBuilder extends Managed {
      */
     @NotNull @Contract("_, _, _, _, _ -> this")
     public RuntimeEffectBuilder setUniform(@NotNull String name, float v1, float v2, float v3, float v4) {
+        assert name != null : "Can't setUniform with name == null";
         Stats.onNativeCall();
         _nSetUniformFloats(_ptr, name, new float[] { v1, v2, v3, v4 });
         return this;
@@ -198,6 +202,7 @@ public class RuntimeEffectBuilder extends Managed {
      */
     @NotNull @Contract("_, _ -> this")
     public RuntimeEffectBuilder setUniform(@NotNull String name, @NotNull float[] value) {
+        assert name != null : "Can't setUniform with name == null";
         Stats.onNativeCall();
         _nSetUniformFloats(_ptr, name, value);
         return this;
@@ -212,6 +217,7 @@ public class RuntimeEffectBuilder extends Managed {
      */
     @NotNull @Contract("_, _ -> this")
     public RuntimeEffectBuilder setUniform(@NotNull String name, @NotNull Matrix33 value) {
+        assert name != null : "Can't setUniform with name == null";
         Stats.onNativeCall();
         _nSetUniformFloats(_ptr, name, value._mat);
         return this;
@@ -226,6 +232,7 @@ public class RuntimeEffectBuilder extends Managed {
      */
     @NotNull @Contract("_, _ -> this")
     public RuntimeEffectBuilder setUniform(@NotNull String name, @NotNull Matrix44 value) {
+        assert name != null : "Can't setUniform with name == null";
         Stats.onNativeCall();
         _nSetUniformFloats(_ptr, name, value._mat);
         return this;
@@ -240,6 +247,7 @@ public class RuntimeEffectBuilder extends Managed {
      */
     @NotNull @Contract("_, _ -> this")
     public RuntimeEffectBuilder setUniform(@NotNull String name, int value) {
+        assert name != null : "Can't setUniform with name == null";
         Stats.onNativeCall();
         _nSetUniformInts(_ptr, name, new int[] { value });
         return this;
@@ -255,6 +263,7 @@ public class RuntimeEffectBuilder extends Managed {
      */
     @NotNull @Contract("_, _, _ -> this")
     public RuntimeEffectBuilder setUniform(@NotNull String name, int v1, int v2) {
+        assert name != null : "Can't setUniform with name == null";
         Stats.onNativeCall();
         _nSetUniformInts(_ptr, name, new int[] { v1, v2 });
         return this;
@@ -271,6 +280,7 @@ public class RuntimeEffectBuilder extends Managed {
      */
     @NotNull @Contract("_, _, _, _ -> this")
     public RuntimeEffectBuilder setUniform(@NotNull String name, int v1, int v2, int v3) {
+        assert name != null : "Can't setUniform with name == null";
         Stats.onNativeCall();
         _nSetUniformInts(_ptr, name, new int[] { v1, v2, v3 });
         return this;
@@ -288,6 +298,7 @@ public class RuntimeEffectBuilder extends Managed {
      */
     @NotNull @Contract("_, _, _, _, _ -> this")
     public RuntimeEffectBuilder setUniform(@NotNull String name, int v1, int v2, int v3, int v4) {
+        assert name != null : "Can't setUniform with name == null";
         Stats.onNativeCall();
         _nSetUniformInts(_ptr, name, new int[] { v1, v2, v3, v4 });
         return this;
@@ -302,6 +313,7 @@ public class RuntimeEffectBuilder extends Managed {
      */
     @NotNull @Contract("_, _ -> this")
     public RuntimeEffectBuilder setUniform(@NotNull String name, @NotNull int[] value) {
+        assert name != null : "Can't setUniform with name == null";
         Stats.onNativeCall();
         _nSetUniformInts(_ptr, name, value);
         return this;
@@ -317,6 +329,7 @@ public class RuntimeEffectBuilder extends Managed {
     @NotNull @Contract("_, _ -> this")
     public RuntimeEffectBuilder setChild(@NotNull String name, @Nullable RuntimeEffectChild child) {
         try {
+            assert name != null : "Can't setChild with name == null";
             Stats.onNativeCall();
             _nSetChild(_ptr, name, Native.getPtr(child));
             return this;

@@ -104,7 +104,7 @@ extern "C" JNIEXPORT jstring JNICALL Java_io_github_humbleui_skija_paragraph_Par
 extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_paragraph_ParagraphStyle__1nSetEllipsis
   (JNIEnv* env, jclass jclass, jlong ptr, jstring ellipsis) {
     ParagraphStyle* instance = reinterpret_cast<ParagraphStyle*>(static_cast<uintptr_t>(ptr));
-    instance->setEllipsis(skString(env, ellipsis));
+    instance->setEllipsis(*skString(env, ellipsis));
 }
 
 extern "C" JNIEXPORT jfloat JNICALL Java_io_github_humbleui_skija_paragraph_ParagraphStyle__1nGetHeight

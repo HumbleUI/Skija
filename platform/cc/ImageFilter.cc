@@ -222,7 +222,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_ImageFilter__1n
     std::vector<std::string> nameStrings;
     for (jsize i = 0; i < count; i++) {
         jstring jname = (jstring) env->GetObjectArrayElement(childShaderNamesArr, i);
-        SkString skName = skString(env, jname);
+        SkString skName = *skString(env, jname);
         std::string s = std::string(skName.c_str());
         nameStrings.push_back(s);
         env->DeleteLocalRef(jname);
@@ -232,7 +232,6 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_ImageFilter__1n
     for (auto& s : nameStrings) {
       childShaderNames.push_back(s);
     }
-
 
     jlong* inputPtrs = env->GetLongArrayElements(inputsArr, nullptr);
     std::vector<sk_sp<SkImageFilter>> inputs;

@@ -1141,9 +1141,9 @@ size_t utfToUtf8(unsigned char *data, size_t len) {
     return write_offset;
 }
 
-SkString skString(JNIEnv* env, jstring s) {
+std::optional<SkString> skString(JNIEnv* env, jstring s) {
     if (s == nullptr) {
-        return SkString();
+        return std::nullopt;
     } else {
         jsize utfUnits = env->GetStringUTFLength(s);
         jsize utf16Units = env->GetStringLength(s);
@@ -1151,7 +1151,7 @@ SkString skString(JNIEnv* env, jstring s) {
         env->GetStringUTFRegion(s, 0, utf16Units, res.data());
         size_t utf8Units = utfToUtf8((unsigned char *) res.data(), utfUnits);
         res.resize(utf8Units);
-        return res;
+        return std::optional(res);
     }
 }
 
@@ -1204,7 +1204,7 @@ std::vector<SkString> skStringVector(JNIEnv* env, jobjectArray arr) {
         std::vector<SkString> res(len);
         for (jint i = 0; i < len; ++i) {
             jstring str = static_cast<jstring>(env->GetObjectArrayElement(arr, i));
-            res[i] = skString(env, str);
+            res[i] = *skString(env, str);
             env->DeleteLocalRef(str);
         }
         return res;
