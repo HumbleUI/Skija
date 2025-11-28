@@ -69,6 +69,11 @@ public enum ColorType {
     BGR_101010X_XR,
 
     /**
+     * Pixel with 10 used bits (most significant) followed by 6 unused bits for red, green, blue, alpha; in 64-bit word
+    */
+    RGBA_10x6,
+
+    /**
      * Pixel with grayscale level in 8-bit byte
      */
     GRAY_8,       
@@ -149,6 +154,8 @@ public enum ColorType {
             case RGB_101010X:        return 4;
             case BGRA_1010102:       return 4;
             case BGR_101010X:        return 4;
+            case BGR_101010X_XR:     return 4;
+            case RGBA_10x6:          return 8;
             case GRAY_8:             return 1;
             case RGBA_F16NORM:       return 8;
             case RGBA_F16:           return 8;
@@ -176,6 +183,8 @@ public enum ColorType {
             case RGB_101010X:        return 2;
             case BGRA_1010102:       return 2;
             case BGR_101010X:        return 2;
+            case BGR_101010X_XR:     return 2;
+            case RGBA_10x6:          return 3;
             case GRAY_8:             return 0;
             case RGBA_F16NORM:       return 3;
             case RGBA_F16:           return 3;
@@ -230,6 +239,7 @@ public enum ColorType {
             case RGBA_F16NORM:
             case RGBA_F16:
             case RGBA_F32:
+            case RGBA_10x6:
             case R16G16B16A16_UNORM:
                 if (ColorAlphaType.UNKNOWN == alphaType)
                     return null;
@@ -242,6 +252,7 @@ public enum ColorType {
             case RGB_888X:
             case RGB_101010X:
             case BGR_101010X:
+            case BGR_101010X_XR:
                 alphaType = ColorAlphaType.OPAQUE;
                 break;
         }
