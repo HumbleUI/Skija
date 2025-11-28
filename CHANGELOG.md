@@ -1,3 +1,20 @@
+# 0.119.0 - Nov 28, 2025
+
+Changed:
+
+- Skia version m116-d2c211228d -> m119-fcb55886b9
+- `DirectContext::submit` returns `boolean`
+
+Added:
+
+- `FontMgr::makeFromFile`
+- `DirectContext::flushAndSubmit`
+
+Removed:
+
+- [ BREAKING ] `Surface::flush` (use `DirectContext::flush(Surface)`)
+- [ BREAKING ] `Surface::flushAndSubmit` (use `DirectContext::flushAndSubmit(Surface)`)
+
 # 0.116.7 - Oct 2, 2025
 
 Fixed:

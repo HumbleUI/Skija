@@ -42,6 +42,84 @@ public class DirectContext extends RefCnt {
         return this;
     }
 
+    /**
+     * <p>Submit outstanding work to the gpu from all previously un-submitted flushes. The return
+     * value of the submit will indicate whether or not the submission to the GPU was successful.</p>
+     *
+     * <p>If the call returns true, all previously passed in semaphores in flush calls will have been
+     * submitted to the GPU and they can safely be waited on. The caller should wait on those
+     * semaphores or perform some other global synchronization before deleting the semaphores.</p>
+     *
+     * <p>If it returns false, then those same semaphores will not have been submitted and we will not
+     * try to submit them again. The caller is free to delete the semaphores at any time.</p>
+     */
+    public boolean submit() {
+        Stats.onNativeCall();
+        return _nSubmit(_ptr, false);
+    }
+
+    /**
+     * <p>Submit outstanding work to the gpu from all previously un-submitted flushes. The return
+     * value of the submit will indicate whether or not the submission to the GPU was successful.</p>
+     *
+     * <p>If the call returns true, all previously passed in semaphores in flush calls will have been
+     * submitted to the GPU and they can safely be waited on. The caller should wait on those
+     * semaphores or perform some other global synchronization before deleting the semaphores.</p>
+     *
+     * <p>If it returns false, then those same semaphores will not have been submitted and we will not
+     * try to submit them again. The caller is free to delete the semaphores at any time.</p>
+     *
+     * @param syncCpu  If true, return once the gpu has finished with all submitted work.
+     */
+    public boolean submit(boolean syncCpu) {
+        Stats.onNativeCall();
+        return _nSubmit(_ptr, syncCpu);
+    }
+
+    /**
+     * Call to ensure all drawing to the context has been flushed and submitted to the underlying 3D
+     * API. This is equivalent to calling {@link #flush} followed by {@link #submit(boolean)}.
+     */
+    @NotNull @Contract("-> this")
+    public DirectContext flushAndSubmit(boolean syncCpu) {
+        Stats.onNativeCall();
+        _nFlushAndSubmit(_ptr, syncCpu);
+        return this;
+    }
+
+    @NotNull @Contract("-> this")
+    public DirectContext flush(Surface surface) {
+        try {
+            Stats.onNativeCall();
+            _nFlushSurface(_ptr, Native.getPtr(surface));
+            return this;
+        } finally {
+            ReferenceUtil.reachabilityFence(surface);
+        }
+    }
+
+    @NotNull @Contract("-> this")
+    public DirectContext flushAndSubmit(Surface surface) {
+        try {
+            Stats.onNativeCall();
+            _nFlushAndSubmitSurface(_ptr, Native.getPtr(surface), false);
+            return this;
+        } finally {
+            ReferenceUtil.reachabilityFence(surface);
+        }
+    }
+
+    @NotNull @Contract("-> this")
+    public DirectContext flushAndSubmit(Surface surface, boolean syncCpu) {
+        try {
+            Stats.onNativeCall();
+            _nFlushAndSubmitSurface(_ptr, Native.getPtr(surface), syncCpu);
+            return this;
+        } finally {
+            ReferenceUtil.reachabilityFence(surface);
+        }
+    }
+
     @NotNull @Contract("-> this")
     public DirectContext resetAll() {
         Stats.onNativeCall();
@@ -64,18 +142,6 @@ public class DirectContext extends RefCnt {
             flags |= state._bit;
         _nReset(_ptr, flags);
         return this;
-    }
-
-    /**
-     * <p>Submit outstanding work to the gpu from all previously un-submitted flushes.</p>
-     * <p>If the syncCpu flag is true this function will return once the gpu has finished with all submitted work.</p>
-     * <p>For more information refer to skia GrDirectContext::submit(bool syncCpu) method.</p>
-     * 
-     * @param syncCpu flag to sync cpu and gpu work submission
-     */ 
-    public void submit(boolean syncCpu) {
-        Stats.onNativeCall();
-        _nSubmit(_ptr, syncCpu);
     }
 
     /**
@@ -109,11 +175,14 @@ public class DirectContext extends RefCnt {
         super(ptr);
     }
 
-    @ApiStatus.Internal public static native long _nMakeGL();
-    @ApiStatus.Internal public static native long _nMakeMetal(long devicePtr, long queuePtr);
-    @ApiStatus.Internal public static native long _nMakeDirect3D(long adapterPtr, long devicePtr, long queuePtr);
-    @ApiStatus.Internal public static native long _nFlush(long ptr);
-    @ApiStatus.Internal public static native long _nSubmit(long ptr, boolean syncCpu);
-    @ApiStatus.Internal public static native void _nReset(long ptr, int flags);
-    @ApiStatus.Internal public static native void _nAbandon(long ptr);
+    @ApiStatus.Internal public static native long    _nMakeGL();
+    @ApiStatus.Internal public static native long    _nMakeMetal(long devicePtr, long queuePtr);
+    @ApiStatus.Internal public static native long    _nMakeDirect3D(long adapterPtr, long devicePtr, long queuePtr);
+    @ApiStatus.Internal public static native void    _nFlush(long ptr);
+    @ApiStatus.Internal public static native boolean _nSubmit(long ptr, boolean syncCpu);
+    @ApiStatus.Internal public static native void    _nFlushAndSubmit(long ptr, boolean syncCpu);
+    @ApiStatus.Internal public static native void    _nFlushSurface(long ptr, long surfacePtr);
+    @ApiStatus.Internal public static native void    _nFlushAndSubmitSurface(long ptr, long surfacePtr, boolean syncCpu);
+    @ApiStatus.Internal public static native void    _nReset(long ptr, int flags);
+    @ApiStatus.Internal public static native void    _nAbandon(long ptr);
 }

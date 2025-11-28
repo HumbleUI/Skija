@@ -5,9 +5,9 @@
 #include "SkImage.h"
 #include "SkShader.h"
 #include "interop.hh"
-#include "GrBackendSurface.h"
-#include "GrDirectContext.h"
+#include "include/gpu/GrDirectContext.h"
 #include "include/gpu/GrBackendSurface.h"
+#include "include/gpu/ganesh/gl/GrGLBackendSurface.h"
 #include "include/gpu/ganesh/SkImageGanesh.h"
 #include "include/gpu/gl/GrGLTypes.h"
 
@@ -21,7 +21,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Image__1nAdoptG
     textureInfo.fTarget = static_cast<GrGLenum>(target);
     textureInfo.fFormat = static_cast<GrGLenum>(format);
     
-    GrBackendTexture backendTexture = GrBackendTexture(
+    GrBackendTexture backendTexture = GrBackendTextures::MakeGL(
         width, height,
         skgpu::Mipmapped::kYes,
         textureInfo

@@ -1,6 +1,8 @@
 #include <iostream>
 #include <jni.h>
-#include "GrBackendSurface.h"
+#include "include/gpu/gl/GrGLTypes.h"
+#include "include/gpu/GrBackendSurface.h"
+#include "include/gpu/ganesh/gl/GrGLBackendSurface.h"
 
 static void deleteBackendRenderTarget(GrBackendRenderTarget* rt) {
     // std::cout << "Deleting [GrBackendRenderTarget " << rt << "]" << std::endl;
@@ -15,7 +17,8 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_BackendRenderTa
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_BackendRenderTarget__1nMakeGL
   (JNIEnv* env, jclass jclass, jint width, jint height, jint sampleCnt, jint stencilBits, jint fbId, jint fbFormat) {
     GrGLFramebufferInfo glInfo = { static_cast<unsigned int>(fbId), static_cast<unsigned int>(fbFormat) };
-    GrBackendRenderTarget* instance = new GrBackendRenderTarget(width, height, sampleCnt, stencilBits, glInfo);
+    GrBackendRenderTarget target = GrBackendRenderTargets::MakeGL(width, height, sampleCnt, stencilBits, glInfo);
+    GrBackendRenderTarget* instance = new GrBackendRenderTarget(target);
     return reinterpret_cast<jlong>(instance);
 }
 
@@ -31,7 +34,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_BackendRenderTa
 #endif
 
 #ifdef SK_DIRECT3D
-#include "d3d/GrD3DTypes.h"
+#include "include/gpu/d3d/GrD3DTypes.h"
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_BackendRenderTarget__1nMakeDirect3D
   (JNIEnv* env, jclass jclass, jint width, jint height, jlong texturePtr, jint format, jint sampleCnt, jint levelCnt) {

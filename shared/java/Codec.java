@@ -65,7 +65,7 @@ public class Codec extends Managed implements IHasImageInfo {
         }        
     }
 
-    @NotNull
+    @NotNull @SuppressWarnings("deprecation")
     public EncodedImageFormat getEncodedImageFormat() {
         try {
             Stats.onNativeCall();

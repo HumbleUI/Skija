@@ -1,8 +1,8 @@
 #include <iostream>
 #include <jni.h>
-#include "GrDirectContext.h"
+#include "include/gpu/GrDirectContext.h"
 #include "SkSurface.h"
-#include "ganesh/SkSurfaceGanesh.h"
+#include "include/gpu/ganesh/SkSurfaceGanesh.h"
 #include "interop.hh"
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Surface__1nWrapPixels
@@ -82,7 +82,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Surface__1nWrap
 }
 
 #ifdef SK_METAL
-#include "ganesh/mtl/SkSurfaceMetal.h"
+#include "include/gpu/ganesh/mtl/SkSurfaceMetal.h"
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Surface__1nWrapMTKView
   (JNIEnv* env, jclass jclass, jlong contextPtr, jlong mtkViewPtr, jint surfaceOrigin, jint sampleCount, jint colorType, jlong colorSpacePtr, jobject surfacePropsObj) {
@@ -198,18 +198,6 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Surface__1nWrite
     SkSurface* surface = reinterpret_cast<SkSurface*>(static_cast<uintptr_t>(ptr));
     SkBitmap* bitmap = reinterpret_cast<SkBitmap*>(static_cast<uintptr_t>(bitmapPtr));
     surface->writePixels(*bitmap, x, y);
-}
-
-extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Surface__1nFlushAndSubmit
-  (JNIEnv* env, jclass jclass, jlong ptr, jboolean syncCpu) {
-    SkSurface* surface = reinterpret_cast<SkSurface*>(static_cast<uintptr_t>(ptr));
-    surface->flushAndSubmit(syncCpu);
-}
-
-extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Surface__1nFlush
-  (JNIEnv* env, jclass jclass, jlong ptr) {
-    SkSurface* surface = reinterpret_cast<SkSurface*>(static_cast<uintptr_t>(ptr));
-    surface->flush();
 }
 
 extern "C" JNIEXPORT jboolean JNICALL Java_io_github_humbleui_skija_Surface__1nUnique

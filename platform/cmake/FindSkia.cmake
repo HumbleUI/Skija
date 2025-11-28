@@ -94,8 +94,6 @@ find_path(SKIA_CORE_SVG_INCLUDE_DIR SkSVGCanvas.h HINTS "${SKIA_DIR}/include/svg
 find_path(SKIA_UTILS_INCLUDE_DIR SkTextUtils.h HINTS "${SKIA_DIR}/include/utils")
 find_path(SKIA_CODEC_INCLUDE_DIR SkCodec.h HINTS "${SKIA_DIR}/include/codec")
 find_path(SKIA_EFFECTS_INCLUDE_DIR SkShaderMaskFilter.h HINTS "${SKIA_DIR}/include/effects")
-find_path(SKIA_GPU_INCLUDE_DIR GrDirectContext.h HINTS "${SKIA_DIR}/include/gpu")
-find_path(SKIA_GPU2_INCLUDE_DIR gl/GrGLDefines.h HINTS "${SKIA_DIR}/src/gpu")
 find_path(SKIA_ANGLE_INCLUDE_DIR angle_gl.h HINTS "${SKIA_DIR}/third_party/externals/angle2/include")
 find_path(SKIA_SKCMS_INCLUDE_DIR skcms.h
   HINTS
@@ -118,8 +116,6 @@ target_include_directories(skia INTERFACE
   ${SKIA_UTILS_INCLUDE_DIR}
   ${SKIA_CODEC_INCLUDE_DIR}
   ${SKIA_EFFECTS_INCLUDE_DIR}
-  ${SKIA_GPU_INCLUDE_DIR}
-  ${SKIA_GPU2_INCLUDE_DIR}
   ${SKIA_SKCMS_INCLUDE_DIR}
   ${SKUNICODE_INCLUDE_DIR}
   ${SKSHAPER_INCLUDE_DIR}

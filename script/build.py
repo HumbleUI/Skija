@@ -1,12 +1,12 @@
 #! /usr/bin/env python3
-import argparse, build_utils, common, cross_compile, os, subprocess, sys, zipfile
+import argparse, build_utils, common, cross_compile, os, re, subprocess, sys, zipfile
 
 def main():
   parser = argparse.ArgumentParser()
   parser.add_argument('--debug', action='store_true')
   parser.add_argument('--arch', default=build_utils.arch)
   parser.add_argument('--skia-dir')
-  parser.add_argument('--skia-release', default='m116-d2c211228d')
+  parser.add_argument('--skia-release', default='m119-fcb55886b9')
   parser.add_argument('--cmake-toolchain-file')
   (args, _) = parser.parse_known_args()
 
@@ -67,14 +67,12 @@ def main():
   build_utils.javac(build_utils.files('../shared/java/**/*.java'),
                     '../shared/target/classes',
                     classpath = common.deps_compile(),
-                    release = '8',
-                    opts = ['-Xlint:-options'])
+                    release = '8')
   build_utils.javac(build_utils.files('../shared/java9/**/*.java'),
                     '../shared/target/classes-java9',
                     classpath = common.deps_compile(),
                     modulepath = common.deps_compile(),
-                    opts = ['-Xlint:-options',
-                            '--patch-module', 'io.github.humbleui.skija.shared=../shared/target/classes',],
+                    opts = ['--patch-module', 'io.github.humbleui.skija.shared=../shared/target/classes',],
                     release = '9')
 
   build_utils.copy_replace(
