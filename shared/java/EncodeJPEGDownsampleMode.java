@@ -1,5 +1,7 @@
 package io.github.humbleui.skija;
 
+import org.jetbrains.annotations.*;
+
 public enum EncodeJPEGDownsampleMode {
     /**
      * Reduction by a factor of two in both the horizontal and vertical directions.
@@ -14,5 +16,7 @@ public enum EncodeJPEGDownsampleMode {
     /**
      * No downsampling.
      */
-    DS_444
+    DS_444;
+
+    @ApiStatus.Internal public static final EncodeJPEGDownsampleMode[] _values = values();
 }

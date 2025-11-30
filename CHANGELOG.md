@@ -1,5 +1,12 @@
 # WIP
 
+Added:
+
+- BlendMode::LAST_COEFF_MODE, BlendMode::LAST_SEPARABLE_MODE
+- ColorChannelFlag
+- EncodedImageFormat::AVIF, EncodedImageFormat::JPEGXL
+- EncodedOrigin::DEFAULT
+
 Fixed:
 
 - ColorType to match latest Skia changes

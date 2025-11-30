@@ -4,5 +4,7 @@ import org.jetbrains.annotations.*;
 
 public enum EncodeWEBPCompressionMode {
     LOSSY,
-    LOSSLESS
+    LOSSLESS;
+
+    @ApiStatus.Internal public static final EncodeWEBPCompressionMode[] _values = values();
 }

@@ -1,6 +1,5 @@
 package io.github.humbleui.skija;
 
-import lombok.Data;
 import org.jetbrains.annotations.*;
 
 /**

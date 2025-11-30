@@ -18,7 +18,9 @@ public enum EncodedImageFormat {
     KTX,
     ASTC,
     DNG,
-    HEIF;
+    HEIF,
+    AVIF,
+    JPEGXL;
 
     @ApiStatus.Internal public static final EncodedImageFormat[] _values = values();
 }

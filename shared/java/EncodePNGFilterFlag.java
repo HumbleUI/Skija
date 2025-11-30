@@ -1,5 +1,6 @@
 package io.github.humbleui.skija;
 
+import lombok.*;
 import org.jetbrains.annotations.*;
 
 public enum EncodePNGFilterFlag {
@@ -11,9 +12,12 @@ public enum EncodePNGFilterFlag {
     PAETH (0x80),
     ALL   (0x08 | 0x10 | 0x20 | 0x40 | 0x80);
 
-    @ApiStatus.Internal public final int _value;
+    @Getter @ApiStatus.Internal
+    public final int _value;
 
     EncodePNGFilterFlag(int value) {
         this._value = value;
     }
+
+    @ApiStatus.Internal public static final EncodePNGFilterFlag[] _values = values();
 }

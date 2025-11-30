@@ -46,7 +46,7 @@ public enum EncodedOrigin {
      */
     LEFT_BOTTOM;
 
-    @ApiStatus.Internal public static final EncodedOrigin[] _values = values();
+    public static final EncodedOrigin DEFAULT = TOP_LEFT;
 
     /**
      * Given an encoded origin and the width and height of the source data, returns a matrix
@@ -99,4 +99,6 @@ public enum EncodedOrigin {
                 return false;
         }
     }
+
+    @ApiStatus.Internal public static final EncodedOrigin[] _values = values();
 }

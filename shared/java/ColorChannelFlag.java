@@ -19,12 +19,13 @@ public enum ColorChannelFlag {
     RGB           (0x01 | 0x02 | 0x04),
     RGBA          (0x01 | 0x02 | 0x04 | 0x08);
 
-    @Getter
-    @ApiStatus.Internal public final int _value;
+    @Getter @ApiStatus.Internal
+    public final int _value;
 
+    @ApiStatus.Internal
     ColorChannelFlag(int value) {
         this._value = value;
     }
 
-    @ApiStatus.Internal public static native int[] _nGetValues();
+    @ApiStatus.Internal public static final ColorChannelFlag[] _values = values();
 }

@@ -1,7 +1,6 @@
 package io.github.humbleui.skija;
 
 import org.jetbrains.annotations.*;
-import io.github.humbleui.skija.impl.*;
 
 /**
  * <p>Describes how pixel bits encode color. A pixel may be an alpha mask, a
@@ -639,8 +638,5 @@ public enum ColorType {
         }
     }
 
-   static { Library.staticLoad(); }
-
    @ApiStatus.Internal public static final ColorType[] _values = values();
-   @ApiStatus.Internal public static native int[] _nGetValues();
 }
