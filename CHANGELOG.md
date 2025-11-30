@@ -1,3 +1,9 @@
+# WIP
+
+Fixed:
+
+- ColorType to match latest Skia changes
+
 # 0.143.4 - Nov 22, 2025
 
 Fixed:

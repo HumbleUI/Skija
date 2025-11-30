@@ -8,8 +8,10 @@ public class TestSuite {
     public static void main(String[] args) {
         TestRunner.startTesting();
         TestRunner.testClass(BitmapTest.class);
+        TestRunner.testClass(ColorChannelFlagTest.class);
         TestRunner.testClass(ColorTest.class);
         TestRunner.testClass(ColorSpaceTest.class);
+        TestRunner.testClass(ColorTypeTest.class);
         TestRunner.testClass(DataTest.class);
         TestRunner.testClass(FontMgrTest.class);
         TestRunner.testClass(ImageTest.class);

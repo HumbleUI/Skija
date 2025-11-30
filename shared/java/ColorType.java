@@ -4,132 +4,282 @@ import org.jetbrains.annotations.*;
 import io.github.humbleui.skija.impl.*;
 
 /**
- * Describes how pixel bits encode color. A pixel may be an alpha mask, a
- * grayscale, RGB, or ARGB.
+ * <p>Describes how pixel bits encode color. A pixel may be an alpha mask, a
+ * grayscale, RGB, or ARGB.</p>
+ *
+ * <p>{@link #N32} selects the native 32-bit ARGB format for the current
+ * configuration. This can lead to inconsistent results across platforms, so
+ * use with caution.</p>
+ *
+ * <p>By default, Skia operates with the assumption of a little-Endian
+ * system. The names of each ColorType implicitly define the channel
+ * ordering and size in memory. Due to historical reasons the names do not
+ * follow 100% identical convention, but are typically labeled from least
+ * significant to most significant. To help clarify when the actual data
+ * layout differs from the default convention, every ColorType's comment
+ * includes a bit-labeled description of a pixel in that color type on a LE
+ * system.</p>
+ *
+ * <p>Unless specified otherwise, a channel's value is treated as an
+ * unsigned integer with a range of [0, 2^N-1] and this is mapped uniformly
+ * to a floating point value of [0.0, 1.0]. Some color types instead store
+ * data directly in 32-bit floating point (assumed to be IEEE), or in 16-bit
+ * "half" floating point values. A half float, or F16/float16, is
+ * interpreted as FP 1-5-10 or</p>
+ *
+ * <p>Bits: [sign:15 exp:14..10 man:9..0]</p>
  */
 public enum ColorType {
     /**
-     * Uninitialized
+     * Unknown or unrepresentable as an ColorType.
      */
     UNKNOWN,      
 
     /**
-     * Pixel with alpha in 8-bit byte
+     * <p>Single channel data (8-bit) interpreted as an alpha value. RGB
+     * are 0.</p>
+     *
+     * <p>Bits: [A:7..0]</p>
      */
     ALPHA_8,      
 
     /**
-     * Pixel with 5 bits red, 6 bits green, 5 bits blue, in 16-bit word
+     * <p>Three channel BGR data (5 bits red, 6 bits green, 5 bits blue)
+     * packed into a LE 16-bit word.</p>
+     *
+     * <p>NOTE: The name of this enum value does not match the standard
+     * convention for ColorType.</p>
+     *
+     * <p>Bits: [R:15..11 G:10..5 B:4..0]</p>
      */
     RGB_565,      
 
     /**
-     * Pixel with 4 bits for alpha, red, green, blue; in 16-bit word
+     * <p>Four channel ABGR data (4 bits per channel) packed into a LE
+     * 16-bit word.</p>
+     *
+     * <p>NOTE: The name of this enum value does not match the standard
+     * convention for SColorType.</p>
+     *
+     * <p>Bits: [R:15..12 G:11..8 B:7..4 A:3..0]</p>
      */
     ARGB_4444,    
 
     /**
-     * Pixel with 8 bits for red, green, blue, alpha; in 32-bit word
+     * <p>Four channel RGBA data (8 bits per channel) packed into a LE
+     * 32-bit word.</p>
+     *
+     * <p>Bits: [A:31..24 B:23..16 G:15..8 R:7..0]</p>
      */
     RGBA_8888,    
 
     /**
-     * Pixel with 8 bits each for red, green, blue; in 32-bit word
+     * <p>Three channel RGB data (8 bits per channel) packed into a LE
+     * 32-bit word. The remaining bits are ignored and alpha is forced to
+     * opaque.</p>
+     *
+     * <p>Bits: [x:31..24 B:23..16 G:15..8 R:7..0]</p>
      */
     RGB_888X,     
 
     /**
-     * Pixel with 8 bits for blue, green, red, alpha; in 32-bit word
+     * <p>Four channel BGRA data (8 bits per channel) packed into a LE
+     * 32-bit word. R and B are swapped relative to {@link #RGBA_8888}.</p>
+     *
+     * <p>Bits: [A:31..24 R:23..16 G:15..8 B:7..0]</p>
      */
     BGRA_8888,    
 
     /**
-     * 10 bits for red, green, blue; 2 bits for alpha; in 32-bit word
+     * <p>Four channel RGBA data (10 bits per color, 2 bits for alpha)
+     * packed into a LE 32-bit word.</p>
+     *
+     * <p>Bits: [A:31..30 B:29..20 G:19..10 R:9..0]</p>
      */
     RGBA_1010102, 
 
     /**
-     * 10 bits for blue, green, red; 2 bits for alpha; in 32-bit word
+     * <p>Four channel BGRA data (10 bits per color, 2 bits for alpha)
+     * packed into a LE 32-bit word. R and B are swapped relative to
+     * {@link #RGBA_1010102}.</p>
+     *
+     * <p>Bits: [A:31..30 R:29..20 G:19..10 B:9..0]</p>
      */
     BGRA_1010102, 
 
     /**
-     * Pixel with 10 bits each for red, green, blue; in 32-bit word
+     * <p>Three channel RGB data (10 bits per channel) packed into a LE
+     * 32-bit word. The remaining bits are ignored and alpha is forced to
+     * opaque.</p>
+     *
+     * <p>Bits: [x:31..30 B:29..20 G:19..10 R:9..0]</p>
      */
     RGB_101010X,  
 
     /**
-     * Pixel with 10 bits each for blue, green, red; in 32-bit word
+     * <p>Three channel BGR data (10 bits per channel) packed into a LE
+     * 32-bit word. The remaining bits are ignored and alpha is forced to
+     * opaque. R and B are swapped relative to {@link #RGB_101010X}.</p>
+     *
+     * <p>Bits: [x:31..30 R:29..20 G:19..10 B:9..0]</p>
      */
     BGR_101010X,
 
     /**
-     * Pixel with 10 bits each for blue, green, red; in 32-bit word, extended range
+     * <p>Three channel BGR data (10 bits per channel) packed into a LE
+     * 32-bit word. The remaining bits are ignored and alpha is forced to
+     * opaque. Instead of normalizing [0, 1023] to [0.0, 1.0] the color
+     * channels map to an extended range of [-0.752941, 1.25098],
+     * compatible with MTLPixelFormatBGR10_XR.</p>
+     *
+     * <p>Bits: [x:31..30 R:29..20 G:19..10 B:9..0]</p>
      */
     BGR_101010X_XR,
 
     /**
-     * Pixel with grayscale level in 8-bit byte
+     * <p>Four channel BGRA data (10 bits per channel) packed into a LE 64-bit
+     * word. Each channel is preceded by 6 bits of padding.  Instead of
+     * normalizing [0, 1023] to [0.0, 1.0] the color and alpha channels map to
+     * an extended range of [-0.752941, 1.25098], compatible with
+     * MTLPixelFormatBGRA10_XR.</p>
+     *
+     * <p>Bits: [A:63..54 x:53..48 R:47..38 x:37..32 G:31..22 x:21..16 B:15..6 x:5..0]</p>
      */
-    GRAY_8,       
+    BGRA_10101010_XR,
 
     /**
-     * Pixel with half floats in [0,1] for red, green, blue, alpha; in 64-bit word
+     * <p>Four channel RGBA data (10 bits per channel) packed into a LE 64-bit
+     * word. Each channel is preceded by 6 bits of padding.</p>
+     *
+     * <p>Bits: [A:63..54 x:53..48 B:47..38 x:37..32 G:31..22 x:21..16 R:15..6 x:5..0]</p>
+     */
+    RGBA_10X6,
+
+    /**
+     * <p>Single channel data (8-bit) interpreted as a grayscale value
+     * (e.g. replicated to RGB).</p>
+     *
+     * <p>Bits: [G:7..0]</p>
+     */
+    GRAY_8,
+
+    /**
+     * <p>Four channel RGBA data (16-bit half-float per channel) packed
+     * into a LE 64-bit word. Values are assumed to be in [0.0,1.0] range,
+     * unlike {@link #RGBA_F16}.</p>
+     *
+     * <p>Bits: [A:63..48 B:47..32 G:31..16 R:15..0]</p>
      */
     RGBA_F16NORM, 
 
     /**
-     * Pixel with half floats for red, green, blue, alpha; in 64-bit word
+     * <p>Four channel RGBA data (16-bit half-float per channel) packed
+     * into a LE 64-bit word. This has extended range compared to
+     * {@link #RGBA_F16NORM}.</p>
+     *
+     * <p>Bits: [A:63..48 B:47..32 G:31..16 R:15..0]</p>
      */
-    RGBA_F16,     
+    RGBA_F16,
 
     /**
-     * Pixel using C float for red, green, blue, alpha; in 128-bit word
+     * <p>Three channel RGB data (16-bit half-float per channel) packed into a
+     * LE 64-bit word. The last 16 bits are ignored and alpha is forced to
+     * opaque.</p>
+     *
+     * <p>Bits: [x:63..48 B:47..32 G:31..16 R:15..0]</p>
+     */
+    RGB_F16F16F16X,
+
+    /**
+     * <p>Four channel RGBA data (32-bit float per channel) packed into a
+     * LE 128-bit word.</p>
+     *
+     * <p>Bits: [A:127..96 B:95..64 G:63..32 R:31..0]</p>
      */
     RGBA_F32,     
 
 
-    // The following 6 colortypes are just for reading from - not for rendering to
-    
+    // The following 8 colortypes are just for reading from - not for rendering to
+
     /**
-     * Pixel with a uint8_t for red and green
+     * <p>Two channel RG data (8 bits per channel). Blue is forced to 0,
+     * alpha is forced to opaque.</p>
+     *
+     * <p>Bits: [G:15..8 R:7..0]</p>
      */
     R8G8_UNORM,        
 
     /**
-     * Pixel with a half float for alpha
+     * <p>Single channel data (16-bit half-float) interpreted as alpha.
+     * RGB are 0.</p>
+     *
+     * <p>Bits: [A:15..0]</p>
      */
     A16_FLOAT,         
 
     /**
-     * Pixel with a half float for red and green
+     * <p>Two channel RG data (16-bit half-float per channel) packed into
+     * a LE 32-bit word. Blue is forced to 0, alpha is forced to
+     * opaque.</p>
+     *
+     * <p>Bits: [G:31..16 R:15..0]</p>
      */
     R16G16_FLOAT,      
 
     /**
-     * Pixel with a little endian uint16_t for alpha
+     * <p>Single channel data (16 bits) interpreted as alpha. RGB are 0.</p>
+     *
+     * <p>Bits: [A:15..0]</p>
      */
     A16_UNORM,         
 
     /**
-     * Pixel with a little endian uint16_t for red and green
+     * <p>Two channel RG data (16 bits per channel) packed into a LE
+     * 32-bit word. B is forced to 0, alpha is forced to opaque.</p>
+     *
+     * <p>Bits: [G:31..16 R:15..0]</p>
      */
     R16G16_UNORM,      
 
     /**
-     * Pixel with a little endian uint16_t for red, green, blue, and alpha
+     * <p>Four channel RGBA data (16 bits per channel) packed into a LE
+     * 64-bit word.</p>
+     *
+     * <p>Bits: [A:63..48 B:47..32 G:31..16 R:15..0]</p>
      */
-    R16G16B16A16_UNORM;
+    R16G16B16A16_UNORM,
 
-    static { Library.staticLoad(); }
+    /**
+     * <p>Four channel RGBA data (8 bits per channel) packed into a LE 32-bit
+     * word. The RGB values are assumed to be encoded with the sRGB transfer
+     * function, which can be decoded automatically by GPU hardware with
+     * certain texture formats.</p>
+     *
+     * <p>Bits: [A:31..24 B:23..16 G:15..8 R:7..0]</p>
+     */
+    SRGBA_8888,
 
-    @ApiStatus.Internal public static final ColorType[] _values = values();
+    /**
+     * <p>Single channel data (8 bits) interpreted as red. G and B are forced
+     * to 0, alpha is forced to opaque.</p>
+     *
+     * <p>Bits: [R:7..0]</p>
+     */
+    R8_UNORM;
 
     /**
      * Native ARGB 32-bit encoding
      */
-    public static ColorType N32 = BGRA_8888;
+    public static final ColorType N32;
 
+    static {
+        // SkTypes.h / SK_R32_SHIFT
+        // BUILD.gn / if (is_linux) { defines += [ "SK_R32_SHIFT=16" ] }
+        String os = System.getProperty("os.name").toLowerCase();
+        N32 = os.contains("mac") || os.contains("darwin") ? RGBA_8888 : BGRA_8888;
+    }
+
+    // SkImageInfo.cpp / SkColorTypeBytesPerPixel
     /**
      * Returns the number of bytes required to store a pixel, including unused padding.
      * Returns zero for {@link #UNKNOWN}.
@@ -149,9 +299,13 @@ public enum ColorType {
             case RGB_101010X:        return 4;
             case BGRA_1010102:       return 4;
             case BGR_101010X:        return 4;
+            case BGR_101010X_XR:     return 4;
+            case BGRA_10101010_XR:   return 8;
+            case RGBA_10X6:          return 8;
             case GRAY_8:             return 1;
             case RGBA_F16NORM:       return 8;
             case RGBA_F16:           return 8;
+            case RGB_F16F16F16X:     return 8;
             case RGBA_F32:           return 16;
             case R8G8_UNORM:         return 2;
             case A16_UNORM:          return 2;
@@ -159,10 +313,13 @@ public enum ColorType {
             case A16_FLOAT:          return 2;
             case R16G16_FLOAT:       return 4;
             case R16G16B16A16_UNORM: return 8;
+            case SRGBA_8888:         return 4;
+            case R8_UNORM:           return 1;
         }
         throw new RuntimeException("Unreachable");
     }
 
+    // SkImageInfoPriv.h / SkColorTypeShiftPerPixel
     public int getShiftPerPixel() {
         switch (this) {
             case UNKNOWN:            return 0;
@@ -176,9 +333,13 @@ public enum ColorType {
             case RGB_101010X:        return 2;
             case BGRA_1010102:       return 2;
             case BGR_101010X:        return 2;
+            case BGR_101010X_XR:     return 2;
+            case BGRA_10101010_XR:   return 3;
+            case RGBA_10X6:          return 3;
             case GRAY_8:             return 0;
             case RGBA_F16NORM:       return 3;
             case RGBA_F16:           return 3;
+            case RGB_F16F16F16X:     return 3;
             case RGBA_F32:           return 4;
             case R8G8_UNORM:         return 1;
             case A16_UNORM:          return 1;
@@ -186,10 +347,13 @@ public enum ColorType {
             case A16_FLOAT:          return 1;
             case R16G16_FLOAT:       return 2;
             case R16G16B16A16_UNORM: return 3;
+            case SRGBA_8888:         return 2;
+            case R8_UNORM:           return 0;
         }
         throw new RuntimeException("Unreachable");
     }
 
+    // SkImageInfo.cpp / SkColorTypeIsAlwaysOpaque
     /**
      * Returns true if ColorType always decodes alpha to 1.0, making the pixel
      * fully opaque. If true, ColorType does not reserve bits to encode alpha.
@@ -197,10 +361,15 @@ public enum ColorType {
      * @return  true if alpha is always set to 1.0
      */
     public boolean isAlwaysOpaque() {
-        Stats.onNativeCall();
-        return _nIsAlwaysOpaque(ordinal());
+        return 0 == (getChannelFlags() & ColorChannelFlag.ALPHA._value);
     }
 
+    // SkImageInfoPriv.h / SkColorTypeIsAlphaOnly
+    public boolean isAlphaOnly() {
+        return ColorChannelFlag.ALPHA._value == getChannelFlags();
+    }
+
+    // SkImageInfo.cpp / SkColorTypeValidateAlphaType
     /**
      * <p>Returns a valid ColorAlphaType for colorType. If there is more than one valid canonical
      * ColorAlphaType, set to alphaType, if valid.</p>
@@ -219,20 +388,25 @@ public enum ColorType {
             case ALPHA_8:         // fall-through
             case A16_UNORM:       // fall-through
             case A16_FLOAT:
-                if (ColorAlphaType.UNPREMUL == alphaType)
+                if (ColorAlphaType.UNPREMUL == alphaType) {
                     alphaType = ColorAlphaType.PREMUL;
+                }
                 // fall-through
             case ARGB_4444:
             case RGBA_8888:
+            case SRGBA_8888:
             case BGRA_8888:
             case RGBA_1010102:
             case BGRA_1010102:
+            case RGBA_10X6:
             case RGBA_F16NORM:
             case RGBA_F16:
             case RGBA_F32:
+            case BGRA_10101010_XR:
             case R16G16B16A16_UNORM:
-                if (ColorAlphaType.UNKNOWN == alphaType)
+                if (ColorAlphaType.UNKNOWN == alphaType) {
                     return null;
+                }
                 break;
             case GRAY_8:
             case R8G8_UNORM:
@@ -242,10 +416,61 @@ public enum ColorType {
             case RGB_888X:
             case RGB_101010X:
             case BGR_101010X:
+            case BGR_101010X_XR:
+            case RGB_F16F16F16X:
+            case R8_UNORM:
                 alphaType = ColorAlphaType.OPAQUE;
                 break;
         }
         return alphaType;
+    }
+
+    // SkImageInfoPriv.h / SkColorTypeChannelFlags
+    public int getChannelFlags() {
+        switch (this) {
+            case UNKNOWN:            return 0;
+            case ALPHA_8:            return ColorChannelFlag.ALPHA._value;
+            case RGB_565:            return ColorChannelFlag.RGB._value;
+            case ARGB_4444:          return ColorChannelFlag.RGBA._value;
+            case RGBA_8888:          return ColorChannelFlag.RGBA._value;
+            case RGB_888X:           return ColorChannelFlag.RGB._value;
+            case BGRA_8888:          return ColorChannelFlag.RGBA._value;
+            case RGBA_1010102:       return ColorChannelFlag.RGBA._value;
+            case RGB_101010X:        return ColorChannelFlag.RGB._value;
+            case BGRA_1010102:       return ColorChannelFlag.RGBA._value;
+            case BGR_101010X:        return ColorChannelFlag.RGB._value;
+            case BGR_101010X_XR:     return ColorChannelFlag.RGB._value;
+            case BGRA_10101010_XR:   return ColorChannelFlag.RGBA._value;
+            case RGBA_10X6:          return ColorChannelFlag.RGBA._value;
+            case GRAY_8:             return ColorChannelFlag.GRAY._value;
+            case RGBA_F16NORM:       return ColorChannelFlag.RGBA._value;
+            case RGBA_F16:           return ColorChannelFlag.RGBA._value;
+            case RGB_F16F16F16X:     return ColorChannelFlag.RGB._value;
+            case RGBA_F32:           return ColorChannelFlag.RGBA._value;
+            case R8G8_UNORM:         return ColorChannelFlag.RG._value;
+            case A16_UNORM:          return ColorChannelFlag.ALPHA._value;
+            case R16G16_UNORM:       return ColorChannelFlag.RG._value;
+            case A16_FLOAT:          return ColorChannelFlag.ALPHA._value;
+            case R16G16_FLOAT:       return ColorChannelFlag.RG._value;
+            case R16G16B16A16_UNORM: return ColorChannelFlag.RGBA._value;
+            case SRGBA_8888:         return ColorChannelFlag.RGBA._value;
+            case R8_UNORM:           return ColorChannelFlag.RED._value;
+        }
+        throw new RuntimeException("Unreachable");
+    }
+
+    // SkImageInfoPriv.h / SkColorTypeNumChannels
+    public int getNumChannels() {
+        int flags = getChannelFlags();
+        if (ColorChannelFlag.RED._value == flags)        return 1;
+        if (ColorChannelFlag.ALPHA._value == flags)      return 1;
+        if (ColorChannelFlag.GRAY._value == flags)       return 1;
+        if (ColorChannelFlag.GRAY_ALPHA._value == flags) return 2;
+        if (ColorChannelFlag.RG._value == flags)         return 2;
+        if (ColorChannelFlag.RGB._value == flags)        return 3;
+        if (ColorChannelFlag.RGBA._value == flags)       return 4;
+        if (0 == flags)                                  return 0;
+        throw new RuntimeException("Unexpected color channel flags");
     }
 
     public long computeOffset(int x, int y, long rowBytes) {
@@ -277,6 +502,7 @@ public enum ColorType {
     public float getR(int color) {
         switch (this) {
             case RGBA_8888:
+            case SRGBA_8888:
                 return ((color >> 24) & 0xFF) / 255f;
             case RGB_888X:
                 return ((color >> 24) & 0xFF) / 255f;
@@ -318,6 +544,7 @@ public enum ColorType {
     public float getG(int color) {
         switch (this) {
             case RGBA_8888:
+            case SRGBA_8888:
                 return ((color >> 16) & 0xFF)  / 255f;
             case RGB_888X:
                 return ((color >> 16) & 0xFF) / 255f;
@@ -359,6 +586,7 @@ public enum ColorType {
     public float getB(int color) {
         switch (this) {
             case RGBA_8888:
+            case SRGBA_8888:
                 return ((color >> 8) & 0xFF) / 255f;
             case RGB_888X:
                 return ((color >> 8) & 0xFF) / 255f;
@@ -398,6 +626,7 @@ public enum ColorType {
     public float getA(int color) {
         switch (this) {
             case RGBA_8888:
+            case SRGBA_8888:
                 return (color & 0xFF) / 255f;
             case BGRA_8888:
                 return (color & 0xFF) / 255f;
@@ -410,5 +639,8 @@ public enum ColorType {
         }
     }
 
-    @ApiStatus.Internal public static native boolean _nIsAlwaysOpaque(int value);
+   static { Library.staticLoad(); }
+
+   @ApiStatus.Internal public static final ColorType[] _values = values();
+   @ApiStatus.Internal public static native int[] _nGetValues();
 }

@@ -16,4 +16,4 @@ public enum EncodePNGFilterFlag {
     EncodePNGFilterFlag(int value) {
         this._value = value;
     }
-};
+}
