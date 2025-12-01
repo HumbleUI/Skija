@@ -1,5 +1,11 @@
 # WIP
 
+Changed:
+
+- [ BREAKING ] GLBackendState -> BackendState
+- [ BREAKING ] DirectContext::resetGL -> DirectContext::reset
+- [ BREAKING ] PathEffect::Style -> PathEffect1DStyle
+
 Added:
 
 - BlendMode::LAST_COEFF_MODE, BlendMode::LAST_SEPARABLE_MODE

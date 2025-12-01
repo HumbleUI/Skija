@@ -2,6 +2,7 @@ package io.github.humbleui.skija;
 
 import org.jetbrains.annotations.*;
 
+// SkPathTypes.h - SkPathDirection
 public enum PathDirection {
     /** Clockwise direction for adding closed contours. */
     CLOCKWISE,

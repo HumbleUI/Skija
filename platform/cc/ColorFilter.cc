@@ -66,8 +66,8 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_ColorFilter__1n
 }
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_ColorFilter__1nMakeHighContrast
-  (JNIEnv* env, jclass jclass, jboolean grayscale, jint inverionModeInt, jfloat contrast) {
-    SkHighContrastConfig config(grayscale, static_cast<SkHighContrastConfig::InvertStyle>(inverionModeInt), contrast);
+  (JNIEnv* env, jclass jclass, jboolean grayscale, jint inversionModeInt, jfloat contrast) {
+    SkHighContrastConfig config(grayscale, static_cast<SkHighContrastConfig::InvertStyle>(inversionModeInt), contrast);
     SkColorFilter* ptr = SkHighContrastFilter::Make(config).release();
     return reinterpret_cast<jlong>(ptr);
 }

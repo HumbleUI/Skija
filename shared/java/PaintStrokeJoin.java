@@ -2,7 +2,8 @@ package io.github.humbleui.skija;
 
 import org.jetbrains.annotations.*;
 
-/** 
+// SkPaint.h - SkPaint::Join
+/**
  * <p>Join specifies how corners are drawn when a shape is stroked. Join
  * affects the four corners of a stroked rectangle, and the connected segments in a
  * stroked path.</p>

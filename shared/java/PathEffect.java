@@ -6,17 +6,6 @@ import io.github.humbleui.skija.impl.*;
 public class PathEffect extends RefCnt implements Flattenable {
     static { Library.staticLoad(); }
     
-    public enum Style {
-        /** translate the shape to each position */
-        TRANSLATE,
-        /** rotate the shape about its center */
-        ROTATE,
-        /** transform each point, and turn lines into curves */
-        MORPH;
-
-        @ApiStatus.Internal public static final Style[] _values = values();
-    }
-
     public PathEffect makeSum(PathEffect second) {
         try {
             Stats.onNativeCall();
@@ -37,7 +26,7 @@ public class PathEffect extends RefCnt implements Flattenable {
         }
     }
     
-    public static PathEffect makePath1D(Path path, float advance, float phase, Style style) {
+    public static PathEffect makePath1D(Path path, float advance, float phase, PathEffect1DStyle style) {
         try {
             Stats.onNativeCall();
             return new PathEffect(_nMakePath1D(Native.getPtr(path), advance, phase, style.ordinal()));

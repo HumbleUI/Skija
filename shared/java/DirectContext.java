@@ -122,24 +122,20 @@ public class DirectContext extends RefCnt {
 
     @NotNull @Contract("-> this")
     public DirectContext resetAll() {
-        Stats.onNativeCall();
-        _nReset(_ptr, -1);
-        return this;
+        return reset(BackendState.ALL);
     }
 
     @NotNull @Contract("-> this")
     public DirectContext resetGLAll() {
-        Stats.onNativeCall();
-        _nReset(_ptr, 0xffff);
-        return this;
+        return reset(BackendState.GL_ALL);
     }
 
     @NotNull @Contract("_ -> this")
-    public DirectContext resetGL(GLBackendState... states) {
+    public DirectContext reset(BackendState... states) {
         Stats.onNativeCall();
         int flags = 0;
-        for (GLBackendState state: states)
-            flags |= state._bit;
+        for (BackendState state: states)
+            flags |= state._value;
         _nReset(_ptr, flags);
         return this;
     }

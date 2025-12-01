@@ -2,6 +2,7 @@ package io.github.humbleui.skija;
 
 import org.jetbrains.annotations.*;
 
+// SkSamplingOptions.h - SkMipmapMode
 public enum MipmapMode {
     /**
      * ignore mipmap levels, sample from the "base"

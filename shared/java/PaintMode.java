@@ -2,6 +2,7 @@ package io.github.humbleui.skija;
 
 import org.jetbrains.annotations.*;
 
+// SkPaint.h - SkPaint::Style
 public enum PaintMode {
     FILL,
     STROKE,

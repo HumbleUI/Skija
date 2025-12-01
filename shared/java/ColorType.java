@@ -1,5 +1,6 @@
 package io.github.humbleui.skija;
 
+import io.github.humbleui.skija.impl.*;
 import org.jetbrains.annotations.*;
 
 /**
@@ -266,17 +267,13 @@ public enum ColorType {
      */
     R8_UNORM;
 
+    // SkTypes.h / SK_R32_SHIFT
+    // BUILD.gn / if (is_linux) { defines += [ "SK_R32_SHIFT=16" ] }
     /**
      * Native ARGB 32-bit encoding
      */
-    public static final ColorType N32;
+    public static final ColorType N32 = OperatingSystem.CURRENT == OperatingSystem.WINDOWS || OperatingSystem.CURRENT == OperatingSystem.LINUX ? BGRA_8888 : RGBA_8888;
 
-    static {
-        // SkTypes.h / SK_R32_SHIFT
-        // BUILD.gn / if (is_linux) { defines += [ "SK_R32_SHIFT=16" ] }
-        String os = System.getProperty("os.name").toLowerCase();
-        N32 = os.contains("mac") || os.contains("darwin") ? RGBA_8888 : BGRA_8888;
-    }
 
     // SkImageInfo.cpp / SkColorTypeBytesPerPixel
     /**

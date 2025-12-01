@@ -2,6 +2,7 @@ package io.github.humbleui.skija;
 
 import org.jetbrains.annotations.*;
 
+// SkPaint.h - SkPaint::Cap
 /**
  * Cap draws at the beginning and end of an open path contour.
  */

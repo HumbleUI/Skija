@@ -14,6 +14,7 @@ public class EnumTest implements Executable {
     @Override
     public void execute() throws Exception {
         TestRunner.testMethod(this, "animationDisposalMode");
+        TestRunner.testMethod(this, "backendState");
         TestRunner.testMethod(this, "blendMode");
         TestRunner.testMethod(this, "clipMode");
         TestRunner.testMethod(this, "colorAlphaType");
@@ -35,6 +36,13 @@ public class EnumTest implements Executable {
         TestRunner.testMethod(this, "fontSlant");
         TestRunner.testMethod(this, "fontWeight");
         TestRunner.testMethod(this, "fontWidth");
+        TestRunner.testMethod(this, "inversionMode");
+        TestRunner.testMethod(this, "mipmapMode");
+        TestRunner.testMethod(this, "paintMode");
+        TestRunner.testMethod(this, "paintStrokeCap");
+        TestRunner.testMethod(this, "paintStrokeJoin");
+        TestRunner.testMethod(this, "pathDirection");
+        TestRunner.testMethod(this, "pathEffect1DStyle");
     }
 
     public void animationDisposalMode() throws Exception {
@@ -43,6 +51,26 @@ public class EnumTest implements Executable {
             AnimationDisposalMode.KEEP.ordinal(),
             AnimationDisposalMode.RESTORE_BG_COLOR.ordinal(),
             AnimationDisposalMode.RESTORE_PREVIOUS.ordinal()
+        };
+        TestRunner.assertArrayEquals(nativeOrdinals, javaOrdinals);
+    }
+
+    public void backendState() throws Exception {
+        int[] nativeOrdinals = _nGetBackendStateOrdinals();
+        int[] javaOrdinals = {
+            BackendState.GL_RENDER_TARGET._value,
+            BackendState.GL_TEXTURE_BINDING._value,
+            BackendState.GL_VIEW._value,
+            BackendState.GL_BLEND._value,
+            BackendState.GL_MSAA_ENABLE._value,
+            BackendState.GL_VERTEX._value,
+            BackendState.GL_STENCIL._value,
+            BackendState.GL_PIXEL_STORE._value,
+            BackendState.GL_PROGRAM._value,
+            BackendState.GL_FIXED_FUNCTION._value,
+            BackendState.GL_MISC._value,
+            BackendState.GL_ALL._value,
+            BackendState.ALL._value
         };
         TestRunner.assertArrayEquals(nativeOrdinals, javaOrdinals);
     }
@@ -400,7 +428,92 @@ public class EnumTest implements Executable {
         TestRunner.assertArrayEquals(nativeOrdinals, javaOrdinals);
     }
 
+    public void inversionMode() throws Exception {
+        int[] nativeOrdinals = _nGetInversionModeOrdinals();
+        int[] javaOrdinals = {
+            InversionMode.NO.ordinal(),
+            InversionMode.BRIGHTNESS.ordinal(),
+            InversionMode.LIGHTNESS.ordinal(),
+
+            // last value
+            InversionMode.LIGHTNESS.ordinal()
+        };
+        TestRunner.assertArrayEquals(nativeOrdinals, javaOrdinals);
+    }
+
+    public void mipmapMode() throws Exception {
+        int[] nativeOrdinals = _nGetMipmapModeOrdinals();
+        int[] javaOrdinals = {
+            MipmapMode.NONE.ordinal(),
+            MipmapMode.NEAREST.ordinal(),
+            MipmapMode.LINEAR.ordinal(),
+
+            // last value
+            MipmapMode.LINEAR.ordinal()
+        };
+        TestRunner.assertArrayEquals(nativeOrdinals, javaOrdinals);
+    }
+
+    public void paintMode() throws Exception {
+        int[] nativeOrdinals = _nGetPaintModeOrdinals();
+        int[] javaOrdinals = {
+            PaintMode.FILL.ordinal(),
+            PaintMode.STROKE.ordinal(),
+            PaintMode.STROKE_AND_FILL.ordinal()
+        };
+        TestRunner.assertArrayEquals(nativeOrdinals, javaOrdinals);
+    }
+
+    public void paintStrokeCap() throws Exception {
+        int[] nativeOrdinals = _nGetPaintStrokeCapOrdinals();
+        int[] javaOrdinals = {
+            PaintStrokeCap.BUTT.ordinal(),
+            PaintStrokeCap.ROUND.ordinal(),
+            PaintStrokeCap.SQUARE.ordinal(),
+
+            // last value
+            PaintStrokeCap.SQUARE.ordinal()
+        };
+        TestRunner.assertArrayEquals(nativeOrdinals, javaOrdinals);
+    }
+
+    public void paintStrokeJoin() throws Exception {
+        int[] nativeOrdinals = _nGetPaintStrokeJoinOrdinals();
+        int[] javaOrdinals = {
+            PaintStrokeJoin.MITER.ordinal(),
+            PaintStrokeJoin.ROUND.ordinal(),
+            PaintStrokeJoin.BEVEL.ordinal(),
+
+            // last value
+            PaintStrokeJoin.BEVEL.ordinal()
+        };
+        TestRunner.assertArrayEquals(nativeOrdinals, javaOrdinals);
+    }
+
+    public void pathDirection() throws Exception {
+        int[] nativeOrdinals = _nGetPathDirectionOrdinals();
+        int[] javaOrdinals = {
+            PathDirection.CLOCKWISE.ordinal(),
+            PathDirection.COUNTER_CLOCKWISE.ordinal()
+        };
+        TestRunner.assertArrayEquals(nativeOrdinals, javaOrdinals);
+    }
+
+    public void pathEffect1DStyle() throws Exception {
+        int[] nativeOrdinals = _nGetPathEffect1DStyleOrdinals();
+        int[] javaOrdinals = {
+            PathEffect1DStyle.TRANSLATE.ordinal(),
+            PathEffect1DStyle.ROTATE.ordinal(),
+            PathEffect1DStyle.MORPH.ordinal(),
+
+            // last value
+            PathEffect1DStyle.MORPH.ordinal()
+        };
+        TestRunner.assertArrayEquals(nativeOrdinals, javaOrdinals);
+    }
+
     public static native int[] _nGetAnimationDisposalModeOrdinals();
+    public static native int[] _nGetBackendStateOrdinals();
     public static native int[] _nGetBlendModeOrdinals();
     public static native int[] _nGetClipModeOrdinals();
     public static native int[] _nGetColorAlphaTypeOrdinals();
@@ -422,4 +535,11 @@ public class EnumTest implements Executable {
     public static native int[] _nGetFontSlantOrdinals();
     public static native int[] _nGetFontWeightOrdinals();
     public static native int[] _nGetFontWidthOrdinals();
+    public static native int[] _nGetInversionModeOrdinals();
+    public static native int[] _nGetMipmapModeOrdinals();
+    public static native int[] _nGetPaintModeOrdinals();
+    public static native int[] _nGetPaintStrokeCapOrdinals();
+    public static native int[] _nGetPaintStrokeJoinOrdinals();
+    public static native int[] _nGetPathDirectionOrdinals();
+    public static native int[] _nGetPathEffect1DStyleOrdinals();
 }
