@@ -5,6 +5,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Deque;
+import java.util.Formatter;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -14,10 +15,11 @@ import io.github.humbleui.types.Point;
 import io.github.humbleui.skija.test.*;
 
 public class TestRunner {
-    public int asserts   = 0;
-    public int failures  = 0;
-    public int errors    = 0;
-    public Deque<String> stack = new ArrayDeque<String>();
+    public int assertsCurrent    = 0;
+    public int asserts           = 0;
+    public int failures          = 0;
+    public int errors            = 0;
+    public Deque<String> stack   = new ArrayDeque<String>();
     public List<String> messages = new ArrayList<String>();
 
     public static TestRunner runner = new TestRunner();
@@ -34,25 +36,43 @@ public class TestRunner {
         return stack.stream().collect(Collectors.joining(" > ")) + " (" + ste.getFileName() + ":" + ste.getLineNumber() + ")";
     }
 
+    public void maybePrintNewline() {
+        if (assertsCurrent >= 120 - 25 - 2) {
+            System.out.print("\n                           ");
+            assertsCurrent = 0;
+        }
+        assertsCurrent++;
+    }
+
+    public void pass() {
+        maybePrintNewline();
+        asserts++;
+        System.out.print(".");
+    }
+
     public void fail(String message) {
+        maybePrintNewline();
+        asserts++;
         failures++;
         messages.add("[ FAIL ] " + message + "\n  at " + location());
         System.out.print("F");
     }
 
     public void error(Throwable t) {
+        maybePrintNewline();
+
+        asserts++;
         errors++;
         messages.add("[ ERROR ] Unexpected exception '" + t + "'\n  at " + location());
         System.out.print("E");
     }
 
     public static void assertEquals(Object expected, Object actual) {
-        runner.asserts++;
         try {
             if (!Objects.equals(expected, actual))
                 runner.fail("Expected '" + expected + "'" + (expected == null ? "" : " (" + expected.getClass() + ")") + " == '" + actual + "'" + (actual == null ? "" : " (" + actual.getClass() + ")"));
             else
-                System.out.print(".");
+                runner.pass();
         } catch(Exception e) {
             runner.error(e);
         }
@@ -66,23 +86,22 @@ public class TestRunner {
         if (expected == null)
             runner.fail("Expected '" + expected + "' != 'null'");
         else
-            System.out.print(".");
+            runner.pass();
     }
     
     public static void assertNull(Object expected) {
         if (expected != null)
             runner.fail("Expected '" + expected + "' == 'null'");
         else
-            System.out.print(".");
+            runner.pass();
     }
 
     public static void assertClose(float expected, float actual, float epsilon) {
-        runner.asserts++;
         try {
             if (Math.abs(expected - actual) > epsilon)
                 runner.fail("Expected " + expected + " == " + actual);
             else
-                System.out.print(".");
+                runner.pass();
         } catch(Exception e) {
             runner.error(e);
         }
@@ -93,12 +112,11 @@ public class TestRunner {
     }
 
     public static void assertClose(Point expected, Point actual, float epsilon) {
-        runner.asserts++;
         try {
             if (Math.abs(expected._x - actual._x) > epsilon || Math.abs(expected._y - actual._y) > epsilon)
                 runner.fail("Expected " + expected + " == " + actual);
             else
-                System.out.print(".");
+                runner.pass();
         } catch(Exception e) {
             runner.error(e);
         }
@@ -109,7 +127,6 @@ public class TestRunner {
     }
 
     public static void assertClose(Matrix33 expected, Matrix33 actual, float epsilon) {
-        runner.asserts++;
         try {
             for (int i = 0; i < 9; ++i) {
                 if (Math.abs(expected._mat[i] - actual._mat[i]) > epsilon) {
@@ -117,74 +134,68 @@ public class TestRunner {
                     return;
                 }
             }
-            System.out.print(".");
+            runner.pass();
         } catch(Exception e) {
             runner.error(e);
         }
     }
 
     public static void assertNotEquals(Object expected, Object actual) {
-        runner.asserts++;
         try {
             if (Objects.equals(expected, actual))
                 runner.fail("Expected '" + expected + "' != '" + actual + "'");
             else
-                System.out.print(".");
+                runner.pass();
         } catch(Exception e) {
             runner.error(e);
         }
     }
 
     public static void assertArrayEquals(Object[] expected, Object[] actual) {
-        runner.asserts++;
         try {
             if (!Arrays.equals(expected, actual))
                 runner.fail("Expected " + Arrays.toString(expected) + " == " + Arrays.toString(actual));
             else
-                System.out.print(".");
+                runner.pass();
         } catch(Exception e) {
             runner.error(e);
         }
     }
 
     public static void assertArrayEquals(byte[] expected, byte[] actual) {
-        runner.asserts++;
         try {
             if (!Arrays.equals(expected, actual))
                 runner.fail("Expected " + Arrays.toString(expected) + " == " + Arrays.toString(actual));
             else
-                System.out.print(".");
+                runner.pass();
         } catch(Exception e) {
             runner.error(e);
         }
     }
 
     public static void assertArrayEquals(short[] expected, short[] actual) {
-        runner.asserts++;
         try {
             if (!Arrays.equals(expected, actual))
                 runner.fail("Expected " + Arrays.toString(expected) + " == " + Arrays.toString(actual));
             else
-                System.out.print(".");
+                runner.pass();
         } catch(Exception e) {
             runner.error(e);
         }
     }
 
     public static void assertArrayEquals(int[] expected, int[] actual) {
-        runner.asserts++;
         try {
             if (!Arrays.equals(expected, actual))
                 runner.fail("Expected " + Arrays.toString(expected) + " == " + Arrays.toString(actual));
             else
-                System.out.print(".");
+                runner.pass();
         } catch(Exception e) {
             runner.error(e);
         }
     }
 
     public static void assertArrayEquals(float[] expected, float[] actual) {
-        runner.asserts++;
         try {
             if (expected.length != actual.length)
                 runner.fail("Expected " + Arrays.toString(expected) + " == " + Arrays.toString(actual));
@@ -193,30 +204,28 @@ public class TestRunner {
                     runner.fail("Expected " + Arrays.toString(expected) + " == " + Arrays.toString(actual));
                     return;
                 }
-            System.out.print(".");
+            runner.pass();
         } catch(Exception e) {
             runner.error(e);
         }
     }
 
     public static void assertThrows(Class<? extends Throwable> expected, Executable executable) {
-        runner.asserts++;
         try {
             executable.execute();
             runner.fail("Expected '" + expected.getName() + "', caught nothing");
         } catch(Exception e) {
             if (expected.isInstance(e))
-                System.out.print(".");
+                runner.pass();
             else
                 runner.fail("Expected '" + expected.getName() + "', caught '" + e + "'");
         }
     }
     
     public static void assertDoesNotThrow(Executable executable) {
-        runner.asserts++;
         try {
             executable.execute();
-            System.out.print(".");
+            runner.pass();
         } catch (Exception e) {
             runner.fail("Did not expect exception, but caught '" + e + "'");
         }
@@ -224,7 +233,9 @@ public class TestRunner {
 
 
     public static void testClass(Class<? extends Executable> cls) {
-        pushStack(cls.getName());
+        System.out.print(new Formatter().format("%-25s (", cls.getSimpleName()));
+        runner.assertsCurrent = 0;
+        pushStack(cls.getSimpleName());
         try {
             Executable test = cls.getDeclaredConstructor().newInstance();
             test.execute();
@@ -232,6 +243,7 @@ public class TestRunner {
             runner.error(e);
         }
         popStack();
+        System.out.print(")\n");
     }
 
     public static void testMethod(Object o, String methodName) {
@@ -257,15 +269,13 @@ public class TestRunner {
 
     public static void startTesting() {
         runner = new TestRunner();
-        System.out.print("[");
     }
 
     public static int finishTesting() {
         assert runner.stack.isEmpty() : "Expected stack to be empty, got: " + runner.stack.toString();
         if (runner.messages.isEmpty()) {
-            System.out.println("] Asserts: " + runner.asserts + ", failures: " + runner.failures + ", errors: " + runner.errors);
+            System.out.println("Asserts: " + runner.asserts + ", failures: " + runner.failures + ", errors: " + runner.errors);
         } else {
-            System.out.println("]");
             for (String message: runner.messages) {
                 System.err.println(message + "\n");
             }

@@ -1,10 +1,13 @@
 package io.github.humbleui.skija.test;
 
+import io.github.humbleui.skija.impl.*;
 import io.github.humbleui.skija.test.paragraph.*;
 import io.github.humbleui.skija.test.svg.*;
 import io.github.humbleui.skija.test.runner.TestRunner;
 
 public class TestSuite {
+    static { Library.staticLoad(); }
+
     public static void main(String[] args) {
         TestRunner.startTesting();
         TestRunner.testClass(BitmapTest.class);
