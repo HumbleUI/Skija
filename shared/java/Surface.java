@@ -241,15 +241,15 @@ public class Surface extends RefCnt {
     }
 
     /**
-     * @deprecated - use {@link #wrapBackendRenderTarget(DirectContext, BackendRenderTarget, SurfaceOrigin, SurfaceColorFormat, ColorSpace)}
+     * @deprecated - use {@link #wrapBackendRenderTarget(DirectContext, BackendRenderTarget, SurfaceOrigin, ColorType, ColorSpace)}
      */
     @Deprecated
     public static Surface makeFromBackendRenderTarget(DirectContext context,
                                                       BackendRenderTarget rt,
                                                       SurfaceOrigin origin,
-                                                      SurfaceColorFormat colorFormat,
+                                                      ColorType colorType,
                                                       ColorSpace colorSpace) {
-        return wrapBackendRenderTarget(context, rt, origin, colorFormat, colorSpace, null);
+        return wrapBackendRenderTarget(context, rt, origin, colorType, colorSpace, null);
     }
 
     /**
@@ -266,7 +266,7 @@ public class Surface extends RefCnt {
      * @param context       GPU context
      * @param rt            texture residing on GPU
      * @param origin        surfaceOrigin pins either the top-left or the bottom-left corner to the origin.
-     * @param colorFormat   color format
+     * @param colorType   color format
      * @param colorSpace    range of colors; may be null
      * @return              Surface if all parameters are valid; otherwise, null
      * @see <a href="https://fiddle.skia.org/c/@Surface_MakeFromBackendTexture">https://fiddle.skia.org/c/@Surface_MakeFromBackendTexture</a>
@@ -275,22 +275,22 @@ public class Surface extends RefCnt {
     public static Surface wrapBackendRenderTarget(@NotNull DirectContext context,
                                                   @NotNull BackendRenderTarget rt,
                                                   @NotNull SurfaceOrigin origin,
-                                                  @NotNull SurfaceColorFormat colorFormat,
+                                                  @NotNull ColorType colorType,
                                                   @Nullable ColorSpace colorSpace) {
-        return wrapBackendRenderTarget(context, rt, origin, colorFormat, colorSpace, null);
+        return wrapBackendRenderTarget(context, rt, origin, colorType, colorSpace, null);
     }
 
     /**
-     * @deprecated - use {@link #wrapBackendRenderTarget(DirectContext, BackendRenderTarget, SurfaceOrigin, SurfaceColorFormat, ColorSpace, SurfaceProps)}
+     * @deprecated - use {@link #wrapBackendRenderTarget(DirectContext, BackendRenderTarget, SurfaceOrigin, ColorType, ColorSpace, SurfaceProps)}
      */
     @Deprecated
     public static Surface makeFromBackendRenderTarget(DirectContext context,
                                                       BackendRenderTarget rt,
                                                       SurfaceOrigin origin,
-                                                      SurfaceColorFormat colorFormat,
+                                                      ColorType colorType,
                                                       ColorSpace colorSpace,
                                                       SurfaceProps surfaceProps) {
-        return wrapBackendRenderTarget(context, rt, origin, colorFormat, colorSpace, surfaceProps);
+        return wrapBackendRenderTarget(context, rt, origin, colorType, colorSpace, surfaceProps);
     }
 
     /**
@@ -307,7 +307,7 @@ public class Surface extends RefCnt {
      * @param context       GPU context
      * @param rt            texture residing on GPU
      * @param origin        surfaceOrigin pins either the top-left or the bottom-left corner to the origin.
-     * @param colorFormat   color format
+     * @param colorType   color format
      * @param colorSpace    range of colors; may be null
      * @param surfaceProps  LCD striping orientation and setting for device independent fonts; may be null
      * @return              Surface if all parameters are valid; otherwise, null
@@ -318,18 +318,18 @@ public class Surface extends RefCnt {
     public static Surface wrapBackendRenderTarget(@NotNull DirectContext context,
                                                   @NotNull BackendRenderTarget rt,
                                                   @NotNull SurfaceOrigin origin,
-                                                  @NotNull SurfaceColorFormat colorFormat,
+                                                  @NotNull ColorType colorType,
                                                   @Nullable ColorSpace colorSpace,
                                                   @Nullable SurfaceProps surfaceProps) {
         try {
             assert context != null : "Can’t wrapBackendRenderTarget with context == null";
             assert rt != null : "Can’t wrapBackendRenderTarget with rt == null";
             assert origin != null : "Can’t wrapBackendRenderTarget with origin == null";
-            assert colorFormat != null : "Can’t wrapBackendRenderTarget with colorFormat == null";
+            assert colorType != null : "Can’t wrapBackendRenderTarget with colorType == null";
             Stats.onNativeCall();
-            long ptr = _nWrapBackendRenderTarget(Native.getPtr(context), Native.getPtr(rt), origin.ordinal(), colorFormat.ordinal(), Native.getPtr(colorSpace), surfaceProps);
+            long ptr = _nWrapBackendRenderTarget(Native.getPtr(context), Native.getPtr(rt), origin.ordinal(), colorType.ordinal(), Native.getPtr(colorSpace), surfaceProps);
             if (ptr == 0)
-                throw new IllegalArgumentException(String.format("Failed Surface.wrapBackendRenderTarget(%s, %s, %s, %s, %s)", context, rt, origin, colorFormat, colorSpace));
+                throw new IllegalArgumentException(String.format("Failed Surface.wrapBackendRenderTarget(%s, %s, %s, %s, %s)", context, rt, origin, colorType, colorSpace));
             return new Surface(ptr, context, rt);
         } finally {
             ReferenceUtil.reachabilityFence(context);
@@ -339,17 +339,17 @@ public class Surface extends RefCnt {
     }
 
     /**
-     * @deprecated - use {@link #wrapMTKView(DirectContext, long, SurfaceOrigin, int, SurfaceColorFormat, ColorSpace, SurfaceProps)}
+     * @deprecated - use {@link #wrapMTKView(DirectContext, long, SurfaceOrigin, int, ColorType, ColorSpace, SurfaceProps)}
      */
     @Deprecated
     public static Surface makeFromMTKView(@NotNull DirectContext context,
                                           long mtkViewPtr,
                                           @NotNull SurfaceOrigin origin,
                                           int sampleCount,
-                                          @NotNull SurfaceColorFormat colorFormat,
+                                          @NotNull ColorType colorType,
                                           @Nullable ColorSpace colorSpace,
                                           @Nullable SurfaceProps surfaceProps) {
-        return wrapMTKView(context, mtkViewPtr, origin, sampleCount, colorFormat, colorSpace, surfaceProps);
+        return wrapMTKView(context, mtkViewPtr, origin, sampleCount, colorType, colorSpace, surfaceProps);
     }
 
     @NotNull
@@ -357,17 +357,17 @@ public class Surface extends RefCnt {
                                       long mtkViewPtr,
                                       @NotNull SurfaceOrigin origin,
                                       int sampleCount,
-                                      @NotNull SurfaceColorFormat colorFormat,
+                                      @NotNull ColorType colorType,
                                       @Nullable ColorSpace colorSpace,
                                       @Nullable SurfaceProps surfaceProps) {
         try {
             assert context != null : "Can’t wrapMTKView with context == null";
             assert origin != null : "Can’t wrapMTKView with origin == null";
-            assert colorFormat != null : "Can’t wrapMTKView with colorFormat == null";
+            assert colorType != null : "Can’t wrapMTKView with colorType == null";
             Stats.onNativeCall();
-            long ptr = _nWrapMTKView(Native.getPtr(context), mtkViewPtr, origin.ordinal(), sampleCount, colorFormat.ordinal(), Native.getPtr(colorSpace), surfaceProps);
+            long ptr = _nWrapMTKView(Native.getPtr(context), mtkViewPtr, origin.ordinal(), sampleCount, colorType.ordinal(), Native.getPtr(colorSpace), surfaceProps);
             if (ptr == 0)
-                throw new IllegalArgumentException(String.format("Failed Surface.WrapMTKView(%s, %s, %s, %s, %s, %s)", context, mtkViewPtr, origin, colorFormat, colorSpace, surfaceProps));
+                throw new IllegalArgumentException(String.format("Failed Surface.WrapMTKView(%s, %s, %s, %s, %s, %s)", context, mtkViewPtr, origin, colorType, colorSpace, surfaceProps));
             return new Surface(ptr, context);
         } finally {
             ReferenceUtil.reachabilityFence(context);

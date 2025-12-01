@@ -2,6 +2,7 @@ package io.github.humbleui.skija;
 
 import org.jetbrains.annotations.*;
 
+// SkSurfaceProps.h - SkPixelGeometry
 public enum PixelGeometry {
     UNKNOWN,
     RGB_H,

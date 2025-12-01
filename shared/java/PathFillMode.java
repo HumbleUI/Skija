@@ -2,6 +2,7 @@ package io.github.humbleui.skija;
 
 import org.jetbrains.annotations.*;
 
+// SkPathTypes.h - SkPathFillType
 public enum PathFillMode {
     /** Specifies that "inside" is computed by a non-zero sum of signed edge crossings. */
     WINDING,

@@ -2,20 +2,28 @@
 
 Changed:
 
-- [ BREAKING ] GLBackendState -> BackendState
-- [ BREAKING ] DirectContext::resetGL -> DirectContext::reset
-- [ BREAKING ] PathEffect::Style -> PathEffect1DStyle
+- [ BREAKING ] `GLBackendState` -> `BackendState`
+- [ BREAKING ] `DirectContext::resetGL` -> `DirectContext::reset`
+- [ BREAKING ] `PathEffect::Style` -> `PathEffect1DStyle`
+- [ BREAKING ] `Region::Op` -> `RegionOp`
 
-Added:
+Removed:
 
-- BlendMode::LAST_COEFF_MODE, BlendMode::LAST_SEPARABLE_MODE
-- ColorChannelFlag
-- EncodedImageFormat::AVIF, EncodedImageFormat::JPEGXL
-- EncodedOrigin::DEFAULT
+- [ BREAKING ] `SurfaceColorFormat` (it was duplicating `ColorType` 🙈)
 
 Fixed:
 
-- ColorType to match latest Skia changes
+- `ColorType` to match latest Skia changes
+- `ColorType.N32` value on macOS
+
+Added:
+
+- `BlendMode.LAST_COEFF_MODE`, `BlendMode.LAST_SEPARABLE_MODE`
+- `ColorChannelFlag`
+- `ColorType.BGRA_10101010_XR`, `RGBA_10X6`, `RGB_F16F16F16X`, `SRGBA_8888`, `R8_UNORM`
+- `EncodedImageFormat.AVIF`, `EncodedImageFormat.JPEGXL`
+- `EncodedOrigin.DEFAULT`
+- `ShadowUtilsFlag.NONE`, `ShadowUtilsFlag.ALL`
 
 # 0.143.4 - Nov 22, 2025
 

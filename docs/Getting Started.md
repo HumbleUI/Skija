@@ -189,7 +189,7 @@ Surface surface = Surface.makeFromBackendRenderTarget(
     context,
     renderTarget,
     SurfaceOrigin.BOTTOM_LEFT,
-    SurfaceColorFormat.RGBA_8888,
+    ColorType.RGBA_8888,
     ColorSpace.getSRGB());
 
 // do not .close() — Surface manages its lifetime here

@@ -6,17 +6,6 @@ import io.github.humbleui.types.*;
 
 public class Region extends Managed {
     static { Library.staticLoad(); }
-    
-    public enum Op {
-        DIFFERENCE,
-        INTERSECT,
-        UNION,
-        XOR,
-        REVERSE_DIFFERENCE,
-        REPLACE;
-
-        @ApiStatus.Internal public static final Op[] _values = values();
-    }
 
     public Region() {
         super(_nMake(), _FinalizerHolder.PTR);
@@ -226,7 +215,7 @@ public class Region extends Managed {
         }
     }
 
-    public boolean op(IRect rect, Op op) {
+    public boolean op(IRect rect, RegionOp op) {
         try {
             Stats.onNativeCall();
             return _nOpIRect(_ptr, rect._left, rect._top, rect._right, rect._bottom, op.ordinal());
@@ -235,7 +224,7 @@ public class Region extends Managed {
         }
     }
 
-    public boolean op(Region r, Op op) {
+    public boolean op(Region r, RegionOp op) {
         try {
             Stats.onNativeCall();
             return _nOpRegion(_ptr, Native.getPtr(r), op.ordinal());
@@ -245,7 +234,7 @@ public class Region extends Managed {
         }
     }
 
-    public boolean op(IRect rect, Region r, Op op) {
+    public boolean op(IRect rect, Region r, RegionOp op) {
         try {
             Stats.onNativeCall();
             return _nOpIRectRegion(_ptr, rect._left, rect._top, rect._right, rect._bottom, Native.getPtr(r), op.ordinal());
@@ -255,7 +244,7 @@ public class Region extends Managed {
         }
     }
 
-    public boolean op(Region r, IRect rect, Op op) {
+    public boolean op(Region r, IRect rect, RegionOp op) {
         try {
             Stats.onNativeCall();
             return _nOpRegionIRect(_ptr, Native.getPtr(r), rect._left, rect._top, rect._right, rect._bottom, op.ordinal());
@@ -265,7 +254,7 @@ public class Region extends Managed {
         }
     }
 
-    public boolean op(Region a, Region b, Op op) {
+    public boolean op(Region a, Region b, RegionOp op) {
         try {
             Stats.onNativeCall();
             return _nOpRegionRegion(_ptr, Native.getPtr(a), Native.getPtr(b), op.ordinal());

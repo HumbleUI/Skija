@@ -2,6 +2,7 @@ package io.github.humbleui.skija;
 
 import org.jetbrains.annotations.*;
 
+// SkPathOps.h - SkPathOp
 /**
  *  The logical operations that can be performed when combining two paths.
  */

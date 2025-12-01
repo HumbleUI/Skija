@@ -1,9 +1,13 @@
 #include <jni.h>
 #include "include/effects/Sk1DPathEffect.h"
+#include "include/effects/SkRuntimeEffect.h"
 #include "include/gpu/ganesh/GrTypes.h"
+#include "include/pathops/SkPathOps.h"
+#include "include/utils/SkShadowUtils.h"
 #include "SkAlphaType.h"
 #include "SkBlendMode.h"
 #include "SkBlurTypes.h"
+#include "SkCanvas.h"
 #include "SkClipOp.h"
 #include "SkCodecAnimation.h"
 #include "SkColor.h"
@@ -16,10 +20,13 @@
 #include "SkImageInfo.h"
 #include "SkJpegEncoder.h"
 #include "SkPaint.h"
+#include "SkPathBuilder.h"
 #include "SkPathTypes.h"
 #include "SkPngEncoder.h"
+#include "SkRegion.h"
 #include "SkSamplingOptions.h"
 #include "SkSurface.h"
+#include "SkSurfaceProps.h"
 #include "SkTileMode.h"
 #include "SkWebpEncoder.h"
 
@@ -530,6 +537,186 @@ extern "C" JNIEXPORT jintArray JNICALL Java_io_github_humbleui_skija_test_EnumTe
         static_cast<jint>(SkPath1DPathEffect::kRotate_Style),
         static_cast<jint>(SkPath1DPathEffect::kMorph_Style),
         static_cast<jint>(SkPath1DPathEffect::kLastEnum_Style),
+    };
+    size_t len = sizeof(values) / sizeof(values[0]);
+    jintArray result = env->NewIntArray(len);
+    env->SetIntArrayRegion(result, 0, len, values);
+    return result;
+}
+
+extern "C" JNIEXPORT jintArray JNICALL Java_io_github_humbleui_skija_test_EnumTest__1nGetPathEllipseArcOrdinals
+  (JNIEnv* env, jclass jclass) {
+    jint values[] = {
+        static_cast<jint>(SkPathBuilder::kSmall_ArcSize),
+        static_cast<jint>(SkPathBuilder::kLarge_ArcSize),
+    };
+    size_t len = sizeof(values) / sizeof(values[0]);
+    jintArray result = env->NewIntArray(len);
+    env->SetIntArrayRegion(result, 0, len, values);
+    return result;
+}
+
+extern "C" JNIEXPORT jintArray JNICALL Java_io_github_humbleui_skija_test_EnumTest__1nGetPathFillModeOrdinals
+  (JNIEnv* env, jclass jclass) {
+    jint values[] = {
+        static_cast<jint>(SkPathFillType::kWinding),
+        static_cast<jint>(SkPathFillType::kEvenOdd),
+        static_cast<jint>(SkPathFillType::kInverseWinding),
+        static_cast<jint>(SkPathFillType::kInverseEvenOdd),
+    };
+    size_t len = sizeof(values) / sizeof(values[0]);
+    jintArray result = env->NewIntArray(len);
+    env->SetIntArrayRegion(result, 0, len, values);
+    return result;
+}
+
+extern "C" JNIEXPORT jintArray JNICALL Java_io_github_humbleui_skija_test_EnumTest__1nGetPathOpOrdinals
+  (JNIEnv* env, jclass jclass) {
+    jint values[] = {
+        static_cast<jint>(kDifference_SkPathOp),
+        static_cast<jint>(kIntersect_SkPathOp),
+        static_cast<jint>(kUnion_SkPathOp),
+        static_cast<jint>(kXOR_SkPathOp),
+        static_cast<jint>(kReverseDifference_SkPathOp),
+    };
+    size_t len = sizeof(values) / sizeof(values[0]);
+    jintArray result = env->NewIntArray(len);
+    env->SetIntArrayRegion(result, 0, len, values);
+    return result;
+}
+
+extern "C" JNIEXPORT jintArray JNICALL Java_io_github_humbleui_skija_test_EnumTest__1nGetPathVerbOrdinals
+  (JNIEnv* env, jclass jclass) {
+    jint values[] = {
+        static_cast<jint>(SkPathVerb::kMove),
+        static_cast<jint>(SkPathVerb::kLine),
+        static_cast<jint>(SkPathVerb::kQuad),
+        static_cast<jint>(SkPathVerb::kConic),
+        static_cast<jint>(SkPathVerb::kCubic),
+        static_cast<jint>(SkPathVerb::kClose),
+        static_cast<jint>(SkPathVerb::kLast_Verb),
+    };
+    size_t len = sizeof(values) / sizeof(values[0]);
+    jintArray result = env->NewIntArray(len);
+    env->SetIntArrayRegion(result, 0, len, values);
+    return result;
+}
+
+extern "C" JNIEXPORT jintArray JNICALL Java_io_github_humbleui_skija_test_EnumTest__1nGetPixelGeometryOrdinals
+  (JNIEnv* env, jclass jclass) {
+    jint values[] = {
+        static_cast<jint>(kUnknown_SkPixelGeometry),
+        static_cast<jint>(kRGB_H_SkPixelGeometry),
+        static_cast<jint>(kBGR_H_SkPixelGeometry),
+        static_cast<jint>(kRGB_V_SkPixelGeometry),
+        static_cast<jint>(kBGR_V_SkPixelGeometry),
+    };
+    size_t len = sizeof(values) / sizeof(values[0]);
+    jintArray result = env->NewIntArray(len);
+    env->SetIntArrayRegion(result, 0, len, values);
+    return result;
+}
+
+extern "C" JNIEXPORT jintArray JNICALL Java_io_github_humbleui_skija_test_EnumTest__1nGetRegionOpOrdinals
+  (JNIEnv* env, jclass jclass) {
+    jint values[] = {
+        static_cast<jint>(SkRegion::kDifference_Op),
+        static_cast<jint>(SkRegion::kIntersect_Op),
+        static_cast<jint>(SkRegion::kUnion_Op),
+        static_cast<jint>(SkRegion::kXOR_Op),
+        static_cast<jint>(SkRegion::kReverseDifference_Op),
+        static_cast<jint>(SkRegion::kReplace_Op),
+        static_cast<jint>(SkRegion::kLastOp),
+    };
+    size_t len = sizeof(values) / sizeof(values[0]);
+    jintArray result = env->NewIntArray(len);
+    env->SetIntArrayRegion(result, 0, len, values);
+    return result;
+}
+
+extern "C" JNIEXPORT jintArray JNICALL Java_io_github_humbleui_skija_test_EnumTest__1nGetRuntimeEffectChildTypeOrdinals
+  (JNIEnv* env, jclass jclass) {
+    jint values[] = {
+        static_cast<jint>(SkRuntimeEffect::ChildType::kShader),
+        static_cast<jint>(SkRuntimeEffect::ChildType::kColorFilter),
+        static_cast<jint>(SkRuntimeEffect::ChildType::kBlender),
+    };
+    size_t len = sizeof(values) / sizeof(values[0]);
+    jintArray result = env->NewIntArray(len);
+    env->SetIntArrayRegion(result, 0, len, values);
+    return result;
+}
+
+extern "C" JNIEXPORT jintArray JNICALL Java_io_github_humbleui_skija_test_EnumTest__1nGetRuntimeEffectUniformFlagOrdinals
+  (JNIEnv* env, jclass jclass) {
+    jint values[] = {
+        static_cast<jint>(SkRuntimeEffect::Uniform::kArray_Flag),
+        static_cast<jint>(SkRuntimeEffect::Uniform::kColor_Flag),
+        static_cast<jint>(SkRuntimeEffect::Uniform::kVertex_Flag),
+        static_cast<jint>(SkRuntimeEffect::Uniform::kFragment_Flag),
+        static_cast<jint>(SkRuntimeEffect::Uniform::kHalfPrecision_Flag),
+    };
+    size_t len = sizeof(values) / sizeof(values[0]);
+    jintArray result = env->NewIntArray(len);
+    env->SetIntArrayRegion(result, 0, len, values);
+    return result;
+}
+
+extern "C" JNIEXPORT jintArray JNICALL Java_io_github_humbleui_skija_test_EnumTest__1nGetRuntimeEffectUniformTypeOrdinals
+  (JNIEnv* env, jclass jclass) {
+    jint values[] = {
+        static_cast<jint>(SkRuntimeEffect::Uniform::Type::kFloat),
+        static_cast<jint>(SkRuntimeEffect::Uniform::Type::kFloat2),
+        static_cast<jint>(SkRuntimeEffect::Uniform::Type::kFloat3),
+        static_cast<jint>(SkRuntimeEffect::Uniform::Type::kFloat4),
+        static_cast<jint>(SkRuntimeEffect::Uniform::Type::kFloat2x2),
+        static_cast<jint>(SkRuntimeEffect::Uniform::Type::kFloat3x3),
+        static_cast<jint>(SkRuntimeEffect::Uniform::Type::kFloat4x4),
+        static_cast<jint>(SkRuntimeEffect::Uniform::Type::kInt),
+        static_cast<jint>(SkRuntimeEffect::Uniform::Type::kInt2),
+        static_cast<jint>(SkRuntimeEffect::Uniform::Type::kInt3),
+        static_cast<jint>(SkRuntimeEffect::Uniform::Type::kInt4),
+    };
+    size_t len = sizeof(values) / sizeof(values[0]);
+    jintArray result = env->NewIntArray(len);
+    env->SetIntArrayRegion(result, 0, len, values);
+    return result;
+}
+
+extern "C" JNIEXPORT jintArray JNICALL Java_io_github_humbleui_skija_test_EnumTest__1nGetSaveLayerRecFlagOrdinals
+  (JNIEnv* env, jclass jclass) {
+    jint values[] = {
+        static_cast<jint>(SkCanvas::kPreserveLCDText_SaveLayerFlag),
+        static_cast<jint>(SkCanvas::kInitWithPrevious_SaveLayerFlag),
+        static_cast<jint>(SkCanvas::kF16ColorType),
+    };
+    size_t len = sizeof(values) / sizeof(values[0]);
+    jintArray result = env->NewIntArray(len);
+    env->SetIntArrayRegion(result, 0, len, values);
+    return result;
+}
+
+extern "C" JNIEXPORT jintArray JNICALL Java_io_github_humbleui_skija_test_EnumTest__1nGetShadowUtilsFlagOrdinals
+  (JNIEnv* env, jclass jclass) {
+    jint values[] = {
+        kNone_ShadowFlag,
+        kTransparentOccluder_ShadowFlag,
+        kGeometricOnly_ShadowFlag,
+        kDirectionalLight_ShadowFlag,
+        kConcaveBlurOnly_ShadowFlag,
+        kAll_ShadowFlag,
+    };
+    size_t len = sizeof(values) / sizeof(values[0]);
+    jintArray result = env->NewIntArray(len);
+    env->SetIntArrayRegion(result, 0, len, values);
+    return result;
+}
+
+extern "C" JNIEXPORT jintArray JNICALL Java_io_github_humbleui_skija_test_EnumTest__1nGetSurfaceOriginOrdinals
+  (JNIEnv* env, jclass jclass) {
+    jint values[] = {
+        static_cast<jint>(kTopLeft_GrSurfaceOrigin),
+        static_cast<jint>(kBottomLeft_GrSurfaceOrigin),
     };
     size_t len = sizeof(values) / sizeof(values[0]);
     jintArray result = env->NewIntArray(len);

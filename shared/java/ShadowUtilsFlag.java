@@ -1,8 +1,15 @@
 package io.github.humbleui.skija;
 
+import lombok.*;
 import org.jetbrains.annotations.*;
 
+// SkShadowUtils.h - SkShadowFlags
 public enum ShadowUtilsFlag {
+    /**
+     * No shadow flags set
+     */
+    NONE(0x0),
+
     /**
      * The occluding object is not opaque. Knowing that the occluder is opaque allows
      * us to cull shadow geometry behind it and improve performance.
@@ -22,9 +29,15 @@ public enum ShadowUtilsFlag {
     /**
      * Concave paths will only use blur to generate the shadow
      */
-    CONCAVE_BLUR_ONLY(0x8);
+    CONCAVE_BLUR_ONLY(0x8),
 
-    @ApiStatus.Internal public final int _value;
+    /**
+     * All shadow flags set
+     */
+    ALL(0x0F);
+
+    @Getter @ApiStatus.Internal
+    public final int _value;
 
     ShadowUtilsFlag(int value) {
         this._value = value;

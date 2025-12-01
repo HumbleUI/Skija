@@ -2,6 +2,7 @@ package io.github.humbleui.skija;
 
 import org.jetbrains.annotations.*;
 
+// SkPathTypes.h - SkPathVerb
 /**
  * Verb instructs Path how to interpret one or more Point and optional conic weight;
  * manage contour, and terminate Path.

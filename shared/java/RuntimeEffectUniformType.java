@@ -2,6 +2,7 @@ package io.github.humbleui.skija;
 
 import org.jetbrains.annotations.*;
 
+// SkRuntimeEffect.h - SkRuntimeEffect::Uniform::Type
 public enum RuntimeEffectUniformType {
     FLOAT,
     FLOAT2,

@@ -132,7 +132,7 @@ class Window {
                     context,
                     renderTarget,
                     SurfaceOrigin.BOTTOM_LEFT,
-                    SurfaceColorFormat.RGBA_8888,
+                    ColorType.RGBA_8888,
                     ColorSpace.getDisplayP3(),  // TODO load monitor profile
                     new SurfaceProps(PixelGeometry.RGB_H));
 

@@ -2,6 +2,7 @@ package io.github.humbleui.skija;
 
 import org.jetbrains.annotations.*;
 
+// SkPathBuilder.h - SkPathBuilder::ArcSize
 public enum PathEllipseArc {
     /** Smaller of arc pair. */
     SMALLER,

@@ -2,6 +2,7 @@ package io.github.humbleui.skija;
 
 import org.jetbrains.annotations.*;
 
+// SkRuntimeEffect.h - SkRuntimeEffect::Uniform::Flags
 public enum RuntimeEffectUniformFlag {
     /** Uniform is declared as an array. 'count' contains array length. */
     ARRAY(0x1),

@@ -2,6 +2,7 @@ package io.github.humbleui.skija;
 
 import org.jetbrains.annotations.*;
 
+// SkCanvas.h - SkCanvas::SaveLayerFlagsSet
 public enum SaveLayerRecFlag {
     PRESERVE_LCD_TEXT(1 << 1),
 

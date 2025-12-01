@@ -43,6 +43,18 @@ public class EnumTest implements Executable {
         TestRunner.testMethod(this, "paintStrokeJoin");
         TestRunner.testMethod(this, "pathDirection");
         TestRunner.testMethod(this, "pathEffect1DStyle");
+        TestRunner.testMethod(this, "pathEllipseArc");
+        TestRunner.testMethod(this, "pathFillMode");
+        TestRunner.testMethod(this, "pathOp");
+        TestRunner.testMethod(this, "pathVerb");
+        TestRunner.testMethod(this, "pixelGeometry");
+        TestRunner.testMethod(this, "regionOp");
+        TestRunner.testMethod(this, "runtimeEffectChildType");
+        TestRunner.testMethod(this, "runtimeEffectUniformFlag");
+        TestRunner.testMethod(this, "runtimeEffectUniformType");
+        TestRunner.testMethod(this, "saveLayerRecFlag");
+        TestRunner.testMethod(this, "shadowUtilsFlag");
+        TestRunner.testMethod(this, "surfaceOrigin");
     }
 
     public void animationDisposalMode() throws Exception {
@@ -512,6 +524,154 @@ public class EnumTest implements Executable {
         TestRunner.assertArrayEquals(nativeOrdinals, javaOrdinals);
     }
 
+    public void pathEllipseArc() throws Exception {
+        int[] nativeOrdinals = _nGetPathEllipseArcOrdinals();
+        int[] javaOrdinals = {
+            PathEllipseArc.SMALLER.ordinal(),
+            PathEllipseArc.LARGER.ordinal()
+        };
+        TestRunner.assertArrayEquals(nativeOrdinals, javaOrdinals);
+    }
+
+    public void pathFillMode() throws Exception {
+        int[] nativeOrdinals = _nGetPathFillModeOrdinals();
+        int[] javaOrdinals = {
+            PathFillMode.WINDING.ordinal(),
+            PathFillMode.EVEN_ODD.ordinal(),
+            PathFillMode.INVERSE_WINDING.ordinal(),
+            PathFillMode.INVERSE_EVEN_ODD.ordinal()
+        };
+        TestRunner.assertArrayEquals(nativeOrdinals, javaOrdinals);
+    }
+
+    public void pathOp() throws Exception {
+        int[] nativeOrdinals = _nGetPathOpOrdinals();
+        int[] javaOrdinals = {
+            PathOp.DIFFERENCE.ordinal(),
+            PathOp.INTERSECT.ordinal(),
+            PathOp.UNION.ordinal(),
+            PathOp.XOR.ordinal(),
+            PathOp.REVERSE_DIFFERENCE.ordinal()
+        };
+        TestRunner.assertArrayEquals(nativeOrdinals, javaOrdinals);
+    }
+
+    public void pathVerb() throws Exception {
+        int[] nativeOrdinals = _nGetPathVerbOrdinals();
+        int[] javaOrdinals = {
+            PathVerb.MOVE.ordinal(),
+            PathVerb.LINE.ordinal(),
+            PathVerb.QUAD.ordinal(),
+            PathVerb.CONIC.ordinal(),
+            PathVerb.CUBIC.ordinal(),
+            PathVerb.CLOSE.ordinal(),
+
+            // last value
+            PathVerb.CLOSE.ordinal()
+        };
+        TestRunner.assertArrayEquals(nativeOrdinals, javaOrdinals);
+    }
+
+    public void pixelGeometry() throws Exception {
+        int[] nativeOrdinals = _nGetPixelGeometryOrdinals();
+        int[] javaOrdinals = {
+            PixelGeometry.UNKNOWN.ordinal(),
+            PixelGeometry.RGB_H.ordinal(),
+            PixelGeometry.BGR_H.ordinal(),
+            PixelGeometry.RGB_V.ordinal(),
+            PixelGeometry.BGR_V.ordinal()
+        };
+        TestRunner.assertArrayEquals(nativeOrdinals, javaOrdinals);
+    }
+
+    public void regionOp() throws Exception {
+        int[] nativeOrdinals = _nGetRegionOpOrdinals();
+        int[] javaOrdinals = {
+            RegionOp.DIFFERENCE.ordinal(),
+            RegionOp.INTERSECT.ordinal(),
+            RegionOp.UNION.ordinal(),
+            RegionOp.XOR.ordinal(),
+            RegionOp.REVERSE_DIFFERENCE.ordinal(),
+            RegionOp.REPLACE.ordinal(),
+
+            // last value
+            RegionOp.REPLACE.ordinal()
+        };
+        TestRunner.assertArrayEquals(nativeOrdinals, javaOrdinals);
+    }
+
+    public void runtimeEffectChildType() throws Exception {
+        int[] nativeOrdinals = _nGetRuntimeEffectChildTypeOrdinals();
+        int[] javaOrdinals = {
+            RuntimeEffectChildType.SHADER.ordinal(),
+            RuntimeEffectChildType.COLOR_FILTER.ordinal(),
+            RuntimeEffectChildType.BLENDER.ordinal()
+        };
+        TestRunner.assertArrayEquals(nativeOrdinals, javaOrdinals);
+    }
+
+    public void runtimeEffectUniformFlag() throws Exception {
+        int[] nativeOrdinals = _nGetRuntimeEffectUniformFlagOrdinals();
+        int[] javaOrdinals = {
+            RuntimeEffectUniformFlag.ARRAY._value,
+            RuntimeEffectUniformFlag.COLOR._value,
+            RuntimeEffectUniformFlag.VERTEX._value,
+            RuntimeEffectUniformFlag.FRAGMENT._value,
+            RuntimeEffectUniformFlag.HALF_PRECISION._value
+        };
+        TestRunner.assertArrayEquals(nativeOrdinals, javaOrdinals);
+    }
+
+    public void runtimeEffectUniformType() throws Exception {
+        int[] nativeOrdinals = _nGetRuntimeEffectUniformTypeOrdinals();
+        int[] javaOrdinals = {
+            RuntimeEffectUniformType.FLOAT.ordinal(),
+            RuntimeEffectUniformType.FLOAT2.ordinal(),
+            RuntimeEffectUniformType.FLOAT3.ordinal(),
+            RuntimeEffectUniformType.FLOAT4.ordinal(),
+            RuntimeEffectUniformType.FLOAT2X2.ordinal(),
+            RuntimeEffectUniformType.FLOAT3X3.ordinal(),
+            RuntimeEffectUniformType.FLOAT4X4.ordinal(),
+            RuntimeEffectUniformType.INT.ordinal(),
+            RuntimeEffectUniformType.INT2.ordinal(),
+            RuntimeEffectUniformType.INT3.ordinal(),
+            RuntimeEffectUniformType.INT4.ordinal()
+        };
+        TestRunner.assertArrayEquals(nativeOrdinals, javaOrdinals);
+    }
+
+    public void saveLayerRecFlag() throws Exception {
+        int[] nativeOrdinals = _nGetSaveLayerRecFlagOrdinals();
+        int[] javaOrdinals = {
+            SaveLayerRecFlag.PRESERVE_LCD_TEXT._flag,
+            SaveLayerRecFlag.INIT_WITH_PREVIOUS._flag,
+            SaveLayerRecFlag.F16_COLOR_TYPE._flag
+        };
+        TestRunner.assertArrayEquals(nativeOrdinals, javaOrdinals);
+    }
+
+    public void shadowUtilsFlag() throws Exception {
+        int[] nativeOrdinals = _nGetShadowUtilsFlagOrdinals();
+        int[] javaOrdinals = {
+            ShadowUtilsFlag.NONE._value,
+            ShadowUtilsFlag.TRANSPARENT_OCCLUDER._value,
+            ShadowUtilsFlag.GEOMETRIC_ONLY._value,
+            ShadowUtilsFlag.DIRECTIONAL_LIGHT._value,
+            ShadowUtilsFlag.CONCAVE_BLUR_ONLY._value,
+            ShadowUtilsFlag.ALL._value
+        };
+        TestRunner.assertArrayEquals(nativeOrdinals, javaOrdinals);
+    }
+
+    public void surfaceOrigin() throws Exception {
+        int[] nativeOrdinals = _nGetSurfaceOriginOrdinals();
+        int[] javaOrdinals = {
+            SurfaceOrigin.TOP_LEFT.ordinal(),
+            SurfaceOrigin.BOTTOM_LEFT.ordinal()
+        };
+        TestRunner.assertArrayEquals(nativeOrdinals, javaOrdinals);
+    }
+
     public static native int[] _nGetAnimationDisposalModeOrdinals();
     public static native int[] _nGetBackendStateOrdinals();
     public static native int[] _nGetBlendModeOrdinals();
@@ -542,4 +702,16 @@ public class EnumTest implements Executable {
     public static native int[] _nGetPaintStrokeJoinOrdinals();
     public static native int[] _nGetPathDirectionOrdinals();
     public static native int[] _nGetPathEffect1DStyleOrdinals();
+    public static native int[] _nGetPathEllipseArcOrdinals();
+    public static native int[] _nGetPathFillModeOrdinals();
+    public static native int[] _nGetPathOpOrdinals();
+    public static native int[] _nGetPathVerbOrdinals();
+    public static native int[] _nGetPixelGeometryOrdinals();
+    public static native int[] _nGetRegionOpOrdinals();
+    public static native int[] _nGetRuntimeEffectChildTypeOrdinals();
+    public static native int[] _nGetRuntimeEffectUniformFlagOrdinals();
+    public static native int[] _nGetRuntimeEffectUniformTypeOrdinals();
+    public static native int[] _nGetSaveLayerRecFlagOrdinals();
+    public static native int[] _nGetShadowUtilsFlagOrdinals();
+    public static native int[] _nGetSurfaceOriginOrdinals();
 }

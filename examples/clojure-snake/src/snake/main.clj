@@ -2,7 +2,7 @@
   (:require
    [snake.game :as game])
   (:import
-   [io.github.humbleui.skija BackendRenderTarget Canvas ColorSpace DirectContext FramebufferFormat Paint Surface SurfaceColorFormat SurfaceOrigin]
+   [io.github.humbleui.skija BackendRenderTarget Canvas ColorSpace ColorType DirectContext FramebufferFormat Paint Surface SurfaceOrigin]
    [io.github.humbleui.types Rect]
    [org.lwjgl.glfw Callbacks GLFW GLFWErrorCallback GLFWKeyCallbackI]
    [org.lwjgl.opengl GL GL11]
@@ -41,7 +41,7 @@
           fb-id   (GL11/glGetInteger 0x8CA6)
           [scale-x scale-y] (display-scale window)
           target  (BackendRenderTarget/makeGL (* scale-x width) (* scale-y height) 0 8 fb-id FramebufferFormat/GR_GL_RGBA8)
-          surface (Surface/makeFromBackendRenderTarget context target SurfaceOrigin/BOTTOM_LEFT SurfaceColorFormat/RGBA_8888 (ColorSpace/getSRGB))
+          surface (Surface/makeFromBackendRenderTarget context target SurfaceOrigin/BOTTOM_LEFT ColorType/RGBA_8888 (ColorSpace/getSRGB))
           canvas  (.getCanvas surface)]
       (.scale canvas scale-x scale-y)
       (loop []
