@@ -1,3 +1,10 @@
+# 0.119.1 - Dec 2, 2025
+
+Fixed:
+
+- `ColorType`, `EncodedImageFormat`, `FramebufferFormat`, `SurfaceColorFormat` updated to match Skia enums
+- `ColorType.N32` value on macOS
+
 # 0.119.0 - Nov 28, 2025
 
 Changed:

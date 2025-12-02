@@ -71,7 +71,7 @@ public enum ColorType {
     /**
      * Pixel with 10 used bits (most significant) followed by 6 unused bits for red, green, blue, alpha; in 64-bit word
     */
-    RGBA_10x6,
+    RGBA_10X6,
 
     /**
      * Pixel with grayscale level in 8-bit byte
@@ -124,7 +124,11 @@ public enum ColorType {
     /**
      * Pixel with a little endian uint16_t for red, green, blue, and alpha
      */
-    R16G16B16A16_UNORM;
+    R16G16B16A16_UNORM,
+
+    SRGBA_8888,
+
+    R8_UNORM;
 
     static { Library.staticLoad(); }
 
@@ -133,7 +137,8 @@ public enum ColorType {
     /**
      * Native ARGB 32-bit encoding
      */
-    public static ColorType N32 = BGRA_8888;
+    public static final ColorType N32 = OperatingSystem.CURRENT == OperatingSystem.WINDOWS || OperatingSystem.CURRENT == OperatingSystem.LINUX ? BGRA_8888 : RGBA_8888;
+
 
     /**
      * Returns the number of bytes required to store a pixel, including unused padding.
@@ -155,7 +160,7 @@ public enum ColorType {
             case BGRA_1010102:       return 4;
             case BGR_101010X:        return 4;
             case BGR_101010X_XR:     return 4;
-            case RGBA_10x6:          return 8;
+            case RGBA_10X6:          return 8;
             case GRAY_8:             return 1;
             case RGBA_F16NORM:       return 8;
             case RGBA_F16:           return 8;
@@ -166,6 +171,8 @@ public enum ColorType {
             case A16_FLOAT:          return 2;
             case R16G16_FLOAT:       return 4;
             case R16G16B16A16_UNORM: return 8;
+            case SRGBA_8888:         return 4;
+            case R8_UNORM:           return 1;
         }
         throw new RuntimeException("Unreachable");
     }
@@ -184,7 +191,7 @@ public enum ColorType {
             case BGRA_1010102:       return 2;
             case BGR_101010X:        return 2;
             case BGR_101010X_XR:     return 2;
-            case RGBA_10x6:          return 3;
+            case RGBA_10X6:          return 3;
             case GRAY_8:             return 0;
             case RGBA_F16NORM:       return 3;
             case RGBA_F16:           return 3;
@@ -195,6 +202,8 @@ public enum ColorType {
             case A16_FLOAT:          return 1;
             case R16G16_FLOAT:       return 2;
             case R16G16B16A16_UNORM: return 3;
+            case SRGBA_8888:         return 2;
+            case R8_UNORM:           return 0;
         }
         throw new RuntimeException("Unreachable");
     }
@@ -233,13 +242,14 @@ public enum ColorType {
                 // fall-through
             case ARGB_4444:
             case RGBA_8888:
+            case SRGBA_8888:
             case BGRA_8888:
             case RGBA_1010102:
             case BGRA_1010102:
+            case RGBA_10X6:
             case RGBA_F16NORM:
             case RGBA_F16:
             case RGBA_F32:
-            case RGBA_10x6:
             case R16G16B16A16_UNORM:
                 if (ColorAlphaType.UNKNOWN == alphaType)
                     return null;
@@ -253,6 +263,7 @@ public enum ColorType {
             case RGB_101010X:
             case BGR_101010X:
             case BGR_101010X_XR:
+            case R8_UNORM:
                 alphaType = ColorAlphaType.OPAQUE;
                 break;
         }
@@ -288,6 +299,7 @@ public enum ColorType {
     public float getR(int color) {
         switch (this) {
             case RGBA_8888:
+            case SRGBA_8888:
                 return ((color >> 24) & 0xFF) / 255f;
             case RGB_888X:
                 return ((color >> 24) & 0xFF) / 255f;
@@ -329,6 +341,7 @@ public enum ColorType {
     public float getG(int color) {
         switch (this) {
             case RGBA_8888:
+            case SRGBA_8888:
                 return ((color >> 16) & 0xFF)  / 255f;
             case RGB_888X:
                 return ((color >> 16) & 0xFF) / 255f;
@@ -370,6 +383,7 @@ public enum ColorType {
     public float getB(int color) {
         switch (this) {
             case RGBA_8888:
+            case SRGBA_8888:
                 return ((color >> 8) & 0xFF) / 255f;
             case RGB_888X:
                 return ((color >> 8) & 0xFF) / 255f;
@@ -409,6 +423,7 @@ public enum ColorType {
     public float getA(int color) {
         switch (this) {
             case RGBA_8888:
+            case SRGBA_8888:
                 return (color & 0xFF) / 255f;
             case BGRA_8888:
                 return (color & 0xFF) / 255f;
