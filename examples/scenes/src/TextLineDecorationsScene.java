@@ -54,7 +54,7 @@ public class TextLineDecorationsScene extends Scene {
             
             try (var line = TextLine.make("Dotted " + w + "px" + descenders, inter13);
                  var circle = new PathBuilder().addCircle(w / 2f, 0, w / 2f).build();
-                 var effect = PathEffect.makePath1D(circle, w * 2, 0, PathEffect.Style.TRANSLATE);
+                 var effect = PathEffect.makePath1D(circle, w * 2, 0, PathEffect1DStyle.TRANSLATE);
                  var stroke = new Paint().setColor(0xFFCC3333).setPathEffect(effect);)
             {
                 canvas.drawLine(0, 1f + w / 2f, (float) Math.floor(line.getWidth()) - w, 1f + w / 2f, stroke);
@@ -66,7 +66,7 @@ public class TextLineDecorationsScene extends Scene {
             //     var intervals = (float) Math.floor(line.getWidth() / (w * 2f));
             //     var interval = line.getWidth() / (intervals + 0.5f);
             //     try (var circle = new Path().addCircle(w / 2f, 0, w / 2f);
-            //          var effect = PathEffect.makePath1D(circle, interval, 0, PathEffect.Style.TRANSLATE);
+            //          var effect = PathEffect.makePath1D(circle, interval, 0, PathEffect1DStyle.TRANSLATE);
             //          var stroke = new Paint().setColor(0xFFCC3333).setPathEffect(effect);)
             //     {
             //         canvas.drawLine(0, 1f + w / 2f, (float) Math.floor(line.getWidth()), 1f + w / 2f, stroke);
@@ -99,7 +99,7 @@ public class TextLineDecorationsScene extends Scene {
 
             try (var line = TextLine.make("Wavy " + w + "px" + descenders, inter13);
                  var element = new PathBuilder().moveTo(0, -1.5f).lineTo(2, 0.5f).lineTo(4, -1.5f).lineTo(4, -0.5f).lineTo(2, 1.5f).lineTo(0, -0.5f).closePath().transform(Matrix33.makeScale(w)).build();
-                 var effect = PathEffect.makePath1D(element, w * 4, 0, PathEffect.Style.TRANSLATE);
+                 var effect = PathEffect.makePath1D(element, w * 4, 0, PathEffect1DStyle.TRANSLATE);
                  var stroke = new Paint().setColor(0xFFCC3333).setPathEffect(effect);)
             {
                 canvas.save();

@@ -18,11 +18,11 @@ public class PathEffectsScene extends Scene {
             float offset = 1f - System.currentTimeMillis() % 1000 / 1000f;
 
             PathEffect[] effects = new PathEffect[] {
-                PathEffect.makePath1D(pattern, 10, 10 * offset, PathEffect.Style.TRANSLATE),
-                PathEffect.makePath1D(pattern, 20, 20 * offset, PathEffect.Style.TRANSLATE),
-                PathEffect.makePath1D(pattern, 20, 20 * offset, PathEffect.Style.ROTATE),
-                PathEffect.makePath1D(pattern, 20, 20 * offset, PathEffect.Style.MORPH),
-                PathEffect.makePath1D(dash, 15, 15 * offset, PathEffect.Style.MORPH),
+                PathEffect.makePath1D(pattern, 10, 10 * offset, PathEffect1DStyle.TRANSLATE),
+                PathEffect.makePath1D(pattern, 20, 20 * offset, PathEffect1DStyle.TRANSLATE),
+                PathEffect.makePath1D(pattern, 20, 20 * offset, PathEffect1DStyle.ROTATE),
+                PathEffect.makePath1D(pattern, 20, 20 * offset, PathEffect1DStyle.MORPH),
+                PathEffect.makePath1D(dash, 15, 15 * offset, PathEffect1DStyle.MORPH),
                 PathEffect.makePath2D(Matrix33.makeScale(15), pattern),
                 PathEffect.makeLine2D(1, Matrix33.makeScale(3, 3)),
                 PathEffect.makeLine2D(1, Matrix33.makeScale(3,3).makeConcat(Matrix33.makeRotate(30))),

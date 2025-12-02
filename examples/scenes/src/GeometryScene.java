@@ -432,7 +432,7 @@ public class GeometryScene extends Scene {
         xOffset += 50;
 
         // op(IRect), getBounds, getBoundaryPath
-        for (var op : Region.Op.values()) {
+        for (var op : RegionOp.values()) {
             r.setRect(IRect.makeLTRB((int) (xOffset * dpi), (int) (yOffset * dpi), (int) ((xOffset + 30) * dpi), (int) ((yOffset + 40) * dpi)));
             r.op(IRect.makeLTRB((int) ((xOffset + 10) * dpi), (int) ((yOffset + 10) * dpi), (int) ((xOffset + 40) * dpi), (int) ((yOffset + 30) * dpi)), op);
 
@@ -464,7 +464,7 @@ public class GeometryScene extends Scene {
         }
 
         // op(Region, Region), getBounds, getBoundaryPath
-        for (var op : Region.Op.values()) {
+        for (var op : RegionOp.values()) {
             Region rA = new Region();
             rA.setRect(IRect.makeLTRB((int) (xOffset * dpi), (int) (yOffset * dpi), (int) ((xOffset + 30) * dpi), (int) ((yOffset + 40) * dpi)));
             Region rB = new Region();
