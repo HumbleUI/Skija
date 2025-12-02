@@ -48,6 +48,7 @@ public interface FramebufferFormat {
 
     /* Luminance sized formats */
     int GR_GL_LUMINANCE8                   = 0x8040;
+    int GR_GL_LUMINANCE8_ALPHA8            = 0x8045;
     int GR_GL_LUMINANCE16F                 = 0x881E;
 
     /* Alpha sized formats */
@@ -84,6 +85,7 @@ public interface FramebufferFormat {
     int GR_GL_RGB565                       = 0x8D62;
     int GR_GL_RGB8                         = 0x8051;
     int GR_GL_SRGB8                        = 0x8C41;
+    int GR_GL_RGBX8                        = 0x96BA;
 
     /* RGB integer sized formats */
     int GR_GL_RGB8I                        = 0x8D8F;

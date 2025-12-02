@@ -34,6 +34,7 @@
 #include "modules/svg/include/SkSVGNode.h"
 #include "modules/svg/include/SkSVGRenderContext.h"
 #include "modules/svg/include/SkSVGTypes.h"
+#include "src/gpu/ganesh/gl/GrGLDefines.h"
 #include "SkWebpEncoder.h"
 
 extern "C" JNIEXPORT jintArray JNICALL Java_io_github_humbleui_skija_test_EnumTest__1nGetAnimationDisposalModeOrdinals
@@ -373,6 +374,98 @@ extern "C" JNIEXPORT jintArray JNICALL Java_io_github_humbleui_skija_test_EnumTe
     return result;
 }
 
+extern "C" JNIEXPORT jintArray JNICALL Java_io_github_humbleui_skija_test_EnumTest__1nGetFramebufferFormatValues
+  (JNIEnv* env, jclass jclass) {
+    jint values[] = {
+        GR_GL_STENCIL_INDEX,
+        GR_GL_DEPTH_COMPONENT,
+        GR_GL_DEPTH_STENCIL,
+        GR_GL_RED,
+        GR_GL_RED_INTEGER,
+        GR_GL_GREEN,
+        GR_GL_BLUE,
+        GR_GL_ALPHA,
+        GR_GL_LUMINANCE,
+        GR_GL_LUMINANCE_ALPHA,
+        GR_GL_RG_INTEGER,
+        GR_GL_RGB,
+        GR_GL_RGB_INTEGER,
+        GR_GL_SRGB,
+        GR_GL_RGBA,
+        GR_GL_RG,
+        GR_GL_SRGB_ALPHA,
+        GR_GL_RGBA_INTEGER,
+        GR_GL_BGRA,
+        GR_GL_STENCIL_INDEX4,
+        GR_GL_STENCIL_INDEX8,
+        GR_GL_STENCIL_INDEX16,
+        GR_GL_DEPTH_COMPONENT16,
+        GR_GL_DEPTH24_STENCIL8,
+        GR_GL_R8,
+        GR_GL_R16,
+        GR_GL_R16F,
+        GR_GL_R32F,
+        GR_GL_R8I,
+        GR_GL_R8UI,
+        GR_GL_R16I,
+        GR_GL_R16UI,
+        GR_GL_R32I,
+        GR_GL_R32UI,
+        GR_GL_LUMINANCE8,
+        GR_GL_LUMINANCE8_ALPHA8,
+        GR_GL_LUMINANCE16F,
+        GR_GL_ALPHA8,
+        GR_GL_ALPHA16,
+        GR_GL_ALPHA16F,
+        GR_GL_ALPHA32F,
+        GR_GL_ALPHA8I,
+        GR_GL_ALPHA8UI,
+        GR_GL_ALPHA16I,
+        GR_GL_ALPHA16UI,
+        GR_GL_ALPHA32I,
+        GR_GL_ALPHA32UI,
+        GR_GL_RG8,
+        GR_GL_RG16,
+        GR_GL_RG16F,
+        GR_GL_RG8I,
+        GR_GL_RG8UI,
+        GR_GL_RG16I,
+        GR_GL_RG16UI,
+        GR_GL_RG32I,
+        GR_GL_RG32UI,
+        GR_GL_RGB5,
+        GR_GL_RGB565,
+        GR_GL_RGB8,
+        GR_GL_SRGB8,
+        GR_GL_RGBX8,
+        GR_GL_RGB8I,
+        GR_GL_RGB8UI,
+        GR_GL_RGB16I,
+        GR_GL_RGB16UI,
+        GR_GL_RGB32I,
+        GR_GL_RGB32UI,
+        GR_GL_RGBA4,
+        GR_GL_RGB5_A1,
+        GR_GL_RGBA8,
+        GR_GL_RGB10_A2,
+        GR_GL_SRGB8_ALPHA8,
+        GR_GL_RGBA16F,
+        GR_GL_RGBA32F,
+        GR_GL_RG32F,
+        GR_GL_RGBA16,
+        GR_GL_RGBA8I,
+        GR_GL_RGBA8UI,
+        GR_GL_RGBA16I,
+        GR_GL_RGBA16UI,
+        GR_GL_RGBA32I,
+        GR_GL_RGBA32UI,
+        GR_GL_BGRA8,
+    };
+    size_t len = sizeof(values) / sizeof(values[0]);
+    jintArray result = env->NewIntArray(len);
+    env->SetIntArrayRegion(result, 0, len, values);
+    return result;
+}
 
 extern "C" JNIEXPORT jintArray JNICALL Java_io_github_humbleui_skija_test_EnumTest__1nGetFontEdgingOrdinals
   (JNIEnv* env, jclass jclass) {
@@ -584,6 +677,20 @@ extern "C" JNIEXPORT jintArray JNICALL Java_io_github_humbleui_skija_test_EnumTe
         static_cast<jint>(kUnion_SkPathOp),
         static_cast<jint>(kXOR_SkPathOp),
         static_cast<jint>(kReverseDifference_SkPathOp),
+    };
+    size_t len = sizeof(values) / sizeof(values[0]);
+    jintArray result = env->NewIntArray(len);
+    env->SetIntArrayRegion(result, 0, len, values);
+    return result;
+}
+
+extern "C" JNIEXPORT jintArray JNICALL Java_io_github_humbleui_skija_test_EnumTest__1nGetPathSegmentTypeValues
+  (JNIEnv* env, jclass jclass) {
+    jint values[] = {
+        kLine_SkPathSegmentMask,
+        kQuad_SkPathSegmentMask,
+        kConic_SkPathSegmentMask,
+        kCubic_SkPathSegmentMask,
     };
     size_t len = sizeof(values) / sizeof(values[0]);
     jintArray result = env->NewIntArray(len);

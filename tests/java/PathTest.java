@@ -12,7 +12,7 @@ import io.github.humbleui.skija.PathBuilder;
 import io.github.humbleui.skija.PathDirection;
 import io.github.humbleui.skija.PathFillMode;
 import io.github.humbleui.skija.PathSegment;
-import io.github.humbleui.skija.PathSegmentMask;
+import io.github.humbleui.skija.PathSegmentType;
 import io.github.humbleui.skija.PathVerb;
 import io.github.humbleui.types.Point;
 import io.github.humbleui.types.RRect;
@@ -212,7 +212,7 @@ public class PathTest implements Executable {
                 Path p = b.build();
                 assertNotEquals(0L, p.getApproximateBytesUsed());
 
-                assertEquals(PathSegmentMask.LINE, p.getSegmentMasks());
+                assertArrayEquals(new PathSegmentType[] { PathSegmentType.LINE }, p.getSegmentTypes());
             } finally {
                 TestRunner.popStack();
             }

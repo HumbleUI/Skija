@@ -34,6 +34,7 @@ public class EnumTest implements Executable {
         TestRunner.testMethod(this, "filterBlurMode");
         TestRunner.testMethod(this, "filterMode");
         TestRunner.testMethod(this, "filterTileMode");
+        TestRunner.testMethod(this, "framebufferFormat");
         TestRunner.testMethod(this, "fontEdging");
         TestRunner.testMethod(this, "fontHinting");
         TestRunner.testMethod(this, "fontSlant");
@@ -49,6 +50,7 @@ public class EnumTest implements Executable {
         TestRunner.testMethod(this, "pathEllipseArc");
         TestRunner.testMethod(this, "pathFillMode");
         TestRunner.testMethod(this, "pathOp");
+        TestRunner.testMethod(this, "pathSegmentType");
         TestRunner.testMethod(this, "pathVerb");
         TestRunner.testMethod(this, "pixelGeometry");
         TestRunner.testMethod(this, "regionOp");
@@ -396,6 +398,96 @@ public class EnumTest implements Executable {
         TestRunner.assertArrayEquals(nativeOrdinals, javaOrdinals);
     }
 
+    public void framebufferFormat() throws Exception {
+        int[] nativeValues = _nGetFramebufferFormatValues();
+        int[] javaValues = {
+            FramebufferFormat.GR_GL_STENCIL_INDEX,
+            FramebufferFormat.GR_GL_DEPTH_COMPONENT,
+            FramebufferFormat.GR_GL_DEPTH_STENCIL,
+            FramebufferFormat.GR_GL_RED,
+            FramebufferFormat.GR_GL_RED_INTEGER,
+            FramebufferFormat.GR_GL_GREEN,
+            FramebufferFormat.GR_GL_BLUE,
+            FramebufferFormat.GR_GL_ALPHA,
+            FramebufferFormat.GR_GL_LUMINANCE,
+            FramebufferFormat.GR_GL_LUMINANCE_ALPHA,
+            FramebufferFormat.GR_GL_RG_INTEGER,
+            FramebufferFormat.GR_GL_RGB,
+            FramebufferFormat.GR_GL_RGB_INTEGER,
+            FramebufferFormat.GR_GL_SRGB,
+            FramebufferFormat.GR_GL_RGBA,
+            FramebufferFormat.GR_GL_RG,
+            FramebufferFormat.GR_GL_SRGB_ALPHA,
+            FramebufferFormat.GR_GL_RGBA_INTEGER,
+            FramebufferFormat.GR_GL_BGRA,
+            FramebufferFormat.GR_GL_STENCIL_INDEX4,
+            FramebufferFormat.GR_GL_STENCIL_INDEX8,
+            FramebufferFormat.GR_GL_STENCIL_INDEX16,
+            FramebufferFormat.GR_GL_DEPTH_COMPONENT16,
+            FramebufferFormat.GR_GL_DEPTH24_STENCIL8,
+            FramebufferFormat.GR_GL_R8,
+            FramebufferFormat.GR_GL_R16,
+            FramebufferFormat.GR_GL_R16F,
+            FramebufferFormat.GR_GL_R32F,
+            FramebufferFormat.GR_GL_R8I,
+            FramebufferFormat.GR_GL_R8UI,
+            FramebufferFormat.GR_GL_R16I,
+            FramebufferFormat.GR_GL_R16UI,
+            FramebufferFormat.GR_GL_R32I,
+            FramebufferFormat.GR_GL_R32UI,
+            FramebufferFormat.GR_GL_LUMINANCE8,
+            FramebufferFormat.GR_GL_LUMINANCE8_ALPHA8,
+            FramebufferFormat.GR_GL_LUMINANCE16F,
+            FramebufferFormat.GR_GL_ALPHA8,
+            FramebufferFormat.GR_GL_ALPHA16,
+            FramebufferFormat.GR_GL_ALPHA16F,
+            FramebufferFormat.GR_GL_ALPHA32F,
+            FramebufferFormat.GR_GL_ALPHA8I,
+            FramebufferFormat.GR_GL_ALPHA8UI,
+            FramebufferFormat.GR_GL_ALPHA16I,
+            FramebufferFormat.GR_GL_ALPHA16UI,
+            FramebufferFormat.GR_GL_ALPHA32I,
+            FramebufferFormat.GR_GL_ALPHA32UI,
+            FramebufferFormat.GR_GL_RG8,
+            FramebufferFormat.GR_GL_RG16,
+            FramebufferFormat.GR_GL_RG16F,
+            FramebufferFormat.GR_GL_RG8I,
+            FramebufferFormat.GR_GL_RG8UI,
+            FramebufferFormat.GR_GL_RG16I,
+            FramebufferFormat.GR_GL_RG16UI,
+            FramebufferFormat.GR_GL_RG32I,
+            FramebufferFormat.GR_GL_RG32UI,
+            FramebufferFormat.GR_GL_RGB5,
+            FramebufferFormat.GR_GL_RGB565,
+            FramebufferFormat.GR_GL_RGB8,
+            FramebufferFormat.GR_GL_SRGB8,
+            FramebufferFormat.GR_GL_RGBX8,
+            FramebufferFormat.GR_GL_RGB8I,
+            FramebufferFormat.GR_GL_RGB8UI,
+            FramebufferFormat.GR_GL_RGB16I,
+            FramebufferFormat.GR_GL_RGB16UI,
+            FramebufferFormat.GR_GL_RGB32I,
+            FramebufferFormat.GR_GL_RGB32UI,
+            FramebufferFormat.GR_GL_RGBA4,
+            FramebufferFormat.GR_GL_RGB5_A1,
+            FramebufferFormat.GR_GL_RGBA8,
+            FramebufferFormat.GR_GL_RGB10_A2,
+            FramebufferFormat.GR_GL_SRGB8_ALPHA8,
+            FramebufferFormat.GR_GL_RGBA16F,
+            FramebufferFormat.GR_GL_RGBA32F,
+            FramebufferFormat.GR_GL_RG32F,
+            FramebufferFormat.GR_GL_RGBA16,
+            FramebufferFormat.GR_GL_RGBA8I,
+            FramebufferFormat.GR_GL_RGBA8UI,
+            FramebufferFormat.GR_GL_RGBA16I,
+            FramebufferFormat.GR_GL_RGBA16UI,
+            FramebufferFormat.GR_GL_RGBA32I,
+            FramebufferFormat.GR_GL_RGBA32UI,
+            FramebufferFormat.GR_GL_BGRA8
+        };
+        TestRunner.assertArrayEquals(nativeValues, javaValues);
+    }
+
     public void fontEdging() throws Exception {
         int[] nativeOrdinals = _nGetFontEdgingOrdinals();
         int[] javaOrdinals = {
@@ -575,6 +667,17 @@ public class EnumTest implements Executable {
             PathOp.REVERSE_DIFFERENCE.ordinal()
         };
         TestRunner.assertArrayEquals(nativeOrdinals, javaOrdinals);
+    }
+
+    public void pathSegmentType() throws Exception {
+        int[] nativeValues = _nGetPathSegmentTypeValues();
+        int[] javaValues = {
+            PathSegmentType.LINE._value,
+            PathSegmentType.QUAD._value,
+            PathSegmentType.CONIC._value,
+            PathSegmentType.CUBIC._value
+        };
+        TestRunner.assertArrayEquals(nativeValues, javaValues);
     }
 
     public void pathVerb() throws Exception {
@@ -958,6 +1061,7 @@ public class EnumTest implements Executable {
     public static native int[] _nGetFilterBlurModeOrdinals();
     public static native int[] _nGetFilterModeOrdinals();
     public static native int[] _nGetFilterTileModeOrdinals();
+    public static native int[] _nGetFramebufferFormatValues();
     public static native int[] _nGetFontEdgingOrdinals();
     public static native int[] _nGetFontHintingOrdinals();
     public static native int[] _nGetFontSlantOrdinals();
@@ -973,6 +1077,7 @@ public class EnumTest implements Executable {
     public static native int[] _nGetPathEllipseArcOrdinals();
     public static native int[] _nGetPathFillModeOrdinals();
     public static native int[] _nGetPathOpOrdinals();
+    public static native int[] _nGetPathSegmentTypeValues();
     public static native int[] _nGetPathVerbOrdinals();
     public static native int[] _nGetPixelGeometryOrdinals();
     public static native int[] _nGetRegionOpOrdinals();

@@ -6,6 +6,7 @@ Changed:
 - [ BREAKING ] `DirectContext::resetGL` -> `DirectContext::reset`
 - [ BREAKING ] `PathEffect::Style` -> `PathEffect1DStyle`
 - [ BREAKING ] `Region::Op` -> `RegionOp`
+- [ BREAKING ] `PathSegmentMask` -> `PathSegmentType`, `Path::getSegmentMask` -> `Path::getSegmentTypes`
 
 Removed:
 
@@ -20,13 +21,14 @@ Fixed:
 
 Added:
 
-- `BlendMode.LAST_COEFF_MODE`, `BlendMode.LAST_SEPARABLE_MODE`
+- `BlendMode`: `LAST_COEFF_MODE`, `LAST_SEPARABLE_MODE`
 - `ColorChannelFlag`
-- `ColorType.BGRA_10101010_XR`, `RGBA_10X6`, `RGB_F16F16F16X`, `SRGBA_8888`, `R8_UNORM`
-- `EncodedImageFormat.AVIF`, `EncodedImageFormat.JPEGXL`
-- `EncodedOrigin.DEFAULT`
-- `ShadowUtilsFlag.NONE`, `ShadowUtilsFlag.ALL`
-- `SVGTag.FE_COMPONENT_TRANSFER`, `SVGTag.FE_FUNC_A`, `SVGTag.FE_FUNC_R`, `SVGTag.FE_FUNC_G`, `SVGTag.FE_FUNC_B`, `SVGTag.FE_MERGE`, `SVGTag.FE_MERGE_NODE`,
+- `ColorType`: `BGRA_10101010_XR`, `RGBA_10X6`, `RGB_F16F16F16X`, `SRGBA_8888`, `R8_UNORM`
+- `EncodedImageFormat`: `AVIF`, `JPEGXL`
+- `EncodedOrigin`: `DEFAULT`
+- `FramebufferFormat`: `GR_GL_LUMINANCE8_ALPHA8`, `GR_GL_RGBX8`
+- `ShadowUtilsFlag`: `NONE`, `ALL`
+- `SVGTag`: `FE_COMPONENT_TRANSFER`, `FE_FUNC_A`, `FE_FUNC_R`, `FE_FUNC_G`, `FE_FUNC_B`, `FE_MERGE`, `FE_MERGE_NODE`,
 - `TextStyleAttribute::equalsByFonts`
 
 # 0.143.4 - Nov 22, 2025

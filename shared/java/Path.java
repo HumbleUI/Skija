@@ -938,10 +938,19 @@ public class Path extends Managed implements Iterable<PathSegment> {
      * @see PathSegmentMask#CUBIC
      */
     @Contract(pure = true)
-    public int getSegmentMasks() {
+    public PathSegmentType[] getSegmentTypes() {
         try {
             Stats.onNativeCall();
-            return _nGetSegmentMasks(_ptr);
+            int mask = _nGetSegmentMasks(_ptr);
+            PathSegmentType[] result = new PathSegmentType[Integer.bitCount(mask)];
+            int idx = 0;
+            for (PathSegmentType type: PathSegmentType._values) {
+                if ((mask & type._value) != 0) {
+                    result[idx] = type;
+                    ++idx;
+                }
+            }
+            return result;
         } finally {
             ReferenceUtil.reachabilityFence(this);
         }
