@@ -923,19 +923,13 @@ public class Path extends Managed implements Iterable<PathSegment> {
     }
 
     /**
-     * <p>Returns a mask, where each set bit corresponds to a SegmentMask constant
-     * if Path contains one or more verbs of that type.</p>
+     * <p>Returns array of {@link PathSegmentType} this {@link Path} contains.</p>
      *
-     * <p>Returns zero if Path contains no lines, or curves: quads, conics, or cubics.</p>
+     * <p>Returns empty array if Path contains no lines, or curves: quads, conics, or cubics.</p>
      *
-     * <p>getSegmentMasks() returns a cached result; it is very fast.</p>
+     * <p>getSegmentTypes() returns a cached result; it is very fast.</p>
      *
-     * @return  SegmentMask bits or zero
-     *
-     * @see PathSegmentMask#LINE
-     * @see PathSegmentMask#QUAD
-     * @see PathSegmentMask#CONIC
-     * @see PathSegmentMask#CUBIC
+     * @return  array of {@link PathSegmentType} this {@link Path} contains
      */
     @Contract(pure = true)
     public PathSegmentType[] getSegmentTypes() {
