@@ -39,6 +39,16 @@ public class TextStyle extends Managed {
         }
     }
 
+    public boolean equalsByFonts(TextStyle other) {
+        try {
+            Stats.onNativeCall();
+            return _nEqualsByFonts(_ptr, Native.getPtr(other));
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(other);
+        }
+    }
+
     public int getColor() {
         try {
             Stats.onNativeCall();
@@ -349,6 +359,7 @@ public class TextStyle extends Managed {
     public static native long  _nMake();
     public static native boolean _nEquals(long ptr, long otherPtr);
     public static native boolean _nAttributeEquals(long ptr, int attribute, long otherPtr);
+    public static native boolean _nEqualsByFonts(long ptr, long otherPtr);
     public static native int   _nGetColor(long ptr);
     public static native void  _nSetColor(long ptr,int color);
     public static native long  _nGetForeground(long ptr);

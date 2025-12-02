@@ -2,6 +2,7 @@ package io.github.humbleui.skija.paragraph;
 
 import org.jetbrains.annotations.*;
 
+// TextStyle.h - TextDecorationStyle
 public enum DecorationLineStyle {
     SOLID,
     DOUBLE,

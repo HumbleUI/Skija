@@ -2,6 +2,7 @@ package io.github.humbleui.skija.paragraph;
 
 import org.jetbrains.annotations.*;
 
+// TextStyle.h - PlaceholderAlignment
 /**
  * Where to vertically align the placeholder relative to the surrounding text.
  */

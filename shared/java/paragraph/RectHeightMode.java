@@ -2,6 +2,7 @@ package io.github.humbleui.skija.paragraph;
 
 import org.jetbrains.annotations.*;
 
+// DartTypes.h - RectHeightStyle
 public enum RectHeightMode {
 
     /** Provide tight bounding boxes that fit heights per run. */

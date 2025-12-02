@@ -24,14 +24,15 @@ public class TextStyleTest implements Executable {
                 TextStyleAttribute.SHADOW,
                 TextStyleAttribute.DECORATIONS,
                 TextStyleAttribute.LETTER_SPACING,
-                TextStyleAttribute.WORD_SPACING,
-                TextStyleAttribute.FONT_EXACT})
+                TextStyleAttribute.WORD_SPACING})
             {
                 pushStack(attr.toString());
                 assertEquals(true, ts1.equals(attr, ts2));
                 assertEquals(true, ts2.equals(attr, ts1));
                 popStack();
             }
+            assertEquals(true, ts2.equalsByFonts(ts1));
+            assertEquals(true, ts1.equalsByFonts(ts2));
         }
 
         assertEquals(false, new TextStyle().setColor(0xFFcc3300).equals(TextStyleAttribute.ALL_ATTRIBUTES, new TextStyle().setColor(0xFF00cc33)));

@@ -2,6 +2,7 @@ package io.github.humbleui.skija.paragraph;
 
 import org.jetbrains.annotations.*;
 
+// DartTypes.h - TextBaseline
 public enum BaselineMode {
     ALPHABETIC,
     IDEOGRAPHIC;

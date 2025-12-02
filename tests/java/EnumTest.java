@@ -6,6 +6,7 @@ import java.util.*;
 
 import io.github.humbleui.skija.*;
 import io.github.humbleui.skija.impl.*;
+import io.github.humbleui.skija.paragraph.*;
 import io.github.humbleui.skija.test.runner.*;
 
 public class EnumTest implements Executable {
@@ -55,6 +56,16 @@ public class EnumTest implements Executable {
         TestRunner.testMethod(this, "saveLayerRecFlag");
         TestRunner.testMethod(this, "shadowUtilsFlag");
         TestRunner.testMethod(this, "surfaceOrigin");
+        TestRunner.testMethod(this, "paragraphAffinity");
+        TestRunner.testMethod(this, "paragraphAlignment");
+        TestRunner.testMethod(this, "paragraphBaselineMode");
+        TestRunner.testMethod(this, "paragraphDecorationLineStyle");
+        TestRunner.testMethod(this, "paragraphDirection");
+        TestRunner.testMethod(this, "paragraphHeightMode");
+        TestRunner.testMethod(this, "paragraphPlaceholderAlignment");
+        TestRunner.testMethod(this, "paragraphRectHeightMode");
+        TestRunner.testMethod(this, "paragraphRectWidthMode");
+        TestRunner.testMethod(this, "paragraphTextStyleAttribute");
     }
 
     public void animationDisposalMode() throws Exception {
@@ -672,6 +683,120 @@ public class EnumTest implements Executable {
         TestRunner.assertArrayEquals(nativeOrdinals, javaOrdinals);
     }
 
+    public void paragraphAffinity() throws Exception {
+        int[] nativeOrdinals = _nGetParagraphAffinityOrdinals();
+        int[] javaOrdinals = {
+            Affinity.UPSTREAM.ordinal(),
+            Affinity.DOWNSTREAM.ordinal()
+        };
+        TestRunner.assertArrayEquals(nativeOrdinals, javaOrdinals);
+    }
+
+    public void paragraphAlignment() throws Exception {
+        int[] nativeOrdinals = _nGetParagraphAlignmentOrdinals();
+        int[] javaOrdinals = {
+            Alignment.LEFT.ordinal(),
+            Alignment.RIGHT.ordinal(),
+            Alignment.CENTER.ordinal(),
+            Alignment.JUSTIFY.ordinal(),
+            Alignment.START.ordinal(),
+            Alignment.END.ordinal()
+        };
+        TestRunner.assertArrayEquals(nativeOrdinals, javaOrdinals);
+    }
+
+    public void paragraphBaselineMode() throws Exception {
+        int[] nativeOrdinals = _nGetParagraphBaselineModeOrdinals();
+        int[] javaOrdinals = {
+            BaselineMode.ALPHABETIC.ordinal(),
+            BaselineMode.IDEOGRAPHIC.ordinal()
+        };
+        TestRunner.assertArrayEquals(nativeOrdinals, javaOrdinals);
+    }
+
+    public void paragraphDecorationLineStyle() throws Exception {
+        int[] nativeOrdinals = _nGetParagraphDecorationLineStyleOrdinals();
+        int[] javaOrdinals = {
+            DecorationLineStyle.SOLID.ordinal(),
+            DecorationLineStyle.DOUBLE.ordinal(),
+            DecorationLineStyle.DOTTED.ordinal(),
+            DecorationLineStyle.DASHED.ordinal(),
+            DecorationLineStyle.WAVY.ordinal()
+        };
+        TestRunner.assertArrayEquals(nativeOrdinals, javaOrdinals);
+    }
+
+    public void paragraphDirection() throws Exception {
+        int[] nativeOrdinals = _nGetParagraphDirectionOrdinals();
+        int[] javaOrdinals = {
+            Direction.RTL.ordinal(),
+            Direction.LTR.ordinal()
+        };
+        TestRunner.assertArrayEquals(nativeOrdinals, javaOrdinals);
+    }
+
+    public void paragraphHeightMode() throws Exception {
+        int[] nativeOrdinals = _nGetParagraphHeightModeOrdinals();
+        int[] javaOrdinals = {
+            HeightMode.ALL.ordinal(),
+            HeightMode.DISABLE_FIRST_ASCENT.ordinal(),
+            HeightMode.DISABLE_LAST_DESCENT.ordinal(),
+            HeightMode.DISABLE_ALL.ordinal()
+        };
+        TestRunner.assertArrayEquals(nativeOrdinals, javaOrdinals);
+    }
+
+    public void paragraphPlaceholderAlignment() throws Exception {
+        int[] nativeOrdinals = _nGetParagraphPlaceholderAlignmentOrdinals();
+        int[] javaOrdinals = {
+            PlaceholderAlignment.BASELINE.ordinal(),
+            PlaceholderAlignment.ABOVE_BASELINE.ordinal(),
+            PlaceholderAlignment.BELOW_BASELINE.ordinal(),
+            PlaceholderAlignment.TOP.ordinal(),
+            PlaceholderAlignment.BOTTOM.ordinal(),
+            PlaceholderAlignment.MIDDLE.ordinal()
+        };
+        TestRunner.assertArrayEquals(nativeOrdinals, javaOrdinals);
+    }
+
+    public void paragraphRectHeightMode() throws Exception {
+        int[] nativeOrdinals = _nGetParagraphRectHeightModeOrdinals();
+        int[] javaOrdinals = {
+            RectHeightMode.TIGHT.ordinal(),
+            RectHeightMode.MAX.ordinal(),
+            RectHeightMode.INCLUDE_LINE_SPACING_MIDDLE.ordinal(),
+            RectHeightMode.INCLUDE_LINE_SPACING_TOP.ordinal(),
+            RectHeightMode.INCLUDE_LINE_SPACING_BOTTOM.ordinal(),
+            RectHeightMode.STRUT.ordinal()
+        };
+        TestRunner.assertArrayEquals(nativeOrdinals, javaOrdinals);
+    }
+
+    public void paragraphRectWidthMode() throws Exception {
+        int[] nativeOrdinals = _nGetParagraphRectWidthModeOrdinals();
+        int[] javaOrdinals = {
+            RectWidthMode.TIGHT.ordinal(),
+            RectWidthMode.MAX.ordinal()
+        };
+        TestRunner.assertArrayEquals(nativeOrdinals, javaOrdinals);
+    }
+
+    public void paragraphTextStyleAttribute() throws Exception {
+        int[] nativeOrdinals = _nGetParagraphTextStyleAttributeOrdinals();
+        int[] javaOrdinals = {
+            TextStyleAttribute.NONE.ordinal(),
+            TextStyleAttribute.ALL_ATTRIBUTES.ordinal(),
+            TextStyleAttribute.FONT.ordinal(),
+            TextStyleAttribute.FOREGROUND.ordinal(),
+            TextStyleAttribute.BACKGROUND.ordinal(),
+            TextStyleAttribute.SHADOW.ordinal(),
+            TextStyleAttribute.DECORATIONS.ordinal(),
+            TextStyleAttribute.LETTER_SPACING.ordinal(),
+            TextStyleAttribute.WORD_SPACING.ordinal()
+        };
+        TestRunner.assertArrayEquals(nativeOrdinals, javaOrdinals);
+    }
+
     public static native int[] _nGetAnimationDisposalModeOrdinals();
     public static native int[] _nGetBackendStateOrdinals();
     public static native int[] _nGetBlendModeOrdinals();
@@ -714,4 +839,14 @@ public class EnumTest implements Executable {
     public static native int[] _nGetSaveLayerRecFlagOrdinals();
     public static native int[] _nGetShadowUtilsFlagOrdinals();
     public static native int[] _nGetSurfaceOriginOrdinals();
+    public static native int[] _nGetParagraphAffinityOrdinals();
+    public static native int[] _nGetParagraphAlignmentOrdinals();
+    public static native int[] _nGetParagraphBaselineModeOrdinals();
+    public static native int[] _nGetParagraphDecorationLineStyleOrdinals();
+    public static native int[] _nGetParagraphDirectionOrdinals();
+    public static native int[] _nGetParagraphHeightModeOrdinals();
+    public static native int[] _nGetParagraphPlaceholderAlignmentOrdinals();
+    public static native int[] _nGetParagraphRectHeightModeOrdinals();
+    public static native int[] _nGetParagraphRectWidthModeOrdinals();
+    public static native int[] _nGetParagraphTextStyleAttributeOrdinals();
 }

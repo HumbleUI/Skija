@@ -28,6 +28,8 @@
 #include "SkSurface.h"
 #include "SkSurfaceProps.h"
 #include "SkTileMode.h"
+#include "modules/skparagraph/include/DartTypes.h"
+#include "modules/skparagraph/include/TextStyle.h"
 #include "SkWebpEncoder.h"
 
 extern "C" JNIEXPORT jintArray JNICALL Java_io_github_humbleui_skija_test_EnumTest__1nGetAnimationDisposalModeOrdinals
@@ -717,6 +719,150 @@ extern "C" JNIEXPORT jintArray JNICALL Java_io_github_humbleui_skija_test_EnumTe
     jint values[] = {
         static_cast<jint>(kTopLeft_GrSurfaceOrigin),
         static_cast<jint>(kBottomLeft_GrSurfaceOrigin),
+    };
+    size_t len = sizeof(values) / sizeof(values[0]);
+    jintArray result = env->NewIntArray(len);
+    env->SetIntArrayRegion(result, 0, len, values);
+    return result;
+}
+
+extern "C" JNIEXPORT jintArray JNICALL Java_io_github_humbleui_skija_test_EnumTest__1nGetParagraphAffinityOrdinals
+  (JNIEnv* env, jclass jclass) {
+    jint values[] = {
+        static_cast<jint>(skia::textlayout::kUpstream),
+        static_cast<jint>(skia::textlayout::kDownstream),
+    };
+    size_t len = sizeof(values) / sizeof(values[0]);
+    jintArray result = env->NewIntArray(len);
+    env->SetIntArrayRegion(result, 0, len, values);
+    return result;
+}
+
+extern "C" JNIEXPORT jintArray JNICALL Java_io_github_humbleui_skija_test_EnumTest__1nGetParagraphAlignmentOrdinals
+  (JNIEnv* env, jclass jclass) {
+    jint values[] = {
+        static_cast<jint>(skia::textlayout::TextAlign::kLeft),
+        static_cast<jint>(skia::textlayout::TextAlign::kRight),
+        static_cast<jint>(skia::textlayout::TextAlign::kCenter),
+        static_cast<jint>(skia::textlayout::TextAlign::kJustify),
+        static_cast<jint>(skia::textlayout::TextAlign::kStart),
+        static_cast<jint>(skia::textlayout::TextAlign::kEnd),
+    };
+    size_t len = sizeof(values) / sizeof(values[0]);
+    jintArray result = env->NewIntArray(len);
+    env->SetIntArrayRegion(result, 0, len, values);
+    return result;
+}
+
+extern "C" JNIEXPORT jintArray JNICALL Java_io_github_humbleui_skija_test_EnumTest__1nGetParagraphBaselineModeOrdinals
+  (JNIEnv* env, jclass jclass) {
+    jint values[] = {
+        static_cast<jint>(skia::textlayout::TextBaseline::kAlphabetic),
+        static_cast<jint>(skia::textlayout::TextBaseline::kIdeographic),
+    };
+    size_t len = sizeof(values) / sizeof(values[0]);
+    jintArray result = env->NewIntArray(len);
+    env->SetIntArrayRegion(result, 0, len, values);
+    return result;
+}
+
+extern "C" JNIEXPORT jintArray JNICALL Java_io_github_humbleui_skija_test_EnumTest__1nGetParagraphDecorationLineStyleOrdinals
+  (JNIEnv* env, jclass jclass) {
+    jint values[] = {
+        static_cast<jint>(skia::textlayout::kSolid),
+        static_cast<jint>(skia::textlayout::kDouble),
+        static_cast<jint>(skia::textlayout::kDotted),
+        static_cast<jint>(skia::textlayout::kDashed),
+        static_cast<jint>(skia::textlayout::kWavy),
+    };
+    size_t len = sizeof(values) / sizeof(values[0]);
+    jintArray result = env->NewIntArray(len);
+    env->SetIntArrayRegion(result, 0, len, values);
+    return result;
+}
+
+extern "C" JNIEXPORT jintArray JNICALL Java_io_github_humbleui_skija_test_EnumTest__1nGetParagraphDirectionOrdinals
+  (JNIEnv* env, jclass jclass) {
+    jint values[] = {
+        static_cast<jint>(skia::textlayout::TextDirection::kRtl),
+        static_cast<jint>(skia::textlayout::TextDirection::kLtr),
+    };
+    size_t len = sizeof(values) / sizeof(values[0]);
+    jintArray result = env->NewIntArray(len);
+    env->SetIntArrayRegion(result, 0, len, values);
+    return result;
+}
+
+extern "C" JNIEXPORT jintArray JNICALL Java_io_github_humbleui_skija_test_EnumTest__1nGetParagraphHeightModeOrdinals
+  (JNIEnv* env, jclass jclass) {
+    jint values[] = {
+        static_cast<jint>(skia::textlayout::kAll),
+        static_cast<jint>(skia::textlayout::kDisableFirstAscent),
+        static_cast<jint>(skia::textlayout::kDisableLastDescent),
+        static_cast<jint>(skia::textlayout::kDisableAll),
+    };
+    size_t len = sizeof(values) / sizeof(values[0]);
+    jintArray result = env->NewIntArray(len);
+    env->SetIntArrayRegion(result, 0, len, values);
+    return result;
+}
+
+extern "C" JNIEXPORT jintArray JNICALL Java_io_github_humbleui_skija_test_EnumTest__1nGetParagraphPlaceholderAlignmentOrdinals
+  (JNIEnv* env, jclass jclass) {
+    jint values[] = {
+        static_cast<jint>(skia::textlayout::PlaceholderAlignment::kBaseline),
+        static_cast<jint>(skia::textlayout::PlaceholderAlignment::kAboveBaseline),
+        static_cast<jint>(skia::textlayout::PlaceholderAlignment::kBelowBaseline),
+        static_cast<jint>(skia::textlayout::PlaceholderAlignment::kTop),
+        static_cast<jint>(skia::textlayout::PlaceholderAlignment::kBottom),
+        static_cast<jint>(skia::textlayout::PlaceholderAlignment::kMiddle),
+    };
+    size_t len = sizeof(values) / sizeof(values[0]);
+    jintArray result = env->NewIntArray(len);
+    env->SetIntArrayRegion(result, 0, len, values);
+    return result;
+}
+
+extern "C" JNIEXPORT jintArray JNICALL Java_io_github_humbleui_skija_test_EnumTest__1nGetParagraphRectHeightModeOrdinals
+  (JNIEnv* env, jclass jclass) {
+    jint values[] = {
+        static_cast<jint>(skia::textlayout::RectHeightStyle::kTight),
+        static_cast<jint>(skia::textlayout::RectHeightStyle::kMax),
+        static_cast<jint>(skia::textlayout::RectHeightStyle::kIncludeLineSpacingMiddle),
+        static_cast<jint>(skia::textlayout::RectHeightStyle::kIncludeLineSpacingTop),
+        static_cast<jint>(skia::textlayout::RectHeightStyle::kIncludeLineSpacingBottom),
+        static_cast<jint>(skia::textlayout::RectHeightStyle::kStrut),
+    };
+    size_t len = sizeof(values) / sizeof(values[0]);
+    jintArray result = env->NewIntArray(len);
+    env->SetIntArrayRegion(result, 0, len, values);
+    return result;
+}
+
+extern "C" JNIEXPORT jintArray JNICALL Java_io_github_humbleui_skija_test_EnumTest__1nGetParagraphRectWidthModeOrdinals
+  (JNIEnv* env, jclass jclass) {
+    jint values[] = {
+        static_cast<jint>(skia::textlayout::RectWidthStyle::kTight),
+        static_cast<jint>(skia::textlayout::RectWidthStyle::kMax),
+    };
+    size_t len = sizeof(values) / sizeof(values[0]);
+    jintArray result = env->NewIntArray(len);
+    env->SetIntArrayRegion(result, 0, len, values);
+    return result;
+}
+
+extern "C" JNIEXPORT jintArray JNICALL Java_io_github_humbleui_skija_test_EnumTest__1nGetParagraphTextStyleAttributeOrdinals
+  (JNIEnv* env, jclass jclass) {
+    jint values[] = {
+        static_cast<jint>(skia::textlayout::kNone),
+        static_cast<jint>(skia::textlayout::kAllAttributes),
+        static_cast<jint>(skia::textlayout::kFont),
+        static_cast<jint>(skia::textlayout::kForeground),
+        static_cast<jint>(skia::textlayout::kBackground),
+        static_cast<jint>(skia::textlayout::kShadow),
+        static_cast<jint>(skia::textlayout::kDecorations),
+        static_cast<jint>(skia::textlayout::kLetterSpacing),
+        static_cast<jint>(skia::textlayout::kWordSpacing)
     };
     size_t len = sizeof(values) / sizeof(values[0]);
     jintArray result = env->NewIntArray(len);

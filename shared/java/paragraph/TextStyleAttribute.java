@@ -2,6 +2,7 @@ package io.github.humbleui.skija.paragraph;
 
 import org.jetbrains.annotations.*;
 
+// TextStyle.h - StyleType
 public enum TextStyleAttribute {
     NONE,
     ALL_ATTRIBUTES,
@@ -11,8 +12,7 @@ public enum TextStyleAttribute {
     SHADOW,
     DECORATIONS,
     LETTER_SPACING,
-    WORD_SPACING,
-    FONT_EXACT;
+    WORD_SPACING;
 
     @ApiStatus.Internal public static final TextStyleAttribute[] _values = values();
 }

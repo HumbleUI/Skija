@@ -2,6 +2,7 @@ package io.github.humbleui.skija.paragraph;
 
 import org.jetbrains.annotations.*;
 
+// DartTypes.h - RectWidthStyle
 public enum RectWidthMode {
 
     /** Provide tight bounding boxes that fit widths to the runs of each line independently. */

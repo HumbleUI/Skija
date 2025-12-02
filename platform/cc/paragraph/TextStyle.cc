@@ -34,10 +34,14 @@ extern "C" JNIEXPORT jboolean JNICALL Java_io_github_humbleui_skija_paragraph_Te
   (JNIEnv* env, jclass jclass, jlong ptr, jint attribute, jlong otherPtr) {
     TextStyle* instance = reinterpret_cast<TextStyle*>(static_cast<uintptr_t>(ptr));
     TextStyle* other = reinterpret_cast<TextStyle*>(static_cast<uintptr_t>(otherPtr));
-    if (attribute == static_cast<jint>(StyleType::kWordSpacing) + 1) // FONT_EXACT
-        return instance->equalsByFonts(*other);
-    else
-        return instance->matchOneAttribute(static_cast<StyleType>(attribute), *other);
+    return instance->matchOneAttribute(static_cast<StyleType>(attribute), *other);
+}
+
+extern "C" JNIEXPORT jboolean JNICALL Java_io_github_humbleui_skija_paragraph_TextStyle__1nEqualsByFonts
+  (JNIEnv* env, jclass jclass, jlong ptr, jlong otherPtr) {
+    TextStyle* instance = reinterpret_cast<TextStyle*>(static_cast<uintptr_t>(ptr));
+    TextStyle* other = reinterpret_cast<TextStyle*>(static_cast<uintptr_t>(otherPtr));
+    return instance->equalsByFonts(*other);
 }
 
 extern "C" JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_paragraph_TextStyle__1nGetColor

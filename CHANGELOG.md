@@ -10,6 +10,7 @@ Changed:
 Removed:
 
 - [ BREAKING ] `SurfaceColorFormat` (it was duplicating `ColorType` 🙈)
+- [ BREAKING ] `TextStyleAttribute.FONT_EXACT` (replaced with `TextStyleAttribute::equalsByFonts`)
 
 Fixed:
 
@@ -24,6 +25,7 @@ Added:
 - `EncodedImageFormat.AVIF`, `EncodedImageFormat.JPEGXL`
 - `EncodedOrigin.DEFAULT`
 - `ShadowUtilsFlag.NONE`, `ShadowUtilsFlag.ALL`
+- `TextStyleAttribute::equalsByFonts`
 
 # 0.143.4 - Nov 22, 2025
 

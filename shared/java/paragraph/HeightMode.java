@@ -2,6 +2,7 @@ package io.github.humbleui.skija.paragraph;
 
 import org.jetbrains.annotations.*;
 
+// DartTypes.h - TextHeightBehavior
 public enum HeightMode {
     ALL,
     DISABLE_FIRST_ASCENT,
