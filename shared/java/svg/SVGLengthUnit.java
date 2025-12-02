@@ -2,6 +2,7 @@ package io.github.humbleui.skija.svg;
 
 import org.jetbrains.annotations.*;
 
+// SkSVGTypes.h - SkSVGLength::Unit
 public enum SVGLengthUnit {
     UNKNOWN,
     NUMBER,

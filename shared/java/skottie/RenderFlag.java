@@ -2,6 +2,7 @@ package io.github.humbleui.skija.skottie;
 
 import org.jetbrains.annotations.*;
 
+// Skottie.h - Animation::RenderFlag
 public enum RenderFlag {
     /**
      * When rendering into a known transparent buffer, clients can pass

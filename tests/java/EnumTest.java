@@ -7,6 +7,8 @@ import java.util.*;
 import io.github.humbleui.skija.*;
 import io.github.humbleui.skija.impl.*;
 import io.github.humbleui.skija.paragraph.*;
+import io.github.humbleui.skija.skottie.*;
+import io.github.humbleui.skija.svg.*;
 import io.github.humbleui.skija.test.runner.*;
 
 public class EnumTest implements Executable {
@@ -66,6 +68,14 @@ public class EnumTest implements Executable {
         TestRunner.testMethod(this, "paragraphRectHeightMode");
         TestRunner.testMethod(this, "paragraphRectWidthMode");
         TestRunner.testMethod(this, "paragraphTextStyleAttribute");
+        TestRunner.testMethod(this, "skottieAnimationBuilderFlag");
+        TestRunner.testMethod(this, "skottieLogLevel");
+        TestRunner.testMethod(this, "skottieRenderFlag");
+        TestRunner.testMethod(this, "svgLengthType");
+        TestRunner.testMethod(this, "svgLengthUnit");
+        TestRunner.testMethod(this, "svgPreserveAspectRatioAlign");
+        TestRunner.testMethod(this, "svgPreserveAspectRatioScale");
+        TestRunner.testMethod(this, "svgTag");
     }
 
     public void animationDisposalMode() throws Exception {
@@ -797,6 +807,139 @@ public class EnumTest implements Executable {
         TestRunner.assertArrayEquals(nativeOrdinals, javaOrdinals);
     }
 
+    public void skottieAnimationBuilderFlag() throws Exception {
+        int[] nativeOrdinals = _nGetSkottieAnimationBuilderFlagOrdinals();
+        int[] javaOrdinals = {
+            AnimationBuilderFlag.DEFER_IMAGE_LOADING._flag,
+            AnimationBuilderFlag.PREFER_EMBEDDED_FONTS._flag
+        };
+        TestRunner.assertArrayEquals(nativeOrdinals, javaOrdinals);
+    }
+
+    public void skottieLogLevel() throws Exception {
+        int[] nativeOrdinals = _nGetSkottieLogLevelOrdinals();
+        int[] javaOrdinals = {
+            LogLevel.WARNING.ordinal(),
+            LogLevel.ERROR.ordinal()
+        };
+        TestRunner.assertArrayEquals(nativeOrdinals, javaOrdinals);
+    }
+
+    public void skottieRenderFlag() throws Exception {
+        int[] nativeOrdinals = _nGetSkottieRenderFlagOrdinals();
+        int[] javaOrdinals = {
+            RenderFlag.SKIP_TOP_LEVEL_ISOLATION._flag,
+            RenderFlag.DISABLE_TOP_LEVEL_CLIPPING._flag
+        };
+        TestRunner.assertArrayEquals(nativeOrdinals, javaOrdinals);
+    }
+
+    public void svgLengthType() throws Exception {
+        int[] nativeOrdinals = _nGetSvgLengthTypeOrdinals();
+        int[] javaOrdinals = {
+            SVGLengthType.HORIZONTAL.ordinal(),
+            SVGLengthType.VERTICAL.ordinal(),
+            SVGLengthType.OTHER.ordinal()
+        };
+        TestRunner.assertArrayEquals(nativeOrdinals, javaOrdinals);
+    }
+
+    public void svgLengthUnit() throws Exception {
+        int[] nativeOrdinals = _nGetSvgLengthUnitOrdinals();
+        int[] javaOrdinals = {
+            SVGLengthUnit.UNKNOWN.ordinal(),
+            SVGLengthUnit.NUMBER.ordinal(),
+            SVGLengthUnit.PERCENTAGE.ordinal(),
+            SVGLengthUnit.EMS.ordinal(),
+            SVGLengthUnit.EXS.ordinal(),
+            SVGLengthUnit.PX.ordinal(),
+            SVGLengthUnit.CM.ordinal(),
+            SVGLengthUnit.MM.ordinal(),
+            SVGLengthUnit.IN.ordinal(),
+            SVGLengthUnit.PT.ordinal(),
+            SVGLengthUnit.PC.ordinal()
+        };
+        TestRunner.assertArrayEquals(nativeOrdinals, javaOrdinals);
+    }
+
+    public void svgPreserveAspectRatioAlign() throws Exception {
+        int[] nativeOrdinals = _nGetSvgPreserveAspectRatioAlignOrdinals();
+        int[] javaOrdinals = {
+            SVGPreserveAspectRatioAlign.XMIN_YMIN._value,
+            SVGPreserveAspectRatioAlign.XMID_YMIN._value,
+            SVGPreserveAspectRatioAlign.XMAX_YMIN._value,
+            SVGPreserveAspectRatioAlign.XMIN_YMID._value,
+            SVGPreserveAspectRatioAlign.XMID_YMID._value,
+            SVGPreserveAspectRatioAlign.XMAX_YMID._value,
+            SVGPreserveAspectRatioAlign.XMIN_YMAX._value,
+            SVGPreserveAspectRatioAlign.XMID_YMAX._value,
+            SVGPreserveAspectRatioAlign.XMAX_YMAX._value,
+            SVGPreserveAspectRatioAlign.NONE._value
+        };
+        TestRunner.assertArrayEquals(nativeOrdinals, javaOrdinals);
+    }
+
+    public void svgPreserveAspectRatioScale() throws Exception {
+        int[] nativeOrdinals = _nGetSvgPreserveAspectRatioScaleOrdinals();
+        int[] javaOrdinals = {
+            SVGPreserveAspectRatioScale.MEET.ordinal(),
+            SVGPreserveAspectRatioScale.SLICE.ordinal()
+        };
+        TestRunner.assertArrayEquals(nativeOrdinals, javaOrdinals);
+    }
+
+    public void svgTag() throws Exception {
+        int[] nativeOrdinals = _nGetSvgTagOrdinals();
+        int[] javaOrdinals = {
+            SVGTag.CIRCLE.ordinal(),
+            SVGTag.CLIP_PATH.ordinal(),
+            SVGTag.DEFS.ordinal(),
+            SVGTag.ELLIPSE.ordinal(),
+            SVGTag.FE_BLEND.ordinal(),
+            SVGTag.FE_COLOR_MATRIX.ordinal(),
+            SVGTag.FE_COMPONENT_TRANSFER.ordinal(),
+            SVGTag.FE_COMPOSITE.ordinal(),
+            SVGTag.FE_DIFFUSE_LIGHTING.ordinal(),
+            SVGTag.FE_DISPLACEMENT_MAP.ordinal(),
+            SVGTag.FE_DISTANT_LIGHT.ordinal(),
+            SVGTag.FE_FLOOD.ordinal(),
+            SVGTag.FE_FUNC_A.ordinal(),
+            SVGTag.FE_FUNC_R.ordinal(),
+            SVGTag.FE_FUNC_G.ordinal(),
+            SVGTag.FE_FUNC_B.ordinal(),
+            SVGTag.FE_GAUSSIAN_BLUR.ordinal(),
+            SVGTag.FE_IMAGE.ordinal(),
+            SVGTag.FE_MERGE.ordinal(),
+            SVGTag.FE_MERGE_NODE.ordinal(),
+            SVGTag.FE_MORPHOLOGY.ordinal(),
+            SVGTag.FE_OFFSET.ordinal(),
+            SVGTag.FE_POINT_LIGHT.ordinal(),
+            SVGTag.FE_SPECULAR_LIGHTING.ordinal(),
+            SVGTag.FE_SPOT_LIGHT.ordinal(),
+            SVGTag.FE_TURBULENCE.ordinal(),
+            SVGTag.FILTER.ordinal(),
+            SVGTag.G.ordinal(),
+            SVGTag.IMAGE.ordinal(),
+            SVGTag.LINE.ordinal(),
+            SVGTag.LINEAR_GRADIENT.ordinal(),
+            SVGTag.MASK.ordinal(),
+            SVGTag.PATH.ordinal(),
+            SVGTag.PATTERN.ordinal(),
+            SVGTag.POLYGON.ordinal(),
+            SVGTag.POLYLINE.ordinal(),
+            SVGTag.RADIAL_GRADIENT.ordinal(),
+            SVGTag.RECT.ordinal(),
+            SVGTag.STOP.ordinal(),
+            SVGTag.SVG.ordinal(),
+            SVGTag.TEXT.ordinal(),
+            SVGTag.TEXT_LITERAL.ordinal(),
+            SVGTag.TEXTPATH.ordinal(),
+            SVGTag.TSPAN.ordinal(),
+            SVGTag.USE.ordinal()
+        };
+        TestRunner.assertArrayEquals(nativeOrdinals, javaOrdinals);
+    }
+
     public static native int[] _nGetAnimationDisposalModeOrdinals();
     public static native int[] _nGetBackendStateOrdinals();
     public static native int[] _nGetBlendModeOrdinals();
@@ -849,4 +992,12 @@ public class EnumTest implements Executable {
     public static native int[] _nGetParagraphRectHeightModeOrdinals();
     public static native int[] _nGetParagraphRectWidthModeOrdinals();
     public static native int[] _nGetParagraphTextStyleAttributeOrdinals();
+    public static native int[] _nGetSkottieAnimationBuilderFlagOrdinals();
+    public static native int[] _nGetSkottieLogLevelOrdinals();
+    public static native int[] _nGetSkottieRenderFlagOrdinals();
+    public static native int[] _nGetSvgLengthTypeOrdinals();
+    public static native int[] _nGetSvgLengthUnitOrdinals();
+    public static native int[] _nGetSvgPreserveAspectRatioAlignOrdinals();
+    public static native int[] _nGetSvgPreserveAspectRatioScaleOrdinals();
+    public static native int[] _nGetSvgTagOrdinals();
 }

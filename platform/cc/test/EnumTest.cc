@@ -30,6 +30,10 @@
 #include "SkTileMode.h"
 #include "modules/skparagraph/include/DartTypes.h"
 #include "modules/skparagraph/include/TextStyle.h"
+#include "modules/skottie/include/Skottie.h"
+#include "modules/svg/include/SkSVGNode.h"
+#include "modules/svg/include/SkSVGRenderContext.h"
+#include "modules/svg/include/SkSVGTypes.h"
 #include "SkWebpEncoder.h"
 
 extern "C" JNIEXPORT jintArray JNICALL Java_io_github_humbleui_skija_test_EnumTest__1nGetAnimationDisposalModeOrdinals
@@ -863,6 +867,163 @@ extern "C" JNIEXPORT jintArray JNICALL Java_io_github_humbleui_skija_test_EnumTe
         static_cast<jint>(skia::textlayout::kDecorations),
         static_cast<jint>(skia::textlayout::kLetterSpacing),
         static_cast<jint>(skia::textlayout::kWordSpacing)
+    };
+    size_t len = sizeof(values) / sizeof(values[0]);
+    jintArray result = env->NewIntArray(len);
+    env->SetIntArrayRegion(result, 0, len, values);
+    return result;
+}
+
+extern "C" JNIEXPORT jintArray JNICALL Java_io_github_humbleui_skija_test_EnumTest__1nGetSkottieAnimationBuilderFlagOrdinals
+  (JNIEnv* env, jclass jclass) {
+    jint values[] = {
+        static_cast<jint>(skottie::Animation::Builder::kDeferImageLoading),
+        static_cast<jint>(skottie::Animation::Builder::kPreferEmbeddedFonts),
+    };
+    size_t len = sizeof(values) / sizeof(values[0]);
+    jintArray result = env->NewIntArray(len);
+    env->SetIntArrayRegion(result, 0, len, values);
+    return result;
+}
+
+extern "C" JNIEXPORT jintArray JNICALL Java_io_github_humbleui_skija_test_EnumTest__1nGetSkottieLogLevelOrdinals
+  (JNIEnv* env, jclass jclass) {
+    jint values[] = {
+        static_cast<jint>(skottie::Logger::Level::kWarning),
+        static_cast<jint>(skottie::Logger::Level::kError),
+    };
+    size_t len = sizeof(values) / sizeof(values[0]);
+    jintArray result = env->NewIntArray(len);
+    env->SetIntArrayRegion(result, 0, len, values);
+    return result;
+}
+
+extern "C" JNIEXPORT jintArray JNICALL Java_io_github_humbleui_skija_test_EnumTest__1nGetSkottieRenderFlagOrdinals
+  (JNIEnv* env, jclass jclass) {
+    jint values[] = {
+        static_cast<jint>(skottie::Animation::kSkipTopLevelIsolation),
+        static_cast<jint>(skottie::Animation::kDisableTopLevelClipping),
+    };
+    size_t len = sizeof(values) / sizeof(values[0]);
+    jintArray result = env->NewIntArray(len);
+    env->SetIntArrayRegion(result, 0, len, values);
+    return result;
+}
+
+extern "C" JNIEXPORT jintArray JNICALL Java_io_github_humbleui_skija_test_EnumTest__1nGetSvgLengthTypeOrdinals
+  (JNIEnv* env, jclass jclass) {
+    jint values[] = {
+        static_cast<jint>(SkSVGLengthContext::LengthType::kHorizontal),
+        static_cast<jint>(SkSVGLengthContext::LengthType::kVertical),
+        static_cast<jint>(SkSVGLengthContext::LengthType::kOther),
+    };
+    size_t len = sizeof(values) / sizeof(values[0]);
+    jintArray result = env->NewIntArray(len);
+    env->SetIntArrayRegion(result, 0, len, values);
+    return result;
+}
+
+extern "C" JNIEXPORT jintArray JNICALL Java_io_github_humbleui_skija_test_EnumTest__1nGetSvgLengthUnitOrdinals
+  (JNIEnv* env, jclass jclass) {
+    jint values[] = {
+        static_cast<jint>(SkSVGLength::Unit::kUnknown),
+        static_cast<jint>(SkSVGLength::Unit::kNumber),
+        static_cast<jint>(SkSVGLength::Unit::kPercentage),
+        static_cast<jint>(SkSVGLength::Unit::kEMS),
+        static_cast<jint>(SkSVGLength::Unit::kEXS),
+        static_cast<jint>(SkSVGLength::Unit::kPX),
+        static_cast<jint>(SkSVGLength::Unit::kCM),
+        static_cast<jint>(SkSVGLength::Unit::kMM),
+        static_cast<jint>(SkSVGLength::Unit::kIN),
+        static_cast<jint>(SkSVGLength::Unit::kPT),
+        static_cast<jint>(SkSVGLength::Unit::kPC),
+    };
+    size_t len = sizeof(values) / sizeof(values[0]);
+    jintArray result = env->NewIntArray(len);
+    env->SetIntArrayRegion(result, 0, len, values);
+    return result;
+}
+
+extern "C" JNIEXPORT jintArray JNICALL Java_io_github_humbleui_skija_test_EnumTest__1nGetSvgPreserveAspectRatioAlignOrdinals
+  (JNIEnv* env, jclass jclass) {
+    jint values[] = {
+        static_cast<jint>(SkSVGPreserveAspectRatio::kXMinYMin),
+        static_cast<jint>(SkSVGPreserveAspectRatio::kXMidYMin),
+        static_cast<jint>(SkSVGPreserveAspectRatio::kXMaxYMin),
+        static_cast<jint>(SkSVGPreserveAspectRatio::kXMinYMid),
+        static_cast<jint>(SkSVGPreserveAspectRatio::kXMidYMid),
+        static_cast<jint>(SkSVGPreserveAspectRatio::kXMaxYMid),
+        static_cast<jint>(SkSVGPreserveAspectRatio::kXMinYMax),
+        static_cast<jint>(SkSVGPreserveAspectRatio::kXMidYMax),
+        static_cast<jint>(SkSVGPreserveAspectRatio::kXMaxYMax),
+        static_cast<jint>(SkSVGPreserveAspectRatio::kNone),
+    };
+    size_t len = sizeof(values) / sizeof(values[0]);
+    jintArray result = env->NewIntArray(len);
+    env->SetIntArrayRegion(result, 0, len, values);
+    return result;
+}
+
+extern "C" JNIEXPORT jintArray JNICALL Java_io_github_humbleui_skija_test_EnumTest__1nGetSvgPreserveAspectRatioScaleOrdinals
+  (JNIEnv* env, jclass jclass) {
+    jint values[] = {
+        static_cast<jint>(SkSVGPreserveAspectRatio::kMeet),
+        static_cast<jint>(SkSVGPreserveAspectRatio::kSlice),
+    };
+    size_t len = sizeof(values) / sizeof(values[0]);
+    jintArray result = env->NewIntArray(len);
+    env->SetIntArrayRegion(result, 0, len, values);
+    return result;
+}
+
+extern "C" JNIEXPORT jintArray JNICALL Java_io_github_humbleui_skija_test_EnumTest__1nGetSvgTagOrdinals
+  (JNIEnv* env, jclass jclass) {
+    jint values[] = {
+        static_cast<jint>(SkSVGTag::kCircle),
+        static_cast<jint>(SkSVGTag::kClipPath),
+        static_cast<jint>(SkSVGTag::kDefs),
+        static_cast<jint>(SkSVGTag::kEllipse),
+        static_cast<jint>(SkSVGTag::kFeBlend),
+        static_cast<jint>(SkSVGTag::kFeColorMatrix),
+        static_cast<jint>(SkSVGTag::kFeComponentTransfer),
+        static_cast<jint>(SkSVGTag::kFeComposite),
+        static_cast<jint>(SkSVGTag::kFeDiffuseLighting),
+        static_cast<jint>(SkSVGTag::kFeDisplacementMap),
+        static_cast<jint>(SkSVGTag::kFeDistantLight),
+        static_cast<jint>(SkSVGTag::kFeFlood),
+        static_cast<jint>(SkSVGTag::kFeFuncA),
+        static_cast<jint>(SkSVGTag::kFeFuncR),
+        static_cast<jint>(SkSVGTag::kFeFuncG),
+        static_cast<jint>(SkSVGTag::kFeFuncB),
+        static_cast<jint>(SkSVGTag::kFeGaussianBlur),
+        static_cast<jint>(SkSVGTag::kFeImage),
+        static_cast<jint>(SkSVGTag::kFeMerge),
+        static_cast<jint>(SkSVGTag::kFeMergeNode),
+        static_cast<jint>(SkSVGTag::kFeMorphology),
+        static_cast<jint>(SkSVGTag::kFeOffset),
+        static_cast<jint>(SkSVGTag::kFePointLight),
+        static_cast<jint>(SkSVGTag::kFeSpecularLighting),
+        static_cast<jint>(SkSVGTag::kFeSpotLight),
+        static_cast<jint>(SkSVGTag::kFeTurbulence),
+        static_cast<jint>(SkSVGTag::kFilter),
+        static_cast<jint>(SkSVGTag::kG),
+        static_cast<jint>(SkSVGTag::kImage),
+        static_cast<jint>(SkSVGTag::kLine),
+        static_cast<jint>(SkSVGTag::kLinearGradient),
+        static_cast<jint>(SkSVGTag::kMask),
+        static_cast<jint>(SkSVGTag::kPath),
+        static_cast<jint>(SkSVGTag::kPattern),
+        static_cast<jint>(SkSVGTag::kPolygon),
+        static_cast<jint>(SkSVGTag::kPolyline),
+        static_cast<jint>(SkSVGTag::kRadialGradient),
+        static_cast<jint>(SkSVGTag::kRect),
+        static_cast<jint>(SkSVGTag::kStop),
+        static_cast<jint>(SkSVGTag::kSvg),
+        static_cast<jint>(SkSVGTag::kText),
+        static_cast<jint>(SkSVGTag::kTextLiteral),
+        static_cast<jint>(SkSVGTag::kTextPath),
+        static_cast<jint>(SkSVGTag::kTSpan),
+        static_cast<jint>(SkSVGTag::kUse),
     };
     size_t len = sizeof(values) / sizeof(values[0]);
     jintArray result = env->NewIntArray(len);

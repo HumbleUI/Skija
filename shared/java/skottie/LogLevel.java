@@ -2,6 +2,7 @@ package io.github.humbleui.skija.skottie;
 
 import org.jetbrains.annotations.*;
 
+// Skottie.h - Logger::Level
 public enum LogLevel {
     WARNING,
     ERROR;

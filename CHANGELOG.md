@@ -16,6 +16,7 @@ Fixed:
 
 - `ColorType` to match latest Skia changes
 - `ColorType.N32` value on macOS
+- `SVGTag` to match latest Skia changes
 
 Added:
 
@@ -25,6 +26,7 @@ Added:
 - `EncodedImageFormat.AVIF`, `EncodedImageFormat.JPEGXL`
 - `EncodedOrigin.DEFAULT`
 - `ShadowUtilsFlag.NONE`, `ShadowUtilsFlag.ALL`
+- `SVGTag.FE_COMPONENT_TRANSFER`, `SVGTag.FE_FUNC_A`, `SVGTag.FE_FUNC_R`, `SVGTag.FE_FUNC_G`, `SVGTag.FE_FUNC_B`, `SVGTag.FE_MERGE`, `SVGTag.FE_MERGE_NODE`,
 - `TextStyleAttribute::equalsByFonts`
 
 # 0.143.4 - Nov 22, 2025

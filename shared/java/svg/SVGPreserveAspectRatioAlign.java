@@ -2,6 +2,7 @@ package io.github.humbleui.skija.svg;
 
 import org.jetbrains.annotations.*;
 
+// SkSVGTypes.h - SkSVGPreserveAspectRatio::Align
 public enum SVGPreserveAspectRatioAlign {
     // These values are chosen such that bits [0,1] encode X alignment, and
     // bits [2,3] encode Y alignment.

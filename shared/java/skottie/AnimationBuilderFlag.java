@@ -2,6 +2,7 @@ package io.github.humbleui.skija.skottie;
 
 import org.jetbrains.annotations.*;
 
+// Skottie.h - Animation::Builder::Flags
 public enum AnimationBuilderFlag {
     /**
      * Normally, all static image frames are resolved at
