@@ -32,7 +32,13 @@ add_library(skija SHARED ${SOURCES} ${IMPL_SOURCES} ${PARAGRAPH_SOURCES} ${SHAPE
 
 # Skia
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
-include(FindSkia)
+
+if(ANDROID)
+    include(FindSkiaAndroid)
+else()
+    include(FindSkia)
+endif()
+
 include("${SKIA_LIBRARY_DIR}/defines.cmake")
 
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
@@ -42,8 +48,13 @@ endif()
 if(APPLE)
     target_include_directories(skija PRIVATE $ENV{JAVA_HOME}/include $ENV{JAVA_HOME}/include/darwin)
 
+elseif(ANDROID)
+    # JNI headers are provided by NDK
+    target_compile_options(skija PRIVATE -fno-rtti)
+
 elseif(UNIX)
     target_include_directories(skija PRIVATE $ENV{JAVA_HOME}/include $ENV{JAVA_HOME}/include/linux)
+    target_compile_options(skija PRIVATE -Wno-attributes)
 
 elseif(WIN32)
     set(CMAKE_C_COMPILER cl)
@@ -57,6 +68,7 @@ elseif(WIN32)
     set(CMAKE_CXX_FLAGS_RELEASE "/MT")
     set(CMAKE_CXX_FLAGS_DEBUG "/MTd")
     target_link_options(skija PRIVATE /INCREMENTAL:NO /NODEFAULTLIB:MSVCRT /machine:X64)
+    target_compile_options(skija PRIVATE /wd4244 /wd4267 /wd5030)
 endif()
 
 target_link_libraries(skija skottie sksg svg skparagraph skshaper skunicode skresources skia ${FREETYPE_LIBRARIES} ${HARFBUZZ_LIBRARIES})

@@ -40,6 +40,8 @@ def package():
     lib_file = 'libskija.dylib'
   elif build_utils.system == 'linux':
     lib_file = 'libskija.so'
+  elif build_utils.system == 'android':
+    lib_file = 'libskija.so'
   elif build_utils.system == 'windows':
     lib_file = 'skija.dll'
 
