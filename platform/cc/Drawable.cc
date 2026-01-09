@@ -11,7 +11,7 @@ public:
 
     ~SkijaDrawableImpl() {
         JNIEnv* env;
-        if (fJavaVM->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_8) == JNI_OK)
+        if (fJavaVM->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_6) == JNI_OK)
           env->DeleteWeakGlobalRef(fObject);
     }
 
