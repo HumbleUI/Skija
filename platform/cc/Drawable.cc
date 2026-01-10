@@ -1,5 +1,10 @@
 #include <iostream>
 #include <jni.h>
+
+#ifndef JNI_VERSION_1_8
+#define JNI_VERSION_1_8 0x00010008
+#endif
+
 #include "SkDrawable.h"
 #include "SkPicture.h"
 #include "interop.hh"
@@ -11,7 +16,7 @@ public:
 
     ~SkijaDrawableImpl() {
         JNIEnv* env;
-        if (fJavaVM->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_6) == JNI_OK)
+        if (fJavaVM->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_8) == JNI_OK)
           env->DeleteWeakGlobalRef(fObject);
     }
 

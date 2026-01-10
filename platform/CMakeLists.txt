@@ -32,13 +32,7 @@ add_library(skija SHARED ${SOURCES} ${IMPL_SOURCES} ${PARAGRAPH_SOURCES} ${SHAPE
 
 # Skia
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
-
-if(ANDROID)
-    include(FindSkiaAndroid)
-else()
-    include(FindSkia)
-endif()
-
+include(FindSkia)
 include("${SKIA_LIBRARY_DIR}/defines.cmake")
 
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
