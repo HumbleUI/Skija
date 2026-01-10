@@ -99,20 +99,16 @@ jobs:
         with:
           fetch-depth: 0
       - uses: abdes/gha-setup-ninja@660f330a40aefa8d11632b3f901e92a4adb33d65
-      - name: Setup Java for Android SDK
+      - name: Setup Java
         run: |
           echo "JAVA_HOME=$JAVA_HOME_17_X64" >> $GITHUB_ENV
           echo "$JAVA_HOME_17_X64/bin" >> $GITHUB_PATH
       - name: Setup Android NDK
         uses: android-actions/setup-android@v3
       - name: Install NDK
-        run: sdkmanager "ndk;25.2.9519653"
+        run: sdkmanager "ndk;25.1.8937393"
       - name: Set NDK Home
-        run: echo "ANDROID_NDK_HOME=${{ env.ANDROID_HOME }}/ndk/25.2.9519653" >> $GITHUB_ENV
-      - name: Setup Java
-        run: |
-          echo "JAVA_HOME=$JAVA_HOME_11_X64" >> $GITHUB_ENV
-          echo "$JAVA_HOME_11_X64/bin" >> $GITHUB_PATH
+        run: echo "ANDROID_NDK_HOME=${{ env.ANDROID_HOME }}/ndk/25.1.8937393" >> $GITHUB_ENV
       - name: Build Android ${{ matrix.arch }}
         run: python3 script/build.py --system android --arch ${{ matrix.arch }}
       - name: Package Android ${{ matrix.arch }}

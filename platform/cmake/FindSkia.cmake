@@ -16,9 +16,24 @@ else()
   endif()
 endif()
 
+# Common options for find_library and find_path when cross-compiling for Android
+if(ANDROID)
+  set(SKIA_FIND_OPTS HINTS "${SKIA_LIBRARY_DIR}" NO_CMAKE_FIND_ROOT_PATH)
+  set(SKIA_PATH_OPTS NO_CMAKE_FIND_ROOT_PATH)
+else()
+  set(SKIA_FIND_OPTS PATH "${SKIA_LIBRARY_DIR}")
+  set(SKIA_PATH_OPTS)
+endif()
+
 # Skia library
-find_library(SKIA_LIBRARY skia PATH "${SKIA_LIBRARY_DIR}")
-if(WIN32)
+find_library(SKIA_LIBRARY NAMES skia ${SKIA_FIND_OPTS})
+
+if(ANDROID)
+  find_library(SKIA_OPENGL_LIBRARY GLESv2)
+  find_library(SKIA_EGL_LIBRARY EGL)
+  find_library(SKIA_ANDROID_LIBRARY android)
+  find_library(SKIA_LOG_LIBRARY log)
+elseif(WIN32)
   set(SKIA_OPENGL_LIBRARY opengl32 CACHE STRING "...")
 elseif(APPLE)
   find_library(SKIA_OPENGL_LIBRARY OpenGL NAMES GL)
@@ -29,83 +44,108 @@ else()
 endif()
 
 # SkUnicode
-find_library(SKUNICODE_CORE_LIBRARY skunicode_core PATH "${SKIA_LIBRARY_DIR}")
-find_library(SKUNICODE_ICU_LIBRARY skunicode_icu PATH "${SKIA_LIBRARY_DIR}")
+find_library(SKUNICODE_CORE_LIBRARY NAMES skunicode_core ${SKIA_FIND_OPTS})
+find_library(SKUNICODE_ICU_LIBRARY NAMES skunicode_icu ${SKIA_FIND_OPTS})
 add_library(skunicode INTERFACE)
-target_link_libraries(skunicode INTERFACE ${SKUNICODE_CORE_LIBRARY} ${SKUNICODE_ICU_LIBRARY})
-find_path(SKUNICODE_INCLUDE_DIR SkUnicode.h HINTS "${SKIA_DIR}/modules/skunicode/include")
+if(SKUNICODE_CORE_LIBRARY)
+    if(SKUNICODE_ICU_LIBRARY)
+        target_link_libraries(skunicode INTERFACE ${SKUNICODE_CORE_LIBRARY} ${SKUNICODE_ICU_LIBRARY})
+    else()
+        target_link_libraries(skunicode INTERFACE ${SKUNICODE_CORE_LIBRARY})
+    endif()
+else()
+    find_library(SKUNICODE_LIBRARY NAMES skunicode ${SKIA_FIND_OPTS})
+    target_link_libraries(skunicode INTERFACE ${SKUNICODE_LIBRARY})
+endif()
+find_path(SKUNICODE_INCLUDE_DIR SkUnicode.h HINTS "${SKIA_DIR}/modules/skunicode/include" ${SKIA_PATH_OPTS})
 
 # SkShaper module + freetype + harfbuzz
-find_library(SKSHAPER_LIBRARY skshaper PATH "${SKIA_LIBRARY_DIR}")
-find_path(SKSHAPER_INCLUDE_DIR SkShaper.h HINTS "${SKIA_DIR}/modules/skshaper/include")
+find_library(SKSHAPER_LIBRARY NAMES skshaper ${SKIA_FIND_OPTS})
+find_path(SKSHAPER_INCLUDE_DIR SkShaper.h HINTS "${SKIA_DIR}/modules/skshaper/include" ${SKIA_PATH_OPTS})
+
 if(NOT FREETYPE_LIBRARIES)
   set(FREETYPE_FOUND ON)
-  if (UNIX AND NOT APPLE)
+  if(ANDROID)
+    find_library(FREETYPE_LIBRARY NAMES freetype2 freetype ${SKIA_FIND_OPTS})
+  elseif(UNIX AND NOT APPLE)
     # Dynamically linked because fontconfig is dynamically linked
     # https://github.com/JetBrains/skija/issues/113
     find_library(FREETYPE_LIBRARY freetype)
   else()
-    find_library(FREETYPE_LIBRARY freetype2 PATH "${SKIA_LIBRARY_DIR}")
+    find_library(FREETYPE_LIBRARY freetype2 ${SKIA_FIND_OPTS})
   endif()
   set(FREETYPE_LIBRARIES ${FREETYPE_LIBRARY})
   set(FREETYPE_INCLUDE_DIRS "${SKIA_DIR}/third_party/externals/freetype/include")
 endif()
+
 if(NOT HARFBUZZ_LIBRARIES)
-  find_library(HARFBUZZ_LIBRARY NAMES harfbuzz HINTS "${SKIA_LIBRARY_DIR}")
+  find_library(HARFBUZZ_LIBRARY NAMES harfbuzz ${SKIA_FIND_OPTS})
   set(HARFBUZZ_LIBRARIES ${HARFBUZZ_LIBRARY})
   set(HARFBUZZ_INCLUDE_DIRS "${SKIA_DIR}/third_party/externals/harfbuzz/src")
 endif()
+
 add_library(skshaper INTERFACE)
 target_link_libraries(skshaper INTERFACE ${SKSHAPER_LIBRARY})
 
 # SkParagraph
-find_library(SKPARAGRAPH_LIBRARY skparagraph PATH "${SKIA_LIBRARY_DIR}")
-find_path(SKPARAGRAPH_INCLUDE_DIR Paragraph.h HINTS "${SKIA_DIR}/modules/skparagraph/include")
+find_library(SKPARAGRAPH_LIBRARY NAMES skparagraph ${SKIA_FIND_OPTS})
+find_path(SKPARAGRAPH_INCLUDE_DIR Paragraph.h HINTS "${SKIA_DIR}/modules/skparagraph/include" ${SKIA_PATH_OPTS})
 add_library(skparagraph INTERFACE)
 target_link_libraries(skparagraph INTERFACE ${SKPARAGRAPH_LIBRARY})
 
 # SVG
-find_library(SKIA_SVG_LIBRARY svg PATH "${SKIA_LIBRARY_DIR}")
+find_library(SKIA_SVG_LIBRARY NAMES svg ${SKIA_FIND_OPTS})
 add_library(svg INTERFACE)
 target_link_libraries(svg INTERFACE ${SKIA_SVG_LIBRARY})
-find_path(SKIA_SVG_INCLUDE_DIR SkSVGDOM.h HINTS "${SKIA_DIR}/modules/svg/include")
+find_path(SKIA_SVG_INCLUDE_DIR SkSVGDOM.h HINTS "${SKIA_DIR}/modules/svg/include" ${SKIA_PATH_OPTS})
 
 # SkResources
-find_library(SKIA_SKRESOURCES_LIBRARY skresources PATH "${SKIA_LIBRARY_DIR}")
+find_library(SKIA_SKRESOURCES_LIBRARY NAMES skresources ${SKIA_FIND_OPTS})
 add_library(skresources INTERFACE)
 target_link_libraries(skresources INTERFACE ${SKIA_SKRESOURCES_LIBRARY})
-find_path(SKIA_SKRESOURCES_INCLUDE_DIR SkResources.h HINTS "${SKIA_DIR}/modules/skresources/include")
+find_path(SKIA_SKRESOURCES_INCLUDE_DIR SkResources.h HINTS "${SKIA_DIR}/modules/skresources/include" ${SKIA_PATH_OPTS})
 
 # SKOTTIE
-find_library(SKIA_SKOTTIE_LIBRARY skottie PATH "${SKIA_LIBRARY_DIR}")
-find_library(SKIA_JSONREADER_LIBRARY jsonreader PATH "${SKIA_LIBRARY_DIR}")
+find_library(SKIA_SKOTTIE_LIBRARY NAMES skottie ${SKIA_FIND_OPTS})
+find_library(SKIA_JSONREADER_LIBRARY NAMES jsonreader ${SKIA_FIND_OPTS})
 add_library(skottie INTERFACE)
-target_link_libraries(skottie INTERFACE ${SKIA_SKOTTIE_LIBRARY} ${SKIA_JSONREADER_LIBRARY})
-find_path(SKIA_SKOTTIE_INCLUDE_DIR Skottie.h HINTS "${SKIA_DIR}/modules/skottie/include")
+target_link_libraries(skottie INTERFACE ${SKIA_SKOTTIE_LIBRARY})
+if(SKIA_JSONREADER_LIBRARY)
+    target_link_libraries(skottie INTERFACE ${SKIA_JSONREADER_LIBRARY})
+endif()
+find_path(SKIA_SKOTTIE_INCLUDE_DIR Skottie.h HINTS "${SKIA_DIR}/modules/skottie/include" ${SKIA_PATH_OPTS})
 
 # SKSG
-find_library(SKIA_SKSG_LIBRARY sksg PATH "${SKIA_LIBRARY_DIR}")
+find_library(SKIA_SKSG_LIBRARY NAMES sksg ${SKIA_FIND_OPTS})
 add_library(sksg INTERFACE)
 target_link_libraries(sksg INTERFACE ${SKIA_SKSG_LIBRARY})
-find_path(SKIA_SKSG_INCLUDE_DIR SkSGInvalidationController.h HINTS "${SKIA_DIR}/modules/sksg/include")
+find_path(SKIA_SKSG_INCLUDE_DIR SkSGInvalidationController.h HINTS "${SKIA_DIR}/modules/sksg/include" ${SKIA_PATH_OPTS})
 
-find_path(SKIA_CONFIG_INCLUDE_DIR SkUserConfig.h HINTS "${SKIA_DIR}/include/config")
-find_path(SKIA_CORE_INCLUDE_DIR SkCanvas.h HINTS "${SKIA_DIR}/include/core")
-find_path(SKIA_PATHOPS_INCLUDE_DIR SkPathOps.h HINTS "${SKIA_DIR}/include/pathops")
-find_path(SKIA_CORE_SVG_INCLUDE_DIR SkSVGCanvas.h HINTS "${SKIA_DIR}/include/svg")
-find_path(SKIA_UTILS_INCLUDE_DIR SkTextUtils.h HINTS "${SKIA_DIR}/include/utils")
-find_path(SKIA_CODEC_INCLUDE_DIR SkCodec.h HINTS "${SKIA_DIR}/include/codec")
-find_path(SKIA_EFFECTS_INCLUDE_DIR SkShaderMaskFilter.h HINTS "${SKIA_DIR}/include/effects")
-find_path(SKIA_ANGLE_INCLUDE_DIR angle_gl.h HINTS "${SKIA_DIR}/third_party/externals/angle2/include")
+find_path(SKIA_CONFIG_INCLUDE_DIR SkUserConfig.h HINTS "${SKIA_DIR}/include/config" ${SKIA_PATH_OPTS})
+find_path(SKIA_CORE_INCLUDE_DIR SkCanvas.h HINTS "${SKIA_DIR}/include/core" ${SKIA_PATH_OPTS})
+find_path(SKIA_PATHOPS_INCLUDE_DIR SkPathOps.h HINTS "${SKIA_DIR}/include/pathops" ${SKIA_PATH_OPTS})
+find_path(SKIA_CORE_SVG_INCLUDE_DIR SkSVGCanvas.h HINTS "${SKIA_DIR}/include/svg" ${SKIA_PATH_OPTS})
+find_path(SKIA_UTILS_INCLUDE_DIR SkTextUtils.h HINTS "${SKIA_DIR}/include/utils" ${SKIA_PATH_OPTS})
+find_path(SKIA_CODEC_INCLUDE_DIR SkCodec.h HINTS "${SKIA_DIR}/include/codec" ${SKIA_PATH_OPTS})
+find_path(SKIA_EFFECTS_INCLUDE_DIR SkShaderMaskFilter.h HINTS "${SKIA_DIR}/include/effects" ${SKIA_PATH_OPTS})
+find_path(SKIA_ANGLE_INCLUDE_DIR angle_gl.h HINTS "${SKIA_DIR}/third_party/externals/angle2/include" ${SKIA_PATH_OPTS})
 find_path(SKIA_SKCMS_INCLUDE_DIR skcms.h
   HINTS
   "${SKIA_DIR}/third_party/skcms"
-  "${SKIA_DIR}/include/third_party/skcms")
+  "${SKIA_DIR}/include/third_party/skcms"
+  ${SKIA_PATH_OPTS})
 
 set(SKIA_LIBRARIES
   ${SKIA_LIBRARY}
   ${SKIA_OPENGL_LIBRARY}
   CACHE INTERNAL "Skia libraries")
+
+if(ANDROID)
+  list(APPEND SKIA_LIBRARIES
+    ${SKIA_EGL_LIBRARY}
+    ${SKIA_ANDROID_LIBRARY}
+    ${SKIA_LOG_LIBRARY})
+endif()
 
 add_library(skia INTERFACE)
 target_include_directories(skia INTERFACE
@@ -155,6 +195,9 @@ if(WIN32)
 elseif(APPLE)
   target_compile_definitions(skia INTERFACE
     SK_BUILD_FOR_MAC)
+elseif(ANDROID)
+  target_compile_definitions(skia INTERFACE
+    SK_BUILD_FOR_ANDROID)
 else()
   target_compile_definitions(skia INTERFACE
     SK_SAMPLES_FOR_X)
@@ -167,7 +210,7 @@ if(APPLE)
     ${COCOA_LIBRARY} ${METAL_LIBRARY})
 endif()
 
-if(UNIX AND NOT APPLE)
+if(UNIX AND NOT APPLE AND NOT ANDROID)
   # Change the kN32_SkColorType ordering to BGRA to work in X windows.
   target_compile_definitions(skia INTERFACE
     SK_R32_SHIFT=16)
@@ -177,4 +220,3 @@ if(UNIX AND NOT APPLE)
   target_link_libraries(skia INTERFACE
     ${FONTCONFIG_LIBRARY})
 endif()
-

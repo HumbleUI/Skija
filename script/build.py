@@ -55,7 +55,7 @@ def main():
     cmake_args += [
       '-DCMAKE_TOOLCHAIN_FILE=' + os.path.join(ndk, 'build/cmake/android.toolchain.cmake'),
       '-DANDROID_ABI=' + {'arm64': 'arm64-v8a', 'arm32': 'armeabi-v7a', 'x64': 'x86_64', 'x86': 'x86'}.get(build_utils.arch, build_utils.arch),
-      '-DANDROID_PLATFORM=android-26',
+      '-DANDROID_PLATFORM=android-33',
       '-DANDROID_STL=c++_static'
     ]
 

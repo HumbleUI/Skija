@@ -1,5 +1,10 @@
 #include <jni.h>
 #include "../interop.hh"
+
+#ifndef JNI_VERSION_1_8
+#define JNI_VERSION_1_8 0x00010008
+#endif
+
 #include "../shaper/interop.hh"
 #include "../skottie/interop.hh"
 #include "../paragraph/interop.hh"
@@ -7,10 +12,10 @@
 
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved) {
     JNIEnv* env;
-    if (vm->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_6) != JNI_OK)
+    if (vm->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_8) != JNI_OK)
         return JNI_ERR;
 
-    return JNI_VERSION_1_6;
+    return JNI_VERSION_1_8;
 }
 
 extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_impl_Library__1nAfterLoad
@@ -28,7 +33,7 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_impl_Library__1n
 
 JNIEXPORT void JNICALL JNI_OnUnload(JavaVM* vm, void* reserved) {
     JNIEnv* env;
-    if (vm->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_6) != JNI_OK)
+    if (vm->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_8) != JNI_OK)
         return;
 
     skija::svg::onUnload(env);
