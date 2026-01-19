@@ -18,15 +18,13 @@ endif()
 
 # Common options for find_library and find_path when cross-compiling for Android
 if(ANDROID)
-  set(SKIA_FIND_OPTS HINTS "${SKIA_LIBRARY_DIR}" NO_CMAKE_FIND_ROOT_PATH)
   set(SKIA_PATH_OPTS NO_CMAKE_FIND_ROOT_PATH)
 else()
-  set(SKIA_FIND_OPTS HINTS "${SKIA_LIBRARY_DIR}")
   set(SKIA_PATH_OPTS)
 endif()
 
 # Skia library
-find_library(SKIA_LIBRARY NAMES skia ${SKIA_FIND_OPTS})
+find_library(SKIA_LIBRARY NAMES skia HINTS "${SKIA_LIBRARY_DIR}" ${SKIA_PATH_OPTS})
 
 if(ANDROID)
   find_library(SKIA_OPENGL_LIBRARY GLESv2)
@@ -44,8 +42,8 @@ else()
 endif()
 
 # SkUnicode
-find_library(SKUNICODE_CORE_LIBRARY NAMES skunicode_core ${SKIA_FIND_OPTS})
-find_library(SKUNICODE_ICU_LIBRARY NAMES skunicode_icu ${SKIA_FIND_OPTS})
+find_library(SKUNICODE_CORE_LIBRARY NAMES skunicode_core HINTS "${SKIA_LIBRARY_DIR}" ${SKIA_PATH_OPTS})
+find_library(SKUNICODE_ICU_LIBRARY NAMES skunicode_icu HINTS "${SKIA_LIBRARY_DIR}" ${SKIA_PATH_OPTS})
 add_library(skunicode INTERFACE)
 if(SKUNICODE_CORE_LIBRARY)
     if(SKUNICODE_ICU_LIBRARY)
@@ -54,32 +52,32 @@ if(SKUNICODE_CORE_LIBRARY)
         target_link_libraries(skunicode INTERFACE ${SKUNICODE_CORE_LIBRARY})
     endif()
 else()
-    find_library(SKUNICODE_LIBRARY NAMES skunicode ${SKIA_FIND_OPTS})
+    find_library(SKUNICODE_LIBRARY NAMES skunicode HINTS "${SKIA_LIBRARY_DIR}" ${SKIA_PATH_OPTS})
     target_link_libraries(skunicode INTERFACE ${SKUNICODE_LIBRARY})
 endif()
 find_path(SKUNICODE_INCLUDE_DIR SkUnicode.h HINTS "${SKIA_DIR}/modules/skunicode/include" ${SKIA_PATH_OPTS})
 
 # SkShaper module + freetype + harfbuzz
-find_library(SKSHAPER_LIBRARY NAMES skshaper ${SKIA_FIND_OPTS})
+find_library(SKSHAPER_LIBRARY NAMES skshaper HINTS "${SKIA_LIBRARY_DIR}" ${SKIA_PATH_OPTS})
 find_path(SKSHAPER_INCLUDE_DIR SkShaper.h HINTS "${SKIA_DIR}/modules/skshaper/include" ${SKIA_PATH_OPTS})
 
 if(NOT FREETYPE_LIBRARIES)
   set(FREETYPE_FOUND ON)
   if(ANDROID)
-    find_library(FREETYPE_LIBRARY NAMES freetype2 freetype ${SKIA_FIND_OPTS})
+    find_library(FREETYPE_LIBRARY NAMES freetype2 freetype HINTS "${SKIA_LIBRARY_DIR}" ${SKIA_PATH_OPTS})
   elseif(UNIX AND NOT APPLE)
     # Dynamically linked because fontconfig is dynamically linked
     # https://github.com/JetBrains/skija/issues/113
     find_library(FREETYPE_LIBRARY freetype)
   else()
-    find_library(FREETYPE_LIBRARY freetype2 ${SKIA_FIND_OPTS})
+    find_library(FREETYPE_LIBRARY freetype2 HINTS "${SKIA_LIBRARY_DIR}" ${SKIA_PATH_OPTS})
   endif()
   set(FREETYPE_LIBRARIES ${FREETYPE_LIBRARY})
   set(FREETYPE_INCLUDE_DIRS "${SKIA_DIR}/third_party/externals/freetype/include")
 endif()
 
 if(NOT HARFBUZZ_LIBRARIES)
-  find_library(HARFBUZZ_LIBRARY NAMES harfbuzz ${SKIA_FIND_OPTS})
+  find_library(HARFBUZZ_LIBRARY NAMES harfbuzz HINTS "${SKIA_LIBRARY_DIR}" ${SKIA_PATH_OPTS})
   set(HARFBUZZ_LIBRARIES ${HARFBUZZ_LIBRARY})
   set(HARFBUZZ_INCLUDE_DIRS "${SKIA_DIR}/third_party/externals/harfbuzz/src")
 endif()
@@ -88,26 +86,26 @@ add_library(skshaper INTERFACE)
 target_link_libraries(skshaper INTERFACE ${SKSHAPER_LIBRARY})
 
 # SkParagraph
-find_library(SKPARAGRAPH_LIBRARY NAMES skparagraph ${SKIA_FIND_OPTS})
+find_library(SKPARAGRAPH_LIBRARY NAMES skparagraph HINTS "${SKIA_LIBRARY_DIR}" ${SKIA_PATH_OPTS})
 find_path(SKPARAGRAPH_INCLUDE_DIR Paragraph.h HINTS "${SKIA_DIR}/modules/skparagraph/include" ${SKIA_PATH_OPTS})
 add_library(skparagraph INTERFACE)
 target_link_libraries(skparagraph INTERFACE ${SKPARAGRAPH_LIBRARY})
 
 # SVG
-find_library(SKIA_SVG_LIBRARY NAMES svg ${SKIA_FIND_OPTS})
+find_library(SKIA_SVG_LIBRARY NAMES svg HINTS "${SKIA_LIBRARY_DIR}" ${SKIA_PATH_OPTS})
 add_library(svg INTERFACE)
 target_link_libraries(svg INTERFACE ${SKIA_SVG_LIBRARY})
 find_path(SKIA_SVG_INCLUDE_DIR SkSVGDOM.h HINTS "${SKIA_DIR}/modules/svg/include" ${SKIA_PATH_OPTS})
 
 # SkResources
-find_library(SKIA_SKRESOURCES_LIBRARY NAMES skresources ${SKIA_FIND_OPTS})
+find_library(SKIA_SKRESOURCES_LIBRARY NAMES skresources HINTS "${SKIA_LIBRARY_DIR}" ${SKIA_PATH_OPTS})
 add_library(skresources INTERFACE)
 target_link_libraries(skresources INTERFACE ${SKIA_SKRESOURCES_LIBRARY})
 find_path(SKIA_SKRESOURCES_INCLUDE_DIR SkResources.h HINTS "${SKIA_DIR}/modules/skresources/include" ${SKIA_PATH_OPTS})
 
 # SKOTTIE
-find_library(SKIA_SKOTTIE_LIBRARY NAMES skottie ${SKIA_FIND_OPTS})
-find_library(SKIA_JSONREADER_LIBRARY NAMES jsonreader ${SKIA_FIND_OPTS})
+find_library(SKIA_SKOTTIE_LIBRARY NAMES skottie HINTS "${SKIA_LIBRARY_DIR}" ${SKIA_PATH_OPTS})
+find_library(SKIA_JSONREADER_LIBRARY NAMES jsonreader HINTS "${SKIA_LIBRARY_DIR}" ${SKIA_PATH_OPTS})
 add_library(skottie INTERFACE)
 target_link_libraries(skottie INTERFACE ${SKIA_SKOTTIE_LIBRARY})
 if(SKIA_JSONREADER_LIBRARY)
@@ -116,7 +114,7 @@ endif()
 find_path(SKIA_SKOTTIE_INCLUDE_DIR Skottie.h HINTS "${SKIA_DIR}/modules/skottie/include" ${SKIA_PATH_OPTS})
 
 # SKSG
-find_library(SKIA_SKSG_LIBRARY NAMES sksg ${SKIA_FIND_OPTS})
+find_library(SKIA_SKSG_LIBRARY NAMES sksg HINTS "${SKIA_LIBRARY_DIR}" ${SKIA_PATH_OPTS})
 add_library(sksg INTERFACE)
 target_link_libraries(sksg INTERFACE ${SKIA_SKSG_LIBRARY})
 find_path(SKIA_SKSG_INCLUDE_DIR SkSGInvalidationController.h HINTS "${SKIA_DIR}/modules/sksg/include" ${SKIA_PATH_OPTS})
