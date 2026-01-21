@@ -255,10 +255,18 @@ public class PathTest implements Executable {
         assertEquals(false, Path.isCubicDegenerate(new Point(0, 0), new Point(10, 0), new Point(0, 0), new Point(0, 0), false));
         assertEquals(true, Path.isCubicDegenerate(new Point(0, 0), new Point(0, 0), new Point(0, 0), new Point(0, 0), false));        
 
-        assertArrayEquals(new Point[] {new Point(0, 20), new Point(6.666667f, 13.333334f)},
-            Path.convertConicToQuads(new Point(0, 20), new Point(20, 0), new Point(40, 20), 0.5f, 1));
-        assertArrayEquals(new Point[] {new Point(0, 20), new Point(3.0940108f, 16.90599f), new Point(8.452995f, 15.119661f), new Point(13.811979f, 13.333334f)},
-            Path.convertConicToQuads(new Point(0, 20), new Point(20, 0), new Point(40, 20), 0.5f, 2));
+        assertArrayEquals(
+            new Point[] {new Point(0.0f, 20.0f), new Point(6.666667f, 13.333334f), new Point(20.0f, 13.333334f), new Point(33.333336f, 13.333334f), new Point(40.0f, 20.0f)},
+            Path.convertConicToQuads(new Point(0, 20), new Point(20, 0), new Point(40, 20), 0.5f, 1)
+        );
+        assertArrayEquals(
+            new Point[] {new Point(0.0f, 20.0f), new Point(3.0940108f, 16.90599f), new Point(8.452995f, 15.119661f), new Point(13.811979f, 13.333334f), new Point(20.0f, 13.333334f), new Point(26.188023f, 13.333334f), new Point(31.547007f, 15.119661f), new Point(36.90599f, 16.90599f), new Point(40.0f, 20.0f)},
+            Path.convertConicToQuads(new Point(0, 20), new Point(20, 0), new Point(40, 20), 0.5f, 2)
+        );
+        assertArrayEquals(
+            new Point[] {new Point(20.0f, 170.0f), new Point(44.850613f, 170.0f), new Point(62.425304f, 187.57468f), new Point(80.0f, 205.14938f), new Point(80.0f, 230.0f)},
+            Path.convertConicToQuads(new Point(20, 170), new Point(80, 170), new Point(80, 230), 0.707f, 1)
+        );
 
         try (PathBuilder b = new PathBuilder().lineTo(40, 40)) {
             var g1 = b.snapshot().getGenerationId();
