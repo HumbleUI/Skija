@@ -33,22 +33,22 @@ jobs:
           fetch-depth: 0
       - uses: abdes/gha-setup-ninja@660f330a40aefa8d11632b3f901e92a4adb33d65
       - run: |
-          echo "JAVA_HOME=$JAVA_HOME_11_X64" >> $GITHUB_ENV
-          echo "$JAVA_HOME_11_X64/bin" >> $GITHUB_PATH
-      - run: python3 script/build.py
-      - run: python3 script/test.py
-      - run: python3 script/package_platform.py
-      - uses: actions/upload-artifact@v4
-        with:
-          name: macos-x64-jars
-          path: target/skija-macos-x64-*
-      - run: python3 script/clean.py
+          echo "JAVA_HOME=$JAVA_HOME_11_arm64" >> $GITHUB_ENV
+          echo "$JAVA_HOME_11_arm64/bin" >> $GITHUB_PATH
       - run: python3 script/build.py --arch arm64
+      - run: python3 script/test.py
       - run: python3 script/package_platform.py --arch arm64
       - uses: actions/upload-artifact@v4
         with:
           name: macos-arm64-jars
           path: target/skija-macos-arm64-*
+      - run: python3 script/clean.py
+      - run: python3 script/build.py --arch x64
+      - run: python3 script/package_platform.py --arch x64
+      - uses: actions/upload-artifact@v4
+        with:
+          name: macos-x64-jars
+          path: target/skija-macos-x64-*
 
   build_linux:
     runs-on: ubuntu-22.04
