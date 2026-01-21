@@ -1,3 +1,9 @@
+# 0.119.2 - Jan 21, 2026
+
+Fixed:
+
+- `Path::convertConicToQuads` returning incomplete array #94
+
 # 0.119.1 - Dec 2, 2025
 
 Fixed:

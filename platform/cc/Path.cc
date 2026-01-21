@@ -298,10 +298,12 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Path__1nClosePat
 
 extern "C" JNIEXPORT jobjectArray Java_io_github_humbleui_skija_Path__1nConvertConicToQuads
   (JNIEnv* env, jclass jclass, jfloat x0, jfloat y0, jfloat x1, jfloat y1, jfloat x2, jfloat y2, jfloat w, jint pow2) {
-    std::vector<SkPoint> pts(1 + 2 * (1 << pow2));
-    int count = SkPath::ConvertConicToQuads({x0, y0}, {x1, y1}, {x2, y2}, w, pts.data(), pow2);
-    jobjectArray res = env->NewObjectArray(count, types::Point::cls, nullptr);
-    for (int i = 0; i < count; ++i) {
+    const int quadCount = 1 << pow2;
+    const int ptCount = 2 * quadCount + 1;
+    std::vector<SkPoint> pts(ptCount);
+    SkPath::ConvertConicToQuads({x0, y0}, {x1, y1}, {x2, y2}, w, pts.data(), pow2);
+    jobjectArray res = env->NewObjectArray(ptCount, types::Point::cls, nullptr);
+    for (int i = 0; i < ptCount; ++i) {
         env->SetObjectArrayElement(res, i, types::Point::fromSkPoint(env, pts[i]));
     }
     return res;
