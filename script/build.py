@@ -48,6 +48,16 @@ def main():
   elif (build_utils.system == 'linux') and (build_utils.arch != build_utils.native_arch):
     if build_utils.arch == 'arm64':
       cross_compile.setup_linux_arm64(native_build_dir, cmake_args)
+  elif build_utils.system == 'android':
+    ndk = os.getenv('ANDROID_NDK_HOME') or os.getenv('ANDROID_NDK')
+    if not ndk:
+      raise Exception("ANDROID_NDK_HOME or ANDROID_NDK not set")
+    cmake_args += [
+      '-DCMAKE_TOOLCHAIN_FILE=' + os.path.join(ndk, 'build/cmake/android.toolchain.cmake'),
+      '-DANDROID_ABI=' + {'arm64': 'arm64-v8a', 'arm32': 'armeabi-v7a', 'x64': 'x86_64', 'x86': 'x86'}.get(build_utils.arch, build_utils.arch),
+      '-DANDROID_PLATFORM=android-33',
+      '-DANDROID_STL=c++_static'
+    ]
 
   subprocess.check_call(cmake_args, cwd=os.path.abspath(native_build_dir))
 
@@ -93,6 +103,8 @@ def main():
   if build_utils.system == 'macos':
     build_utils.copy_newer(f'{native_build_dir}/libskija.dylib', f'{target}/libskija.dylib')
   elif build_utils.system == 'linux':
+    build_utils.copy_newer(f'{native_build_dir}/libskija.so', f'{target}/libskija.so')
+  elif build_utils.system == 'android':
     build_utils.copy_newer(f'{native_build_dir}/libskija.so', f'{target}/libskija.so')
   elif build_utils.system == 'windows':
     build_utils.copy_newer(f'{native_build_dir}/skija.dll', f'{target}/skija.dll')
