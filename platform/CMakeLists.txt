@@ -42,6 +42,10 @@ endif()
 if(APPLE)
     target_include_directories(skija PRIVATE $ENV{JAVA_HOME}/include $ENV{JAVA_HOME}/include/darwin)
 
+elseif(ANDROID)
+    # JNI headers are provided by NDK
+    target_compile_options(skija PRIVATE -fno-rtti)
+
 elseif(UNIX)
     target_include_directories(skija PRIVATE $ENV{JAVA_HOME}/include $ENV{JAVA_HOME}/include/linux)
 

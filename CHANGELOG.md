@@ -1,5 +1,9 @@
 # WIP
 
+Added:
+
+- Android build #93 via @Eatgrapes
+
 Fixed:
 
 - `Path::convertConicToQuads` returning incomplete array #94

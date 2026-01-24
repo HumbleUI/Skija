@@ -1,5 +1,6 @@
 #pragma once
 #include <mutex>
+#include <memory>
 #include "SkFontMgr.h"
 
 #if defined(SK_BUILD_FOR_WIN)
@@ -8,6 +9,11 @@
 
 #if defined(SK_BUILD_FOR_MAC)
 #include "include/ports/SkFontMgr_mac_ct.h"
+#endif
+
+#if defined(SK_BUILD_FOR_ANDROID)
+#include "include/ports/SkFontMgr_android.h"
+#include "include/ports/SkFontScanner_FreeType.h"
 #endif
 
 #if defined(SK_BUILD_FOR_UNIX)
@@ -29,6 +35,8 @@ public:
             mgr = SkFontMgr_New_DirectWrite();
 #elif defined(SK_BUILD_FOR_MAC)
             mgr = SkFontMgr_New_CoreText(nullptr);
+#elif defined(SK_BUILD_FOR_ANDROID)
+            mgr = SkFontMgr_New_Android(nullptr, SkFontScanner_Make_FreeType());
 #elif defined(SK_BUILD_FOR_UNIX)
             mgr = SkFontMgr_New_FontConfig(nullptr, SkFontScanner_Make_FreeType());
 #endif
