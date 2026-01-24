@@ -47,18 +47,11 @@ find_library(SKIA_ICU_LIBRARY NAMES icu HINTS "${SKIA_LIBRARY_DIR}" ${SKIA_PATH_
 find_library(SKUNICODE_CORE_LIBRARY NAMES skunicode_core HINTS "${SKIA_LIBRARY_DIR}" ${SKIA_PATH_OPTS})
 find_library(SKUNICODE_ICU_LIBRARY NAMES skunicode_icu HINTS "${SKIA_LIBRARY_DIR}" ${SKIA_PATH_OPTS})
 add_library(skunicode INTERFACE)
-if(SKUNICODE_CORE_LIBRARY)
-    target_link_libraries(skunicode INTERFACE ${SKUNICODE_CORE_LIBRARY})
-    if(SKUNICODE_ICU_LIBRARY)
-        target_link_libraries(skunicode INTERFACE ${SKUNICODE_ICU_LIBRARY})
-    endif()
-    if(SKIA_ICU_LIBRARY)
-        target_link_libraries(skunicode INTERFACE ${SKIA_ICU_LIBRARY})
-    endif()
-else()
-    find_library(SKUNICODE_LIBRARY NAMES skunicode HINTS "${SKIA_LIBRARY_DIR}" ${SKIA_PATH_OPTS})
-    target_link_libraries(skunicode INTERFACE ${SKUNICODE_LIBRARY})
+target_link_libraries(skunicode INTERFACE ${SKUNICODE_CORE_LIBRARY} ${SKUNICODE_ICU_LIBRARY})
+if(SKIA_ICU_LIBRARY)
+    target_link_libraries(skunicode INTERFACE ${SKIA_ICU_LIBRARY})
 endif()
+
 find_path(SKUNICODE_INCLUDE_DIR SkUnicode.h HINTS "${SKIA_DIR}/modules/skunicode/include" ${SKIA_PATH_OPTS})
 
 # SkShaper module + freetype + harfbuzz
