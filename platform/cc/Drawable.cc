@@ -1,6 +1,5 @@
 #include <iostream>
 #include <jni.h>
-
 #include "SkDrawable.h"
 #include "SkPicture.h"
 #include "interop.hh"

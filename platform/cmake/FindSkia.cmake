@@ -41,16 +41,13 @@ else()
     set(SKIA_OPENGL_LIBRARY ${SKIA_GL_LIBRARY} ${SKIA_EGL_LIBRARY})
 endif()
 
-find_library(SKIA_ICU_LIBRARY NAMES icu HINTS "${SKIA_LIBRARY_DIR}" ${SKIA_PATH_OPTS})
 
 # SkUnicode
 find_library(SKUNICODE_CORE_LIBRARY NAMES skunicode_core HINTS "${SKIA_LIBRARY_DIR}" ${SKIA_PATH_OPTS})
 find_library(SKUNICODE_ICU_LIBRARY NAMES skunicode_icu HINTS "${SKIA_LIBRARY_DIR}" ${SKIA_PATH_OPTS})
+find_library(SKIA_ICU_LIBRARY NAMES icu HINTS "${SKIA_LIBRARY_DIR}" ${SKIA_PATH_OPTS})
 add_library(skunicode INTERFACE)
-target_link_libraries(skunicode INTERFACE ${SKUNICODE_CORE_LIBRARY} ${SKUNICODE_ICU_LIBRARY})
-if(SKIA_ICU_LIBRARY)
-    target_link_libraries(skunicode INTERFACE ${SKIA_ICU_LIBRARY})
-endif()
+target_link_libraries(skunicode INTERFACE ${SKUNICODE_CORE_LIBRARY} ${SKUNICODE_ICU_LIBRARY} ${SKIA_ICU_LIBRARY})
 
 find_path(SKUNICODE_INCLUDE_DIR SkUnicode.h HINTS "${SKIA_DIR}/modules/skunicode/include" ${SKIA_PATH_OPTS})
 
@@ -104,10 +101,7 @@ find_path(SKIA_SKRESOURCES_INCLUDE_DIR SkResources.h HINTS "${SKIA_DIR}/modules/
 find_library(SKIA_SKOTTIE_LIBRARY NAMES skottie HINTS "${SKIA_LIBRARY_DIR}" ${SKIA_PATH_OPTS})
 find_library(SKIA_JSONREADER_LIBRARY NAMES jsonreader HINTS "${SKIA_LIBRARY_DIR}" ${SKIA_PATH_OPTS})
 add_library(skottie INTERFACE)
-target_link_libraries(skottie INTERFACE ${SKIA_SKOTTIE_LIBRARY})
-if(SKIA_JSONREADER_LIBRARY)
-    target_link_libraries(skottie INTERFACE ${SKIA_JSONREADER_LIBRARY})
-endif()
+target_link_libraries(skottie INTERFACE ${SKIA_SKOTTIE_LIBRARY} ${SKIA_JSONREADER_LIBRARY})
 find_path(SKIA_SKOTTIE_INCLUDE_DIR Skottie.h HINTS "${SKIA_DIR}/modules/skottie/include" ${SKIA_PATH_OPTS})
 
 # SKSG
@@ -215,3 +209,4 @@ if(UNIX AND NOT APPLE AND NOT ANDROID)
   target_link_libraries(skia INTERFACE
     ${FONTCONFIG_LIBRARY})
 endif()
+

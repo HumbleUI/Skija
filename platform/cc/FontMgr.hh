@@ -14,7 +14,9 @@
 #if defined(SK_BUILD_FOR_ANDROID)
 #include "include/ports/SkFontMgr_android.h"
 #include "include/ports/SkFontScanner_FreeType.h"
-#elif defined(SK_BUILD_FOR_UNIX)
+#endif
+
+#if defined(SK_BUILD_FOR_UNIX)
 #include "include/ports/SkFontMgr_fontconfig.h"
 #include "include/ports/SkFontScanner_FreeType.h"
 #endif

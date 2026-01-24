@@ -1,6 +1,5 @@
 #include <jni.h>
 #include "../interop.hh"
-
 #include "../shaper/interop.hh"
 #include "../skottie/interop.hh"
 #include "../paragraph/interop.hh"
