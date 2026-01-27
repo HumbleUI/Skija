@@ -475,9 +475,9 @@ public class Paint extends Managed {
     @Contract("!null, !null, _, _ -> _; null, _, _, _ -> fail")
     public boolean fillPath(@NotNull Path src, @NotNull Path dst, @Nullable Rect cull, @NotNull Matrix33 matrix) {
         try {
-            assert src != null : "Paint::getFillPath expected src != null";
-            assert dst != null : "Paint::getFillPath expected dst != null";
-            assert matrix != null : "Paint::getFillPath expected matrix != null";
+            assert src != null : "Paint::fillPath expected src != null";
+            assert dst != null : "Paint::fillPath expected dst != null";
+            assert matrix != null : "Paint::fillPath expected matrix != null";
             Stats.onNativeCall();
             if (cull == null)
                 return _nFillPathWithPaint(_ptr, Native.getPtr(src), Native.getPtr(dst), 0, 0, 0, 0, matrix._mat);
