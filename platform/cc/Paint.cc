@@ -182,6 +182,16 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Paint__1nGetFil
     }
 }
 
+extern "C" JNIEXPORT jboolean JNICALL Java_io_github_humbleui_skija_Paint__1nFillPathWithPaint
+  (JNIEnv* env, jclass jclass, jlong ptr, jlong srcPtr, jlong dstPtr, jfloat left, jfloat top, jfloat right, jfloat bottom, jfloatArray matrixArr) {
+    SkPaint* instance = reinterpret_cast<SkPaint*>(static_cast<uintptr_t>(ptr));
+    SkPath* src = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(srcPtr));
+    SkPath* dst = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(dstPtr));
+    SkRect cull {left, top, right, bottom};
+    std::unique_ptr<SkMatrix> matrix = skMatrix(env, matrixArr);
+    return skpathutils::FillPathWithPaint(*src, *instance, dst, &cull, *matrix);
+}
+
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Paint__1nGetMaskFilter
   (JNIEnv* env, jclass jclass, jlong ptr) {
     SkPaint* instance = reinterpret_cast<SkPaint*>(static_cast<uintptr_t>(ptr));
