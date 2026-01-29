@@ -19,6 +19,7 @@ public class TestSuite {
         TestRunner.testClass(ImageTest.class);
         TestRunner.testClass(PathTest.class);
         TestRunner.testClass(SurfaceTest.class);
+        TestRunner.testClass(DocumentTest.class);
         TestRunner.testClass(PaintTest.class);
         TestRunner.testClass(PathMeasureTest.class);
         TestRunner.testClass(TextLineTest.class);
