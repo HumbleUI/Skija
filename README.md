@@ -96,6 +96,9 @@ Platforms:
 - macOS:
   - [x] x64
   - [x] arm64
+- Android:
+  - [x] x64
+  - [x] arm64
 
 Backends:
 
@@ -184,6 +187,8 @@ Replace `${artifact}` and `${version}` with:
 | Linux (arm64)   | `skija-linux-arm64`   | [![](https://img.shields.io/maven-central/v/io.github.humbleui/skija-linux-arm64)](https://mvnrepository.com/artifact/io.github.humbleui/skija-linux-arm64)     |
 | macOS (x64)   | `skija-macos-x64`   | [![](https://img.shields.io/maven-central/v/io.github.humbleui/skija-macos-x64)](https://mvnrepository.com/artifact/io.github.humbleui/skija-macos-x64)     |
 | macOS (arm64) | `skija-macos-arm64` | [![](https://img.shields.io/maven-central/v/io.github.humbleui/skija-macos-arm64)](https://mvnrepository.com/artifact/io.github.humbleui/skija-macos-arm64) |
+| Android (x64)   | `skija-android-x64`   | [![](https://img.shields.io/maven-central/v/io.github.humbleui/skija-android-x64)](https://mvnrepository.com/artifact/io.github.humbleui/skija-android-x64)     |
+| Android (arm64) | `skija-android-arm64` | [![](https://img.shields.io/maven-central/v/io.github.humbleui/skija-android-arm64)](https://mvnrepository.com/artifact/io.github.humbleui/skija-android-arm64) |
 
 For simplicity or if your build system is not smart enough to select artifact based on OS, you can add all you need as dependencies—they will not conflict.
 
