@@ -1,3 +1,9 @@
+# 0.143.7 - Jan 29, 2026
+
+Fixed
+
+- Actually publish Android build #96 via @Eatgrapes
+
 # 0.143.6 - Jan 26, 2026
 
 Added:
