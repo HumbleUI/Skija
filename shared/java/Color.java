@@ -1,12 +1,63 @@
 package io.github.humbleui.skija;
 
 public class Color {
-    // TODO premultiply, alpha
-    public static int makeLerp(int c1, int c2, float weight) {
-        int r = (int) (getR(c1) * weight + getR(c2) * (1 - weight));
-        int g = (int) (getG(c1) * weight + getG(c2) * (1 - weight));
-        int b = (int) (getB(c1) * weight + getB(c2) * (1 - weight));
-        return makeRGB(r, g, b);
+    public static int premultiply(int color) {
+        int a = getA(color);
+        if (a == 255) return color;
+        if (a == 0) return 0;
+        int r = (getR(color) * a + 128); r = (r + (r >> 8)) >> 8;
+        int g = (getG(color) * a + 128); g = (g + (g >> 8)) >> 8;
+        int b = (getB(color) * a + 128); b = (b + (b >> 8)) >> 8;
+        return makeARGB(a, r, g, b);
+    }
+
+    public static int unpremultiply(int color) {
+        int a = getA(color);
+        if (a == 255 || a == 0) return color;
+        int r = Math.min(255, (getR(color) * 255 + a / 2) / a);
+        int g = Math.min(255, (getG(color) * 255 + a / 2) / a);
+        int b = Math.min(255, (getB(color) * 255 + a / 2) / a);
+        return makeARGB(a, r, g, b);
+    }
+
+    public static int makeLerp(int c1, int c2, float t) {
+        if (t <= 0) return c1;
+        if (t >= 1) return c2;
+
+        int a1 = getA(c1);
+        int r1 = getR(c1);
+        int g1 = getG(c1);
+        int b1 = getB(c1);
+
+        int a2 = getA(c2);
+        int r2 = getR(c2);
+        int g2 = getG(c2);
+        int b2 = getB(c2);
+
+        if (a1 != 255) {
+            r1 = (r1 * a1 + 128); r1 = (r1 + (r1 >> 8)) >> 8;
+            g1 = (g1 * a1 + 128); g1 = (g1 + (g1 >> 8)) >> 8;
+            b1 = (b1 * a1 + 128); b1 = (b1 + (b1 >> 8)) >> 8;
+        }
+        if (a2 != 255) {
+            r2 = (r2 * a2 + 128); r2 = (r2 + (r2 >> 8)) >> 8;
+            g2 = (g2 * a2 + 128); g2 = (g2 + (g2 >> 8)) >> 8;
+            b2 = (b2 * a2 + 128); b2 = (b2 + (b2 >> 8)) >> 8;
+        }
+
+        float a = a1 + (a2 - a1) * t;
+        float r = r1 + (r2 - r1) * t;
+        float g = g1 + (g2 - g1) * t;
+        float b = b1 + (b2 - b1) * t;
+
+        int ia = Math.round(a);
+        if (ia <= 0) return 0;
+        if (ia >= 255) return makeARGB(255, Math.round(r), Math.round(g), Math.round(b));
+
+        return makeARGB(ia,
+                        Math.min(255, Math.round(r * 255f / a)),
+                        Math.min(255, Math.round(g * 255f / a)),
+                        Math.min(255, Math.round(b * 255f / a)));
     }
 
     public static int makeARGB(int a, int r, int g, int b) {

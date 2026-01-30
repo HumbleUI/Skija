@@ -1022,6 +1022,16 @@ public class Bitmap extends Managed implements IHasImageInfo {
         }
     }
 
+    public boolean peekPixels(@NotNull Pixmap pixmap) {
+        try {
+            Stats.onNativeCall();
+            return _nPeekPixelsToPixmap(_ptr, Native.getPtr(pixmap));
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(pixmap);
+        }
+    }
+
     @NotNull
     public Shader makeShader() {
         return makeShader(FilterTileMode.CLAMP, FilterTileMode.CLAMP, SamplingMode.DEFAULT, null);
@@ -1110,5 +1120,6 @@ public class Bitmap extends Managed implements IHasImageInfo {
     @ApiStatus.Internal public static native byte[]  _nReadPixels(long ptr, int width, int height, int colorType, int alphaType, long colorSpacePtr, long dstRowBytes, int srcX, int srcY);
     @ApiStatus.Internal public static native IPoint  _nExtractAlpha(long ptr, long dstPtr, long paintPtr);
     @ApiStatus.Internal public static native ByteBuffer _nPeekPixels(long ptr);
-    @ApiStatus.Internal public static native long    _nMakeShader(long ptr, int tmx, int tmy, long samplingMode, float[] localMatrix);
+    @ApiStatus.Internal public static native boolean    _nPeekPixelsToPixmap(long ptr, long pixmapPtr);
+    @ApiStatus.Internal public static native long       _nMakeShader(long ptr, int tmx, int tmy, long samplingMode, float[] localMatrix);
 }

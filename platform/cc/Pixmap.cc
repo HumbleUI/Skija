@@ -71,6 +71,40 @@ extern "C" {
         return skija::ImageInfo::toJava(env, imageInfo);
     }
 
+    JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_Pixmap__1nGetWidth
+      (JNIEnv *env, jclass klass, jlong ptr) {
+        SkPixmap* pixmap = jlongToPtr<SkPixmap*>(ptr);
+        return static_cast<jint>(pixmap->width());
+    }
+
+    JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_Pixmap__1nGetHeight
+      (JNIEnv *env, jclass klass, jlong ptr) {
+        SkPixmap* pixmap = jlongToPtr<SkPixmap*>(ptr);
+        return static_cast<jint>(pixmap->height());
+    }
+
+    JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_Pixmap__1nGetColorType
+      (JNIEnv *env, jclass klass, jlong ptr) {
+        SkPixmap* pixmap = jlongToPtr<SkPixmap*>(ptr);
+        return static_cast<jint>(pixmap->colorType());
+    }
+
+    JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_Pixmap__1nGetAlphaType
+      (JNIEnv *env, jclass klass, jlong ptr) {
+        SkPixmap* pixmap = jlongToPtr<SkPixmap*>(ptr);
+        return static_cast<jint>(pixmap->alphaType());
+    }
+
+    JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Pixmap__1nGetColorSpace
+      (JNIEnv *env, jclass klass, jlong ptr) {
+        SkPixmap* pixmap = jlongToPtr<SkPixmap*>(ptr);
+        SkColorSpace* colorSpace = pixmap->colorSpace();
+        if (colorSpace == nullptr)
+            return 0;
+        colorSpace->ref();
+        return ptrToJlong(colorSpace);
+    }
+
     JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_Pixmap__1nGetRowBytes
       (JNIEnv *env, jclass klass, jlong ptr) {
         SkPixmap* pixmap = jlongToPtr<SkPixmap*>(ptr);
@@ -87,6 +121,12 @@ extern "C" {
       (JNIEnv *env, jclass klass, jlong ptr) {
         SkPixmap* pixmap = jlongToPtr<SkPixmap*>(ptr);
         return static_cast<jint>(pixmap->rowBytesAsPixels());
+    }
+
+    JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_Pixmap__1nGetShiftPerPixel
+      (JNIEnv *env, jclass klass, jlong ptr) {
+        SkPixmap* pixmap = jlongToPtr<SkPixmap*>(ptr);
+        return static_cast<jint>(pixmap->shiftPerPixel());
     }
 
     JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_Pixmap__1nComputeByteSize
@@ -184,5 +224,18 @@ extern "C" {
       (JNIEnv *env, jclass klass, jlong ptr, jint color, jint l, jint t, jint w, jint h) {
         SkPixmap* pixmap = jlongToPtr<SkPixmap*>(ptr);
         return static_cast<jboolean>(pixmap->erase(color, { l, t, w, h }));
+    }
+
+    JNIEXPORT jboolean JNICALL Java_io_github_humbleui_skija_Pixmap__1nErase4f
+      (JNIEnv *env, jclass klass, jlong ptr, jfloat r, jfloat g, jfloat b, jfloat a) {
+        SkPixmap* pixmap = jlongToPtr<SkPixmap*>(ptr);
+        return static_cast<jboolean>(pixmap->erase({r, g, b, a}, nullptr));
+    }
+
+    JNIEXPORT jboolean JNICALL Java_io_github_humbleui_skija_Pixmap__1nEraseSubset4f
+      (JNIEnv *env, jclass klass, jlong ptr, jfloat r, jfloat g, jfloat b, jfloat a, jint l, jint t, jint w, jint h) {
+        SkPixmap* pixmap = jlongToPtr<SkPixmap*>(ptr);
+        SkIRect subset = { l, t, w, h };
+        return static_cast<jboolean>(pixmap->erase({r, g, b, a}, &subset));
     }
 }
