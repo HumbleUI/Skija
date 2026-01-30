@@ -425,7 +425,6 @@ public class PathsScene extends Scene {
                 .setMode(PaintMode.STROKE)
                 .setAntiAlias(true)
                 .setStrokeJoin(PaintStrokeJoin.ROUND);
-             var srcPath = new Path();
              var dstPath = new Path();) {
 
             float penX = x;
@@ -434,14 +433,12 @@ public class PathsScene extends Scene {
             short[]  glyphs = font.getStringGlyphs(text);
 
             for (var glyph : glyphs) {
-                srcPath.reset();
                 dstPath.reset();
 
                 Path glyphPath = font.getPath(glyph);
                 if (glyphPath != null) {
-                    srcPath.addPath(glyphPath);
 
-                    boolean success = srcPath.fillPath(paint, dstPath);
+                    boolean success = glyphPath.fillPath(paint, dstPath);
                     if (success) {
                         canvas.save();
                         canvas.translate(penX, penY);
@@ -451,6 +448,7 @@ public class PathsScene extends Scene {
                                 .setAntiAlias(true));
                         canvas.restore();
                     }
+                    glyphPath.close();
                 }
 
                 float advance = font.getWidths(new short[]{glyph})[0];
