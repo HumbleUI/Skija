@@ -17,7 +17,6 @@ public class PathsScene extends Scene {
         drawPathsOp(canvas);
         drawInterpolate(canvas);
         drawMeasure(canvas);
-        
     }
 
     public void drawPaths(Canvas canvas, Paint paint) {
