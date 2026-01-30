@@ -90,19 +90,66 @@ public class Pixmap extends Managed {
         }
     }
 
-    public int getRowBytes() {
+    public int getWidth() {
         Stats.onNativeCall();
         try {
-            return _nGetRowBytes(_ptr);
+            return _nGetWidth(_ptr);
         } finally {
             ReferenceUtil.reachabilityFence(this);
         }
     }
 
-    public long getAddr() {
+    public int getHeight() {
         Stats.onNativeCall();
         try {
-            return _nGetAddr(_ptr);
+            return _nGetHeight(_ptr);
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    public ColorType getColorType() {
+        Stats.onNativeCall();
+        try {
+            return ColorType.values()[_nGetColorType(_ptr)];
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    public ColorAlphaType getAlphaType() {
+        Stats.onNativeCall();
+        try {
+            return ColorAlphaType.values()[_nGetAlphaType(_ptr)];
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    @Nullable
+    public ColorSpace getColorSpace() {
+        Stats.onNativeCall();
+        try {
+            long ptr = _nGetColorSpace(_ptr);
+            return ptr == 0 ? null : new ColorSpace(ptr);
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    public int getShiftPerPixel() {
+        Stats.onNativeCall();
+        try {
+            return _nGetShiftPerPixel(_ptr);
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    public int getRowBytes() {
+        Stats.onNativeCall();
+        try {
+            return _nGetRowBytes(_ptr);
         } finally {
             ReferenceUtil.reachabilityFence(this);
         }
@@ -162,7 +209,16 @@ public class Pixmap extends Managed {
         }
     }
 
-    public long getAddr(int x, int y) {
+    public long getAddr() {
+        Stats.onNativeCall();
+        try {
+            return _nGetAddr(_ptr);
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    public long getAddrAt(int x, int y) {
         Stats.onNativeCall();
         try {
             return _nGetAddrAt(_ptr, x, y);
@@ -248,6 +304,24 @@ public class Pixmap extends Managed {
         }
     }
 
+    public boolean erase(Color4f color) {
+        Stats.onNativeCall();
+        try {
+            return _nErase4f(_ptr, color._r, color._g, color._b, color._a);
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    public boolean erase(Color4f color, IRect subset) {
+        Stats.onNativeCall();
+        try {
+            return _nEraseSubset4f(_ptr, color._r, color._g, color._b, color._a, subset._left, subset._top, subset._right, subset._bottom);
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
     public ByteBuffer getBuffer() {
         return BufferUtil.getByteBufferFromPointer(getAddr(), computeByteSize());
     }
@@ -266,11 +340,15 @@ public class Pixmap extends Managed {
     public static native void _nSetColorSpace(long ptr, long colorSpacePtr);
     public static native boolean _nExtractSubset(long ptr, long subsetPtr, int l, int t, int r, int b);
     public static native ImageInfo _nGetInfo(long ptr);
+    public static native int _nGetWidth(long ptr);
+    public static native int _nGetHeight(long ptr);
+    public static native int _nGetColorType(long ptr);
+    public static native int _nGetAlphaType(long ptr);
+    public static native long _nGetColorSpace(long ptr);
     public static native int _nGetRowBytes(long ptr);
     public static native long _nGetAddr(long ptr);
-    // TODO methods flattening ImageInfo not included yet - use GetInfo() instead.
     public static native int _nGetRowBytesAsPixels(long ptr);
-    // TODO shiftPerPixel
+    public static native int _nGetShiftPerPixel(long ptr);
     public static native int _nComputeByteSize(long ptr);
     public static native boolean _nComputeIsOpaque(long ptr);
     public static native int _nGetColor(long ptr, int x, int y);
@@ -285,5 +363,6 @@ public class Pixmap extends Managed {
     public static native boolean _nScalePixels(long ptr, long dstPixmapPtr, long samplingOptions);
     public static native boolean _nErase(long ptr, int color);
     public static native boolean _nEraseSubset(long ptr, int color, int l, int t, int r, int b);
-    // TODO float erase methods not included
+    public static native boolean _nErase4f(long ptr, float r, float g, float b, float a);
+    public static native boolean _nEraseSubset4f(long ptr, float r, float g, float b, float a, int l, int t, int r1, int b1);
 }
