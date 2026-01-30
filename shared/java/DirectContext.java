@@ -35,6 +35,25 @@ public class DirectContext extends RefCnt {
         return new DirectContext(_nMakeDirect3D(adapterPtr, devicePtr, queuePtr));
     }
 
+    /**
+     * <p>Creates Vulkan direct rendering context from Vulkan native objects.</p>
+     * <p>For more information refer to skia GrDirectContext class.</p>
+     *
+     * @param instancePtr       pointer to VkInstance; must be not zero
+     * @param physicalDevicePtr pointer to VkPhysicalDevice; must be not zero
+     * @param devicePtr         pointer to VkDevice; must be not zero
+     * @param queuePtr          pointer to VkQueue; must be not zero
+     * @param graphicsQueueIndex index of the graphics queue
+     * @param instanceProcAddr  pointer to vkGetInstanceProcAddr function
+     * @param getProcAddr       pointer to vkGetDeviceProcAddr function
+     * @param apiVersion        Vulkan API version
+     */
+    @NotNull @Contract("-> this")
+    public static DirectContext makeVulkan(long instancePtr, long physicalDevicePtr, long devicePtr, long queuePtr, int graphicsQueueIndex, long instanceProcAddr, long getProcAddr, int apiVersion) {
+        Stats.onNativeCall();
+        return new DirectContext(_nMakeVulkan(instancePtr, physicalDevicePtr, devicePtr, queuePtr, graphicsQueueIndex, instanceProcAddr, getProcAddr, apiVersion));
+    }
+
     @NotNull @Contract("-> this")
     public DirectContext flush() {
         Stats.onNativeCall();
@@ -174,6 +193,7 @@ public class DirectContext extends RefCnt {
     @ApiStatus.Internal public static native long    _nMakeGL();
     @ApiStatus.Internal public static native long    _nMakeMetal(long devicePtr, long queuePtr);
     @ApiStatus.Internal public static native long    _nMakeDirect3D(long adapterPtr, long devicePtr, long queuePtr);
+    @ApiStatus.Internal public static native long    _nMakeVulkan(long instancePtr, long physicalDevicePtr, long devicePtr, long queuePtr, int graphicsQueueIndex, long instanceProcAddr, long getProcAddr, int apiVersion);
     @ApiStatus.Internal public static native void    _nFlush(long ptr);
     @ApiStatus.Internal public static native boolean _nSubmit(long ptr, boolean syncCpu);
     @ApiStatus.Internal public static native void    _nFlushAndSubmit(long ptr, boolean syncCpu);

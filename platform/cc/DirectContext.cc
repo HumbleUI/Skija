@@ -27,6 +27,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_DirectContext__
 
 #ifdef SK_DIRECT3D
 #include "include/gpu/ganesh/d3d/GrD3DBackendContext.h"
+#include "include/gpu/ganesh/d3d/GrD3DDirectContext.h"
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_DirectContext__1nMakeDirect3D
   (JNIEnv* env, jclass jclass, jlong adapterPtr, jlong devicePtr, jlong queuePtr) {
@@ -37,10 +38,41 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_DirectContext__
     backendContext.fAdapter.retain(adapter);
     backendContext.fDevice.retain(device);
     backendContext.fQueue.retain(queue);
-    sk_sp<GrDirectContext> instance = GrDirectContext::MakeDirect3D(backendContext);
+    sk_sp<GrDirectContext> instance = GrDirectContexts::MakeDirect3D(backendContext);
     return reinterpret_cast<jlong>(instance.release());
 }
-#endif //SK_DIRECT3D 
+#endif // SK_DIRECT3D
+
+#ifdef SK_VULKAN
+#include "include/gpu/ganesh/vk/GrVkDirectContext.h"
+#include "include/gpu/ganesh/vk/GrVkTypes.h"
+#include "include/gpu/vk/VulkanBackendContext.h"
+#include "include/gpu/vk/VulkanExtensions.h"
+
+extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_DirectContext__1nMakeVulkan
+  (JNIEnv* env, jclass jclass, jlong instancePtr, jlong physicalDevicePtr, jlong devicePtr, jlong queuePtr, jint graphicsQueueIndex, jlong instanceProcAddr, jlong getProcAddr, jint apiVersion) {
+    skgpu::VulkanBackendContext backendContext = {};
+    backendContext.fInstance = reinterpret_cast<VkInstance>(static_cast<uintptr_t>(instancePtr));
+    backendContext.fPhysicalDevice = reinterpret_cast<VkPhysicalDevice>(static_cast<uintptr_t>(physicalDevicePtr));
+    backendContext.fDevice = reinterpret_cast<VkDevice>(static_cast<uintptr_t>(devicePtr));
+    backendContext.fQueue = reinterpret_cast<VkQueue>(static_cast<uintptr_t>(queuePtr));
+    backendContext.fGraphicsQueueIndex = (uint32_t) graphicsQueueIndex;
+    backendContext.fGetProc = [instanceProcAddr, getProcAddr](const char* name, VkInstance instance, VkDevice device) -> PFN_vkVoidFunction {
+        if (device != VK_NULL_HANDLE) {
+            return reinterpret_cast<PFN_vkGetDeviceProcAddr>(static_cast<uintptr_t>(getProcAddr))(device, name);
+        }
+        return reinterpret_cast<PFN_vkGetInstanceProcAddr>(static_cast<uintptr_t>(instanceProcAddr))(instance, name);
+    };
+
+    skgpu::VulkanExtensions* extensions = new skgpu::VulkanExtensions();
+    extensions->init(backendContext.fGetProc, backendContext.fInstance, backendContext.fPhysicalDevice, 0, nullptr, 0, nullptr);
+    backendContext.fVkExtensions = extensions;
+    backendContext.fMaxAPIVersion = (uint32_t) apiVersion;
+
+    sk_sp<GrDirectContext> instance = GrDirectContexts::MakeVulkan(backendContext);
+    return reinterpret_cast<jlong>(instance.release());
+}
+#endif // SK_VULKAN
 
 extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_DirectContext__1nFlush
   (JNIEnv* env, jclass jclass, jlong ptr) {
