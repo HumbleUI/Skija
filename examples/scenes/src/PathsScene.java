@@ -421,36 +421,31 @@ public class PathsScene extends Scene {
         Typeface typeface = Typeface.makeFromFile(file("fonts/InterHinted-Regular.ttf"));
         var font = new Font(typeface, 32);
 
-        try (var paint = new Paint().setStrokeWidth(4)
+        try (var textPaint = new Paint().setStrokeWidth(4)
                 .setMode(PaintMode.STROKE)
-                .setAntiAlias(true)
+                .setAntiAlias(false)
                 .setStrokeJoin(PaintStrokeJoin.ROUND);
-             var dstPath = new Path();) {
+             var dstPath = new Path();
+             var fillPaint = new Paint().setMode(PaintMode.FILL).setAntiAlias(true);) {
 
             float penX = x;
             float penY = y;
 
             short[]  glyphs = font.getStringGlyphs(text);
-
             for (var glyph : glyphs) {
                 dstPath.reset();
-
                 Path glyphPath = font.getPath(glyph);
                 if (glyphPath != null) {
-
-                    boolean success = glyphPath.fillPath(paint, dstPath);
+                    boolean success = glyphPath.fillPath(textPaint, dstPath);
                     if (success) {
                         canvas.save();
                         canvas.translate(penX, penY);
-                        canvas.drawPath(dstPath, new Paint()
-                                .setMode(PaintMode.FILL)
-                                .setColor(0xFF00AA00 + (glyph * 123456) % 0x0000FF)
-                                .setAntiAlias(true));
+                        fillPaint.setColor(0xFF00AA00 + (glyph * 123456) % 0x0000FF);
+                        canvas.drawPath(dstPath, fillPaint);
                         canvas.restore();
                     }
                     glyphPath.close();
                 }
-
                 float advance = font.getWidths(new short[]{glyph})[0];
                 penX += advance;
                 penY = y + 5 * (float)Math.sin((penX - x) * Math.PI / 64);
