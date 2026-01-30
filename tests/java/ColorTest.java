@@ -36,5 +36,20 @@ public class ColorTest implements Executable {
         assertEquals(0x12FE5678, Color.withR(0x12345678, 0xFE));
         assertEquals(0x1234FE78, Color.withG(0x12345678, 0xFE));
         assertEquals(0x123456FE, Color.withB(0x12345678, 0xFE));
+
+        assertEquals(0xFF000000, Color.makeLerp(0xFF000000, 0xFFFFFFFF, 0));
+        assertEquals(0xFFFFFFFF, Color.makeLerp(0xFF000000, 0xFFFFFFFF, 1));
+        assertEquals(0xFF808080, Color.makeLerp(0xFF000000, 0xFFFFFFFF, 0.5f));
+
+        assertEquals(0x80000000, Color.makeLerp(0xFF000000, 0x00000000, 0.5f));
+        assertEquals(0x800000FF, Color.makeLerp(0xFF0000FF, 0x00FF0000, 0.5f));
+
+        assertEquals(new Color4f(1, 1, 1, 1), new Color4f(0, 0, 0, 1).makeLerp(new Color4f(1, 1, 1, 1), 1));
+        assertEquals(new Color4f(0, 0, 1, 0.5f), new Color4f(0, 0, 1, 1).makeLerp(new Color4f(1, 0, 0, 0), 0.5f));
+
+        assertEquals(0x80000080, Color.premultiply(0x800000FF));
+        assertEquals(0x800000FF, Color.unpremultiply(0x80000080));
+        assertEquals(new Color4f(0.5f, 0, 0, 0.5f), new Color4f(1, 0, 0, 0.5f).premultiply());
+        assertEquals(new Color4f(1, 0, 0, 0.5f), new Color4f(0.5f, 0, 0, 0.5f).unpremultiply());
     }
 }
