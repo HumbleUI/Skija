@@ -463,45 +463,6 @@ public class Paint extends Managed {
         }
     }
 
-    /** 
-     * Returns the filled equivalent of the stroked path, filling the destination path.
-     *
-     * @param src       Path read to create a filled version
-     * @param dst       Path to fill with the result, may be the same as src, but may not be nullptr
-     * @param cull      Optional limit passed to PathEffect
-     * @param matrix    Matrix to apply to the path
-     * @return          true if the dst path was updated, false if it was not (e.g. if the path represents hairline and cannot be filled)
-     */
-    @Contract("!null, !null, _, _ -> _; null, _, _, _ -> fail")
-    public boolean fillPath(@NotNull Path src, @NotNull Path dst, @Nullable Rect cull, @NotNull Matrix33 matrix) {
-        try {
-            assert src != null : "Paint::fillPath expected src != null";
-            assert dst != null : "Paint::fillPath expected dst != null";
-            assert matrix != null : "Paint::fillPath expected matrix != null";
-            Stats.onNativeCall();
-            if (cull == null)
-                return _nFillPathWithPaint(_ptr, Native.getPtr(src), Native.getPtr(dst), 0, 0, 0, 0, matrix._mat);
-            else
-                return _nFillPathWithPaint(_ptr, Native.getPtr(src), Native.getPtr(dst), cull._left, cull._top, cull._right, cull._bottom, matrix._mat);
-        } finally {
-            ReferenceUtil.reachabilityFence(this);
-            ReferenceUtil.reachabilityFence(src);
-            ReferenceUtil.reachabilityFence(dst);
-        }
-    }
-
-    public boolean fillPath(@NotNull Path src, @NotNull Path dst, @NotNull Matrix33 matrix) {
-        return fillPath(src, dst, null, matrix);
-    }
-
-    public boolean fillPath(@NotNull Path src, @NotNull Path dst) {
-        return fillPath(src, dst, null, Matrix33.IDENTITY);
-    }
-
-    public boolean fillPath(@NotNull Path src, @NotNull Path dst, float resScale) {
-        return fillPath(src, dst, null, Matrix33.makeScale(resScale));
-    }
-
     /**
      * @return  {@link Shader} or null
      * @see     <a href="https://fiddle.skia.org/c/@Paint_refShader">https://fiddle.skia.org/c/@Paint_refShader</a>
@@ -744,7 +705,6 @@ public class Paint extends Managed {
     public static native void  _nSetStrokeJoin(long ptr, int value);
     public static native long  _nGetFillPath(long ptr, long path, float resScale);
     public static native long  _nGetFillPathCull(long ptr, long path, float left, float top, float right, float bottom, float resScale);
-    public static native boolean _nFillPathWithPaint(long ptr, long srcPath, long dstPath, float left, float top, float right, float bottom, float[] matrix);
     public static native long  _nGetShader(long ptr);
     public static native void  _nSetShader(long ptr, long shaderPtr);
     public static native long  _nGetColorFilter(long ptr);
