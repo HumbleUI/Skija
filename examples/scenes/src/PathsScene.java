@@ -8,7 +8,6 @@ public class PathsScene extends Scene {
     public void draw(Canvas canvas, int width, int height, float dpi, int xpos, int ypos) {
         canvas.translate(30, 30);
 
-        drawGlyphsWithFillPath(canvas, "Hello, Skija! (fillPath glyphs)", 20, 10);
         drawPaths(canvas, new Paint().setColor(0xFFF6BC01));
         drawPaths(canvas, new Paint().setColor(0xFF437AA0).setMode(PaintMode.STROKE).setStrokeWidth(1f));
         drawAdds(canvas);
@@ -17,6 +16,7 @@ public class PathsScene extends Scene {
         drawPathsOp(canvas);
         drawInterpolate(canvas);
         drawMeasure(canvas);
+        drawGlyphsWithFillPath(canvas, "Hello, Skija! (fillPath glyphs)", 0, 10);
     }
 
     public void drawPaths(Canvas canvas, Paint paint) {
@@ -422,16 +422,18 @@ public class PathsScene extends Scene {
 
         try (Typeface typeface = Typeface.makeFromFile(file("fonts/InterHinted-Regular.ttf"));
              var font = new Font(typeface, textSize);
-             var textPaint = new Paint().setStrokeWidth(4).setMode(PaintMode.STROKE)
+             var textPaint = new Paint().setStrokeWidth(1).setMode(PaintMode.STROKE)
                                         .setAntiAlias(true).setStrokeJoin(PaintStrokeJoin.ROUND);
              var dstPath = new Path();
-             var fillPaint = new Paint().setMode(PaintMode.FILL).setAntiAlias(true);) {
-
+             var effect = PathEffect.makeDash(new float[] {5, 2}, 0);
+             var fillPaint = new Paint().setColor(0xFF447AA0).setMode(PaintMode.FILL).setAntiAlias(true);)
+        {
+            textPaint.setPathEffect(effect);
             float penX = x;
-            float penY = y;
-
             short[] glyphs = font.getStringGlyphs(text);
             for (var glyph : glyphs) {
+                float penY = y + textSize + 2 * (float) Math.sin((penX - x) * Math.PI / 64);
+
                 dstPath.reset();
                 Path glyphPath = font.getPath(glyph);
                 if (glyphPath != null) {
@@ -439,9 +441,8 @@ public class PathsScene extends Scene {
                     if (success) {
                         canvas.save();
                         canvas.translate(penX, penY);
-                        fillPaint.setColor(0xFF00AA00 + (glyph * 123456) % 0x0000FF);
                         canvas.drawPath(glyphPath, fillPaint);
-                        canvas.translate(0, penY + textSize);
+                        canvas.translate(0, penY + textSize / 2);
                         canvas.drawPath(dstPath, fillPaint);
                         canvas.restore();
                     }
@@ -449,10 +450,9 @@ public class PathsScene extends Scene {
                 }
                 float advance = font.getWidths(new short[]{glyph})[0];
                 penX += advance;
-                penY = y + 5 * (float) Math.sin((penX - x) * Math.PI / 64);
             }
         }
         canvas.restore();
-        canvas.translate(0, textSize * 2 + 10);
+        canvas.translate(0, textSize + 10);
     }
 }
