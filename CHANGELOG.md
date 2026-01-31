@@ -1,3 +1,9 @@
+# 0.119.3 - Jan 31, 2026
+
+Added:
+
+- `Path::fillPath` #95 via @vladimirsamsonov
+
 # 0.119.2 - Jan 21, 2026
 
 Fixed:
