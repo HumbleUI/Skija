@@ -7,6 +7,9 @@ import static io.github.humbleui.skija.test.runner.TestRunner.assertThrows;
 
 import java.util.NoSuchElementException;
 
+import io.github.humbleui.skija.Matrix33;
+import io.github.humbleui.skija.Paint;
+import io.github.humbleui.skija.PaintMode;
 import io.github.humbleui.skija.Path;
 import io.github.humbleui.skija.PathBuilder;
 import io.github.humbleui.skija.PathDirection;
@@ -32,6 +35,7 @@ public class PathTest implements Executable {
         TestRunner.testMethod(this, "contains");
         TestRunner.testMethod(this, "utils");
         TestRunner.testMethod(this, "serialize");
+        TestRunner.testMethod(this, "fillWithPaint");
     }
 
     public void iter() {
@@ -282,6 +286,48 @@ public class PathTest implements Executable {
         try (Path p = new PathBuilder().lineTo(40, 40).lineTo(40, 0).lineTo(0, 40).lineTo(0, 0).closePath().build();) {
             Path p2 = Path.makeFromBytes(p.serializeToBytes());
             assertEquals(p, p2);
+        }
+    }
+
+    public void fillWithPaint() throws Exception {
+         try (var paint = new Paint();
+             var src = new PathBuilder().addRect(Rect.makeXYWH(10, 10, 50, 50)).build();
+             var dst = new PathBuilder();
+         ) {
+
+            paint.setMode(PaintMode.STROKE).setStrokeWidth(5);
+
+            Matrix33 identityMatrix = Matrix33.IDENTITY;
+            boolean result = src.fillWithPaint(paint, dst, null, identityMatrix);
+            assertEquals(true, result);
+            assertEquals(false, dst.isEmpty());
+
+            dst.reset();
+            Matrix33 scaleMatrix = Matrix33.makeScale(2.0f, 2.0f);
+            result = src.fillWithPaint(paint, dst, null, scaleMatrix);
+            assertEquals(true, result);
+            assertEquals(false, dst.isEmpty());
+
+            dst.reset();
+            Rect cullRect = Rect.makeXYWH(0, 0, 100, 100);
+            result = src.fillWithPaint(paint, dst, cullRect, identityMatrix);
+            assertEquals(true, result);
+            assertEquals(false, dst.isEmpty());
+
+            dst.reset();
+            result = src.fillWithPaint(paint, dst, identityMatrix);
+            assertEquals(true, result);
+            assertEquals(false, dst.isEmpty());
+
+            dst.reset();
+            result = src.fillWithPaint(paint, dst);
+            assertEquals(true, result);
+            assertEquals(false, dst.isEmpty());
+
+            dst.reset();
+            result = src.fillWithPaint(paint, dst, 3.0f);
+            assertEquals(true, result);
+            assertEquals(false, dst.isEmpty());
         }
     }
 }

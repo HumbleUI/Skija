@@ -23,6 +23,7 @@ public class PathsScene extends Scene {
         drawPathsOp(canvas);
         drawInterpolate(canvas);
         drawMeasure(canvas);
+        drawFillWithPaint(canvas, "fillWithPaint", 0, 10);
     }
 
     public void drawPaths(Canvas canvas, Paint paint) {
@@ -569,5 +570,45 @@ public class PathsScene extends Scene {
 
         canvas.restore();
         canvas.translate(0, 50);
+    }
+
+    public void drawFillWithPaint(Canvas canvas, String text, float x, float y) {
+        canvas.save();
+        final int textSize = 32;
+
+        try (Typeface typeface = FontMgr.getDefault().makeFromFile(file("fonts/InterHinted-Regular.ttf"));
+             var font = new Font(typeface, textSize);
+             var textPaint = new Paint().setStrokeWidth(1).setMode(PaintMode.STROKE)
+                                        .setAntiAlias(true).setStrokeJoin(PaintStrokeJoin.ROUND);
+             var dstBuilder = new PathBuilder();
+             var effect = PathEffect.makeDash(new float[] {5, 2}, 0);
+             var fillPaint = new Paint().setColor(0xFF447AA0).setMode(PaintMode.FILL).setAntiAlias(true);)
+        {
+            textPaint.setPathEffect(effect);
+            float penX = x;
+            short[] glyphs = font.getStringGlyphs(text);
+            for (var glyph : glyphs) {
+                float penY = y + textSize + 2 * (float) Math.sin((penX - x) * Math.PI / 64);
+                Path glyphPath = font.getPath(glyph);
+                if (glyphPath != null) {
+                    boolean success = glyphPath.fillWithPaint(textPaint, dstBuilder);
+                    if (success) {
+                        canvas.save();
+                        canvas.translate(penX, penY);
+                        canvas.drawPath(glyphPath, fillPaint);
+                        canvas.translate(0, penY + textSize / 2);
+                        try (var dst = dstBuilder.detach();) {
+                            canvas.drawPath(dst, fillPaint);
+                        }
+                        canvas.restore();
+                    }
+                    glyphPath.close();
+                }
+                float advance = font.getWidths(new short[]{glyph})[0];
+                penX += advance;
+            }
+        }
+        canvas.restore();
+        canvas.translate(0, textSize + 10);
     }
 }

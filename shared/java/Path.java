@@ -1204,6 +1204,45 @@ public class Path extends Managed implements Iterable<PathSegment> {
         }
     }
 
+    /**
+     * Returns the filled equivalent of the stroked path, filling the destination path.
+     *
+     * @param paint     Paint describing the stroke properties
+     * @param dst       Path to fill with the result, may be the same as src, but may not be nullptr
+     * @param cull      Optional limit passed to PathEffect
+     * @param matrix    Matrix to apply to the path
+     * @return          true if the dst path was updated, false if it was not (e.g. if the path represents hairline and cannot be filled)
+     */
+    @Contract("!null, !null, _, _ -> _; null, _, _, _ -> fail")
+    public boolean fillWithPaint(@NotNull Paint paint, @NotNull PathBuilder dst, @Nullable Rect cull, @NotNull Matrix33 matrix) {
+        try {
+            assert paint != null : "Path::fillPath expected paint != null";
+            assert dst != null : "Path::fillPath expected dst != null";
+            assert matrix != null : "Path::fillPath expected matrix != null";
+            Stats.onNativeCall();
+            if (cull == null)
+                return _nFillWithPaint(_ptr, Native.getPtr(paint), Native.getPtr(dst), 0, 0, 0, 0, matrix._mat);
+            else
+                return _nFillWithPaint(_ptr, Native.getPtr(paint), Native.getPtr(dst), cull._left, cull._top, cull._right, cull._bottom, matrix._mat);
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(paint);
+            ReferenceUtil.reachabilityFence(dst);
+        }
+    }
+
+    public boolean fillWithPaint(@NotNull Paint paint, @NotNull PathBuilder dst, @NotNull Matrix33 matrix) {
+        return fillWithPaint(paint, dst, null, matrix);
+    }
+
+    public boolean fillWithPaint(@NotNull Paint paint, @NotNull PathBuilder dst) {
+        return fillWithPaint(paint, dst, null, Matrix33.IDENTITY);
+    }
+
+    public boolean fillWithPaint(@NotNull Paint paint, @NotNull PathBuilder dst, float resScale) {
+        return fillWithPaint(paint, dst, null, Matrix33.makeScale(resScale));
+    }
+
     @ApiStatus.Internal
     public Path(long ptr) {
         super(ptr, _FinalizerHolder.PTR);
@@ -1268,4 +1307,5 @@ public class Path extends Managed implements Iterable<PathSegment> {
     public static native long    _nMakeFromBytes(byte[] data);
     public static native int     _nGetGenerationId(long ptr);
     public static native boolean _nIsValid(long ptr);
+    public static native boolean _nFillWithPaint(long ptr, long srcPath, long dstPathBuilder, float left, float top, float right, float bottom, float[] matrix);
 }

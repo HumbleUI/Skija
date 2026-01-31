@@ -1,3 +1,9 @@
+# WIP
+
+Added:
+
+- `Path::fillWithPaint` #95 via @vladimirsamsonov
+
 # 0.143.8 - Jan 29, 2026
 
 Added
@@ -137,6 +143,42 @@ Removed:
 - [ BREAKING ] `Typeface::makeFromName` (use `FontMgr::matchFamilyStyle`)
 - [ BREAKING ] `Typeface::makeFromFile` (use `FontMgr::makeFromFile`)
 - [ BREAKING ] `Typeface::makeFromData` (use `FontMgr::makeFromData`)
+- [ BREAKING ] `Surface::flush` (use `DirectContext::flush(Surface)`)
+- [ BREAKING ] `Surface::flushAndSubmit` (use `DirectContext::flushAndSubmit(Surface)`)
+
+# 0.119.3 - Jan 31, 2026
+
+Added:
+
+- `Path::fillPath` #95 via @vladimirsamsonov
+
+# 0.119.2 - Jan 21, 2026
+
+Fixed:
+
+- `Path::convertConicToQuads` returning incomplete array #94
+
+# 0.119.1 - Dec 2, 2025
+
+Fixed:
+
+- `ColorType`, `EncodedImageFormat`, `FramebufferFormat`, `SurfaceColorFormat` updated to match Skia enums
+- `ColorType.N32` value on macOS
+
+# 0.119.0 - Nov 28, 2025
+
+Changed:
+
+- Skia version m116-d2c211228d -> m119-fcb55886b9
+- `DirectContext::submit` returns `boolean`
+
+Added:
+
+- `FontMgr::makeFromFile`
+- `DirectContext::flushAndSubmit`
+
+Removed:
+
 - [ BREAKING ] `Surface::flush` (use `DirectContext::flush(Surface)`)
 - [ BREAKING ] `Surface::flushAndSubmit` (use `DirectContext::flushAndSubmit(Surface)`)
 
