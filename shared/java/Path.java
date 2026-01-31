@@ -1,6 +1,7 @@
 package io.github.humbleui.skija;
 
 import org.jetbrains.annotations.*;
+import io.github.humbleui.skija.Paint;
 import io.github.humbleui.skija.impl.*;
 import io.github.humbleui.types.*;
 
@@ -1171,6 +1172,45 @@ public class Path extends Managed implements Iterable<PathSegment> {
         return this;
     }
 
+    /** 
+     * Returns the filled equivalent of the stroked path, filling the destination path.
+     *
+     * @param paint     Paint describing the stroke properties
+     * @param dst       Path to fill with the result, may be the same as src, but may not be nullptr
+     * @param cull      Optional limit passed to PathEffect
+     * @param matrix    Matrix to apply to the path
+     * @return          true if the dst path was updated, false if it was not (e.g. if the path represents hairline and cannot be filled)
+     */
+    @Contract("!null, !null, _, _ -> _; null, _, _, _ -> fail")
+    public boolean fillPath(@NotNull Paint paint, @NotNull Path dst, @Nullable Rect cull, @NotNull Matrix33 matrix) {
+        try {
+            assert paint != null : "Path::fillPath expected paint != null";
+            assert dst != null : "Path::fillPath expected dst != null";
+            assert matrix != null : "Path::fillPath expected matrix != null";
+            Stats.onNativeCall();
+            if (cull == null)
+                return _nFillPathWithPaint(_ptr, Native.getPtr(paint), Native.getPtr(dst), 0, 0, 0, 0, matrix._mat);
+            else
+                return _nFillPathWithPaint(_ptr, Native.getPtr(paint), Native.getPtr(dst), cull._left, cull._top, cull._right, cull._bottom, matrix._mat);
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(paint);
+            ReferenceUtil.reachabilityFence(dst);
+        }
+    }
+
+    public boolean fillPath(@NotNull Paint paint, @NotNull Path dst, @NotNull Matrix33 matrix) {
+        return fillPath(paint, dst, null, matrix);
+    }
+
+    public boolean fillPath(@NotNull Paint paint, @NotNull Path dst) {
+        return fillPath(paint, dst, null, Matrix33.IDENTITY);
+    }
+
+    public boolean fillPath(@NotNull Paint paint, @NotNull Path dst, float resScale) {
+        return fillPath(paint, dst, null, Matrix33.makeScale(resScale));
+    }
+
     /**
      * <p>Approximates conic with quad array. Conic is constructed from start Point p0,
      * control Point p1, end Point p2, and weight w.</p>
@@ -2004,6 +2044,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
     public static native void    _nEllipticalArcTo(long ptr, float rx, float ry, float xAxisRotate, int size, int direction, float x, float y);
     public static native void    _nREllipticalArcTo(long ptr, float rx, float ry, float xAxisRotate, int size, int direction, float dx, float dy);
     public static native void    _nClosePath(long ptr);
+    public static native boolean _nFillPathWithPaint(long ptr, long srcPath, long dstPath, float left, float top, float right, float bottom, float[] matrix);
     public static native Point[] _nConvertConicToQuads(float x0, float y0, float x1, float y1, float x2, float y2, float w, int pow2);
     public static native Rect    _nIsRect(long ptr);
     public static native void    _nAddRect(long ptr, float l, float t, float r, float b, int dir, int start);

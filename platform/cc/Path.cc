@@ -5,6 +5,7 @@
 #include <jni.h>
 #include "SkPath.h"
 #include "SkPathOps.h"
+#include "SkPathUtils.h"
 #include "interop.hh"
 #include "include/utils/SkParsePath.h"
 
@@ -499,4 +500,14 @@ extern "C" JNIEXPORT jboolean JNICALL Java_io_github_humbleui_skija_Path__1nIsVa
   (JNIEnv* env, jclass jclass, jlong ptr) {
     SkPath* instance = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(ptr));
     return instance->isValid();
+}
+
+extern "C" JNIEXPORT jboolean JNICALL Java_io_github_humbleui_skija_Path__1nFillPathWithPaint
+  (JNIEnv* env, jclass jclass, jlong ptr, jlong paintPtr, jlong dstPtr, jfloat left, jfloat top, jfloat right, jfloat bottom, jfloatArray matrixArr) {
+    SkPath* instance = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(ptr));
+    SkPaint* paint = reinterpret_cast<SkPaint*>(static_cast<uintptr_t>(paintPtr));
+    SkPath* dst = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(dstPtr));
+    SkRect cull {left, top, right, bottom};
+    std::unique_ptr<SkMatrix> matrix = skMatrix(env, matrixArr);
+    return skpathutils::FillPathWithPaint(*instance, *paint, dst, &cull, *matrix);
 }
