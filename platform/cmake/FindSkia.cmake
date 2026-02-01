@@ -161,6 +161,11 @@ target_include_directories(skia INTERFACE
   ${SKIA_SKRESOURCES_INCLUDE_DIR}
 )
 
+if(NOT APPLE)
+  target_include_directories(skia INTERFACE
+    ${SKIA_DIR}/include/third_party/vulkan)
+endif()
+
 if(WIN32)
   target_include_directories(skia INTERFACE
     ${SKIA_ANGLE_INCLUDE_DIR})

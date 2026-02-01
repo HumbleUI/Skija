@@ -35,6 +35,12 @@ public class BackendRenderTarget extends Managed {
         return new BackendRenderTarget(_nMakeDirect3D(width, height, texturePtr, format, sampleCnt, levelCnt));
     }
 
+    @NotNull @Contract("_, _, _, _, _, _, _, _, _ -> new")
+    public static BackendRenderTarget makeVulkan(int width, int height, long imagePtr, int imageTiling, int imageLayout, int format, int imageUsageFlags, int sampleCnt, int levelCnt) {
+        Stats.onNativeCall();
+        return new BackendRenderTarget(_nMakeVulkan(width, height, imagePtr, imageTiling, imageLayout, format, imageUsageFlags, sampleCnt, levelCnt));
+    }
+
     @ApiStatus.Internal
     public BackendRenderTarget(long ptr) {
         super(ptr, _FinalizerHolder.PTR);
@@ -49,5 +55,6 @@ public class BackendRenderTarget extends Managed {
     @ApiStatus.Internal public static native long _nMakeGL(int width, int height, int sampleCnt, int stencilBits, int fbId, int fbFormat);
     @ApiStatus.Internal public static native long _nMakeMetal(int width, int height, long texturePtr);
     @ApiStatus.Internal public static native long _nMakeDirect3D(int width, int height, long texturePtr, int format, int sampleCnt, int levelCnt);
+    @ApiStatus.Internal public static native long _nMakeVulkan(int width, int height, long imagePtr, int imageTiling, int imageLayout, int format, int imageUsageFlags, int sampleCnt, int levelCnt);
 
 }
