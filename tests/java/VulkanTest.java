@@ -12,11 +12,8 @@ public class VulkanTest implements Executable {
     }
 
     public void testVulkanContext() {
-        try {
-            DirectContext context = DirectContext.makeVulkan(0, 0, 0, 0, 0, 0, 0);
-        } catch (Exception e) {
-        } catch (UnsatisfiedLinkError e) {
-            throw new RuntimeException("Vulkan bindings not found!", e);
-        }
+        assertThrows(RuntimeException.class, () -> {
+            DirectContext.makeVulkan(0, 0, 0, 0, 0, 0, 0, 0);
+        });
     }
 }
