@@ -39,7 +39,6 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_BackendRenderTa
 #endif //SK_METAL
 
 #ifdef SK_DIRECT3D
-#include "include/gpu/ganesh/d3d/GrD3DBackendSurface.h"
 #include "include/gpu/ganesh/d3d/GrD3DTypes.h"
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_BackendRenderTarget__1nMakeDirect3D
@@ -54,7 +53,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_BackendRenderTa
     GrBackendRenderTarget* instance = new GrBackendRenderTarget(width, height, texResInfo);
     return reinterpret_cast<jlong>(instance);
 }
-#endif // SK_DIRECT3D
+#endif //SK_DIRECT3D
 
 #ifdef SK_VULKAN
 #include "include/gpu/ganesh/vk/GrVkBackendSurface.h"

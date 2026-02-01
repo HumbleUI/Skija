@@ -27,7 +27,6 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_DirectContext__
 
 #ifdef SK_DIRECT3D
 #include "include/gpu/ganesh/d3d/GrD3DBackendContext.h"
-#include "include/gpu/ganesh/d3d/GrD3DDirectContext.h"
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_DirectContext__1nMakeDirect3D
   (JNIEnv* env, jclass jclass, jlong adapterPtr, jlong devicePtr, jlong queuePtr) {
@@ -41,7 +40,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_DirectContext__
     sk_sp<GrDirectContext> instance = GrDirectContext::MakeDirect3D(backendContext);
     return reinterpret_cast<jlong>(instance.release());
 }
-#endif // SK_DIRECT3D
+#endif //SK_DIRECT3D
 
 #ifdef SK_VULKAN
 #include "include/gpu/ganesh/vk/GrVkDirectContext.h"
