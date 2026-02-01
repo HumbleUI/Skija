@@ -161,13 +161,13 @@ extern "C" JNIEXPORT jfloat JNICALL Java_io_github_humbleui_skija_TextLine__1nGe
     TextLine* instance = reinterpret_cast<TextLine*>(static_cast<uintptr_t>(ptr));
 
     for (auto& run: instance->fRuns) {
-        if (offset16 > run.fBreakOffsets.back())
+        if (offset16 > (jint) run.fBreakOffsets.back())
             continue;
 
         for (uint32_t idx = 0; idx < run.fBreakPositions.size() - 1; ++idx) {
-            if (offset16 < run.fBreakOffsets[idx] && idx > 0)
+            if (offset16 < (jint) run.fBreakOffsets[idx] && idx > 0)
                 return run.fBreakPositions[idx - 1];
-            if (offset16 <= run.fBreakOffsets[idx])
+            if (offset16 <= (jint) run.fBreakOffsets[idx])
                 return run.fBreakPositions[idx];
         }
     }

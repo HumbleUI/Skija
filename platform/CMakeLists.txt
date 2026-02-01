@@ -56,7 +56,13 @@ elseif(WIN32)
     target_include_directories(skija PRIVATE $ENV{JAVA_HOME}/include $ENV{JAVA_HOME}/include/win32)
     target_link_libraries(skija d3d12 dxgi d3dcompiler)
 
-    # target_compile_options(skija PRIVATE /MT)
+    # Suppress warnings from Skia headers and size_t conversions
+    target_compile_options(skija PRIVATE
+        /wd4244  # conversion from 'int32_t' to 'float'
+        /wd4267  # conversion from 'size_t' to smaller type
+        /wd5030  # attribute not recognized
+    )
+
     # set_property(TARGET skija PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded")
     set(CMAKE_CXX_FLAGS_RELEASE "/MT")
     set(CMAKE_CXX_FLAGS_DEBUG "/MTd")

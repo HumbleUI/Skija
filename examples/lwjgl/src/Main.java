@@ -128,7 +128,7 @@ class Window {
                          /*fbId*/0,
                          FramebufferFormat.GR_GL_RGBA8);
 
-        surface = Surface.makeFromBackendRenderTarget(
+        surface = Surface.wrapBackendRenderTarget(
                     context,
                     renderTarget,
                     SurfaceOrigin.BOTTOM_LEFT,

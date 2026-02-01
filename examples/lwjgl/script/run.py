@@ -6,7 +6,7 @@ import common, build, build_utils
 def main():
   parser = argparse.ArgumentParser()
   parser.add_argument('--skija-version')
-  parser.add_argument('--lwjgl-version', default='3.3.1')
+  parser.add_argument('--lwjgl-version', default='3.4.0')
   (args, _) = parser.parse_known_args()
 
   # Javac

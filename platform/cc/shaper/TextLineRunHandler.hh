@@ -70,7 +70,7 @@ public:
             run.fBreakOffsets.push_back(conv.from8To16(offset));
 
             // if grapheme clusters includes multiple glyphs, skip over them
-            while (glyph < info.glyphCount && fGlyphOffsets[glyph] < offset)
+            while (glyph < info.glyphCount && (int32_t) fGlyphOffsets[glyph] < offset)
                 ++glyph;
 
             // if one glyph includes multiple grapheme clusters (ligature, e.g. <->), accumulate
