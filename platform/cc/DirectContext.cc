@@ -38,7 +38,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_DirectContext__
     backendContext.fAdapter.retain(adapter);
     backendContext.fDevice.retain(device);
     backendContext.fQueue.retain(queue);
-    sk_sp<GrDirectContext> instance = GrDirectContexts::MakeDirect3D(backendContext);
+    sk_sp<GrDirectContext> instance = GrDirectContext::MakeDirect3D(backendContext);
     return reinterpret_cast<jlong>(instance.release());
 }
 #endif // SK_DIRECT3D

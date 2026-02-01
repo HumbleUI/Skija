@@ -51,8 +51,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_BackendRenderTa
     texResInfo.fFormat = static_cast<DXGI_FORMAT>(format);
     texResInfo.fSampleCount = static_cast<uint32_t>(sampleCnt);
     texResInfo.fLevelCount = static_cast<uint32_t>(levelCnt);
-    GrBackendRenderTarget target = GrBackendRenderTargets::MakeDirect3D(width, height, texResInfo);
-    GrBackendRenderTarget* instance = new GrBackendRenderTarget(target);
+    GrBackendRenderTarget* instance = new GrBackendRenderTarget(width, height, texResInfo);
     return reinterpret_cast<jlong>(instance);
 }
 #endif // SK_DIRECT3D
