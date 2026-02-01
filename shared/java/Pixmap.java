@@ -8,7 +8,7 @@ import io.github.humbleui.skija.SamplingMode;
 import io.github.humbleui.skija.impl.*;
 import io.github.humbleui.types.*;
 
-public class Pixmap extends Managed {
+public class Pixmap extends Managed implements IHasImageInfo {
     static { Library.staticLoad(); }
 
     @ApiStatus.Internal
@@ -19,6 +19,11 @@ public class Pixmap extends Managed {
     public Pixmap() {
         this(_nMakeNull(), true);
         Stats.onNativeCall();
+    }
+
+    @Override @NotNull
+    public ImageInfo getImageInfo() {
+        return getInfo();
     }
 
     public static Pixmap make(ImageInfo info, ByteBuffer buffer, int rowBytes) {
