@@ -61,6 +61,7 @@ public class Main {
         glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE); 
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
         window = glfwCreateWindow(800, 600, "Skija Vulkan Example", NULL, NULL);
+        glfwShowWindow(window);
     }
 
     private static void initVulkan() {
@@ -188,11 +189,12 @@ public class Main {
         VkSurfaceFormatKHR.Buffer formats = VkSurfaceFormatKHR.malloc(pFormatCount.get(0), stack);
         vkGetPhysicalDeviceSurfaceFormatsKHR(physicalDevice, surface, pFormatCount, formats);
         
-        swapchainFormat = VK_FORMAT_B8G8R8A8_UNORM; 
-        int colorSpace = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
+        swapchainFormat = formats.get(0).format(); 
+        int colorSpace = formats.get(0).colorSpace();
         for (int i = 0; i < formats.capacity(); i++) {
-            if (formats.get(i).format() == VK_FORMAT_B8G8R8A8_UNORM && formats.get(i).colorSpace() == colorSpace) {
+            if (formats.get(i).format() == VK_FORMAT_B8G8R8A8_UNORM && formats.get(i).colorSpace() == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR) {
                 swapchainFormat = VK_FORMAT_B8G8R8A8_UNORM;
+                colorSpace = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
                 break;
             }
         }
@@ -259,11 +261,17 @@ public class Main {
                 1
             );
 
-            skiaSurfaces[i] = Surface.makeFromBackendRenderTarget(
+            ColorType colorType = ColorType.BGRA_8888;
+            if (swapchainFormat == VK_FORMAT_R8G8B8A8_UNORM || swapchainFormat == VK_FORMAT_R8G8B8A8_SRGB)
+                colorType = ColorType.RGBA_8888;
+            else if (swapchainFormat == VK_FORMAT_B8G8R8A8_UNORM || swapchainFormat == VK_FORMAT_B8G8R8A8_SRGB)
+                colorType = ColorType.BGRA_8888;
+
+            skiaSurfaces[i] = Surface.wrapBackendRenderTarget(
                 directContext,
                 renderTargets[i],
                 SurfaceOrigin.TOP_LEFT,
-                swapchainFormat == VK_FORMAT_B8G8R8A8_SRGB ? ColorType.BGRA_8888 : ColorType.BGRA_8888,
+                colorType,
                 null,
                 new SurfaceProps(PixelGeometry.RGB_H)
             );

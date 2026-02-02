@@ -6,8 +6,7 @@ import common, build, build_utils
 def main():
   parser = argparse.ArgumentParser()
   parser.add_argument('--skija-version')
-  parser.add_argument('--lwjgl-version', default='3.3.1')
-  parser.add_argument('--skija-local', action='store_true', help='Build Skija locally')
+  parser.add_argument('--lwjgl-version', default='3.4.0')
   (args, _) = parser.parse_known_args()
 
   if (build_utils.arch == 'x64'):
@@ -23,14 +22,7 @@ def main():
     build_utils.fetch_maven('org.lwjgl', 'lwjgl-glfw', args.lwjgl_version, classifier=lwjgl_classifier)
   ]
 
-  if args.skija_local:
-    build.main()
-    classpath += [
-      os.path.join('..', '..', 'platform', 'target', common.classifier, 'classes'),
-      os.path.join('..', '..', 'shared', 'target', 'classes-java9'),
-      os.path.join('..', '..', 'shared', 'target', 'classes')
-    ]
-  elif args.skija_version:
+  if args.skija_version:
     classpath += [
       build_utils.fetch_maven('io.github.humbleui', 'skija-shared', args.skija_version),
       build_utils.fetch_maven('io.github.humbleui', 'skija-' + common.classifier, args.skija_version),
