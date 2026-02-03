@@ -2,6 +2,7 @@ package io.github.humbleui.skija.examples.vulkan;
 
 import java.nio.IntBuffer;
 import java.nio.LongBuffer;
+import java.nio.FloatBuffer;
 import java.util.*;
 
 import org.lwjgl.PointerBuffer;
@@ -19,9 +20,18 @@ import static org.lwjgl.vulkan.KHRSurface.*;
 import static org.lwjgl.vulkan.KHRSwapchain.*;
 
 import io.github.humbleui.skija.*;
+import io.github.humbleui.skija.examples.scenes.*;
+import io.github.humbleui.skija.impl.*;
+import io.github.humbleui.types.*;
 
 public class Main {
     private static long window;
+    private static int width = 800;
+    private static int height = 600;
+    private static float dpi = 1f;
+    private static int xpos = 0;
+    private static int ypos = 0;
+
     private static VkInstance instance;
     private static long surface;
     private static VkPhysicalDevice physicalDevice;
@@ -48,6 +58,8 @@ public class Main {
     private static Surface[] skiaSurfaces;
 
     public static void main(String[] args) {
+        if ("false".equals(System.getProperty("skija.staticLoad")))
+            io.github.humbleui.skija.impl.Library.load();
         initWindow();
         initVulkan();
         initSkia();
@@ -56,12 +68,101 @@ public class Main {
     }
 
     private static void initWindow() {
+        if (System.getenv("WAYLAND_DISPLAY") != null) {
+            glfwInitHint(GLFW_PLATFORM, GLFW_PLATFORM_WAYLAND);
+        }
         if (!glfwInit()) throw new IllegalStateException("Unable to initialize GLFW");
         glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-        glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE); 
+        glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); 
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
-        window = glfwCreateWindow(800, 600, "Skija Vulkan Example", NULL, NULL);
+        window = glfwCreateWindow(width, height, "Skija Vulkan Example", NULL, NULL);
+
+        glfwSetWindowSizeCallback(window, (window, w, h) -> {
+            updateDimensions();
+            recreateSwapchain();
+        });
+
+        glfwSetCursorPosCallback(window, (window, x, y) -> {
+            xpos = (int) (x / dpi);
+            ypos = (int) (y / dpi);
+        });
+
+        glfwSetScrollCallback(window, (window, xoffset, yoffset) -> {
+            Scenes.currentScene().onScroll((float) xoffset * dpi, (float) yoffset * dpi);
+        });
+
+        glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
+             if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
+                glfwSetWindowShouldClose(window, true);
+             if (action == GLFW_PRESS) {
+                switch (key) {
+                    case GLFW_KEY_LEFT:
+                        Scenes.prevScene();
+                        break;
+                    case GLFW_KEY_RIGHT:
+                        Scenes.nextScene();
+                        break;
+                    case GLFW_KEY_UP:
+                        Scenes.currentScene().changeVariant(-1);
+                        break;
+                    case GLFW_KEY_DOWN:
+                        Scenes.currentScene().changeVariant(1);
+                        break;
+                    case GLFW_KEY_S:
+                        Scenes.stats = !Scenes.stats;
+                        break;
+                    case GLFW_KEY_G:
+                        System.gc();
+                        break;
+                }
+            }
+        });
+
+        updateDimensions();
         glfwShowWindow(window);
+    }
+
+    private static void updateDimensions() {
+        try (MemoryStack stack = MemoryStack.stackPush()) {
+            IntBuffer fw = stack.mallocInt(1);
+            IntBuffer fh = stack.mallocInt(1);
+            glfwGetFramebufferSize(window, fw, fh);
+
+            FloatBuffer sx = stack.mallocFloat(1);
+            FloatBuffer sy = stack.mallocFloat(1);
+            glfwGetWindowContentScale(window, sx, sy);
+            
+            dpi = sx.get(0);
+            width = (int) (fw.get(0) / dpi);
+            height = (int) (fh.get(0) / dpi);
+        }
+    }
+
+    private static void recreateSwapchain() {
+        vkDeviceWaitIdle(device);
+        cleanupSkia();
+        cleanupSwapchain();
+        
+        try (MemoryStack stack = MemoryStack.stackPush()) {
+            createSwapchain(stack);
+        }
+        initSkia();
+    }
+
+    private static void cleanupSwapchain() {
+        for (long imageView : swapchainImageViews) {
+            vkDestroyImageView(device, imageView, null);
+        }
+        vkDestroySwapchainKHR(device, swapchain, null);
+    }
+
+    private static void cleanupSkia() {
+        if (skiaSurfaces != null) {
+            for (Surface s : skiaSurfaces) if (s != null) s.close();
+        }
+        if (renderTargets != null) {
+            for (BackendRenderTarget rt : renderTargets) if (rt != null) rt.close();
+        }
     }
 
     private static void initVulkan() {
@@ -225,12 +326,31 @@ public class Main {
         vkGetSwapchainImagesKHR(device, swapchain, pImageCount, pSwapchainImages);
         
         swapchainImages = new ArrayList<>();
+        swapchainImageViews = new ArrayList<>();
         for (int i = 0; i < pSwapchainImages.capacity(); i++) {
-            swapchainImages.add(pSwapchainImages.get(i));
+            long image = pSwapchainImages.get(i);
+            swapchainImages.add(image);
+
+            VkImageViewCreateInfo viewInfo = VkImageViewCreateInfo.calloc(stack)
+                .sType(VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO)
+                .image(image)
+                .viewType(VK_IMAGE_VIEW_TYPE_2D)
+                .format(swapchainFormat)
+                .subresourceRange(it -> it
+                    .aspectMask(VK_IMAGE_ASPECT_COLOR_BIT)
+                    .baseMipLevel(0)
+                    .levelCount(1)
+                    .baseArrayLayer(0)
+                    .layerCount(1));
+            
+            LongBuffer pView = stack.mallocLong(1);
+            check(vkCreateImageView(device, viewInfo, null, pView));
+            swapchainImageViews.add(pView.get(0));
         }
     }
 
     private static void initSkia() {
+        Stats.enabled = true;
         long instanceProcAddr = VK.getFunctionProvider().getFunctionAddress("vkGetInstanceProcAddr");
         long deviceProcAddr = VK.getFunctionProvider().getFunctionAddress("vkGetDeviceProcAddr");
 
@@ -337,10 +457,7 @@ public class Main {
             vkQueueSubmit(graphicsQueue, setupSubmitInfo, NULL);
 
             Canvas canvas = skiaSurfaces[imageIndex].getCanvas();
-            canvas.clear(0xFFFFFFFF); 
-            Paint p = new Paint().setColor(0xFF0000FF).setStrokeWidth(10f); 
-            canvas.drawLine(100, 100, 700, 500, p);
-            canvas.drawCircle(400, 300, 100, p);
+            Scenes.draw(canvas, width, height, dpi, xpos, ypos);
             
             directContext.flushAndSubmit(false);
 
@@ -385,21 +502,14 @@ public class Main {
     }
 
     private static void cleanup() {
-        if (directContext != null) directContext.abandon();
-        
-        if (skiaSurfaces != null) {
-            for (Surface s : skiaSurfaces) if (s != null) s.close();
-        }
-        if (renderTargets != null) {
-            for (BackendRenderTarget rt : renderTargets) if (rt != null) rt.close();
-        }
+        cleanupSkia();
         if (directContext != null) directContext.close();
 
         vkDestroySemaphore(device, imageAvailableSemaphore, null);
         vkDestroySemaphore(device, renderFinishedSemaphore, null);
         vkDestroyFence(device, fence, null);
         vkDestroyCommandPool(device, commandPool, null);
-        vkDestroySwapchainKHR(device, swapchain, null);
+        cleanupSwapchain();
         vkDestroyDevice(device, null);
         vkDestroySurfaceKHR(instance, surface, null);
         vkDestroyInstance(instance, null);

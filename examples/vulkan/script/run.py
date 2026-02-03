@@ -37,7 +37,7 @@ def main():
 
   os.chdir(common.basedir + '/examples/vulkan')
 
-  sources = build_utils.files('src/**/*.java')
+  sources = build_utils.files('src/**/*.java', '../scenes/src/**/*.java')
   build_utils.javac(sources, 'target/classes', classpath = classpath, release = '16')
 
   subprocess.check_call([
