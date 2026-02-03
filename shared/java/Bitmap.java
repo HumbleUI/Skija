@@ -1022,13 +1022,19 @@ public class Bitmap extends Managed implements IHasImageInfo {
         }
     }
 
-    public boolean peekPixels(@NotNull Pixmap pixmap) {
+    @Nullable
+    public Pixmap peekPixelsToPixmap() {
         try {
+            Pixmap pixmap = new Pixmap();
             Stats.onNativeCall();
-            return _nPeekPixelsToPixmap(_ptr, Native.getPtr(pixmap));
+            if (_nPeekPixelsToPixmap(_ptr, Native.getPtr(pixmap)))
+                return pixmap;
+            else {
+                pixmap.close();
+                return null;
+            }
         } finally {
             ReferenceUtil.reachabilityFence(this);
-            ReferenceUtil.reachabilityFence(pixmap);
         }
     }
 

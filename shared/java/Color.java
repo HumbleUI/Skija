@@ -20,6 +20,9 @@ public class Color {
         return makeARGB(a, r, g, b);
     }
 
+    /**
+     * Interpolates between two unpremultiplied colors.
+     */
     public static int makeLerp(int c1, int c2, float t) {
         if (t <= 0) return c1;
         if (t >= 1) return c2;
@@ -58,6 +61,36 @@ public class Color {
                         Math.min(255, Math.round(r * 255f / a)),
                         Math.min(255, Math.round(g * 255f / a)),
                         Math.min(255, Math.round(b * 255f / a)));
+    }
+
+    /**
+     * Interpolates between two premultiplied colors.
+     */
+    public static int makeLerpPM(int c1, int c2, float t) {
+        if (t <= 0) return c1;
+        if (t >= 1) return c2;
+
+        int a1 = getA(c1);
+        int r1 = getR(c1);
+        int g1 = getG(c1);
+        int b1 = getB(c1);
+
+        int a2 = getA(c2);
+        int r2 = getR(c2);
+        int g2 = getG(c2);
+        int b2 = getB(c2);
+
+        float a = a1 + (a2 - a1) * t;
+        float r = r1 + (r2 - r1) * t;
+        float g = g1 + (g2 - g1) * t;
+        float b = b1 + (b2 - b1) * t;
+
+        return makeARGB(
+            Math.min(255, Math.max(0, Math.round(a))),
+            Math.min(255, Math.max(0, Math.round(r))),
+            Math.min(255, Math.max(0, Math.round(g))),
+            Math.min(255, Math.max(0, Math.round(b)))
+        );
     }
 
     public static int makeARGB(int a, int r, int g, int b) {

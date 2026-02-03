@@ -16,6 +16,9 @@ public class Pixmap extends Managed implements IHasImageInfo {
         super(ptr, _FinalizerHolder.PTR, managed);
     }
 
+    @ApiStatus.Internal
+    public ImageInfo _imageInfo = null;
+
     public Pixmap() {
         this(_nMakeNull(), true);
         Stats.onNativeCall();
@@ -23,7 +26,15 @@ public class Pixmap extends Managed implements IHasImageInfo {
 
     @Override @NotNull
     public ImageInfo getImageInfo() {
-        return getInfo();
+        try {
+            if (_imageInfo == null) {
+                Stats.onNativeCall();
+                _imageInfo = _nGetInfo(_ptr);
+            }
+            return _imageInfo;
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
     }
 
     public static Pixmap make(ImageInfo info, ByteBuffer buffer, int rowBytes) {
@@ -48,6 +59,7 @@ public class Pixmap extends Managed implements IHasImageInfo {
     public void reset() {
         Stats.onNativeCall();
         _nReset(_ptr);
+        _imageInfo = null;
         ReferenceUtil.reachabilityFence(this);
     }
 
@@ -58,6 +70,7 @@ public class Pixmap extends Managed implements IHasImageInfo {
             info._colorInfo._colorType.ordinal(),
             info._colorInfo._alphaType.ordinal(),
             Native.getPtr(info._colorInfo._colorSpace), addr, rowBytes);
+        _imageInfo = null;
         ReferenceUtil.reachabilityFence(this);
         ReferenceUtil.reachabilityFence(info._colorInfo._colorSpace);
     }
@@ -69,6 +82,7 @@ public class Pixmap extends Managed implements IHasImageInfo {
     public void setColorSpace(ColorSpace colorSpace) {
         Stats.onNativeCall();
         _nSetColorSpace(_ptr, Native.getPtr(colorSpace));
+        _imageInfo = null;
         ReferenceUtil.reachabilityFence(this);
         ReferenceUtil.reachabilityFence(colorSpace);
     }
@@ -87,68 +101,7 @@ public class Pixmap extends Managed implements IHasImageInfo {
     }
 
     public ImageInfo getInfo() {
-        Stats.onNativeCall();
-        try {
-            return _nGetInfo(_ptr);
-        } finally {
-            ReferenceUtil.reachabilityFence(this);
-        }
-    }
-
-    public int getWidth() {
-        Stats.onNativeCall();
-        try {
-            return _nGetWidth(_ptr);
-        } finally {
-            ReferenceUtil.reachabilityFence(this);
-        }
-    }
-
-    public int getHeight() {
-        Stats.onNativeCall();
-        try {
-            return _nGetHeight(_ptr);
-        } finally {
-            ReferenceUtil.reachabilityFence(this);
-        }
-    }
-
-    public ColorType getColorType() {
-        Stats.onNativeCall();
-        try {
-            return ColorType.values()[_nGetColorType(_ptr)];
-        } finally {
-            ReferenceUtil.reachabilityFence(this);
-        }
-    }
-
-    public ColorAlphaType getAlphaType() {
-        Stats.onNativeCall();
-        try {
-            return ColorAlphaType.values()[_nGetAlphaType(_ptr)];
-        } finally {
-            ReferenceUtil.reachabilityFence(this);
-        }
-    }
-
-    @Nullable
-    public ColorSpace getColorSpace() {
-        Stats.onNativeCall();
-        try {
-            long ptr = _nGetColorSpace(_ptr);
-            return ptr == 0 ? null : new ColorSpace(ptr);
-        } finally {
-            ReferenceUtil.reachabilityFence(this);
-        }
-    }
-
-    public int getShiftPerPixel() {
-        Stats.onNativeCall();
-        try {
-            return _nGetShiftPerPixel(_ptr);
-        } finally {
-            ReferenceUtil.reachabilityFence(this);
-        }
+        return getImageInfo();
     }
 
     public int getRowBytes() {
