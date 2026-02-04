@@ -42,7 +42,7 @@ public class PixmapTest implements Executable {
                 assertNotEquals(0, pixmap.getAddr());
                 assertNotEquals(0, pixmap.getAddrAt(1, 1));
                 
-                var info = pixmap.getInfo();
+                var info = pixmap.getImageInfo();
                 assertEquals(10, info._width);
                 assertEquals(20, info._height);
             }

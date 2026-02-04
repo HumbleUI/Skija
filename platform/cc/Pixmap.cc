@@ -64,7 +64,7 @@ extern "C" {
         return pixmap->extractSubset(dst, { l, t, w, h });
     }
 
-    JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_Pixmap__1nGetInfo
+    JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_Pixmap__1nGetImageInfo
       (JNIEnv *env, jclass klass, jlong ptr) {
         SkPixmap* pixmap = jlongToPtr<SkPixmap*>(ptr);
         const SkImageInfo& imageInfo = pixmap->info();

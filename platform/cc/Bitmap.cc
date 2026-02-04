@@ -275,21 +275,14 @@ extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_Bitmap__1nExt
         return nullptr;
 }
 
-extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_Bitmap__1nPeekPixels
+extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Bitmap__1nPeekPixels
   (JNIEnv* env, jclass jclass, jlong ptr) {
     SkBitmap* instance = reinterpret_cast<SkBitmap*>(static_cast<uintptr_t>(ptr));
-    SkPixmap pixmap;
-    if (instance->peekPixels(&pixmap))
-        return env->NewDirectByteBuffer(pixmap.writable_addr(), pixmap.rowBytes() * pixmap.height());
+    std::unique_ptr<SkPixmap> pixmap(new SkPixmap());
+    if (instance->peekPixels(pixmap.get()))
+        return reinterpret_cast<jlong>(pixmap.release());
     else
-        return nullptr;
-}
-
-extern "C" JNIEXPORT jboolean JNICALL Java_io_github_humbleui_skija_Bitmap__1nPeekPixelsToPixmap
-  (JNIEnv* env, jclass jclass, jlong ptr, jlong pixmapPtr) {
-    SkBitmap* instance = reinterpret_cast<SkBitmap*>(static_cast<uintptr_t>(ptr));
-    SkPixmap* pixmap = reinterpret_cast<SkPixmap*>(static_cast<uintptr_t>(pixmapPtr));
-    return instance->peekPixels(pixmap);
+        return 0;
 }
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Bitmap__1nMakeShader

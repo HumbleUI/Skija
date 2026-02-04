@@ -62,12 +62,40 @@ public class Color4f {
         return new Color4f(_r / _a, _g / _a, _b / _a, _a);
     }
 
-    public Color4f makeLerp(Color4f other, float weight) {
+    /**
+     * Interpolate between two unpremultiplied colors.
+     *
+     * @param other  color to interpolate to
+     * @param t      interpolation ratio 0..1, 0 == fully this, 1 == fully other
+     *
+     * @return       interpolated color, unpremultiplied
+     */
+    public Color4f makeLerp(Color4f other, float t) {
+        if (t <= 0) return this;
+        if (t >= 1) return other;
         Color4f c1 = this.premultiply();
         Color4f c2 = other.premultiply();
-        return new Color4f(c1._r + (c2._r - c1._r) * weight,
-                           c1._g + (c2._g - c1._g) * weight,
-                           c1._b + (c2._b - c1._b) * weight,
-                           c1._a + (c2._a - c1._a) * weight).unpremultiply();
+        return new Color4f(c1._r + (c2._r - c1._r) * t,
+                           c1._g + (c2._g - c1._g) * t,
+                           c1._b + (c2._b - c1._b) * t,
+                           c1._a + (c2._a - c1._a) * t).unpremultiply();
     }
+
+    /**
+     * Interpolate between two premultiplied colors.
+     *
+     * @param other  color to interpolate to
+     * @param t      interpolation ratio 0..1, 0 == fully this, 1 == fully other
+     *
+     * @return       interpolated color, premultiplied
+     */
+    public Color4f makeLerpPM(Color4f other, float t) {
+        if (t <= 0) return this;
+        if (t >= 1) return other;
+        return new Color4f(_r + (other._r - _r) * t,
+                           _g + (other._g - _g) * t,
+                           _b + (other._b - _b) * t,
+                           _a + (other._a - _a) * t);
+    }
+
 }

@@ -22,6 +22,12 @@ public class Color {
 
     /**
      * Interpolates between two unpremultiplied colors.
+     *
+     * @param c1  color to interpolate from
+     * @param c2  color to interpolate to
+     * @param t   interpolation ratio 0..1, 0 == fully c1, 1 == fully c2
+     *
+     * @return    interpolated color, unpremultiplied
      */
     public static int makeLerp(int c1, int c2, float t) {
         if (t <= 0) return c1;
@@ -65,6 +71,12 @@ public class Color {
 
     /**
      * Interpolates between two premultiplied colors.
+     *
+     * @param c1  color to interpolate from
+     * @param c2  color to interpolate to
+     * @param t   interpolation ratio 0..1, 0 == fully c1, 1 == fully c2
+     *
+     * @return    interpolated color, premultiplied
      */
     public static int makeLerpPM(int c1, int c2, float t) {
         if (t <= 0) return c1;

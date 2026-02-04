@@ -1,3 +1,17 @@
+# WIP
+
+Added:
+
+- `Pixmap::erase`, `Pixmap implements IHasImageInfo` #101 via @Eatgrapes
+- `Color::premultiply`, `unpremultiply`, `makeLerpPM` #101 via @Eatgrapes
+- `Color4f::premultiply`, `unpremultiply`, `makeLerpPM` #101 via @Eatgrapes
+
+Changed:
+
+- [ BREAKING ] `Pixmap::getInfo` -> `Pixmap::getImageInfo` #101 via @Eatgrapes
+- [ BREAKING ] `Bitmap::peekPixels` now returns `Pixmap`, same as Skia #101 via @Eatgrapes
+- `Color::makeLerp`, `Color4f::makeLerp` now produce correct results with alpha #101 via @Eatgrapes
+
 # 0.143.8 - Jan 29, 2026
 
 Added

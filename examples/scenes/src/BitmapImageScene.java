@@ -84,7 +84,7 @@ public class BitmapImageScene extends Scene {
 
         // Bitmap peekPixels
         try (var bitmap = Bitmap.makeFromImage(image);) {
-            pixelSorting(canvas, bitmap.peekPixels(), bitmap.getImageInfo());
+            pixelSorting(canvas, bitmap.peekPixels().getBuffer(), bitmap.getImageInfo());
             try (var image = Image.makeRasterFromBitmap(bitmap.setImmutable());) {
                 canvas.drawImageRect(image, Rect.makeXYWH(0, 0, 200, 200));
             }

@@ -29,7 +29,7 @@ public class Pixmap extends Managed implements IHasImageInfo {
         try {
             if (_imageInfo == null) {
                 Stats.onNativeCall();
-                _imageInfo = _nGetInfo(_ptr);
+                _imageInfo = _nGetImageInfo(_ptr);
             }
             return _imageInfo;
         } finally {
@@ -98,10 +98,6 @@ public class Pixmap extends Managed implements IHasImageInfo {
 
     public boolean extractSubset(ByteBuffer buffer, IRect area) {
         return extractSubset(BufferUtil.getPointerFromByteBuffer(buffer), area);
-    }
-
-    public ImageInfo getInfo() {
-        return getImageInfo();
     }
 
     public int getRowBytes() {
@@ -297,7 +293,7 @@ public class Pixmap extends Managed implements IHasImageInfo {
     public static native void _nResetWithInfo(long ptr, int width, int height, int colorType, int alphaType, long colorSpacePtr, long pixelsPtr, int rowBytes);
     public static native void _nSetColorSpace(long ptr, long colorSpacePtr);
     public static native boolean _nExtractSubset(long ptr, long subsetPtr, int l, int t, int r, int b);
-    public static native ImageInfo _nGetInfo(long ptr);
+    public static native ImageInfo _nGetImageInfo(long ptr);
     public static native int _nGetRowBytes(long ptr);
     public static native long _nGetAddr(long ptr);
     public static native int _nGetRowBytesAsPixels(long ptr);
