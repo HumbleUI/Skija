@@ -18,7 +18,7 @@ public class PixmapTest implements Executable {
             bitmap.allocPixels(ImageInfo.makeN32Premul(10, 20));
             bitmap.erase(0xFF112233);
 
-            try (var pixmap = bitmap.peekPixelsToPixmap()) {
+            try (var pixmap = bitmap.peekPixels()) {
                 assertNotEquals(null, pixmap);
 
                 assertEquals(10, pixmap.getWidth());
