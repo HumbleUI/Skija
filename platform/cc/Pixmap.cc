@@ -71,40 +71,6 @@ extern "C" {
         return skija::ImageInfo::toJava(env, imageInfo);
     }
 
-    JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_Pixmap__1nGetWidth
-      (JNIEnv *env, jclass klass, jlong ptr) {
-        SkPixmap* pixmap = jlongToPtr<SkPixmap*>(ptr);
-        return static_cast<jint>(pixmap->width());
-    }
-
-    JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_Pixmap__1nGetHeight
-      (JNIEnv *env, jclass klass, jlong ptr) {
-        SkPixmap* pixmap = jlongToPtr<SkPixmap*>(ptr);
-        return static_cast<jint>(pixmap->height());
-    }
-
-    JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_Pixmap__1nGetColorType
-      (JNIEnv *env, jclass klass, jlong ptr) {
-        SkPixmap* pixmap = jlongToPtr<SkPixmap*>(ptr);
-        return static_cast<jint>(pixmap->colorType());
-    }
-
-    JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_Pixmap__1nGetAlphaType
-      (JNIEnv *env, jclass klass, jlong ptr) {
-        SkPixmap* pixmap = jlongToPtr<SkPixmap*>(ptr);
-        return static_cast<jint>(pixmap->alphaType());
-    }
-
-    JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Pixmap__1nGetColorSpace
-      (JNIEnv *env, jclass klass, jlong ptr) {
-        SkPixmap* pixmap = jlongToPtr<SkPixmap*>(ptr);
-        SkColorSpace* colorSpace = pixmap->colorSpace();
-        if (colorSpace == nullptr)
-            return 0;
-        colorSpace->ref();
-        return ptrToJlong(colorSpace);
-    }
-
     JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_Pixmap__1nGetRowBytes
       (JNIEnv *env, jclass klass, jlong ptr) {
         SkPixmap* pixmap = jlongToPtr<SkPixmap*>(ptr);
@@ -121,12 +87,6 @@ extern "C" {
       (JNIEnv *env, jclass klass, jlong ptr) {
         SkPixmap* pixmap = jlongToPtr<SkPixmap*>(ptr);
         return static_cast<jint>(pixmap->rowBytesAsPixels());
-    }
-
-    JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_Pixmap__1nGetShiftPerPixel
-      (JNIEnv *env, jclass klass, jlong ptr) {
-        SkPixmap* pixmap = jlongToPtr<SkPixmap*>(ptr);
-        return static_cast<jint>(pixmap->shiftPerPixel());
     }
 
     JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_Pixmap__1nComputeByteSize

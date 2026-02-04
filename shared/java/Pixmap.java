@@ -298,15 +298,9 @@ public class Pixmap extends Managed implements IHasImageInfo {
     public static native void _nSetColorSpace(long ptr, long colorSpacePtr);
     public static native boolean _nExtractSubset(long ptr, long subsetPtr, int l, int t, int r, int b);
     public static native ImageInfo _nGetInfo(long ptr);
-    public static native int _nGetWidth(long ptr);
-    public static native int _nGetHeight(long ptr);
-    public static native int _nGetColorType(long ptr);
-    public static native int _nGetAlphaType(long ptr);
-    public static native long _nGetColorSpace(long ptr);
     public static native int _nGetRowBytes(long ptr);
     public static native long _nGetAddr(long ptr);
     public static native int _nGetRowBytesAsPixels(long ptr);
-    public static native int _nGetShiftPerPixel(long ptr);
     public static native int _nComputeByteSize(long ptr);
     public static native boolean _nComputeIsOpaque(long ptr);
     public static native int _nGetColor(long ptr, int x, int y);
