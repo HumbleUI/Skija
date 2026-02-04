@@ -64,7 +64,7 @@ extern "C" {
         return pixmap->extractSubset(dst, { l, t, w, h });
     }
 
-    JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_Pixmap__1nGetInfo
+    JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_Pixmap__1nGetImageInfo
       (JNIEnv *env, jclass klass, jlong ptr) {
         SkPixmap* pixmap = jlongToPtr<SkPixmap*>(ptr);
         const SkImageInfo& imageInfo = pixmap->info();
@@ -184,5 +184,18 @@ extern "C" {
       (JNIEnv *env, jclass klass, jlong ptr, jint color, jint l, jint t, jint w, jint h) {
         SkPixmap* pixmap = jlongToPtr<SkPixmap*>(ptr);
         return static_cast<jboolean>(pixmap->erase(color, { l, t, w, h }));
+    }
+
+    JNIEXPORT jboolean JNICALL Java_io_github_humbleui_skija_Pixmap__1nErase4f
+      (JNIEnv *env, jclass klass, jlong ptr, jfloat r, jfloat g, jfloat b, jfloat a) {
+        SkPixmap* pixmap = jlongToPtr<SkPixmap*>(ptr);
+        return static_cast<jboolean>(pixmap->erase({r, g, b, a}, nullptr));
+    }
+
+    JNIEXPORT jboolean JNICALL Java_io_github_humbleui_skija_Pixmap__1nEraseSubset4f
+      (JNIEnv *env, jclass klass, jlong ptr, jfloat r, jfloat g, jfloat b, jfloat a, jint l, jint t, jint w, jint h) {
+        SkPixmap* pixmap = jlongToPtr<SkPixmap*>(ptr);
+        SkIRect subset = { l, t, w, h };
+        return static_cast<jboolean>(pixmap->erase({r, g, b, a}, &subset));
     }
 }

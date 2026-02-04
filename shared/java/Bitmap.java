@@ -1005,18 +1005,19 @@ public class Bitmap extends Managed implements IHasImageInfo {
     }
 
     /**
-     * If pixel address is available, return ByteBuffer wrapping it.
+     * If pixel address is available, return Pixmap wrapping it.
      * If pixel address is not available, return null.
      *
-     * @return  ByteBuffer with direct access to pixels, or null
+     * @return  Pixmap with direct access to pixels, or null
      *
      * @see <a href="https://fiddle.skia.org/c/@Bitmap_peekPixels">https://fiddle.skia.org/c/@Bitmap_peekPixels</a>
      */
     @Nullable
-    public ByteBuffer peekPixels() {
+    public Pixmap peekPixels() {
         try {
             Stats.onNativeCall();
-            return _nPeekPixels(_ptr);
+            long pixmapPtr = _nPeekPixels(_ptr);
+            return pixmapPtr == 0 ? null : new Pixmap(pixmapPtr, true);
         } finally {
             ReferenceUtil.reachabilityFence(this);
         }
@@ -1074,7 +1075,6 @@ public class Bitmap extends Managed implements IHasImageInfo {
     @ApiStatus.Internal public static native long    _nMake();
     @ApiStatus.Internal public static native long    _nMakeClone(long ptr);
     @ApiStatus.Internal public static native void    _nSwap(long ptr, long otherPtr);
-    @ApiStatus.Internal public static native long    _nGetPixmap(long ptr);
     @ApiStatus.Internal public static native ImageInfo _nGetImageInfo(long ptr);
     @ApiStatus.Internal public static native int     _nGetRowBytesAsPixels(long ptr);
     @ApiStatus.Internal public static native boolean _nIsNull(long ptr);
@@ -1109,6 +1109,6 @@ public class Bitmap extends Managed implements IHasImageInfo {
     @ApiStatus.Internal public static native boolean _nExtractSubset(long ptr, long dstPtr, int left, int top, int right, int bottom);
     @ApiStatus.Internal public static native byte[]  _nReadPixels(long ptr, int width, int height, int colorType, int alphaType, long colorSpacePtr, long dstRowBytes, int srcX, int srcY);
     @ApiStatus.Internal public static native IPoint  _nExtractAlpha(long ptr, long dstPtr, long paintPtr);
-    @ApiStatus.Internal public static native ByteBuffer _nPeekPixels(long ptr);
+    @ApiStatus.Internal public static native long    _nPeekPixels(long ptr);
     @ApiStatus.Internal public static native long    _nMakeShader(long ptr, int tmx, int tmy, long samplingMode, float[] localMatrix);
 }

@@ -8,7 +8,7 @@ import io.github.humbleui.skija.SamplingMode;
 import io.github.humbleui.skija.impl.*;
 import io.github.humbleui.types.*;
 
-public class Pixmap extends Managed {
+public class Pixmap extends Managed implements IHasImageInfo {
     static { Library.staticLoad(); }
 
     @ApiStatus.Internal
@@ -16,9 +16,25 @@ public class Pixmap extends Managed {
         super(ptr, _FinalizerHolder.PTR, managed);
     }
 
+    @ApiStatus.Internal
+    public ImageInfo _imageInfo = null;
+
     public Pixmap() {
         this(_nMakeNull(), true);
         Stats.onNativeCall();
+    }
+
+    @Override @NotNull
+    public ImageInfo getImageInfo() {
+        try {
+            if (_imageInfo == null) {
+                Stats.onNativeCall();
+                _imageInfo = _nGetImageInfo(_ptr);
+            }
+            return _imageInfo;
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
     }
 
     public static Pixmap make(ImageInfo info, ByteBuffer buffer, int rowBytes) {
@@ -43,6 +59,7 @@ public class Pixmap extends Managed {
     public void reset() {
         Stats.onNativeCall();
         _nReset(_ptr);
+        _imageInfo = null;
         ReferenceUtil.reachabilityFence(this);
     }
 
@@ -53,6 +70,7 @@ public class Pixmap extends Managed {
             info._colorInfo._colorType.ordinal(),
             info._colorInfo._alphaType.ordinal(),
             Native.getPtr(info._colorInfo._colorSpace), addr, rowBytes);
+        _imageInfo = null;
         ReferenceUtil.reachabilityFence(this);
         ReferenceUtil.reachabilityFence(info._colorInfo._colorSpace);
     }
@@ -64,6 +82,7 @@ public class Pixmap extends Managed {
     public void setColorSpace(ColorSpace colorSpace) {
         Stats.onNativeCall();
         _nSetColorSpace(_ptr, Native.getPtr(colorSpace));
+        _imageInfo = null;
         ReferenceUtil.reachabilityFence(this);
         ReferenceUtil.reachabilityFence(colorSpace);
     }
@@ -81,28 +100,10 @@ public class Pixmap extends Managed {
         return extractSubset(BufferUtil.getPointerFromByteBuffer(buffer), area);
     }
 
-    public ImageInfo getInfo() {
-        Stats.onNativeCall();
-        try {
-            return _nGetInfo(_ptr);
-        } finally {
-            ReferenceUtil.reachabilityFence(this);
-        }
-    }
-
     public int getRowBytes() {
         Stats.onNativeCall();
         try {
             return _nGetRowBytes(_ptr);
-        } finally {
-            ReferenceUtil.reachabilityFence(this);
-        }
-    }
-
-    public long getAddr() {
-        Stats.onNativeCall();
-        try {
-            return _nGetAddr(_ptr);
         } finally {
             ReferenceUtil.reachabilityFence(this);
         }
@@ -162,7 +163,16 @@ public class Pixmap extends Managed {
         }
     }
 
-    public long getAddr(int x, int y) {
+    public long getAddr() {
+        Stats.onNativeCall();
+        try {
+            return _nGetAddr(_ptr);
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    public long getAddrAt(int x, int y) {
         Stats.onNativeCall();
         try {
             return _nGetAddrAt(_ptr, x, y);
@@ -248,6 +258,24 @@ public class Pixmap extends Managed {
         }
     }
 
+    public boolean erase(Color4f color) {
+        Stats.onNativeCall();
+        try {
+            return _nErase4f(_ptr, color._r, color._g, color._b, color._a);
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    public boolean erase(Color4f color, IRect subset) {
+        Stats.onNativeCall();
+        try {
+            return _nEraseSubset4f(_ptr, color._r, color._g, color._b, color._a, subset._left, subset._top, subset._right, subset._bottom);
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
     public ByteBuffer getBuffer() {
         return BufferUtil.getByteBufferFromPointer(getAddr(), computeByteSize());
     }
@@ -265,12 +293,10 @@ public class Pixmap extends Managed {
     public static native void _nResetWithInfo(long ptr, int width, int height, int colorType, int alphaType, long colorSpacePtr, long pixelsPtr, int rowBytes);
     public static native void _nSetColorSpace(long ptr, long colorSpacePtr);
     public static native boolean _nExtractSubset(long ptr, long subsetPtr, int l, int t, int r, int b);
-    public static native ImageInfo _nGetInfo(long ptr);
+    public static native ImageInfo _nGetImageInfo(long ptr);
     public static native int _nGetRowBytes(long ptr);
     public static native long _nGetAddr(long ptr);
-    // TODO methods flattening ImageInfo not included yet - use GetInfo() instead.
     public static native int _nGetRowBytesAsPixels(long ptr);
-    // TODO shiftPerPixel
     public static native int _nComputeByteSize(long ptr);
     public static native boolean _nComputeIsOpaque(long ptr);
     public static native int _nGetColor(long ptr, int x, int y);
@@ -285,5 +311,6 @@ public class Pixmap extends Managed {
     public static native boolean _nScalePixels(long ptr, long dstPixmapPtr, long samplingOptions);
     public static native boolean _nErase(long ptr, int color);
     public static native boolean _nEraseSubset(long ptr, int color, int l, int t, int r, int b);
-    // TODO float erase methods not included
+    public static native boolean _nErase4f(long ptr, float r, float g, float b, float a);
+    public static native boolean _nEraseSubset4f(long ptr, float r, float g, float b, float a, int l, int t, int r1, int b1);
 }
