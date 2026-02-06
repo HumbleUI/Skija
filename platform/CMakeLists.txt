@@ -48,6 +48,7 @@ elseif(ANDROID)
 
 elseif(UNIX)
     target_include_directories(skija PRIVATE $ENV{JAVA_HOME}/include $ENV{JAVA_HOME}/include/linux)
+    target_compile_options(skija PRIVATE -Wno-attributes)
 
 elseif(WIN32)
     set(CMAKE_C_COMPILER cl)

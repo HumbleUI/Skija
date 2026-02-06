@@ -1,3 +1,9 @@
+# WIP
+
+Added
+
+- Vulkan support #100 via @Eatgrapes
+
 # 0.143.8 - Jan 29, 2026
 
 Added
