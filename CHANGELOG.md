@@ -2,6 +2,7 @@
 
 Added:
 
+- Vulkan support #100 via @Eatgrapes
 - `Path::fillWithPaint` #95 via @vladimirsamsonov
 - `Pixmap::erase`, `Pixmap implements IHasImageInfo` #101 via @Eatgrapes
 - `Color::premultiply`, `unpremultiply`, `makeLerpPM` #101 via @Eatgrapes
