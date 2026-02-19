@@ -26,7 +26,7 @@ Enter Skia. Skia has a proven track record of industrial-scale project relying o
 - extensive color spaces support,
 - modern typography with open type features, variable typefaces, correct multi-script text handling, emojis,
 - highly-optimized GPU rendering,
-- modern GPU backends, including Vulkan and Metal (already in Skia, coming to Skija soon),
+- modern GPU backends, including Vulkan and Metal.
 - built-in caching and compositing facilities.
 
 Skija brings all this power to the tips of your fingers, as simple as adding a jar to classpath.
@@ -106,32 +106,32 @@ Backends:
 - [x] OpenGL
 - [x] Direct3D
 - [x] Metal
-- [ ] Vulkan
+- [x] Vulkan
 
 APIs:
 
 ```
 Bitmap               ▓▓▓▓▓▓▓▓▓▓    Paint                ▓▓▓▓▓▓▓▓▓▓
 Canvas               ▓▓▓▓▓▓▓▓░░    Path                 ▓▓▓▓▓▓▓▓▓▓
-Codec                ▓▓▓▓░░░░░░    PathEffects          ▓▓▓▓▓▓▓▓▓▓
-Color                ▓░░░░░░░░░    PathMeasure          ▓▓▓▓▓▓▓▓▓▓
+Codec                ▓▓▓░░░░░░░    PathEffects          ▓▓▓▓▓▓▓▓▓▓
+Color                ▓▓▓▓▓░░░░░    PathMeasure          ▓▓▓▓▓▓▓▓▓▓
 ColorFilter          ▓▓▓▓▓▓▓▓▓▓    PaintFilterCanvas    ▓▓▓▓▓▓▓▓▓▓
 ColorInfo            ▓▓▓▓▓▓▓▓▓▓    Picture              ▓▓▓▓▓▓▓▓▓░
-ColorSpace           ▓▓▓▓░░░░░░    PictureRecorder      ▓▓▓▓▓▓▓▓▓▓
+ColorSpace           ▓▓▓▓░░░░░░    PictureRecorder      ▓▓▓▓▓▓▓▓▓░
 Data                 ▓▓▓▓▓▓▓▓▓░    PixelRef             ▓▓▓▓▓▓▓▓▓▓
 Drawable             ▓▓▓▓▓▓▓▓░░    Pixmap               ▓▓▓▓▓▓▓▓▓▓
-Flattenable          ░░░░░░░░░░    Region               ▓▓▓▓▓▓▓▓▓▓
+Flattenable          N/A           Region               ▓▓▓▓▓▓▓▓▓▓
 Font                 ▓▓▓▓▓▓▓▓▓▓    RuntimeEffect        ▓▓▓▓▓▓▓▓▓▓
-FontData             ░░░░░░░░░░    ScalerContext        ░░░░░░░░░░
+FontData             N/A           ScalerContext        N/A
 FontManager          ▓▓▓▓▓▓▓▓▓░    Shader               ▓▓▓▓▓▓▓▓▓▓
 FontStyle            ▓▓▓▓▓▓▓▓▓▓    ShadowUtils          ▓▓▓▓▓▓▓▓▓▓
-FontStyleSet         ▓▓▓▓▓▓▓▓▓▓    Stream               ░░░░░░░░░░
-Image                ▓▓░░░░░░░░    String               ▓░░░░░░░░░
-ImageFilters         ▓▓▓▓▓▓▓▓▓▓    Surface              ▓░░░░░░░░░
+FontStyleSet         ▓▓▓▓▓▓▓▓▓▓    Stream               ▓▓▓▓▓▓▓▓░░
+Image                ▓▓▓▓░░░░░░    String               ▓░░░░░░░░░
+ImageFilters         ▓▓▓▓▓▓▓▓▓▓    Surface              ▓▓▓▓▓▓▓░░░
 ImageInfo            ▓▓▓▓▓▓▓▓▓▓    TextBlob             ▓▓▓▓▓▓▓▓▓▓
 MaskFilter           ▓▓▓▓▓▓▓▓▓▓    TextBlobBuilder      ▓▓▓▓▓▓▓▓▓▓
-Matrix33             ▓▓▓░░░░░░░    Typeface             ▓▓▓▓▓▓▓▓░░
-Matrix44             ▓▓▓░░░░░░░    WStream              ▓▓░░░░░░░░
+Matrix33             ▓▓▓▓░░░░░░    Typeface             ▓▓▓▓▓▓▓▓░░
+Matrix44             ▓░░░░░░░░░    WStream              ▓░░░░░░░░░
 
 Shaper:                            Paragraph:
 
@@ -153,6 +153,8 @@ SVGDOM               ▓▓▓▓▓▓▓▓░░
 SVGCanvas            ▓▓▓▓▓▓▓▓▓▓
 SVGSVG               ▓▓▓▓▓▓▓▓░░
 ```
+
+`N/A` means this entry is currently outside the direct Java API completion scoring scope.
 
 ## Using Skija
 

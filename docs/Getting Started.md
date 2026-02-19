@@ -7,8 +7,11 @@ Add ONE of these dependencies to your ant/maven/gradle/bazel:
 ```
 io.github.humbleui:skija-windows-x64:${version}
 io.github.humbleui:skija-linux-x64:${version}
+io.github.humbleui:skija-linux-arm64:${version}
 io.github.humbleui:skija-macos-x64:${version}
 io.github.humbleui:skija-macos-arm64:${version}
+io.github.humbleui:skija-android-x64:${version}
+io.github.humbleui:skija-android-arm64:${version}
 ```
 
 (Replace `${version}` with ![version](https://img.shields.io/maven-central/v/io.github.humbleui/skija-shared))
