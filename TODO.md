@@ -22,7 +22,7 @@
   - [x] SkBlender, ImageFilters::makeBlend(Blender)
   - [x] ImageFilters::makeDropShadow with Color4f & ColorSpace
 - [x] ImageFilter javadoc
-- [ ] ImageInfo allocates ColorSpace ptr
+- [ ] Find a way to create ImageInfo without allocating new native ColorSpace ptr
 - [x] Write CHANGELOG
 - [ ] Update JWM to run on latest Skia
 - [ ] Check if graphite is worth migrating to

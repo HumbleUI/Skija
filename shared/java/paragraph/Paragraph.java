@@ -194,12 +194,8 @@ public class Paragraph extends Managed {
         return this;
     }
 
-    // public Paragraph updateText(int from, String text) {
-    //     Stats.onNativeCall();
-    //     _nUpdateText(_ptr, from, text);
-    //     // TODO: update _text
-    //     return this;
-    // }
+    // Skia now does not provide Paragraph::updateText().
+    // To change text, rebuild Paragraph via ParagraphBuilder.
 
     public Paragraph updateFontSize(int from, int to, float size) {
         try {
@@ -271,7 +267,6 @@ public class Paragraph extends Managed {
     public static native void  _nMarkDirty(long ptr);
     public static native int   _nGetUnresolvedGlyphsCount(long ptr);
     public static native void  _nUpdateAlignment(long ptr, int Align);
-    // public static native void  _nUpdateText(long ptr, int from, String text);
     public static native void  _nUpdateFontSize(long ptr, int from, int to, float size, long textPtr);
     public static native void  _nUpdateForegroundPaint(long ptr, int from, int to, long paintPtr, long textPtr);
     public static native void  _nUpdateBackgroundPaint(long ptr, int from, int to, long paintPtr, long textPtr);

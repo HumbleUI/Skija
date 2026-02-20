@@ -177,12 +177,6 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_paragraph_Paragr
     return instance->updateTextAlign(static_cast<TextAlign>(textAlignment));
 }
 
-// extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_paragraph_Paragraph__1nUpdateText
-//   (JNIEnv* env, jclass jclass, jlong ptr, jint from, jstring text) {
-//     Paragraph* instance = reinterpret_cast<Paragraph*>(static_cast<uintptr_t>(ptr));
-//     return instance->updateText(from, skString(env, text));
-// }
-
 extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_paragraph_Paragraph__1nUpdateFontSize
   (JNIEnv* env, jclass jclass, jlong ptr, jint from, jint to, jfloat fontSize, jlong textPtr) {
     Paragraph* instance = reinterpret_cast<Paragraph*>(static_cast<uintptr_t>(ptr));
