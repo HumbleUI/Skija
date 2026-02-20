@@ -120,9 +120,9 @@ ColorInfo            ▓▓▓▓▓▓▓▓▓▓    Picture              ▓�
 ColorSpace           ▓▓▓▓░░░░░░    PictureRecorder      ▓▓▓▓▓▓▓▓▓░
 Data                 ▓▓▓▓▓▓▓▓▓░    PixelRef             ▓▓▓▓▓▓▓▓▓▓
 Drawable             ▓▓▓▓▓▓▓▓░░    Pixmap               ▓▓▓▓▓▓▓▓▓▓
-Flattenable          N/A           Region               ▓▓▓▓▓▓▓▓▓▓
+Flattenable          ░░░░░░░░░░    Region               ▓▓▓▓▓▓▓▓▓▓
 Font                 ▓▓▓▓▓▓▓▓▓▓    RuntimeEffect        ▓▓▓▓▓▓▓▓▓▓
-FontData             N/A           ScalerContext        N/A
+FontData             ░░░░░░░░░░    ScalerContext        ░░░░░░░░░░
 FontManager          ▓▓▓▓▓▓▓▓▓░    Shader               ▓▓▓▓▓▓▓▓▓▓
 FontStyle            ▓▓▓▓▓▓▓▓▓▓    ShadowUtils          ▓▓▓▓▓▓▓▓▓▓
 FontStyleSet         ▓▓▓▓▓▓▓▓▓▓    Stream               ▓▓▓▓▓▓▓▓░░
@@ -154,7 +154,7 @@ SVGCanvas            ▓▓▓▓▓▓▓▓▓▓
 SVGSVG               ▓▓▓▓▓▓▓▓░░
 ```
 
-`N/A` means this entry is currently outside the direct Java API completion scoring scope.
+Full `░` means this entry is currently outside the direct Java API completion scoring scope.
 
 ## Using Skija
 
