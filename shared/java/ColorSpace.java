@@ -33,6 +33,25 @@ public class ColorSpace extends Managed {
         return _DisplayP3Holder.INSTANCE;
     }
 
+    @Nullable
+    public static ColorSpace makeRGB(@NotNull float[] transferFn, @NotNull Matrix33 toXYZD50) {
+        assert transferFn != null : "Can't makeRGB with transferFn == null";
+        assert transferFn.length == 7 : "Expected 7 transferFn elements, got " + transferFn.length;
+        assert toXYZD50 != null : "Can't makeRGB with toXYZD50 == null";
+        Stats.onNativeCall();
+        long ptr = _nMakeRGB(transferFn, toXYZD50._mat);
+        return ptr == 0 ? null : new ColorSpace(ptr);
+    }
+
+    @Nullable
+    public static ColorSpace makeCICP(@NotNull ColorSpaceNamedPrimaries primaries, @NotNull ColorSpaceNamedTransferFn transferFn) {
+        assert primaries != null : "Can't makeCICP with primaries == null";
+        assert transferFn != null : "Can't makeCICP with transferFn == null";
+        Stats.onNativeCall();
+        long ptr = _nMakeCICP(primaries._value, transferFn._value);
+        return ptr == 0 ? null : new ColorSpace(ptr);
+    }
+
     public Color4f convert(ColorSpace to, Color4f color) {
         to = to == null ? getSRGB() : to;
         try {
@@ -40,6 +59,18 @@ public class ColorSpace extends Managed {
         } finally {
             ReferenceUtil.reachabilityFence(this);
             ReferenceUtil.reachabilityFence(to);
+            ReferenceUtil.reachabilityFence(color);
+        }
+    }
+
+    @ApiStatus.Internal @Override
+    public boolean _nativeEquals(Native other) {
+        try {
+            Stats.onNativeCall();
+            return _nEquals(_ptr, Native.getPtr(other));
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(other);
         }
     }
 
@@ -97,6 +128,137 @@ public class ColorSpace extends Managed {
         }
     }
 
+    @Nullable
+    public float[] getNumericalTransferFn() {
+        try {
+            Stats.onNativeCall();
+            return _nIsNumericalTransferFn(_ptr);
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    @Nullable
+    public Matrix33 getToXYZD50() {
+        try {
+            Stats.onNativeCall();
+            return _matrix33FromArray(_nGetToXYZD50(_ptr));
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    public int getToXYZD50Hash() {
+        try {
+            Stats.onNativeCall();
+            return _nGetToXYZD50Hash(_ptr);
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    public int getTransferFnHash() {
+        try {
+            Stats.onNativeCall();
+            return _nGetTransferFnHash(_ptr);
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    public long getHash() {
+        try {
+            Stats.onNativeCall();
+            return _nGetHash(_ptr);
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    @NotNull
+    public ColorSpace makeLinearGamma() {
+        try {
+            Stats.onNativeCall();
+            return new ColorSpace(_nMakeLinearGamma(_ptr));
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    @NotNull
+    public ColorSpace makeSRGBGamma() {
+        try {
+            Stats.onNativeCall();
+            return new ColorSpace(_nMakeSRGBGamma(_ptr));
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    @NotNull
+    public ColorSpace makeColorSpin() {
+        try {
+            Stats.onNativeCall();
+            return new ColorSpace(_nMakeColorSpin(_ptr));
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    @NotNull
+    public Data serializeToData() {
+        try {
+            Stats.onNativeCall();
+            return new Data(_nSerializeToData(_ptr));
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    @Nullable
+    public static ColorSpace makeFromData(@NotNull Data data) {
+        try {
+            assert data != null : "Can't makeFromData with data == null";
+            Stats.onNativeCall();
+            long ptr = _nMakeFromData(Native.getPtr(data));
+            return ptr == 0 ? null : new ColorSpace(ptr);
+        } finally {
+            ReferenceUtil.reachabilityFence(data);
+        }
+    }
+
+    @NotNull
+    public float[] getTransferFn() {
+        try {
+            Stats.onNativeCall();
+            return _nTransferFn(_ptr);
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    @NotNull
+    public float[] getInvTransferFn() {
+        try {
+            Stats.onNativeCall();
+            return _nInvTransferFn(_ptr);
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    @NotNull
+    public Matrix33 getGamutTransformTo(@NotNull ColorSpace dst) {
+        try {
+            assert dst != null : "Can't getGamutTransformTo with dst == null";
+            Stats.onNativeCall();
+            return new Matrix33(_nGamutTransformTo(_ptr, Native.getPtr(dst)));
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(dst);
+        }
+    }
+
     /**
      * Create a ColorSpace from ICC profile bytes.
      *
@@ -110,6 +272,11 @@ public class ColorSpace extends Managed {
         return ptr == 0 ? null : new ColorSpace(ptr);
     }
 
+    @Nullable
+    private static Matrix33 _matrix33FromArray(@Nullable float[] values) {
+        return values == null ? null : new Matrix33(values);
+    }
+
     @ApiStatus.Internal
     public static class _FinalizerHolder {
         public static final long PTR = _nGetFinalizer();
@@ -119,9 +286,25 @@ public class ColorSpace extends Managed {
     public static native long _nMakeSRGB();
     public static native long _nMakeDisplayP3();
     public static native long _nMakeSRGBLinear();
+    public static native long _nMakeRGB(float[] transferFn, float[] toXYZD50);
+    public static native long _nMakeCICP(int primaries, int transferFn);
     public static native float[] _nConvert(long fromPtr, long toPtr, float r, float g, float b, float a);
     public static native boolean _nIsGammaCloseToSRGB(long ptr);
     public static native boolean _nIsGammaLinear(long ptr);
     public static native boolean _nIsSRGB(long ptr);
+    public static native float[] _nIsNumericalTransferFn(long ptr);
+    public static native float[] _nGetToXYZD50(long ptr);
+    public static native int _nGetToXYZD50Hash(long ptr);
+    public static native int _nGetTransferFnHash(long ptr);
+    public static native long _nGetHash(long ptr);
+    public static native long _nMakeLinearGamma(long ptr);
+    public static native long _nMakeSRGBGamma(long ptr);
+    public static native long _nMakeColorSpin(long ptr);
+    public static native long _nSerializeToData(long ptr);
+    public static native long _nMakeFromData(long dataPtr);
+    public static native float[] _nTransferFn(long ptr);
+    public static native float[] _nInvTransferFn(long ptr);
+    public static native float[] _nGamutTransformTo(long ptr, long dstPtr);
+    public static native boolean _nEquals(long ptr, long otherPtr);
     public static native long _nMakeFromICCProfile(byte[] bytes);
 }

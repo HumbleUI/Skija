@@ -51,5 +51,30 @@ public class ColorTest implements Executable {
         assertEquals(0x800000FF, Color.unpremultiply(0x80000080));
         assertEquals(new Color4f(0.5f, 0, 0, 0.5f), new Color4f(1, 0, 0, 0.5f).premultiply());
         assertEquals(new Color4f(1, 0, 0, 0.5f), new Color4f(0.5f, 0, 0, 0.5f).unpremultiply());
+
+        assertEquals(0x00, Color.ALPHA_TRANSPARENT);
+        assertEquals(0xFF, Color.ALPHA_OPAQUE);
+        assertEquals(0x00000000, Color.TRANSPARENT);
+        assertEquals(0xFF000000, Color.BLACK);
+        assertEquals(0xFFFFFFFF, Color.WHITE);
+        assertEquals(0xFFFF0000, Color.RED);
+        assertEquals(0xFF00FF00, Color.GREEN);
+        assertEquals(0xFF0000FF, Color.BLUE);
+        assertEquals(0xFFFFFF00, Color.YELLOW);
+        assertEquals(0xFF00FFFF, Color.CYAN);
+        assertEquals(0xFFFF00FF, Color.MAGENTA);
+
+        float[] hsvRed = Color.convertToHSV(0xFFFF0000);
+        assertClose(0f, hsvRed[0], 0.001f);
+        assertClose(1f, hsvRed[1], 0.001f);
+        assertClose(1f, hsvRed[2], 0.001f);
+
+        float[] hsvGreen = Color.convertRGBToHSV(0, 255, 0);
+        assertClose(120f, hsvGreen[0], 0.001f);
+        assertClose(1f, hsvGreen[1], 0.001f);
+        assertClose(1f, hsvGreen[2], 0.001f);
+
+        assertEquals(0xFFFF0000, Color.makeFromHSV(new float[] {0f, 1f, 1f}));
+        assertEquals(0x8000FF00, Color.makeFromHSV(0x80, new float[] {120f, 1f, 1f}));
     }
 }

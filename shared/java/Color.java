@@ -1,6 +1,27 @@
 package io.github.humbleui.skija;
 
+import io.github.humbleui.skija.impl.*;
+import org.jetbrains.annotations.*;
+
 public class Color {
+    static { Library.staticLoad(); }
+
+    public static final int ALPHA_TRANSPARENT = 0x00;
+    public static final int ALPHA_OPAQUE      = 0xFF;
+
+    public static final int TRANSPARENT = 0x00000000;
+    public static final int BLACK       = 0xFF000000;
+    public static final int DKGRAY      = 0xFF444444;
+    public static final int GRAY        = 0xFF888888;
+    public static final int LTGRAY      = 0xFFCCCCCC;
+    public static final int WHITE       = 0xFFFFFFFF;
+    public static final int RED         = 0xFFFF0000;
+    public static final int GREEN       = 0xFF00FF00;
+    public static final int BLUE        = 0xFF0000FF;
+    public static final int YELLOW      = 0xFFFFFF00;
+    public static final int CYAN        = 0xFF00FFFF;
+    public static final int MAGENTA     = 0xFFFF00FF;
+
     public static int premultiply(int color) {
         int a = getA(color);
         if (a == 255) return color;
@@ -105,6 +126,31 @@ public class Color {
         );
     }
 
+    public static float[] convertRGBToHSV(int red, int green, int blue) {
+        assert 0 <= red && red <= 255 : "Red is out of 0..255 range: " + red;
+        assert 0 <= green && green <= 255 : "Green is out of 0..255 range: " + green;
+        assert 0 <= blue && blue <= 255 : "Blue is out of 0..255 range: " + blue;
+        Stats.onNativeCall();
+        return _nConvertRGBToHSV(red, green, blue);
+    }
+
+    public static float[] convertToHSV(int color) {
+        Stats.onNativeCall();
+        return _nConvertToHSV(color);
+    }
+
+    public static int makeFromHSV(float[] hsv) {
+        return makeFromHSV(255, hsv);
+    }
+
+    public static int makeFromHSV(int alpha, float[] hsv) {
+        assert 0 <= alpha && alpha <= 255 : "Alpha is out of 0..255 range: " + alpha;
+        assert hsv != null : "HSV is null";
+        assert hsv.length >= 3 : "Expected at least 3 HSV components, got " + hsv.length;
+        Stats.onNativeCall();
+        return _nMakeFromHSV(alpha, hsv);
+    }
+
     public static int makeARGB(int a, int r, int g, int b) {
         assert 0 <= a && a <= 255 : "Alpha is out of 0..255 range: " + a;
         assert 0 <= r && r <= 255 : "Red is out of 0..255 range: " + r;
@@ -155,4 +201,13 @@ public class Color {
         assert 0 <= b && b <= 255 : "Blue is out of 0..255 range: " + b;
         return (b & 0xFF) | (color & 0xFFFFFF00);
     }
+
+    @ApiStatus.Internal
+    public static native float[] _nConvertRGBToHSV(int red, int green, int blue);
+
+    @ApiStatus.Internal
+    public static native float[] _nConvertToHSV(int color);
+
+    @ApiStatus.Internal
+    public static native int _nMakeFromHSV(int alpha, float[] hsv);
 }
