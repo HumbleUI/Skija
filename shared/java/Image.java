@@ -449,6 +449,38 @@ public class Image extends RefCnt implements IHasImageInfo {
     }
 
     /**
+     * Returns an Image that is made from subset of this Image.
+     *
+     * @param subset bounds of Image to extract
+     * @return       subset Image or null
+     */
+    @Nullable
+    public Image makeSubset(@NotNull IRect subset) {
+        return makeSubset(null, subset);
+    }
+
+    /**
+     * Returns an Image that is made from subset of this Image.
+     *
+     * @param context the DirectContext in play - if it exists
+     * @param subset  bounds of Image to extract
+     * @return        subset Image or null
+     */
+    @Nullable
+    public Image makeSubset(@Nullable DirectContext context, @NotNull IRect subset) {
+        try {
+            assert subset != null : "Can't makeSubset with subset == null";
+            Stats.onNativeCall();
+            long ptr = _nMakeSubset(_ptr, Native.getPtr(context), subset._left, subset._top, subset._right, subset._bottom);
+            return ptr == 0 ? null : new Image(ptr);
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+            ReferenceUtil.reachabilityFence(context);
+            ReferenceUtil.reachabilityFence(subset);
+        }
+    }
+
+    /**
      * <p>Creates a filtered Image on the CPU. The filter processes the src image, potentially changing
      * the color, position, and size. The subset parameter defines the bounds of src that are processed
      * by the filter. The clipBounds parameter specifies the expected bounds of the filtered Image.
@@ -546,6 +578,7 @@ public class Image extends RefCnt implements IHasImageInfo {
     @ApiStatus.Internal public static native boolean _nPeekPixelsToPixmap(long ptr, long pixmapPtr);
     @ApiStatus.Internal public static native boolean _nScalePixels(long ptr, long pixmapPtr, long samplingOptions, boolean cache);
     @ApiStatus.Internal public static native long    _nMakeScaled(long ptr, int width, int height, int colorType, int alphaType, long colorSpacePtr, long samplingOptions);
+    @ApiStatus.Internal public static native long    _nMakeSubset(long ptr, long contextPtr, int subsetL, int subsetT, int subsetR, int subsetB);
     @ApiStatus.Internal public static native boolean _nReadPixelsBitmap(long ptr, long contextPtr, long bitmapPtr, int srcX, int srcY, boolean cache);
     @ApiStatus.Internal public static native boolean _nReadPixelsPixmap(long ptr, long pixmapPtr, int srcX, int srcY, boolean cache);
     @ApiStatus.Internal public static native ImageWithFilterResult _nMakeWithFilter(long srcPtr, long filterPtr, int subsetL, int subsetT, int subsetR, int subsetB, int clipBoundsL, int clipBoundsT, int clipBoundsR, int clipBoundsB);

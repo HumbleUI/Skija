@@ -7,6 +7,7 @@
 #include "include/core/SkShader.h"
 #include "include/gpu/ganesh/GrBackendSurface.h"
 #include "include/gpu/ganesh/GrDirectContext.h"
+#include "include/gpu/ganesh/GrRecordingContext.h"
 #include "include/gpu/ganesh/SkImageGanesh.h"
 #include "include/gpu/ganesh/gl/GrGLBackendSurface.h"
 #include "include/gpu/ganesh/gl/GrGLTypes.h"
@@ -157,6 +158,16 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Image__1nMakeSc
                                               static_cast<SkAlphaType>(alphaType),
                                               sk_ref_sp<SkColorSpace>(colorSpace));
     sk_sp<SkImage> image = instance->makeScaled(imageInfo, skija::SamplingMode::unpack(samplingOptions));
+    return image ? ptrToJlong(image.release()) : 0;
+}
+
+extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Image__1nMakeSubset
+  (JNIEnv* env, jclass jclass, jlong ptr, jlong contextPtr, jint subsetL, jint subsetT, jint subsetR, jint subsetB) {
+    SkImage* instance = reinterpret_cast<SkImage*>(static_cast<uintptr_t>(ptr));
+    GrDirectContext* context = reinterpret_cast<GrDirectContext*>(static_cast<uintptr_t>(contextPtr));
+    SkIRect subset = SkIRect::MakeLTRB(subsetL, subsetT, subsetR, subsetB);
+    SkRecorder* recorder = context ? context->asRecorder() : nullptr;
+    sk_sp<SkImage> image = instance->makeSubset(recorder, subset, SkImage::RequiredProperties());
     return image ? ptrToJlong(image.release()) : 0;
 }
 
