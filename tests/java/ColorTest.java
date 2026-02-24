@@ -56,6 +56,9 @@ public class ColorTest implements Executable {
         assertEquals(0xFF, Color.ALPHA_OPAQUE);
         assertEquals(0x00000000, Color.TRANSPARENT);
         assertEquals(0xFF000000, Color.BLACK);
+        assertEquals(0xFF444444, Color.DARK_GRAY);
+        assertEquals(0xFF888888, Color.GRAY);
+        assertEquals(0xFFCCCCCC, Color.LIGHT_GRAY);
         assertEquals(0xFFFFFFFF, Color.WHITE);
         assertEquals(0xFFFF0000, Color.RED);
         assertEquals(0xFF00FF00, Color.GREEN);

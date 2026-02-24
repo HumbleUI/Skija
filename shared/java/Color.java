@@ -1,19 +1,14 @@
 package io.github.humbleui.skija;
 
-import io.github.humbleui.skija.impl.*;
-import org.jetbrains.annotations.*;
-
 public class Color {
-    static { Library.staticLoad(); }
-
     public static final int ALPHA_TRANSPARENT = 0x00;
     public static final int ALPHA_OPAQUE      = 0xFF;
 
     public static final int TRANSPARENT = 0x00000000;
     public static final int BLACK       = 0xFF000000;
-    public static final int DKGRAY      = 0xFF444444;
+    public static final int DARK_GRAY   = 0xFF444444;
     public static final int GRAY        = 0xFF888888;
-    public static final int LTGRAY      = 0xFFCCCCCC;
+    public static final int LIGHT_GRAY  = 0xFFCCCCCC;
     public static final int WHITE       = 0xFFFFFFFF;
     public static final int RED         = 0xFFFF0000;
     public static final int GREEN       = 0xFF00FF00;
@@ -130,13 +125,30 @@ public class Color {
         assert 0 <= red && red <= 255 : "Red is out of 0..255 range: " + red;
         assert 0 <= green && green <= 255 : "Green is out of 0..255 range: " + green;
         assert 0 <= blue && blue <= 255 : "Blue is out of 0..255 range: " + blue;
-        Stats.onNativeCall();
-        return _nConvertRGBToHSV(red, green, blue);
+
+        int max = Math.max(red, Math.max(green, blue));
+        int min = Math.min(red, Math.min(green, blue));
+        int delta = max - min;
+
+        float h;
+        if (delta == 0) {
+            h = 0f;
+        } else if (max == red) {
+            h = 60f * (green - blue) / delta;
+            if (h < 0f) h += 360f;
+        } else if (max == green) {
+            h = 60f * (blue - red) / delta + 120f;
+        } else {
+            h = 60f * (red - green) / delta + 240f;
+        }
+
+        float s = max == 0 ? 0f : delta / (float) max;
+        float v = max / 255f;
+        return new float[] {h, s, v};
     }
 
     public static float[] convertToHSV(int color) {
-        Stats.onNativeCall();
-        return _nConvertToHSV(color);
+        return convertRGBToHSV(getR(color), getG(color), getB(color));
     }
 
     public static int makeFromHSV(float[] hsv) {
@@ -147,8 +159,58 @@ public class Color {
         assert 0 <= alpha && alpha <= 255 : "Alpha is out of 0..255 range: " + alpha;
         assert hsv != null : "HSV is null";
         assert hsv.length >= 3 : "Expected at least 3 HSV components, got " + hsv.length;
-        Stats.onNativeCall();
-        return _nMakeFromHSV(alpha, hsv);
+
+        float h = pin(hsv[0], 0f, 360f);
+        float s = pin(hsv[1], 0f, 1f);
+        float v = pin(hsv[2], 0f, 1f);
+
+        float c = v * s;
+        float hh = h / 60f;
+        float x = c * (1f - Math.abs(hh % 2f - 1f));
+
+        float r1;
+        float g1;
+        float b1;
+
+        switch ((int) hh) {
+            case 0:
+            case 6:
+                r1 = c;
+                g1 = x;
+                b1 = 0f;
+                break;
+            case 1:
+                r1 = x;
+                g1 = c;
+                b1 = 0f;
+                break;
+            case 2:
+                r1 = 0f;
+                g1 = c;
+                b1 = x;
+                break;
+            case 3:
+                r1 = 0f;
+                g1 = x;
+                b1 = c;
+                break;
+            case 4:
+                r1 = x;
+                g1 = 0f;
+                b1 = c;
+                break;
+            default:
+                r1 = c;
+                g1 = 0f;
+                b1 = x;
+                break;
+        }
+
+        float m = v - c;
+        int red = pinToByte(Math.round((r1 + m) * 255f));
+        int green = pinToByte(Math.round((g1 + m) * 255f));
+        int blue = pinToByte(Math.round((b1 + m) * 255f));
+        return makeARGB(alpha, red, green, blue);
     }
 
     public static int makeARGB(int a, int r, int g, int b) {
@@ -180,7 +242,15 @@ public class Color {
 
     public static int getB(int color) {
         return color & 0xFF;
-    }    
+    }
+
+    private static float pin(float value, float min, float max) {
+        return Math.max(min, Math.min(max, value));
+    }
+
+    private static int pinToByte(int value) {
+        return Math.max(0, Math.min(255, value));
+    }
 
     public static int withA(int color, int a) {
         assert 0 <= a && a <= 255 : "Alpha is out of 0..255 range: " + a;
@@ -201,13 +271,4 @@ public class Color {
         assert 0 <= b && b <= 255 : "Blue is out of 0..255 range: " + b;
         return (b & 0xFF) | (color & 0xFFFFFF00);
     }
-
-    @ApiStatus.Internal
-    public static native float[] _nConvertRGBToHSV(int red, int green, int blue);
-
-    @ApiStatus.Internal
-    public static native float[] _nConvertToHSV(int color);
-
-    @ApiStatus.Internal
-    public static native int _nMakeFromHSV(int alpha, float[] hsv);
 }

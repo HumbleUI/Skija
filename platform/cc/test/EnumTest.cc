@@ -11,6 +11,7 @@
 #include "SkClipOp.h"
 #include "SkCodecAnimation.h"
 #include "SkColor.h"
+#include "SkColorSpace.h"
 #include "SkEncodedImageFormat.h"
 #include "SkEncodedOrigin.h"
 #include "SkFont.h"
@@ -213,6 +214,50 @@ extern "C" JNIEXPORT jintArray JNICALL Java_io_github_humbleui_skija_test_EnumTe
         kR8_unorm_SkColorType,
         kLastEnum_SkColorType,
         kN32_SkColorType
+    };
+    size_t len = sizeof(values) / sizeof(values[0]);
+    jintArray result = env->NewIntArray(len);
+    env->SetIntArrayRegion(result, 0, len, values);
+    return result;
+}
+
+extern "C" JNIEXPORT jintArray JNICALL Java_io_github_humbleui_skija_test_EnumTest__1nGetColorSpaceNamedPrimariesValues
+  (JNIEnv* env, jclass jclass) {
+    jint values[] = {
+        static_cast<jint>(SkNamedPrimaries::CicpId::kRec709),
+        static_cast<jint>(SkNamedPrimaries::CicpId::kRec470SystemM),
+        static_cast<jint>(SkNamedPrimaries::CicpId::kRec470SystemBG),
+        static_cast<jint>(SkNamedPrimaries::CicpId::kRec601),
+        static_cast<jint>(SkNamedPrimaries::CicpId::kSMPTE_ST_240),
+        static_cast<jint>(SkNamedPrimaries::CicpId::kGenericFilm),
+        static_cast<jint>(SkNamedPrimaries::CicpId::kRec2020),
+        static_cast<jint>(SkNamedPrimaries::CicpId::kSMPTE_ST_428_1),
+        static_cast<jint>(SkNamedPrimaries::CicpId::kSMPTE_RP_431_2),
+        static_cast<jint>(SkNamedPrimaries::CicpId::kSMPTE_EG_432_1),
+        static_cast<jint>(SkNamedPrimaries::CicpId::kITU_T_H273_Value22),
+    };
+    size_t len = sizeof(values) / sizeof(values[0]);
+    jintArray result = env->NewIntArray(len);
+    env->SetIntArrayRegion(result, 0, len, values);
+    return result;
+}
+
+extern "C" JNIEXPORT jintArray JNICALL Java_io_github_humbleui_skija_test_EnumTest__1nGetColorSpaceNamedTransferFnValues
+  (JNIEnv* env, jclass jclass) {
+    jint values[] = {
+        static_cast<jint>(SkNamedTransferFn::CicpId::kRec709),
+        static_cast<jint>(SkNamedTransferFn::CicpId::kRec470SystemM),
+        static_cast<jint>(SkNamedTransferFn::CicpId::kRec470SystemBG),
+        static_cast<jint>(SkNamedTransferFn::CicpId::kRec601),
+        static_cast<jint>(SkNamedTransferFn::CicpId::kSMPTE_ST_240),
+        static_cast<jint>(SkNamedTransferFn::CicpId::kLinear),
+        static_cast<jint>(SkNamedTransferFn::CicpId::kIEC61966_2_4),
+        static_cast<jint>(SkNamedTransferFn::CicpId::kSRGB),
+        static_cast<jint>(SkNamedTransferFn::CicpId::kRec2020_10bit),
+        static_cast<jint>(SkNamedTransferFn::CicpId::kRec2020_12bit),
+        static_cast<jint>(SkNamedTransferFn::CicpId::kPQ),
+        static_cast<jint>(SkNamedTransferFn::CicpId::kSMPTE_ST_428_1),
+        static_cast<jint>(SkNamedTransferFn::CicpId::kHLG),
     };
     size_t len = sizeof(values) / sizeof(values[0]);
     jintArray result = env->NewIntArray(len);
