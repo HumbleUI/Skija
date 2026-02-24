@@ -8,11 +8,13 @@ import java.nio.file.Path;
 
 import io.github.humbleui.skija.*;
 import io.github.humbleui.skija.test.runner.*;
+import io.github.humbleui.types.IRect;
 
 public class ImageTest implements Executable {
     @Override
     public void execute() throws Exception {
         TestRunner.testMethod(this, "base");
+        TestRunner.testMethod(this, "makeSubset");
         TestRunner.testMethod(this, "refCntToStringAfterClose");
     }
     public void base() throws Exception {
@@ -32,6 +34,22 @@ public class ImageTest implements Executable {
                 Files.write(Path.of(dir, "polygon_webp_default.webp"), EncoderWEBP.encode(image).getBytes());
                 Files.write(Path.of(dir, "polygon_webp_50.webp"), EncoderWEBP.encode(image,EncodeWEBPOptions.DEFAULT.withQuality(50)).getBytes());
                 Files.write(Path.of(dir, "polygon_webp_lossless.webp"), EncoderWEBP.encode(image,EncodeWEBPOptions.DEFAULT.withCompressionMode(EncodeWEBPCompressionMode.LOSSLESS)).getBytes());
+            }
+        }
+    }
+
+    public void makeSubset() throws Exception {
+        try (var surface = Surface.makeRaster(ImageInfo.makeN32Premul(100, 80))) {
+            var canvas = surface.getCanvas();
+            canvas.clear(0xFF112233);
+            try (var image = surface.makeImageSnapshot()) {
+                var subset = image.makeSubset(new IRect(10, 20, 70, 50));
+                assertNotNull(subset);
+                if (subset != null) {
+                    assertEquals(60, subset.getWidth());
+                    assertEquals(30, subset.getHeight());
+                    subset.close();
+                }
             }
         }
     }
