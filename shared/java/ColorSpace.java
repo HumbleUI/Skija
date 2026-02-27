@@ -11,6 +11,9 @@ public class ColorSpace extends Managed {
         public static final ColorSpace INSTANCE = new ColorSpace(_nMakeSRGB(), false);
     }
 
+    /**
+     * @return  the sRGB color space
+     */
     public static ColorSpace getSRGB() {
         return _SRGBHolder.INSTANCE;
     }
@@ -20,6 +23,9 @@ public class ColorSpace extends Managed {
         public static final ColorSpace INSTANCE = new ColorSpace(_nMakeSRGBLinear(), false);
     }
 
+    /**
+     * @return  color space with the sRGB primaries, but a linear (1.0) gamma
+     */
     public static ColorSpace getSRGBLinear() {
         return _SRGBLinearHolder.INSTANCE;
     }
@@ -33,6 +39,13 @@ public class ColorSpace extends Managed {
         return _DisplayP3Holder.INSTANCE;
     }
 
+    /**
+     * Create a ColorSpace from a transfer function and a row-major 3x3 transformation to XYZ.
+     *
+     * @param transferFn  transfer function coefficients (7 elements)
+     * @param toXYZD50    row-major 3x3 transformation matrix to XYZ D50
+     * @return            new ColorSpace, or null if invalid
+     */
     @Nullable
     public static ColorSpace makeRGB(@NotNull float[] transferFn, @NotNull Matrix33 toXYZD50) {
         assert transferFn != null : "Can't makeRGB with transferFn == null";
@@ -43,6 +56,25 @@ public class ColorSpace extends Managed {
         return ptr == 0 ? null : new ColorSpace(ptr);
     }
 
+    /**
+     * <p>Create a ColorSpace from code points specified in Rec. ITU-T H.273.
+     * Returns null for invalid or unsupported combination of code points.</p>
+     *
+     * <p>Only RGB color spaces are supported.</p>
+     *
+     * <p>{@link ColorSpace} only supports RGB color spaces and therefore this
+     * function does not take a {@code matrix_coefficients} parameter - the caller is
+     * expected to verify that {@code matrix_coefficients} is 0.</p>
+     *
+     * <p>Narrow range images are extremely rare - see
+     * https://github.com/w3c/png/issues/312#issuecomment-2327349614.  Therefore
+     * this function doesn't take a {@code video_full_range_flag} - the caller is
+     * expected to verify that it is 1 (indicating a full range image).</p>
+     *
+     * @param primaries   identifies an entry in Rec. ITU-T H.273, Table 2
+     * @param transferFn  identifies an entry in Rec. ITU-T H.273, Table 3
+     * @return            new ColorSpace, or null if invalid or unsupported
+     */
     @Nullable
     public static ColorSpace makeCICP(@NotNull ColorSpaceNamedPrimaries primaries, @NotNull ColorSpaceNamedTransferFn transferFn) {
         assert primaries != null : "Can't makeCICP with primaries == null";
@@ -59,7 +91,6 @@ public class ColorSpace extends Managed {
         } finally {
             ReferenceUtil.reachabilityFence(this);
             ReferenceUtil.reachabilityFence(to);
-            ReferenceUtil.reachabilityFence(color);
         }
     }
 
@@ -128,11 +159,18 @@ public class ColorSpace extends Managed {
         }
     }
 
+    /**
+     * Returns the transfer function from this color space as coefficients to the standard ICC
+     * 7-parameter equation. Returns null if the transfer function cannot be represented this way
+     * (e.g., PQ, HLG).
+     *
+     * @return  transfer function coefficients, or null if not representable as ICC 7-parameter equation
+     */
     @Nullable
     public float[] getNumericalTransferFn() {
         try {
             Stats.onNativeCall();
-            return _nIsNumericalTransferFn(_ptr);
+            return _nGetNumericalTransferFn(_ptr);
         } finally {
             ReferenceUtil.reachabilityFence(this);
         }
@@ -142,12 +180,19 @@ public class ColorSpace extends Managed {
     public Matrix33 getToXYZD50() {
         try {
             Stats.onNativeCall();
-            return _matrix33FromArray(_nGetToXYZD50(_ptr));
+            float[] values = _nGetToXYZD50(_ptr);
+            return values == null ? null : new Matrix33(values);
         } finally {
             ReferenceUtil.reachabilityFence(this);
         }
     }
 
+    /**
+     * Returns a hash of the gamut transformation to XYZ D50. Allows for fast equality checking
+     * of gamuts, at the (very small) risk of collision.
+     *
+     * @return  hash of the gamut transformation to XYZ D50
+     */
     public int getToXYZD50Hash() {
         try {
             Stats.onNativeCall();
@@ -175,6 +220,9 @@ public class ColorSpace extends Managed {
         }
     }
 
+    /**
+     * @return  a color space with the same gamut as this one, but with a linear gamma
+     */
     @NotNull
     public ColorSpace makeLinearGamma() {
         try {
@@ -185,6 +233,9 @@ public class ColorSpace extends Managed {
         }
     }
 
+    /**
+     * @return  a color space with the same gamut as this one, but with the sRGB transfer function
+     */
     @NotNull
     public ColorSpace makeSRGBGamma() {
         try {
@@ -195,6 +246,15 @@ public class ColorSpace extends Managed {
         }
     }
 
+    /**
+     * Returns a color space with the same transfer function as this one, but with the primary
+     * colors rotated. In other words, this produces a new color space that maps RGB to GBR
+     * (when applied to a source), and maps RGB to BRG (when applied to a destination).
+     *
+     * <p>This is used for testing, to construct color spaces that have severe and testable behavior.</p>
+     *
+     * @return  new color space with rotated primaries
+     */
     @NotNull
     public ColorSpace makeColorSpin() {
         try {
@@ -205,6 +265,9 @@ public class ColorSpace extends Managed {
         }
     }
 
+    /**
+     * @return  a serialized representation of this color space
+     */
     @NotNull
     public Data serializeToData() {
         try {
@@ -215,6 +278,12 @@ public class ColorSpace extends Managed {
         }
     }
 
+    /**
+     * Deserialize a ColorSpace from data previously serialized by {@link #serializeToData()}.
+     *
+     * @param data  serialized color space data
+     * @return      deserialized ColorSpace, or null if the data is invalid
+     */
     @Nullable
     public static ColorSpace makeFromData(@NotNull Data data) {
         try {
@@ -272,11 +341,6 @@ public class ColorSpace extends Managed {
         return ptr == 0 ? null : new ColorSpace(ptr);
     }
 
-    @Nullable
-    private static Matrix33 _matrix33FromArray(@Nullable float[] values) {
-        return values == null ? null : new Matrix33(values);
-    }
-
     @ApiStatus.Internal
     public static class _FinalizerHolder {
         public static final long PTR = _nGetFinalizer();
@@ -292,7 +356,7 @@ public class ColorSpace extends Managed {
     public static native boolean _nIsGammaCloseToSRGB(long ptr);
     public static native boolean _nIsGammaLinear(long ptr);
     public static native boolean _nIsSRGB(long ptr);
-    public static native float[] _nIsNumericalTransferFn(long ptr);
+    public static native float[] _nGetNumericalTransferFn(long ptr);
     public static native float[] _nGetToXYZD50(long ptr);
     public static native int _nGetToXYZD50Hash(long ptr);
     public static native int _nGetTransferFnHash(long ptr);

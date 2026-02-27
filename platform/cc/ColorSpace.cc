@@ -111,7 +111,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_ColorSpace__1nI
     return instance->isSRGB();
 }
 
-extern "C" JNIEXPORT jfloatArray JNICALL Java_io_github_humbleui_skija_ColorSpace__1nIsNumericalTransferFn
+extern "C" JNIEXPORT jfloatArray JNICALL Java_io_github_humbleui_skija_ColorSpace__1nGetNumericalTransferFn
   (JNIEnv* env, jclass jclass, jlong ptr) {
     SkColorSpace* instance = reinterpret_cast<SkColorSpace*>(static_cast<uintptr_t>(ptr));
     skcms_TransferFunction fn;
