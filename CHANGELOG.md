@@ -1,5 +1,10 @@
 # WIP
 
+Added:
+
+- `Color`: `convertRGBToHSV`, `convertToHSV`, `makeFromHSV`, color constants #105 via @Eatgrapes
+- `ColorSpace`: all the missing functions #105 via @Eatgrapes
+
 Fixed:
 
 - Absolute CI build paths in release binaries #106

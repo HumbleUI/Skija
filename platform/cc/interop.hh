@@ -18,6 +18,7 @@
 #include "SkShaper.h"
 #include "SkString.h"
 #include "SkSurfaceProps.h"
+#include "modules/skcms/skcms.h"
 
 namespace java {
     namespace io {
@@ -285,6 +286,22 @@ namespace skija {
         void onUnload(JNIEnv* env);
         jobject toJava(JNIEnv* env, const SkSurfaceProps& props);
         std::unique_ptr<SkSurfaceProps> toSkSurfaceProps(JNIEnv* env, jobject surfacePropsObj);
+    }
+
+    namespace TransferFunction {
+        extern jclass cls;
+        extern jmethodID ctor;
+        extern jfieldID _g;
+        extern jfieldID _a;
+        extern jfieldID _b;
+        extern jfieldID _c;
+        extern jfieldID _d;
+        extern jfieldID _e;
+        extern jfieldID _f;
+        void onLoad(JNIEnv* env);
+        void onUnload(JNIEnv* env);
+        jobject toJava(JNIEnv* env, const skcms_TransferFunction& fn);
+        skcms_TransferFunction fromJava(JNIEnv* env, jobject obj);
     }
 
     namespace impl {

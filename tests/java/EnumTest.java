@@ -24,6 +24,8 @@ public class EnumTest implements Executable {
         TestRunner.testMethod(this, "colorChannel");
         TestRunner.testMethod(this, "colorChannelFlag");
         TestRunner.testMethod(this, "colorType");
+        TestRunner.testMethod(this, "colorSpaceNamedPrimaries");
+        TestRunner.testMethod(this, "colorSpaceNamedTransferFn");
         TestRunner.testMethod(this, "contentChangeMode");
         TestRunner.testMethod(this, "encodedImageFormat");
         TestRunner.testMethod(this, "encodedOrigin");
@@ -265,6 +267,44 @@ public class EnumTest implements Executable {
                 type.validateAlphaType(alpha);
             }
         }
+    }
+
+    public void colorSpaceNamedPrimaries() throws Exception {
+        int[] nativeValues = _nGetColorSpaceNamedPrimariesValues();
+        int[] javaValues = {
+            ColorSpaceNamedPrimaries.REC709._value,
+            ColorSpaceNamedPrimaries.REC470_SYSTEM_M._value,
+            ColorSpaceNamedPrimaries.REC470_SYSTEM_BG._value,
+            ColorSpaceNamedPrimaries.REC601._value,
+            ColorSpaceNamedPrimaries.SMPTE_ST_240._value,
+            ColorSpaceNamedPrimaries.GENERIC_FILM._value,
+            ColorSpaceNamedPrimaries.REC2020._value,
+            ColorSpaceNamedPrimaries.SMPTE_ST_428_1._value,
+            ColorSpaceNamedPrimaries.SMPTE_RP_431_2._value,
+            ColorSpaceNamedPrimaries.SMPTE_EG_432_1._value,
+            ColorSpaceNamedPrimaries.ITU_T_H273_VALUE22._value
+        };
+        TestRunner.assertArrayEquals(nativeValues, javaValues);
+    }
+
+    public void colorSpaceNamedTransferFn() throws Exception {
+        int[] nativeValues = _nGetColorSpaceNamedTransferFnValues();
+        int[] javaValues = {
+            ColorSpaceNamedTransferFn.REC709._value,
+            ColorSpaceNamedTransferFn.REC470_SYSTEM_M._value,
+            ColorSpaceNamedTransferFn.REC470_SYSTEM_BG._value,
+            ColorSpaceNamedTransferFn.REC601._value,
+            ColorSpaceNamedTransferFn.SMPTE_ST_240._value,
+            ColorSpaceNamedTransferFn.LINEAR._value,
+            ColorSpaceNamedTransferFn.IEC61966_2_4._value,
+            ColorSpaceNamedTransferFn.SRGB._value,
+            ColorSpaceNamedTransferFn.REC2020_10BIT._value,
+            ColorSpaceNamedTransferFn.REC2020_12BIT._value,
+            ColorSpaceNamedTransferFn.PQ._value,
+            ColorSpaceNamedTransferFn.SMPTE_ST_428_1._value,
+            ColorSpaceNamedTransferFn.HLG._value
+        };
+        TestRunner.assertArrayEquals(nativeValues, javaValues);
     }
 
     public void contentChangeMode() throws Exception {
@@ -1051,6 +1091,8 @@ public class EnumTest implements Executable {
     public static native int[] _nGetColorChannelOrdinals();
     public static native int[] _nGetColorChannelFlagOrdinals();
     public static native int[] _nGetColorTypeOrdinals();
+    public static native int[] _nGetColorSpaceNamedPrimariesValues();
+    public static native int[] _nGetColorSpaceNamedTransferFnValues();
     public static native int[] _nGetContentChangeModeOrdinals();
     public static native int[] _nGetEncodedImageFormatOrdinals();
     public static native int[] _nGetEncodedOriginOrdinals();

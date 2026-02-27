@@ -114,10 +114,10 @@ APIs:
 Bitmap               ▓▓▓▓▓▓▓▓▓▓    Paint                ▓▓▓▓▓▓▓▓▓▓
 Canvas               ▓▓▓▓▓▓▓▓░░    Path                 ▓▓▓▓▓▓▓▓▓▓
 Codec                ▓▓▓░░░░░░░    PathEffects          ▓▓▓▓▓▓▓▓▓▓
-Color                ▓▓▓▓▓░░░░░    PathMeasure          ▓▓▓▓▓▓▓▓▓▓
+Color                ▓▓▓▓▓▓▓▓▓▓    PathMeasure          ▓▓▓▓▓▓▓▓▓▓
 ColorFilter          ▓▓▓▓▓▓▓▓▓▓    PaintFilterCanvas    ▓▓▓▓▓▓▓▓▓▓
 ColorInfo            ▓▓▓▓▓▓▓▓▓▓    Picture              ▓▓▓▓▓▓▓▓▓░
-ColorSpace           ▓▓▓▓░░░░░░    PictureRecorder      ▓▓▓▓▓▓▓▓▓░
+ColorSpace           ▓▓▓▓▓▓▓▓▓▓    PictureRecorder      ▓▓▓▓▓▓▓▓▓░
 Data                 ▓▓▓▓▓▓▓▓▓░    PixelRef             ▓▓▓▓▓▓▓▓▓▓
 Drawable             ▓▓▓▓▓▓▓▓░░    Pixmap               ▓▓▓▓▓▓▓▓▓▓
 Flattenable          ░░░░░░░░░░    Region               ▓▓▓▓▓▓▓▓▓▓
