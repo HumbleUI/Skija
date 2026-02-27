@@ -42,13 +42,22 @@ endif()
 if(APPLE)
     target_include_directories(skija PRIVATE $ENV{JAVA_HOME}/include $ENV{JAVA_HOME}/include/darwin)
 
+    # https://github.com/HumbleUI/Skija/issues/106
+    target_compile_options(skija PRIVATE -ffile-prefix-map=${CMAKE_SOURCE_DIR}/=)
+
 elseif(ANDROID)
     # JNI headers are provided by NDK
     target_compile_options(skija PRIVATE -fno-rtti)
 
+    # https://github.com/HumbleUI/Skija/issues/106
+    target_compile_options(skija PRIVATE -ffile-prefix-map=${CMAKE_SOURCE_DIR}/=)
+
 elseif(UNIX)
     target_include_directories(skija PRIVATE $ENV{JAVA_HOME}/include $ENV{JAVA_HOME}/include/linux)
     target_compile_options(skija PRIVATE -Wno-attributes)
+
+    # https://github.com/HumbleUI/Skija/issues/106
+    target_compile_options(skija PRIVATE -ffile-prefix-map=${CMAKE_SOURCE_DIR}/=)
 
 elseif(WIN32)
     set(CMAKE_C_COMPILER cl)
@@ -56,6 +65,11 @@ elseif(WIN32)
 
     target_include_directories(skija PRIVATE $ENV{JAVA_HOME}/include $ENV{JAVA_HOME}/include/win32)
     target_link_libraries(skija d3d12 dxgi d3dcompiler)
+
+    # https://github.com/HumbleUI/Skija/issues/106
+    target_compile_options(skija
+        PRIVATE /source-charset:utf-8
+        PRIVATE "/d1trimfile:${CMAKE_SOURCE_DIR}/")
 
     # Suppress warnings from Skia headers and size_t conversions
     target_compile_options(skija PRIVATE

@@ -65,5 +65,6 @@ def setup_linux_arm64(native_build_dir: str, cmake_args: List[str]):
     '-DFREETYPE_LIBRARY=' + f'{deps_dir}/libfreetype.so',
     '-DFONTCONFIG_LIBRARY=' + f'{deps_dir}/libfontconfig.so',
     '-DSKIA_EGL_LIBRARY=' + f'{deps_dir}/libEGL.so',
-    '-DSKIA_GL_LIBRARY=' + f'{deps_dir}/libGL.so'
+    '-DSKIA_GL_LIBRARY=' + f'{deps_dir}/libGL.so',
+    '-DCMAKE_SKIP_RPATH=TRUE',
   ]

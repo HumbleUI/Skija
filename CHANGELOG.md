@@ -1,3 +1,9 @@
+# WIP
+
+Fixed:
+
+- Absolute CI build paths in release binaries #106
+
 # 0.143.9 - Feb 6, 2026
 
 Added:
