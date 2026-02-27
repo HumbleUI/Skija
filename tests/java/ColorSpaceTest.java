@@ -14,6 +14,7 @@ import io.github.humbleui.skija.ColorSpaceNamedPrimaries;
 import io.github.humbleui.skija.ColorSpaceNamedTransferFn;
 import io.github.humbleui.skija.Data;
 import io.github.humbleui.skija.Matrix33;
+import io.github.humbleui.skija.TransferFunction;
 import io.github.humbleui.skija.test.runner.Executable;
 
 public class ColorSpaceTest implements Executable {
@@ -62,7 +63,7 @@ public class ColorSpaceTest implements Executable {
             assertNotNull(spun);
         }
 
-        float[] transferFn = srgb.getTransferFn();
+        TransferFunction transferFn = srgb.getTransferFn();
         assertNotNull(transferFn);
         assertNotNull(xyz);
         try (ColorSpace fromRGB = ColorSpace.makeRGB(transferFn, xyz)) {

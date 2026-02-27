@@ -1,3 +1,10 @@
+# WIP
+
+Added:
+
+- `Color`: `convertRGBToHSV`, `convertToHSV`, `makeFromHSV`, color constants #105 via @Eatgrapes
+- `ColorSpace`: all the missing functions #105 via @Eatgrapes
+
 # 0.143.9 - Feb 6, 2026
 
 Added:

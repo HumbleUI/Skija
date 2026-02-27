@@ -10,10 +10,6 @@ static void unrefColorSpace(SkColorSpace* ptr) {
     ptr->unref();
 }
 
-static jfloatArray transferFnToJava(JNIEnv* env, const skcms_TransferFunction& fn) {
-    return javaFloatArray(env, {fn.g, fn.a, fn.b, fn.c, fn.d, fn.e, fn.f});
-}
-
 static jfloatArray matrix3x3ToJava(JNIEnv* env, const skcms_Matrix3x3& matrix) {
     return javaFloatArray(env,
         {matrix.vals[0][0], matrix.vals[0][1], matrix.vals[0][2],
@@ -41,26 +37,20 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_ColorSpace__1nM
 }
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_ColorSpace__1nMakeRGB
-  (JNIEnv* env, jclass jclass, jfloatArray transferFnArray, jfloatArray toXYZD50Array) {
-    if (transferFnArray == nullptr || toXYZD50Array == nullptr)
+  (JNIEnv* env, jclass jclass, jobject transferFnObj, jfloatArray toXYZD50Array) {
+    if (transferFnObj == nullptr || toXYZD50Array == nullptr)
         return 0;
-    if (env->GetArrayLength(transferFnArray) < 7 || env->GetArrayLength(toXYZD50Array) < 9)
+    if (env->GetArrayLength(toXYZD50Array) < 9)
         return 0;
 
-    jfloat* transferFnValues = env->GetFloatArrayElements(transferFnArray, 0);
+    skcms_TransferFunction transferFn = skija::TransferFunction::fromJava(env, transferFnObj);
+
     jfloat* toXYZD50Values = env->GetFloatArrayElements(toXYZD50Array, 0);
-
-    skcms_TransferFunction transferFn = {
-        transferFnValues[0], transferFnValues[1], transferFnValues[2], transferFnValues[3],
-        transferFnValues[4], transferFnValues[5], transferFnValues[6]
-    };
     skcms_Matrix3x3 toXYZD50 = {{
         {toXYZD50Values[0], toXYZD50Values[1], toXYZD50Values[2]},
         {toXYZD50Values[3], toXYZD50Values[4], toXYZD50Values[5]},
         {toXYZD50Values[6], toXYZD50Values[7], toXYZD50Values[8]},
     }};
-
-    env->ReleaseFloatArrayElements(transferFnArray, transferFnValues, JNI_ABORT);
     env->ReleaseFloatArrayElements(toXYZD50Array, toXYZD50Values, JNI_ABORT);
 
     sk_sp<SkColorSpace> colorSpace = SkColorSpace::MakeRGB(transferFn, toXYZD50);
@@ -111,11 +101,11 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_ColorSpace__1nI
     return instance->isSRGB();
 }
 
-extern "C" JNIEXPORT jfloatArray JNICALL Java_io_github_humbleui_skija_ColorSpace__1nGetNumericalTransferFn
+extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_ColorSpace__1nGetNumericalTransferFn
   (JNIEnv* env, jclass jclass, jlong ptr) {
     SkColorSpace* instance = reinterpret_cast<SkColorSpace*>(static_cast<uintptr_t>(ptr));
     skcms_TransferFunction fn;
-    return instance->isNumericalTransferFn(&fn) ? transferFnToJava(env, fn) : nullptr;
+    return instance->isNumericalTransferFn(&fn) ? skija::TransferFunction::toJava(env, fn) : nullptr;
 }
 
 extern "C" JNIEXPORT jfloatArray JNICALL Java_io_github_humbleui_skija_ColorSpace__1nGetToXYZD50
@@ -180,20 +170,20 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_ColorSpace__1nM
     return colorSpace ? reinterpret_cast<jlong>(colorSpace.release()) : 0;
 }
 
-extern "C" JNIEXPORT jfloatArray JNICALL Java_io_github_humbleui_skija_ColorSpace__1nTransferFn
+extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_ColorSpace__1nTransferFn
   (JNIEnv* env, jclass jclass, jlong ptr) {
     SkColorSpace* instance = reinterpret_cast<SkColorSpace*>(static_cast<uintptr_t>(ptr));
     skcms_TransferFunction fn;
     instance->transferFn(&fn);
-    return transferFnToJava(env, fn);
+    return skija::TransferFunction::toJava(env, fn);
 }
 
-extern "C" JNIEXPORT jfloatArray JNICALL Java_io_github_humbleui_skija_ColorSpace__1nInvTransferFn
+extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_ColorSpace__1nInvTransferFn
   (JNIEnv* env, jclass jclass, jlong ptr) {
     SkColorSpace* instance = reinterpret_cast<SkColorSpace*>(static_cast<uintptr_t>(ptr));
     skcms_TransferFunction fn;
     instance->invTransferFn(&fn);
-    return transferFnToJava(env, fn);
+    return skija::TransferFunction::toJava(env, fn);
 }
 
 extern "C" JNIEXPORT jfloatArray JNICALL Java_io_github_humbleui_skija_ColorSpace__1nGamutTransformTo

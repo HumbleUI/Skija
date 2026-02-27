@@ -690,6 +690,51 @@ namespace skija {
         }
     }
 
+    namespace TransferFunction {
+        jclass cls;
+        jmethodID ctor;
+        jfieldID _g;
+        jfieldID _a;
+        jfieldID _b;
+        jfieldID _c;
+        jfieldID _d;
+        jfieldID _e;
+        jfieldID _f;
+
+        void onLoad(JNIEnv* env) {
+            jclass local = env->FindClass("io/github/humbleui/skija/TransferFunction");
+            cls  = static_cast<jclass>(env->NewGlobalRef(local));
+            ctor = env->GetMethodID(cls, "<init>", "(FFFFFFF)V");
+            _g = env->GetFieldID(cls, "_g", "F");
+            _a = env->GetFieldID(cls, "_a", "F");
+            _b = env->GetFieldID(cls, "_b", "F");
+            _c = env->GetFieldID(cls, "_c", "F");
+            _d = env->GetFieldID(cls, "_d", "F");
+            _e = env->GetFieldID(cls, "_e", "F");
+            _f = env->GetFieldID(cls, "_f", "F");
+        }
+
+        void onUnload(JNIEnv* env) {
+            env->DeleteGlobalRef(cls);
+        }
+
+        jobject toJava(JNIEnv* env, const skcms_TransferFunction& fn) {
+            return env->NewObject(cls, ctor, fn.g, fn.a, fn.b, fn.c, fn.d, fn.e, fn.f);
+        }
+
+        skcms_TransferFunction fromJava(JNIEnv* env, jobject obj) {
+            return {
+                env->GetFloatField(obj, _g),
+                env->GetFloatField(obj, _a),
+                env->GetFloatField(obj, _b),
+                env->GetFloatField(obj, _c),
+                env->GetFloatField(obj, _d),
+                env->GetFloatField(obj, _e),
+                env->GetFloatField(obj, _f),
+            };
+        }
+    }
+
     namespace impl {
         namespace Native {
             jfieldID _ptr;
@@ -731,11 +776,13 @@ namespace skija {
         RuntimeEffectUniformInfo::onLoad(env);
         RuntimeEffectChildInfo::onLoad(env);
         SurfaceProps::onLoad(env);
+        TransferFunction::onLoad(env);
 
         impl::Native::onLoad(env);
     }
 
     void onUnload(JNIEnv* env) {
+        TransferFunction::onUnload(env);
         SurfaceProps::onUnload(env);
         RuntimeEffectChildInfo::onUnload(env);
         RuntimeEffectUniformInfo::onUnload(env);

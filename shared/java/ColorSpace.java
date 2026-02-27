@@ -42,14 +42,13 @@ public class ColorSpace extends Managed {
     /**
      * Create a ColorSpace from a transfer function and a row-major 3x3 transformation to XYZ.
      *
-     * @param transferFn  transfer function coefficients (7 elements)
+     * @param transferFn  transfer function
      * @param toXYZD50    row-major 3x3 transformation matrix to XYZ D50
      * @return            new ColorSpace, or null if invalid
      */
     @Nullable
-    public static ColorSpace makeRGB(@NotNull float[] transferFn, @NotNull Matrix33 toXYZD50) {
+    public static ColorSpace makeRGB(@NotNull TransferFunction transferFn, @NotNull Matrix33 toXYZD50) {
         assert transferFn != null : "Can't makeRGB with transferFn == null";
-        assert transferFn.length == 7 : "Expected 7 transferFn elements, got " + transferFn.length;
         assert toXYZD50 != null : "Can't makeRGB with toXYZD50 == null";
         Stats.onNativeCall();
         long ptr = _nMakeRGB(transferFn, toXYZD50._mat);
@@ -164,10 +163,10 @@ public class ColorSpace extends Managed {
      * 7-parameter equation. Returns null if the transfer function cannot be represented this way
      * (e.g., PQ, HLG).
      *
-     * @return  transfer function coefficients, or null if not representable as ICC 7-parameter equation
+     * @return  transfer function, or null if not representable as ICC 7-parameter equation
      */
     @Nullable
-    public float[] getNumericalTransferFn() {
+    public TransferFunction getNumericalTransferFn() {
         try {
             Stats.onNativeCall();
             return _nGetNumericalTransferFn(_ptr);
@@ -297,7 +296,7 @@ public class ColorSpace extends Managed {
     }
 
     @NotNull
-    public float[] getTransferFn() {
+    public TransferFunction getTransferFn() {
         try {
             Stats.onNativeCall();
             return _nTransferFn(_ptr);
@@ -307,7 +306,7 @@ public class ColorSpace extends Managed {
     }
 
     @NotNull
-    public float[] getInvTransferFn() {
+    public TransferFunction getInvTransferFn() {
         try {
             Stats.onNativeCall();
             return _nInvTransferFn(_ptr);
@@ -350,13 +349,13 @@ public class ColorSpace extends Managed {
     public static native long _nMakeSRGB();
     public static native long _nMakeDisplayP3();
     public static native long _nMakeSRGBLinear();
-    public static native long _nMakeRGB(float[] transferFn, float[] toXYZD50);
+    public static native long _nMakeRGB(TransferFunction transferFn, float[] toXYZD50);
     public static native long _nMakeCICP(int primaries, int transferFn);
     public static native float[] _nConvert(long fromPtr, long toPtr, float r, float g, float b, float a);
     public static native boolean _nIsGammaCloseToSRGB(long ptr);
     public static native boolean _nIsGammaLinear(long ptr);
     public static native boolean _nIsSRGB(long ptr);
-    public static native float[] _nGetNumericalTransferFn(long ptr);
+    public static native TransferFunction _nGetNumericalTransferFn(long ptr);
     public static native float[] _nGetToXYZD50(long ptr);
     public static native int _nGetToXYZD50Hash(long ptr);
     public static native int _nGetTransferFnHash(long ptr);
@@ -366,8 +365,8 @@ public class ColorSpace extends Managed {
     public static native long _nMakeColorSpin(long ptr);
     public static native long _nSerializeToData(long ptr);
     public static native long _nMakeFromData(long dataPtr);
-    public static native float[] _nTransferFn(long ptr);
-    public static native float[] _nInvTransferFn(long ptr);
+    public static native TransferFunction _nTransferFn(long ptr);
+    public static native TransferFunction _nInvTransferFn(long ptr);
     public static native float[] _nGamutTransformTo(long ptr, long dstPtr);
     public static native boolean _nEquals(long ptr, long otherPtr);
     public static native long _nMakeFromICCProfile(byte[] bytes);
