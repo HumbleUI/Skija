@@ -79,3 +79,9 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_FontMgr__1nDefa
     SkFontMgr* instance = SkFontMgr::RefDefault().release();
     return reinterpret_cast<jlong>(instance);
 }
+
+extern "C" void DWriteTypeface_UseSystemRenderingParams(int value);
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_FontMgr__1nUseSystemRenderingParams
+  (JNIEnv* env, jclass jclass, jint value) {
+    DWriteTypeface_UseSystemRenderingParams((int)value);
+}
