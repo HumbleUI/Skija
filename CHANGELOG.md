@@ -1,3 +1,13 @@
+# 0.119.4 - Mar 9, 2026
+
+Changed:
+
+- Skia version m119-fcb55886b9 -> m119-fcb55886b9-2
+
+Added:
+
+- `FontMgr::useSystemRenderingParams` #107 via @vladimirsamsonov
+
 # 0.119.3 - Jan 31, 2026
 
 Added:
