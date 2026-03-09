@@ -101,20 +101,19 @@ public class FontMgrTest implements Executable {
     }
 
     public void dWriteUseSystemRenderingParams() {
-
         Typeface jbMono = Typeface.makeFromFile("fonts/JetBrainsMono-Regular.ttf", 0);
         Font font = new Font(jbMono, 14);
 
-        try (Bitmap a = new Bitmap(); Paint p = new Paint();) {
-        a.allocN32Pixels(10, 20);
-            try(Canvas canvas = new Canvas(a)) {  
+        try (Bitmap a = new Bitmap();
+             Paint p = new Paint();)
+        {
+            a.allocN32Pixels(10, 20);
+            try(Canvas canvas = new Canvas(a)) {
                 assertDoesNotThrow(() -> {        
                     FontMgr.useSystemRenderingParams(true);
                     canvas.drawString("Test1", 0, 10, font, p);
                     FontMgr.useSystemRenderingParams(false);
                     canvas.drawString("Test2", 0, 20, font, p);
-                    FontMgr.useSystemRenderingParams(null);
-                    canvas.drawString("Test3", 0, 30, font, p);
                     }
                 );
             }
