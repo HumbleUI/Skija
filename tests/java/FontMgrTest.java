@@ -1,12 +1,17 @@
 package io.github.humbleui.skija.test;
 
 import static io.github.humbleui.skija.test.runner.TestRunner.assertArrayEquals;
+import static io.github.humbleui.skija.test.runner.TestRunner.assertDoesNotThrow;
 import static io.github.humbleui.skija.test.runner.TestRunner.assertEquals;
 import static io.github.humbleui.skija.test.runner.TestRunner.assertNotNull;
 
+import io.github.humbleui.skija.Bitmap;
+import io.github.humbleui.skija.Canvas;
 import io.github.humbleui.skija.Data;
+import io.github.humbleui.skija.Font;
 import io.github.humbleui.skija.FontMgr;
 import io.github.humbleui.skija.FontStyle;
+import io.github.humbleui.skija.Paint;
 import io.github.humbleui.skija.Typeface;
 import io.github.humbleui.skija.paragraph.FontCollection;
 import io.github.humbleui.skija.paragraph.TypefaceFontProvider;
@@ -16,6 +21,11 @@ import io.github.humbleui.skija.test.runner.TestRunner;
 public class FontMgrTest implements Executable {
     @Override
     public void execute() throws Exception {
+         TestRunner.testMethod(this, "base");
+         TestRunner.testMethod(this, "dWriteUseSystemRenderingParams");
+    }
+
+    public void base() {
         // FontManager
         TypefaceFontProvider fm = new TypefaceFontProvider();
         Typeface jbMono = FontMgr.getDefault().makeFromFile("fonts/JetBrainsMono-Regular.ttf", 0);
@@ -91,5 +101,28 @@ public class FontMgrTest implements Executable {
         }
 
         fm.close();
+    }
+
+    public void dWriteUseSystemRenderingParams() {
+        Typeface jbMono = FontMgr.getDefault().makeFromFile("fonts/JetBrainsMono-Regular.ttf", 0);
+        Font font = new Font(jbMono, 14);
+
+        try (Bitmap a = new Bitmap();
+             Paint p = new Paint();)
+        {
+            a.allocN32Pixels(10, 20);
+            try(Canvas canvas = new Canvas(a)) {
+                assertDoesNotThrow(() -> {
+                    FontMgr.useSystemRenderingParams(true);
+                    canvas.drawString("Test1", 0, 10, font, p);
+                    FontMgr.useSystemRenderingParams(false);
+                    canvas.drawString("Test2", 0, 20, font, p);
+                    }
+                );
+            }
+        }
+
+        font.close();
+        jbMono.close();
     }
 }

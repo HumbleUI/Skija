@@ -180,6 +180,19 @@ public class FontMgr extends RefCnt {
         }
     }
 
+    /**
+     * Controls whether Skia reads gamma and contrast at runtime from Windows ClearType settings.
+     * Windows DirectWrite only
+     *
+     * @param value true to match Windows native text rendering, false to consistent rendering across machines
+     * @see <a href="https://github.com/HumbleUI/SkiaBuild/pull/14">https://github.com/HumbleUI/SkiaBuild/pull/14</a>
+     * @see <a href="https://github.com/HumbleUI/Skija/pull/107">https://github.com/HumbleUI/Skija/pull/107</a>
+     */
+    public static void useSystemRenderingParams(boolean value) {
+        Stats.onNativeCall();
+        _nUseSystemRenderingParams(value ? 1 : 0);
+    }
+
     public static class _DefaultHolder {
         static { Stats.onNativeCall(); }
         public static final FontMgr INSTANCE = new FontMgr(_nDefault(), false);
@@ -210,5 +223,6 @@ public class FontMgr extends RefCnt {
     public static native long _nMatchFamilyStyleCharacter(long ptr, String familyName, int fontStyle, String[] bcp47, int character);
     public static native long _nMakeFromFile(long ptr, String path, int ttcIndex);
     public static native long _nMakeFromData(long ptr, long dataPtr, int ttcIndex);
+    public static native void _nUseSystemRenderingParams(int value);
     public static native long _nDefault();
 }

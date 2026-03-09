@@ -1,3 +1,13 @@
+# 0.143.11 - Mar 9, 2026
+
+Changed:
+
+- Skia version m143-da51f0d60e-2 -> m143-da51f0d60e-3
+
+Added:
+
+- `FontMgr::useSystemRenderingParams` #107 via @vladimirsamsonov
+
 # 0.143.10 - Feb 26, 2026
 
 Added:
@@ -166,6 +176,16 @@ Removed:
 - [ BREAKING ] `Typeface::makeFromData` (use `FontMgr::makeFromData`)
 - [ BREAKING ] `Surface::flush` (use `DirectContext::flush(Surface)`)
 - [ BREAKING ] `Surface::flushAndSubmit` (use `DirectContext::flushAndSubmit(Surface)`)
+
+# 0.119.4 - Mar 9, 2026
+
+Changed:
+
+- Skia version m119-fcb55886b9 -> m119-fcb55886b9-2
+
+Added:
+
+- `FontMgr::useSystemRenderingParams` #107 via @vladimirsamsonov
 
 # 0.119.3 - Jan 31, 2026
 
