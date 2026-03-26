@@ -1,6 +1,6 @@
 #! /usr/bin/env python3
 import os, subprocess, sys
-sys.path.append(os.path.normpath(os.path.dirname(__file__) + '/../../../script'))
+sys.path.insert(0, os.path.normpath(os.path.dirname(__file__) + '/../../../script'))
 import build_utils, common
 
 def main():
