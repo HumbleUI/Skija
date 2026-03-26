@@ -935,7 +935,7 @@ public class Bitmap extends Managed implements IHasImageInfo {
      *
      * <p>Pixels are copied only if pixel conversion is possible. If Bitmap getColorType() is
      * {@link ColorType#GRAY_8}, or {@link ColorType#ALPHA_8}; dstInfo.colorType() must match.
-     * If Bitmap getClorType() is {@link ColorType#GRAY_8}, dstInfo.getColorSpace() must match.
+     * If Bitmap getColorType() is {@link ColorType#GRAY_8}, dstInfo.getColorSpace() must match.
      * If Bitmap getAlphaType() is {@link ColorAlphaType#OPAQUE}, dstInfo.getAlphaType() must
      * match. If Bitmap getColorSpace() is null, dstInfo.getColorSpace() must match. Returns
      * false if pixel conversion is not possible.</p>
