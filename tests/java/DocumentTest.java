@@ -14,8 +14,12 @@ public class DocumentTest implements Executable {
              Document doc = Document.makePDF(stream)) {
             
             try (Canvas canvas = doc.beginPage(100, 100)) {
+                canvas.annotateNamedDestination(0, 0, "start");
                 Paint paint = new Paint().setColor(0xFFFF0000);
-                canvas.drawRect(Rect.makeXYWH(10, 10, 80, 80), paint);
+                Rect rect = Rect.makeXYWH(10, 10, 80, 80);
+                canvas.drawRect(rect, paint);
+                canvas.annotateRectWithURL(rect, "https://example.org/");
+                canvas.annotateLinkToDestination(Rect.makeXYWH(0, 80, 100, 20), "start");
             }
             doc.endPage();
             doc.close();

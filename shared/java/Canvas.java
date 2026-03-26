@@ -1009,6 +1009,50 @@ public class Canvas extends Managed {
     }
 
     /**
+     * <p>For SVG and PDF backends, makes a link over the rectangle to the specified URL.
+     * Does nothing on other backends.</p>
+     * 
+     * <p>The URL should be properly escaped and be valid 7-bit ASCII.</p>
+     */
+    @NotNull @Contract("_, _ -> this")
+    public Canvas annotateRectWithURL(@NotNull Rect r, @NotNull String url) {
+        assert _ptr != 0 : "Canvas is closed";
+        assert r != null : "Can’t annotateRectWithURL with r == null";
+        assert url != null : "Can’t annotateRectWithURL with url == null";
+        Stats.onNativeCall();
+        _nAnnotateRectWithURL(_ptr, r._left, r._top, r._right, r._bottom, url);
+        return this;
+    }
+
+    /**
+     * <p>For the PDF backend, associates the point with a name that {@link Canvas#annotateLinkToDestination} can make a jump to.</p>
+     * <p>For the SVG backend, functions like {@link Canvas#annotateRectWithURL}.</p>
+     * Does nothing on other backends.
+     */
+    @NotNull @Contract("_, _, _ -> this")
+    public Canvas annotateNamedDestination(float x, float y, @NotNull String name) {
+        assert _ptr != 0 : "Canvas is closed";
+        assert name != null : "Can’t annotateNamedDestination with name == null";
+        Stats.onNativeCall();
+        _nAnnotateNamedDestination(_ptr, x, y, name);
+        return this;
+    }
+
+    /**
+     * For the PDF backend, makes a link over the given rectangle that goes to the respective {@link Canvas#annotateNamedDestination}.
+     * Does nothing on other backends.
+     */
+    @NotNull @Contract("_, _ -> this")
+    public Canvas annotateLinkToDestination(@NotNull Rect r, @NotNull String name) {
+        assert _ptr != 0 : "Canvas is closed";
+        assert r != null : "Can’t annotateLinkToDestination with r == null";
+        assert name != null : "Can’t annotateLinkToDestination with name == null";
+        Stats.onNativeCall();
+        _nAnnotateLinkToDestination(_ptr, r._left, r._top, r._right, r._bottom, name);
+        return this;
+    }
+
+    /**
      * Replaces Matrix with matrix.
      * Unlike concat(), any prior matrix state is overwritten.
      *
@@ -1526,4 +1570,7 @@ public class Canvas extends Managed {
     public static native int  _nGetSaveCount(long ptr);
     public static native void _nRestore(long ptr);
     public static native void _nRestoreToCount(long ptr, int saveCount);
+    public static native void _nAnnotateRectWithURL(long ptr, float left, float top, float right, float bottom, String url);
+    public static native void _nAnnotateNamedDestination(long ptr, float x, float y, String name);
+    public static native void _nAnnotateLinkToDestination(long ptr, float left, float top, float right, float bottom, String name);
 }

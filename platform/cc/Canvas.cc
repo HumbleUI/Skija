@@ -5,6 +5,8 @@
 #include "SkSurface.h"
 #include "SkTextBlob.h"
 #include "SkVertices.h"
+#include "SkAnnotation.h"
+#include "SkData.h"
 #include "hb.h"
 #include "interop.hh"
 
@@ -413,4 +415,26 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Canvas__1nRestor
 
 extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Canvas__1nRestoreToCount(JNIEnv* env, jclass jclass, jlong ptr, jint saveCount) {
     reinterpret_cast<SkCanvas*>(static_cast<uintptr_t>(ptr))->restoreToCount(saveCount);
+}
+
+static sk_sp<SkData> stringToData(JNIEnv* env, jstring str) {
+    SkString path = *skString(env, str);
+    return SkData::MakeWithCString(path.c_str());
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Canvas__1nAnnotateRectWithURL(JNIEnv* env, jclass jclass, jlong ptr, jfloat left, jfloat top, jfloat right, jfloat bottom, jstring urlStr) {
+    SkCanvas* canvas = reinterpret_cast<SkCanvas*>(static_cast<uintptr_t>(ptr));
+    SkRect bounds {left, top, right, bottom};
+    SkAnnotateRectWithURL(canvas, bounds, stringToData(env, urlStr).get());
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Canvas__1nAnnotateNamedDestination(JNIEnv* env, jclass jclass, jlong ptr, jfloat x, jfloat y, jstring nameStr) {
+    SkCanvas* canvas = reinterpret_cast<SkCanvas*>(static_cast<uintptr_t>(ptr));
+    SkAnnotateNamedDestination(canvas, SkPoint::Make(x, y), stringToData(env, nameStr).get());
+}
+
+extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Canvas__1nAnnotateLinkToDestination(JNIEnv* env, jclass jclass, jlong ptr, jfloat left, jfloat top, jfloat right, jfloat bottom, jstring nameStr) {
+    SkCanvas* canvas = reinterpret_cast<SkCanvas*>(static_cast<uintptr_t>(ptr));
+    SkRect bounds {left, top, right, bottom};
+    SkAnnotateLinkToDestination(canvas, bounds, stringToData(env, nameStr).get());
 }
