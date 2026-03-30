@@ -1,3 +1,9 @@
+# 0.143.12 - Mar 30, 2026
+
+Added:
+
+- `Canvas`: `annotateRectWithURL`, `annotateNamedDestination`, `annotateLinkToDestination` #108 via @dzaima
+
 # 0.143.11 - Mar 9, 2026
 
 Changed:
