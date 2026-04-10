@@ -1154,13 +1154,10 @@ size_t utfToUtf8(unsigned char *data, size_t len) {
 
         // Six-byte modified UTF-8
         // 11101101    1010xxxx    10xxxxxx    11101101    1011xxxx    10xxxxxx
-        if (byte1 == 0b11101101 && (byte2 & 0b11110000) == 0b10100000) {
-            SkASSERT(read_offset + 5 < len);
-            unsigned char byte4 = data[read_offset + 3];
+        if (byte1 == 0b11101101 && (byte2 & 0b11110000) == 0b10100000 && read_offset + 5 < len && data[read_offset + 3] == 0b11101101) {
             unsigned char byte5 = data[read_offset + 4];
             unsigned char byte6 = data[read_offset + 5];
             SkASSERT((byte3 & 0b11000000) == 0b10000000);
-            SkASSERT(byte4 == 0b11101101);
             SkASSERT((byte5 & 0b11110000) == 0b10110000);
             SkASSERT((byte6 & 0b11000000) == 0b10000000);
             uint32_t codepoint = (((byte2 & 0b00001111) << 16) |
