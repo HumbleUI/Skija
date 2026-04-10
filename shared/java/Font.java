@@ -460,6 +460,7 @@ public class Font extends Managed {
      * @return   the bounding box of text
      */
     public Rect measureText(String s, Paint p) {
+        assert _validUTF16(s) : "Can’t measureText with invalid UTF-16";
         try {
             Stats.onNativeCall();
             return _nMeasureText(_ptr, s, Native.getPtr(p));
@@ -475,6 +476,7 @@ public class Font extends Managed {
     }
 
     public float measureTextWidth(String s, Paint p) {
+        assert _validUTF16(s) : "Can’t measureTextWidth with invalid UTF-16";
         try {
             Stats.onNativeCall();
             return _nMeasureTextWidth(_ptr, s, Native.getPtr(p));
@@ -627,6 +629,19 @@ public class Font extends Managed {
     @ApiStatus.Internal
     public static class _FinalizerHolder {
         public static final long PTR = _nGetFinalizer();
+    }
+
+    @ApiStatus.Internal
+    public boolean _validUTF16(String s) {
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (Character.isSurrogate(c)) {
+                if (i + 1 >= s.length() || !Character.isSurrogatePair(c, s.charAt(i + 1)))
+                    return false;
+                i++;
+            }
+        }
+        return true;
     }
 
     @ApiStatus.Internal public static native long    _nGetFinalizer();
