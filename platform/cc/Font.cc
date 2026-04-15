@@ -205,12 +205,14 @@ extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Font__1nSetSkewX
 extern "C" JNIEXPORT jshortArray JNICALL Java_io_github_humbleui_skija_Font__1nGetStringGlyphs
   (JNIEnv* env, jclass jclass, jlong ptr, jstring str) {
     SkFont* instance = reinterpret_cast<SkFont*>(static_cast<uintptr_t>(ptr));
-    jsize len = env->GetStringLength(str);
-    const jchar* chars = env->GetStringCritical(str, nullptr);
-    int count = instance->textToGlyphs(chars, len * sizeof(jchar), SkTextEncoding::kUTF16, SkSpan<SkGlyphID>());
-    std::vector<SkGlyphID> glyphs(count);
-    instance->textToGlyphs(chars, len * sizeof(jchar), SkTextEncoding::kUTF16, glyphs);
-    env->ReleaseStringCritical(str, chars);
+    skija::ConvertToUTF32 utf32;
+    const SkUnichar* uni = utf32.convert(env, str);
+    if (!uni) {
+        env->ThrowNew(env->FindClass("java/lang/IllegalArgumentException"), "Invalid UTF-16 string (unpaired surrogate)");
+        return nullptr;
+    }
+    std::vector<SkGlyphID> glyphs(utf32.count());
+    instance->textToGlyphs(uni, utf32.count() * sizeof(SkUnichar), SkTextEncoding::kUTF32, glyphs);
     return javaShortArray(env, glyphs);
 }
 
@@ -234,22 +236,27 @@ extern "C" JNIEXPORT jshort JNICALL Java_io_github_humbleui_skija_Font__1nGetUTF
 extern "C" JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_Font__1nGetStringGlyphsCount
   (JNIEnv* env, jclass jclass, jlong ptr, jstring str) {
     SkFont* instance = reinterpret_cast<SkFont*>(static_cast<uintptr_t>(ptr));
-    jsize len = env->GetStringLength(str);
-    const jchar* chars = env->GetStringCritical(str, nullptr);
-    int count = instance->countText(chars, len * sizeof(jchar), SkTextEncoding::kUTF16);
-    env->ReleaseStringCritical(str, chars);
-    return count;
+    skija::ConvertToUTF32 utf32;
+    const SkUnichar* uni = utf32.convert(env, str);
+    if (!uni) {
+        env->ThrowNew(env->FindClass("java/lang/IllegalArgumentException"), "Invalid UTF-16 string (unpaired surrogate)");
+        return 0;
+    }
+    return instance->countText(uni, utf32.count() * sizeof(SkUnichar), SkTextEncoding::kUTF32);
 }
 
 extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_Font__1nMeasureText
   (JNIEnv* env, jclass jclass, jlong ptr, jstring str, jlong paintPtr) {
     SkFont* instance = reinterpret_cast<SkFont*>(static_cast<uintptr_t>(ptr));
     SkPaint* paint = reinterpret_cast<SkPaint*>(static_cast<uintptr_t>(paintPtr));
-    jsize len = env->GetStringLength(str);
-    const jchar* chars = env->GetStringCritical(str, nullptr);
+    skija::ConvertToUTF32 utf32;
+    const SkUnichar* uni = utf32.convert(env, str);
+    if (!uni) {
+        env->ThrowNew(env->FindClass("java/lang/IllegalArgumentException"), "Invalid UTF-16 string (unpaired surrogate)");
+        return nullptr;
+    }
     SkRect bounds;
-    instance->measureText(chars, len * sizeof(jchar), SkTextEncoding::kUTF16, &bounds, paint);
-    env->ReleaseStringCritical(str, chars);
+    instance->measureText(uni, utf32.count() * sizeof(SkUnichar), SkTextEncoding::kUTF32, &bounds, paint);
     return types::Rect::fromSkRect(env, bounds);
 }
 
@@ -257,11 +264,13 @@ extern "C" JNIEXPORT jfloat JNICALL Java_io_github_humbleui_skija_Font__1nMeasur
   (JNIEnv* env, jclass jclass, jlong ptr, jstring str, jlong paintPtr) {
     SkFont* instance = reinterpret_cast<SkFont*>(static_cast<uintptr_t>(ptr));
     SkPaint* paint = reinterpret_cast<SkPaint*>(static_cast<uintptr_t>(paintPtr));
-    jsize len = env->GetStringLength(str);
-    const jchar* chars = env->GetStringCritical(str, nullptr);
-    float width = instance->measureText(chars, len * sizeof(jchar), SkTextEncoding::kUTF16, nullptr, paint);
-    env->ReleaseStringCritical(str, chars);
-    return width;
+    skija::ConvertToUTF32 utf32;
+    const SkUnichar* uni = utf32.convert(env, str);
+    if (!uni) {
+        env->ThrowNew(env->FindClass("java/lang/IllegalArgumentException"), "Invalid UTF-16 string (unpaired surrogate)");
+        return 0;
+    }
+    return instance->measureText(uni, utf32.count() * sizeof(SkUnichar), SkTextEncoding::kUTF32, nullptr, paint);
 }
 
 extern "C" JNIEXPORT jfloatArray JNICALL Java_io_github_humbleui_skija_Font__1nGetWidths

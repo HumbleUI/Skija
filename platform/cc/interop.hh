@@ -18,6 +18,7 @@
 #include "SkShaper.h"
 #include "SkString.h"
 #include "SkSurfaceProps.h"
+#include "include/private/base/SkTemplates.h"
 #include "modules/skcms/skcms.h"
 
 namespace java {
@@ -315,6 +316,20 @@ namespace skija {
 
     void onLoad(JNIEnv* env);
     void onUnload(JNIEnv* env);
+
+    // Version on SkTypeface::SkConvertToUTF32 that doesn't ignore errors
+    // Reported as https://issues.skia.org/issues/503011009
+    class ConvertToUTF32 {
+    public:
+        ConvertToUTF32() {}
+
+        const SkUnichar* convert(JNIEnv* env, jstring str);
+        int count() const { return fCount; }
+
+    private:
+        skia_private::AutoSTMalloc<256, SkUnichar> fStorage;
+        int fCount = 0;
+    };
 
     class UtfIndicesConverter {
     public:

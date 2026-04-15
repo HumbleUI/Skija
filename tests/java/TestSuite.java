@@ -18,6 +18,7 @@ public class TestSuite {
         TestRunner.testClass(EnumTest.class);
         TestRunner.testClass(FontCollectionTest.class);
         TestRunner.testClass(FontMgrTest.class);
+        TestRunner.testClass(FontTest.class);
         TestRunner.testClass(ImageTest.class);
         TestRunner.testClass(ManagedStringTest.class);
         TestRunner.testClass(PaintTest.class);

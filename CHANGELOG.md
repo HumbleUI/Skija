@@ -1,3 +1,9 @@
+# 0.143.13 - Apr 15, 2026
+
+Fixed:
+
+- Handling of invalid UTF-16 strings #109 with @dzaima
+
 # 0.143.12 - Mar 30, 2026
 
 Added:
