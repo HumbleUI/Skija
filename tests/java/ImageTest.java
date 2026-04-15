@@ -17,6 +17,7 @@ public class ImageTest implements Executable {
         TestRunner.testMethod(this, "makeSubset");
         TestRunner.testMethod(this, "refCntToStringAfterClose");
     }
+
     public void base() throws Exception {
         try (var surface = Surface.makeRaster(ImageInfo.makeN32Premul(100, 100));
              var paint = new Paint().setColor(0xFFFF0000);

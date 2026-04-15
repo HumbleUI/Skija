@@ -11,27 +11,27 @@ public class TestSuite {
     public static void main(String[] args) {
         TestRunner.startTesting();
         TestRunner.testClass(BitmapTest.class);
-        TestRunner.testClass(PixmapTest.class);
-        TestRunner.testClass(ColorTest.class);
         TestRunner.testClass(ColorSpaceTest.class);
+        TestRunner.testClass(ColorTest.class);
         TestRunner.testClass(DataTest.class);
+        TestRunner.testClass(DocumentTest.class);
         TestRunner.testClass(EnumTest.class);
+        TestRunner.testClass(FontCollectionTest.class);
         TestRunner.testClass(FontMgrTest.class);
         TestRunner.testClass(ImageTest.class);
-        TestRunner.testClass(PathTest.class);
-        TestRunner.testClass(SurfaceTest.class);
-        TestRunner.testClass(DocumentTest.class);
+        TestRunner.testClass(ManagedStringTest.class);
         TestRunner.testClass(PaintTest.class);
         TestRunner.testClass(PathMeasureTest.class);
+        TestRunner.testClass(PathTest.class);
+        TestRunner.testClass(PixmapTest.class);
+        TestRunner.testClass(RuntimeEffectBuilderTest.class);
+        TestRunner.testClass(StreamAssetTest.class);
+        TestRunner.testClass(SurfaceTest.class);
+        TestRunner.testClass(SVGCanvasTest.class);
         TestRunner.testClass(TextLineTest.class);
+        TestRunner.testClass(TextStyleTest.class);
         TestRunner.testClass(TypefaceTest.class);
 
-        TestRunner.testClass(FontCollectionTest.class);
-        TestRunner.testClass(TextStyleTest.class);
-
-        TestRunner.testClass(SVGCanvasTest.class);
-        TestRunner.testClass(StreamAssetTest.class);
-        TestRunner.testClass(RuntimeEffectBuilderTest.class);
         if (OperatingSystem.CURRENT != OperatingSystem.MACOS)
             TestRunner.testClass(VulkanTest.class);
 
