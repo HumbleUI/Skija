@@ -370,7 +370,7 @@ def release(zip_name, target_dir):
   except urllib.error.HTTPError as e:
     error_data = e.read().decode('utf-8') if e.fp else str(e)
     print(f"Upload failed: {e.code} - {error_data}")
-    raise Exception(f"Failed to upload to Sonatype Central: {e.code} - {error_data}")
+    raise Exception(f"Failed to upload to Sonatype Central: {e.code} - {error_data}") from e
 
   # Check deployment status
   deployment_id = response_data
