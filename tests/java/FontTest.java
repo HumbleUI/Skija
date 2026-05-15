@@ -1,6 +1,7 @@
 package io.github.humbleui.skija.test;
 
 import io.github.humbleui.skija.*;
+import io.github.humbleui.types.Rect;
 import io.github.humbleui.skija.test.runner.*;
 
 import static io.github.humbleui.skija.test.runner.TestRunner.*;
@@ -13,6 +14,12 @@ public class FontTest implements Executable {
 
             float advance = font.measureTextWidth("a");
 
+            // Empty strings
+            assertEquals(0.0f, font.measureTextWidth(""));
+            assertEquals(0, font.getStringGlyphs("").length);
+            assertEquals(0, font.getStringGlyphsCount(""));
+            assertEquals(Rect.makeLTRB(0, 0, 0, 0), font.measureText(""));
+            
             // ASCII
             assertClose(3 * advance, font.measureTextWidth("abc"), 0.01f);
 
