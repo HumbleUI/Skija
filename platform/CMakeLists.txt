@@ -81,7 +81,7 @@ elseif(WIN32)
     # set_property(TARGET skija PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded")
     set(CMAKE_CXX_FLAGS_RELEASE "/MT")
     set(CMAKE_CXX_FLAGS_DEBUG "/MTd")
-    target_link_options(skija PRIVATE /INCREMENTAL:NO /NODEFAULTLIB:MSVCRT /machine:X64)
+    target_link_options(skija PRIVATE /INCREMENTAL:NO /NODEFAULTLIB:MSVCRT)
 endif()
 
 target_link_libraries(skija skottie sksg svg skparagraph skshaper skunicode skresources skia ${FREETYPE_LIBRARIES} ${HARFBUZZ_LIBRARIES})
