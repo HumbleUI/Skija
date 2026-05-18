@@ -1,4 +1,8 @@
-# WIP
+# 0.143.14 - May 18, 2026
+
+Changed:
+
+- Update to HumbleUI/types 0.2.0 #110 via @tomwmth
 
 Fixed:
 
