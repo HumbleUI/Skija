@@ -321,14 +321,16 @@ namespace skija {
     // Reported as https://issues.skia.org/issues/503011009
     class ConvertToUTF32 {
     public:
-        ConvertToUTF32() {}
+        ConvertToUTF32(JNIEnv* env, jstring str);
 
-        const SkUnichar* convert(JNIEnv* env, jstring str);
+        const SkUnichar* data() const { return fStorage.get(); }
         int count() const { return fCount; }
+        bool valid() const { return fValid; }
 
     private:
         skia_private::AutoSTMalloc<256, SkUnichar> fStorage;
         int fCount = 0;
+        bool fValid = true;
     };
 
     class UtfIndicesConverter {
