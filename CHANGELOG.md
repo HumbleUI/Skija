@@ -1,3 +1,9 @@
+# 0.143.15 - May 19, 2026
+
+Added:
+
+- Windows ARM build #114 via @chirontt
+
 # 0.143.14 - May 18, 2026
 
 Changed:
