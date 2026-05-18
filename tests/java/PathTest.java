@@ -21,6 +21,7 @@ import io.github.humbleui.types.RRect;
 import io.github.humbleui.types.Rect;
 import io.github.humbleui.skija.test.runner.Executable;
 import io.github.humbleui.skija.test.runner.TestRunner;
+import io.github.humbleui.skija.impl.Native;
 
 public class PathTest implements Executable {
     @Override
@@ -35,6 +36,7 @@ public class PathTest implements Executable {
         TestRunner.testMethod(this, "utils");
         TestRunner.testMethod(this, "serialize");
         TestRunner.testMethod(this, "fillPathWithPaint");
+        TestRunner.testMethod(this, "cloneTest");
     }
 
     public void iter() {
@@ -371,6 +373,19 @@ public class PathTest implements Executable {
             result = src.fillPath(paint, dst, 3.0f);
             assertEquals(true, result);
             assertEquals(false, dst.isEmpty());
+        }
+    }
+
+    public void cloneTest() throws Exception {
+        try (Path src = new Path().lineTo(40, 40).lineTo(40, 0).lineTo(0, 40).lineTo(0, 0).closePath();
+             Path dst = new Path(src)) {
+            assertNotEquals(Native.getPtr(src), Native.getPtr(dst));
+            assertEquals(src.getBounds(), dst.getBounds());
+            assertArrayEquals(src.getPoints(), dst.getPoints());
+            assertArrayEquals(src.getVerbs(), dst.getVerbs());
+            dst.reset();
+            assertEquals(true, dst.isEmpty());
+            assertEquals(false, src.isEmpty());
         }
     }
 }

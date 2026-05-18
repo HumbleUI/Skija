@@ -23,6 +23,12 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Path__1nMake(JN
     return reinterpret_cast<jlong>(obj);
 }
 
+extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Path__1nMakeClone(JNIEnv* env, jclass jclass, jlong srcPtr) {
+    SkPath* src = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(srcPtr));
+    SkPath* obj = new SkPath(*src);
+    return reinterpret_cast<jlong>(obj);
+}
+
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Path__1nMakeFromSVGString
   (JNIEnv* env, jclass jclass, jstring d) {
     SkPath* obj = new SkPath();
