@@ -41,6 +41,12 @@ public class Path extends Managed implements Iterable<PathSegment> {
         Stats.onNativeCall();
     }
 
+    public Path(Path src) {
+        this(_nMakeClone(Native.getPtr(src)));
+        Stats.onNativeCall();
+    }
+
+
     @NotNull
     public static Path makeFromSVGString(String svg) {
         long res = _nMakeFromSVGString(svg);
@@ -2000,6 +2006,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
     public static native long    _nMakeFromSVGString(String s);
     public static native boolean _nEquals(long aPtr, long bPtr);
     public static native boolean _nIsInterpolatable(long ptr, long comparePtr);
+    public static native long    _nMakeClone(long ptr);
     public static native long    _nMakeLerp(long ptr, long endingPtr, float weight);
     public static native int     _nGetFillMode(long ptr);
     public static native void    _nSetFillMode(long ptr, int fillMode);
