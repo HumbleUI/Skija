@@ -117,23 +117,34 @@ jobs:
           path: target/skija-android-${{ matrix.arch }}-*
 
   build_windows:
-    runs-on: windows-2022
+    strategy:
+      matrix:
+        os: [ windows-2022, windows-11-arm ]
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v5
-      - uses: microsoft/setup-msbuild@v1
+      - uses: actions/checkout@v6
+      - run: |
+          $os_arch = "${{ runner.arch }}".ToLower()
+          echo "os_arch=$os_arch" >> $env:GITHUB_ENV
+      - uses: microsoft/setup-msbuild@v3
+        with:
+          msbuild-architecture: ${{ env.os_arch }}
       - uses: ilammy/msvc-dev-cmd@v1
-      - shell: bash
-        run: |
-          echo "JAVA_HOME=$JAVA_HOME_11_X64" >> $GITHUB_ENV
-          echo "$JAVA_HOME_11_X64/bin" >> $GITHUB_PATH
+        with:
+          arch: ${{ env.os_arch }}
+      - uses: actions/setup-java@v5
+        with:
+          distribution: 'microsoft'
+          java-version: '11'
       - run: python3 script/build.py
       - shell: bash
         run: python3 script/test.py
       - run: python3 script/package_platform.py
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         with:
-          name: windows-x64-jars
-          path: target/skija-windows-x64-*
+          name: windows-${{ env.os_arch }}-jars
+          path: target/skija-windows-${{ env.os_arch }}-*
 
   release:
     if: startsWith(github.ref, 'refs/tags/')
