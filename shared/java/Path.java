@@ -41,8 +41,22 @@ public class Path extends Managed implements Iterable<PathSegment> {
         Stats.onNativeCall();
     }
 
-    public Path(Path src) {
-        this(_nMakeClone(Native.getPtr(src)));
+    /**
+     * <p>Constructs a copy of an existing path. Copy constructor makes two
+     * paths identical by value. Internally, path and the returned result share
+     * pointer values. The underlying verb array, {@link Point} array and
+     * weights are copied when modified.</p>
+     *
+     * <p>Creating a {@link Path} copy is very efficient and never allocates
+     * memory. {@link Path} are always copied by value from the interface; the
+     * underlying shared pointers are not exposed.</p>
+     *
+     * @param path  Path to copy by value
+     * @see <a href="https://fiddle.skia.org/c/@Path_copy_const_SkPath">https://fiddle.skia.org/c/@Path_copy_const_SkPath</a>
+     */
+    public Path(@NotNull Path path) {
+        this(_nMakeCopy(Native.getPtr(path)));
+        ReferenceUtil.reachabilityFence(path);
         Stats.onNativeCall();
     }
 
@@ -2006,7 +2020,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
     public static native long    _nMakeFromSVGString(String s);
     public static native boolean _nEquals(long aPtr, long bPtr);
     public static native boolean _nIsInterpolatable(long ptr, long comparePtr);
-    public static native long    _nMakeClone(long ptr);
+    public static native long    _nMakeCopy(long ptr);
     public static native long    _nMakeLerp(long ptr, long endingPtr, float weight);
     public static native int     _nGetFillMode(long ptr);
     public static native void    _nSetFillMode(long ptr, int fillMode);
