@@ -1,3 +1,9 @@
+# WIP
+
+Fixed:
+
+- Font::measureTextWidth & co error on an empty string input #112 #113 with @dzaima
+
 # 0.143.13 - Apr 15, 2026
 
 Fixed:

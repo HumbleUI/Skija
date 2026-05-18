@@ -1097,25 +1097,24 @@ std::unique_ptr<SkM44> skM44(JNIEnv* env, jfloatArray matrixArray) {
     }
 }
 
-const SkUnichar* skija::ConvertToUTF32::convert(JNIEnv* env, jstring str) {
+skija::ConvertToUTF32::ConvertToUTF32(JNIEnv* env, jstring str) {
     jsize len = env->GetStringLength(str);
     const jchar* chars = env->GetStringCritical(str, nullptr);
     const uint16_t* src = reinterpret_cast<const uint16_t*>(chars);
     const uint16_t* end = src + len;
-    SkUnichar* dst = fStorage.reset(std::max(len, 1));
+    SkUnichar* dst = fStorage.reset(len);
     int n = 0;
     while (src < end) {
         SkUnichar u = SkUTF::NextUTF16(&src, end);
         if (u < 0) {
             env->ReleaseStringCritical(str, chars);
-            fCount = 0;
-            return nullptr;
+            fValid = false;
+            return;
         }
         dst[n++] = u;
     }
     env->ReleaseStringCritical(str, chars);
     fCount = n;
-    return dst;
 }
 
 std::optional<SkString> skString(JNIEnv* env, jstring s) {
