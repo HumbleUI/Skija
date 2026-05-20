@@ -187,6 +187,10 @@ jobs:
         with:
           name: windows-x64-jars
           path: target
+      - uses: actions/download-artifact@v6
+        with:
+          name: windows-arm64-jars
+          path: target
       - name: Release to Maven Central
         run: |
           echo -n "$GPG_SIGNING_KEY" | base64 --decode | gpg --import
