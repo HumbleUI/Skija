@@ -13,29 +13,68 @@
 #include "include/gpu/ganesh/gl/GrGLTypes.h"
 #include "interop.hh"
 
-extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Image__1nAdoptGLTextureFrom
-  (JNIEnv* env, jclass jclass, jlong contextPtr, jint textureId, jint target, jint width, jint height, jint format, jint surfaceOrigin, jint colorType) {
+extern JavaVM* gJavaVM;
 
+extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Image__1nAdoptTextureFrom
+  (JNIEnv* env, jclass jclass, jlong contextPtr, jlong backendTexturePtr, jint surfaceOrigin, jint colorType) {
     GrDirectContext* context = reinterpret_cast<GrDirectContext*>(static_cast<uintptr_t>(contextPtr));
+    GrBackendTexture* backendTexture = reinterpret_cast<GrBackendTexture*>(static_cast<uintptr_t>(backendTexturePtr));
+    sk_sp<SkImage> image = SkImages::AdoptTextureFrom(static_cast<GrRecordingContext*>(context),
+                                                      *backendTexture,
+                                                      static_cast<GrSurfaceOrigin>(surfaceOrigin),
+                                                      static_cast<SkColorType>(colorType));
+    return reinterpret_cast<jlong>(image.release());
+}
 
-    GrGLTextureInfo textureInfo;
-    textureInfo.fID = static_cast<GrGLuint>(textureId);
-    textureInfo.fTarget = static_cast<GrGLenum>(target);
-    textureInfo.fFormat = static_cast<GrGLenum>(format);
-    
-    GrBackendTexture backendTexture = GrBackendTextures::MakeGL(
-        width, height,
-        skgpu::Mipmapped::kYes,
-        textureInfo
-    );
+static void skija_texture_release_proxy(SkImages::ReleaseContext context) {
+    if (!context) return;
+    jobject runnable = static_cast<jobject>(context);
+    JNIEnv* env = nullptr;
+    bool attached = false;
+    jint getEnvStat = gJavaVM->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_6);
+    if (getEnvStat == JNI_EDETACHED) {
+        if (gJavaVM->AttachCurrentThread(reinterpret_cast<void**>(&env), nullptr) == JNI_OK) {
+            attached = true;
+        } else {
+            return;
+        }
+    }
+    jclass runnableClass = env->GetObjectClass(runnable);
+    jmethodID runMethod = env->GetMethodID(runnableClass, "run", "()V");
+    if (runMethod) {
+        env->CallVoidMethod(runnable, runMethod);
+        if (env->ExceptionCheck()) {
+            env->ExceptionClear();
+        }
+    }
+    env->DeleteGlobalRef(runnable);
+    if (attached) {
+        gJavaVM->DetachCurrentThread();
+    }
+}
 
-    sk_sp<SkImage> image = SkImages::AdoptTextureFrom(
-        context,
-        backendTexture,
-        static_cast<GrSurfaceOrigin>(surfaceOrigin),
-        static_cast<SkColorType>(colorType)
-    );
-
+extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Image__1nBorrowTextureFrom
+  (JNIEnv* env, jclass clazz, jlong contextPtr, jlong backendTexturePtr, jint surfaceOrigin, jint colorType, jint alphaType, jlong colorSpacePtr, jobject releaseProc) {
+    GrRecordingContext* context = reinterpret_cast<GrRecordingContext*>(static_cast<uintptr_t>(contextPtr));
+    GrBackendTexture* backendTexture = reinterpret_cast<GrBackendTexture*>(static_cast<uintptr_t>(backendTexturePtr));
+    SkColorSpace* colorSpace = reinterpret_cast<SkColorSpace*>(static_cast<uintptr_t>(colorSpacePtr));
+    SkImages::TextureReleaseProc cReleaseProc = nullptr;
+    SkImages::ReleaseContext cReleaseContext = nullptr;
+    if (releaseProc != nullptr) {
+        cReleaseProc = skija_texture_release_proxy;
+        cReleaseContext = env->NewGlobalRef(releaseProc);
+    }
+    sk_sp<SkImage> image = SkImages::BorrowTextureFrom(static_cast<GrRecordingContext*>(context),
+                                                       *backendTexture,
+                                                       static_cast<GrSurfaceOrigin>(surfaceOrigin),
+                                                       static_cast<SkColorType>(colorType),
+                                                       static_cast<SkAlphaType>(alphaType),
+                                                       sk_ref_sp<SkColorSpace>(colorSpace),
+                                                       cReleaseProc,
+                                                       cReleaseContext);
+    if (!image && cReleaseContext != nullptr) {
+        env->DeleteGlobalRef(static_cast<jobject>(cReleaseContext));
+    }
     return reinterpret_cast<jlong>(image.release());
 }
 
