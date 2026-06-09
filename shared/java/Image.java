@@ -25,39 +25,63 @@ public class Image extends RefCnt implements IHasImageInfo {
     }
 
     /**
-     * <p>Creates Image from an OpenGL texture.</p>
+     * <p>Creates Image and adopts texture.</p>
      *
-     * <p>Image is returned if the texture is valid. Valid texture parameters include:</p>
-     * <ul>
-     * <li>textureId is a valid OpenGL texture ID;</li>
-     * <li>width and height are greater than zero;</li>
-     * <li>ColorType and AlphaType are valid, and ColorType is not ColorType.UNKNOWN;</li>
-     * <li>colorSpace is a valid SkColorSpace;</li>
-     * </ul>
+     * <p>Image is returned if the texture is valid.</p>
      *
-     * @param context     GrDirectContext
-     * @param textureId   OpenGL texture ID
-     * @param width       width of the texture
-     * @param height      height of the texture
-     * @param colorType   color type of the texture
-     * @return            Image
+     * @param directContext  GrDirectContext
+     * @param backendTexture GrBackendTexture
+     * @param surfaceOrigin  GrSurfaceOrigin
+     * @param colorType      SkColorType
+     * @return               Image
      */
-    public static Image adoptGLTextureFrom(DirectContext context, int textureId, int target, int width, int height, int format, SurfaceOrigin surfaceOrigin, ColorType colorType) {
+    public static Image adoptTextureFrom(DirectContext directContext, BackendTexture backendTexture, SurfaceOrigin surfaceOrigin, ColorType colorType) {
         try {
             Stats.onNativeCall();
-            long ptr = _nAdoptGLTextureFrom(Native.getPtr(context),
-                                            textureId,
-                                            target,
-                                            width,
-                                            height,
-                                            format,
-                                            surfaceOrigin.ordinal(),
-                                            colorType.ordinal());
+            long ptr = _nAdoptTextureFrom(Native.getPtr(directContext),
+                                          Native.getPtr(backendTexture),
+                                          surfaceOrigin.ordinal(),
+                                          colorType.ordinal());
             if (ptr == 0)
-                throw new RuntimeException("Failed to adoptGLTextureFrom " + textureId + " " + width + "x" + height);
+                throw new RuntimeException("Failed to adoptTextureFrom " + backendTexture);
             return new Image(ptr);
         } finally {
-            ReferenceUtil.reachabilityFence(context);
+            ReferenceUtil.reachabilityFence(directContext);
+            ReferenceUtil.reachabilityFence(backendTexture);
+        }
+    }
+
+    /**
+     * <p>Creates image and borrows texture.</p>
+     *
+     * <p>Image is returned if the texture is valid.</p>
+     *
+     * @param directContext  GrDirectContext
+     * @param backendTexture GrBackendTexture
+     * @param surfaceOrigin  GrSurfaceOrigin
+     * @param colorType      SkColorType
+     * @param alphaType      SkAlphaType
+     * @param colorSpace     SkColorSpace
+     * @param releaseProc    TextureReleaseProc
+     * @return               Image
+     */
+    public static Image borrowTextureFrom(DirectContext directContext, BackendTexture backendTexture, SurfaceOrigin surfaceOrigin, ColorType colorType, AlphaType alphaType, @Nullable ColorSpace colorSpace, @Nullable Runnable releaseProc) {
+        try {
+            Stats.onNativeCall();
+            long ptr = _nBorrowTextureFrom(Native.getPtr(directContext),
+                                           Native.getPtr(backendTexture),
+                                           surfaceOrigin.ordinal(),
+                                           colorType.ordinal(),
+                                           alphaType.ordinal(),
+                                           Native.getPtr(colorSpace),
+                                           releaseProc);
+            if (ptr == 0)
+                throw new RuntimeException("Failed to borrowTextureFrom " + backendTexture);
+            return new Image(ptr);
+        } finally {
+            ReferenceUtil.reachabilityFence(directContext);
+            ReferenceUtil.reachabilityFence(backendTexture);
+            ReferenceUtil.reachabilityFence(colorSpace);
         }
     }
         
@@ -566,7 +590,8 @@ public class Image extends RefCnt implements IHasImageInfo {
         }
     }
 
-    @ApiStatus.Internal public static native long _nAdoptGLTextureFrom(long contextPtr, int textureId, int target, int width, int height, int format, int surfaceOrigin, int colorType);
+    @ApiStatus.Internal public static native long _nAdoptTextureFrom(long contextPtr, long backendTexturePtr, int surfaceOrigin, int colorType);
+    @ApiStatus.Internal public static native long _nBorrowTextureFrom(long contextPtr, long backendTexturePtr, int surfaceOrigin, int colorType, int alphaType, long colorSpacePtr, Runnable releaseContextPtr);
     @ApiStatus.Internal public static native long _nMakeRasterFromBytes(int width, int height, int colorType, int alphaType, long colorSpacePtr, byte[] pixels, long rowBytes);
     @ApiStatus.Internal public static native long _nMakeRasterFromData(int width, int height, int colorType, int alphaType, long colorSpacePtr, long dataPtr, long rowBytes);
     @ApiStatus.Internal public static native long _nMakeRasterFromBitmap(long bitmapPtr);
