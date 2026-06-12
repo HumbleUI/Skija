@@ -122,7 +122,7 @@ public class Canvas extends Managed {
         try {
             assert _ptr != 0 : "Canvas is closed";
             Stats.onNativeCall();
-            float[] bounds = _nGetLocalClipBounds(_ptr); // {left, top, right, bottom}
+            float[] bounds = _nGetLocalClipBounds(_ptr);
             return Rect.makeLTRB(bounds[0], bounds[1], bounds[2], bounds[3]);
         } finally {
             ReferenceUtil.reachabilityFence(this);
