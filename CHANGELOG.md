@@ -1,3 +1,10 @@
+# 0.143.17 - Jun 15, 2026
+
+Added:
+
+- `Graphics` #119
+- `Canvas::getDeviceClipBounds`, `::getDeviceClipBounds` #118
+
 # 0.143.16 - May 20, 2026
 
 Added:
@@ -204,6 +211,14 @@ Removed:
 - [ BREAKING ] `Typeface::makeFromData` (use `FontMgr::makeFromData`)
 - [ BREAKING ] `Surface::flush` (use `DirectContext::flush(Surface)`)
 - [ BREAKING ] `Surface::flushAndSubmit` (use `DirectContext::flushAndSubmit(Surface)`)
+
+# 0.119.5 - Jun 15, 2026
+
+Added:
+
+- `Graphics` #119
+- `Canvas::getDeviceClipBounds`, `::getDeviceClipBounds` #118
+- `Path(Path)` ctor #117
 
 # 0.119.4 - Mar 9, 2026
 

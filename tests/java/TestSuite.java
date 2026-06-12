@@ -20,6 +20,7 @@ public class TestSuite {
         TestRunner.testClass(FontCollectionTest.class);
         TestRunner.testClass(FontMgrTest.class);
         TestRunner.testClass(FontTest.class);
+        TestRunner.testClass(GraphicsTest.class);
         TestRunner.testClass(ImageTest.class);
         TestRunner.testClass(ManagedStringTest.class);
         TestRunner.testClass(PaintTest.class);
