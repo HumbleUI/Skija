@@ -12,6 +12,7 @@ public class TestSuite {
         TestRunner.testClass(ColorTest.class);
         TestRunner.testClass(DataTest.class);
         TestRunner.testClass(FontMgrTest.class);
+        TestRunner.testClass(GraphicsTest.class);
         TestRunner.testClass(ImageTest.class);
         TestRunner.testClass(PathTest.class);
         TestRunner.testClass(SurfaceTest.class);
