@@ -101,11 +101,10 @@ public class Canvas extends Managed {
         try {
             assert _ptr != 0 : "Canvas is closed";
             Stats.onNativeCall();
-            int[] bounds = _nGetDeviceClipBounds(_ptr);
-            return  IRect.makeLTRB(bounds[0], bounds[1], bounds[2], bounds[3]); 
+            return _nGetDeviceClipBounds(_ptr);
         } finally {
             ReferenceUtil.reachabilityFence(this);
-        }   
+        }
     }
 
     /**
@@ -122,8 +121,7 @@ public class Canvas extends Managed {
         try {
             assert _ptr != 0 : "Canvas is closed";
             Stats.onNativeCall();
-            float[] bounds = _nGetLocalClipBounds(_ptr);
-            return Rect.makeLTRB(bounds[0], bounds[1], bounds[2], bounds[3]);
+            return _nGetLocalClipBounds(_ptr);
         } finally {
             ReferenceUtil.reachabilityFence(this);
         }
@@ -1503,8 +1501,8 @@ public class Canvas extends Managed {
     public static native long _nMakeFromBitmap(long bitmapPtr, int flags, int pixelGeometry);
     public static native SurfaceProps _nGetBaseProps(long ptr);
     public static native SurfaceProps _nGetTopProps(long ptr);
-    public static native int[] _nGetDeviceClipBounds(long ptr);
-    public static native float[] _nGetLocalClipBounds(long ptr);
+    public static native IRect _nGetDeviceClipBounds(long ptr);
+    public static native Rect _nGetLocalClipBounds(long ptr);
     public static native long _nGetSurface(long ptr);
     public static native void _nDrawPoint(long ptr, float x, float y, long paintPtr);
     public static native void _nDrawPoints(long ptr, int mode, float[] coords, long paintPtr);
