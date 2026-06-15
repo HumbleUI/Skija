@@ -28,7 +28,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Image__1nAdoptT
 
 static void skija_texture_release_proxy(SkImages::ReleaseContext context) {
     if (!context) return;
-    jobject runnable = static_cast<jobject>(context);
+    jobject releaseProc = static_cast<jobject>(context);
     JNIEnv* env = nullptr;
     bool attached = false;
     jint getEnvStat = gJavaVM->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_6);
@@ -38,16 +38,26 @@ static void skija_texture_release_proxy(SkImages::ReleaseContext context) {
         } else {
             return;
         }
+    } else if (getEnvStat != JNI_OK) {
+        return;
     }
-    jclass runnableClass = env->GetObjectClass(runnable);
-    jmethodID runMethod = env->GetMethodID(runnableClass, "run", "()V");
-    if (runMethod) {
-        env->CallVoidMethod(runnable, runMethod);
+    if (jclass runnableClass = env->GetObjectClass(releaseProc)) {
+        jmethodID runMethod = env->GetMethodID(runnableClass, "run", "()V");
         if (env->ExceptionCheck()) {
             env->ExceptionClear();
+            runMethod = nullptr;
         }
+        if (runMethod) {
+            env->CallVoidMethod(releaseProc, runMethod);
+            if (env->ExceptionCheck()) {
+                env->ExceptionClear();
+            }
+        }
+        env->DeleteLocalRef(runnableClass);
+    } else if (env->ExceptionCheck()) {
+        env->ExceptionClear();
     }
-    env->DeleteGlobalRef(runnable);
+    env->DeleteGlobalRef(releaseProc);
     if (attached) {
         gJavaVM->DetachCurrentThread();
     }
