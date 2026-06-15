@@ -21,6 +21,8 @@
 #include "include/private/base/SkTemplates.h"
 #include "modules/skcms/skcms.h"
 
+extern JavaVM* gJavaVM;
+
 namespace java {
     namespace io {
         namespace OutputStream {

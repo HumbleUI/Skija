@@ -60,19 +60,19 @@ public class Image extends RefCnt implements IHasImageInfo {
      * @param backendTexture GrBackendTexture
      * @param surfaceOrigin  GrSurfaceOrigin
      * @param colorType      SkColorType
-     * @param alphaType      SkAlphaType
+     * @param colorAlphaType SkAlphaType
      * @param colorSpace     SkColorSpace
      * @param releaseProc    TextureReleaseProc
      * @return               Image
      */
-    public static Image borrowTextureFrom(DirectContext directContext, BackendTexture backendTexture, SurfaceOrigin surfaceOrigin, ColorType colorType, AlphaType alphaType, @Nullable ColorSpace colorSpace, @Nullable Runnable releaseProc) {
+    public static Image borrowTextureFrom(DirectContext directContext, BackendTexture backendTexture, SurfaceOrigin surfaceOrigin, ColorType colorType, ColorAlphaType colorAlphaType, @Nullable ColorSpace colorSpace, @Nullable Runnable releaseProc) {
         try {
             Stats.onNativeCall();
             long ptr = _nBorrowTextureFrom(Native.getPtr(directContext),
                                            Native.getPtr(backendTexture),
                                            surfaceOrigin.ordinal(),
                                            colorType.ordinal(),
-                                           alphaType.ordinal(),
+                                           colorAlphaType.ordinal(),
                                            Native.getPtr(colorSpace),
                                            releaseProc);
             if (ptr == 0)
