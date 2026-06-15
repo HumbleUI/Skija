@@ -296,6 +296,18 @@ extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_Canvas__1nGet
   return javaFloatArray(env, floats);
 }
 
+extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_Canvas__1nGetDeviceClipBounds
+(JNIEnv* env, jclass jclass, jlong ptr) {
+  SkCanvas* canvas = reinterpret_cast<SkCanvas*>(static_cast<uintptr_t>(ptr));
+  return types::IRect::fromSkIRect(env, canvas->getDeviceClipBounds());
+}
+
+extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_Canvas__1nGetLocalClipBounds
+(JNIEnv* env, jclass jclass, jlong ptr) {
+  SkCanvas* canvas = reinterpret_cast<SkCanvas*>(static_cast<uintptr_t>(ptr));
+  return types::Rect::fromSkRect(env, canvas->getLocalClipBounds());
+}
+
 extern "C" JNIEXPORT void JNICALL Java_io_github_humbleui_skija_Canvas__1nClipRect
   (JNIEnv* env, jclass jclass, jlong canvasPtr, jfloat left, jfloat top, jfloat right, jfloat bottom, jint mode, jboolean antiAlias) {
     SkCanvas* canvas = reinterpret_cast<SkCanvas*>(static_cast<uintptr_t>(canvasPtr));

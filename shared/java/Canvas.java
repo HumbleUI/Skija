@@ -89,6 +89,44 @@ public class Canvas extends Managed {
         }
     }
 
+    /**
+     * <p>Returns bounds of clip, unaffected by Matrix.</p>
+     *
+     * <p>If clip is empty, return empty bounds, where all sides equal zero.</p>
+     *
+     * @return bounds of clip in base device coordinates
+     * @see <a href="https://fiddle.skia.org/c/@Canvas_getDeviceClipBounds">https://fiddle.skia.org/c/@Canvas_getDeviceClipBounds</a>
+     */         
+    public IRect getDeviceClipBounds() {
+        try {
+            assert _ptr != 0 : "Canvas is closed";
+            Stats.onNativeCall();
+            return _nGetDeviceClipBounds(_ptr);
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
+    /**
+     * <p>Returns bounds of clip, transformed by inverse of Matrix.</p>
+     *
+     * <p>If clip is empty, return empty bounds, where all sides equal zero.</p>
+     *
+     * <p>Bounds returned is outset by one to account for partial pixel coverage if clip is anti-aliased.</p>
+     *
+     * @return bounds of clip in local coordinates
+     * @see <a href="https://fiddle.skia.org/c/@Canvas_getLocalClipBounds">https://fiddle.skia.org/c/@Canvas_getLocalClipBounds</a>
+     */
+    public Rect getLocalClipBounds() {
+        try {
+            assert _ptr != 0 : "Canvas is closed";
+            Stats.onNativeCall();
+            return _nGetLocalClipBounds(_ptr);
+        } finally {
+            ReferenceUtil.reachabilityFence(this);
+        }
+    }
+
     @Nullable
     public Surface getSurface() {
         try {
@@ -1463,6 +1501,8 @@ public class Canvas extends Managed {
     public static native long _nMakeFromBitmap(long bitmapPtr, int flags, int pixelGeometry);
     public static native SurfaceProps _nGetBaseProps(long ptr);
     public static native SurfaceProps _nGetTopProps(long ptr);
+    public static native IRect _nGetDeviceClipBounds(long ptr);
+    public static native Rect _nGetLocalClipBounds(long ptr);
     public static native long _nGetSurface(long ptr);
     public static native void _nDrawPoint(long ptr, float x, float y, long paintPtr);
     public static native void _nDrawPoints(long ptr, int mode, float[] coords, long paintPtr);
