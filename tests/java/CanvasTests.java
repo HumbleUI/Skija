@@ -8,6 +8,7 @@ import io.github.humbleui.types.*;
 import io.github.humbleui.skija.Bitmap;
 import io.github.humbleui.skija.Canvas;
 import io.github.humbleui.skija.Path;
+import io.github.humbleui.skija.PathBuilder;
 import io.github.humbleui.skija.test.runner.*;
 
 
@@ -30,12 +31,13 @@ public class CanvasTests implements Executable {
             assertEquals(257f, bounds._bottom);  
         
             float[] clipPoints = {30, 130, 120, 130, 120, 230};
-            Path clipPath = new Path();
-            clipPath.moveTo(clipPoints[0], clipPoints[1]);
+            PathBuilder builder = new PathBuilder();
+            builder.moveTo(clipPoints[0], clipPoints[1]);
             for (int i = 2; i < clipPoints.length; i += 2) {
-                clipPath.lineTo(clipPoints[i], clipPoints[i + 1]);
+                builder.lineTo(clipPoints[i], clipPoints[i + 1]);
             }
-            clipPath.closePath();
+            builder.closePath();
+            Path clipPath = builder.build();
             canvas.clipPath(clipPath, true);
             bounds = canvas.getLocalClipBounds();
             assertEquals(29f, bounds._left);
@@ -65,12 +67,13 @@ public class CanvasTests implements Executable {
             assertEquals(256, bounds._bottom);  
 
             float[] clipPoints = {30, 130, 120, 130, 120, 230};
-            Path clipPath = new Path();
-            clipPath.moveTo(clipPoints[0], clipPoints[1]);
+            PathBuilder builder = new PathBuilder();
+            builder.moveTo(clipPoints[0], clipPoints[1]);
             for (int i = 2; i < clipPoints.length; i += 2) {
-                clipPath.lineTo(clipPoints[i], clipPoints[i + 1]);
+                builder.lineTo(clipPoints[i], clipPoints[i + 1]);
             }
-            clipPath.closePath();
+            builder.closePath();
+            Path clipPath = builder.build();
             canvas.save();
             canvas.clipPath(clipPath, true);
             bounds = canvas.getDeviceClipBounds();
