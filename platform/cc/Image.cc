@@ -41,6 +41,16 @@ static void skija_texture_release_proxy(SkImages::ReleaseContext context) {
     } else if (getEnvStat != JNI_OK) {
         return;
     }
+    if (env->PushLocalFrame(1) < 0) {
+        if (env->ExceptionCheck()) {
+            env->ExceptionClear();
+        }
+        env->DeleteGlobalRef(releaseProc);
+        if (attached) {
+            gJavaVM->DetachCurrentThread();
+        }
+        return;
+    }
     if (jclass runnableClass = env->GetObjectClass(releaseProc)) {
         jmethodID runMethod = env->GetMethodID(runnableClass, "run", "()V");
         if (env->ExceptionCheck()) {
@@ -53,10 +63,10 @@ static void skija_texture_release_proxy(SkImages::ReleaseContext context) {
                 env->ExceptionClear();
             }
         }
-        env->DeleteLocalRef(runnableClass);
     } else if (env->ExceptionCheck()) {
         env->ExceptionClear();
     }
+    env->PopLocalFrame(nullptr);
     env->DeleteGlobalRef(releaseProc);
     if (attached) {
         gJavaVM->DetachCurrentThread();
