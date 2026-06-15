@@ -1,3 +1,11 @@
+# 0.119.5 - Jun 15, 2026
+
+Added:
+
+- `Graphics` #119
+- `Canvas::getDeviceClipBounds`, `::getDeviceClipBounds` #118
+- `Path(Path)` ctor #117
+
 # 0.119.4 - Mar 9, 2026
 
 Changed:
