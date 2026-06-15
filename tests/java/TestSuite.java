@@ -11,6 +11,7 @@ public class TestSuite {
     public static void main(String[] args) {
         TestRunner.startTesting();
         TestRunner.testClass(BitmapTest.class);
+        TestRunner.testClass(CanvasTests.class);
         TestRunner.testClass(ColorSpaceTest.class);
         TestRunner.testClass(ColorTest.class);
         TestRunner.testClass(DataTest.class);
