@@ -29,48 +29,18 @@ extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Image__1nAdoptT
 static void skija_texture_release_proxy(SkImages::ReleaseContext context) {
     if (!context) return;
     jobject releaseProc = static_cast<jobject>(context);
-    JNIEnv* env = nullptr;
-    bool attached = false;
-    jint getEnvStat = gJavaVM->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_6);
-    if (getEnvStat == JNI_EDETACHED) {
-        if (gJavaVM->AttachCurrentThread(reinterpret_cast<void**>(&env), nullptr) == JNI_OK) {
-            attached = true;
-        } else {
-            return;
-        }
-    } else if (getEnvStat != JNI_OK) {
-        return;
-    }
-    if (env->PushLocalFrame(1) < 0) {
-        if (env->ExceptionCheck()) {
-            env->ExceptionClear();
-        }
-        env->DeleteGlobalRef(releaseProc);
-        if (attached) {
-            gJavaVM->DetachCurrentThread();
-        }
-        return;
-    }
-    if (jclass runnableClass = env->GetObjectClass(releaseProc)) {
-        jmethodID runMethod = env->GetMethodID(runnableClass, "run", "()V");
-        if (env->ExceptionCheck()) {
-            env->ExceptionClear();
-            runMethod = nullptr;
-        }
+    JNIScope scope(1);
+    if (!scope.env) return;
+    if (jclass runnableClass = scope.env->FindClass("java/lang/Runnable")) {
+        jmethodID runMethod = scope.env->GetMethodID(runnableClass, "run", "()V");
         if (runMethod) {
-            env->CallVoidMethod(releaseProc, runMethod);
-            if (env->ExceptionCheck()) {
-                env->ExceptionClear();
-            }
+            scope.env->CallVoidMethod(releaseProc, runMethod);
+            if (scope.env->ExceptionCheck()) scope.env->ExceptionClear();
         }
-    } else if (env->ExceptionCheck()) {
-        env->ExceptionClear();
+    } else if (scope.env->ExceptionCheck()) {
+        scope.env->ExceptionClear();
     }
-    env->PopLocalFrame(nullptr);
-    env->DeleteGlobalRef(releaseProc);
-    if (attached) {
-        gJavaVM->DetachCurrentThread();
-    }
+    scope.env->DeleteGlobalRef(releaseProc);
 }
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_Image__1nBorrowTextureFrom
