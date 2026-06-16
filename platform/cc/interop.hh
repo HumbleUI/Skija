@@ -21,6 +21,49 @@
 #include "include/private/base/SkTemplates.h"
 #include "modules/skcms/skcms.h"
 
+extern JavaVM* gJavaVM;
+
+struct JNIScope {
+    JNIEnv* env = nullptr;
+
+    JNIScope(int capacity = 0) {
+        jint stat = gJavaVM->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_6);
+        if (stat == JNI_EDETACHED) {
+            if (gJavaVM->AttachCurrentThread(reinterpret_cast<void**>(&env), nullptr) != JNI_OK) {
+                env = nullptr;
+                return;
+            }
+            _attached = true;
+        } else if (stat != JNI_OK) {
+            env = nullptr;
+            return;
+        }
+        if (capacity > 0) {
+            if (env->PushLocalFrame(capacity) < 0) {
+                if (env->ExceptionCheck()) env->ExceptionClear();
+                if (_attached) gJavaVM->DetachCurrentThread();
+                env = nullptr;
+                return;
+            }
+            _hasFrame = true;
+        }
+    }
+
+    ~JNIScope() {
+        if (env) {
+            if (_hasFrame) env->PopLocalFrame(nullptr);
+            if (_attached) gJavaVM->DetachCurrentThread();
+        }
+    }
+
+    JNIScope(const JNIScope&) = delete;
+    JNIScope& operator=(const JNIScope&) = delete;
+
+private:
+    bool _attached = false;
+    bool _hasFrame = false;
+};
+
 namespace java {
     namespace io {
         namespace OutputStream {

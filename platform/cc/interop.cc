@@ -552,11 +552,9 @@ namespace skija {
     }
 
     namespace PaintFilterCanvas {
-        JavaVM* _vm;
         jmethodID onFilterId;
 
         void onLoad(JNIEnv* env) {
-            env->GetJavaVM(&_vm);
             jclass local = env->FindClass("io/github/humbleui/skija/PaintFilterCanvas");
             onFilterId = env->GetMethodID(local, "onFilter", "(J)Z");
         }
@@ -565,15 +563,9 @@ namespace skija {
         }
 
         bool onFilter(jobject obj, SkPaint& paint) {
-            JNIEnv *env;
-#ifdef ANDROID
-            _vm->AttachCurrentThread(&env, NULL);
-#else
-            _vm->AttachCurrentThread((void **) &env, NULL);
-#endif
-            jboolean result = env->CallBooleanMethod(obj, onFilterId, reinterpret_cast<jlong>(&paint));
-            _vm->DetachCurrentThread();
-            return result;
+            JNIScope scope;
+            if (!scope.env) return true;
+            return scope.env->CallBooleanMethod(obj, onFilterId, reinterpret_cast<jlong>(&paint));
         }
 
         jobject attach(JNIEnv* env, jobject obj) {
@@ -581,14 +573,9 @@ namespace skija {
         }
 
         void detach(jobject obj) {
-            JNIEnv *env;
-#ifdef ANDROID
-            _vm->AttachCurrentThread(&env, NULL);
-#else
-            _vm->AttachCurrentThread((void **) &env, NULL);
-#endif
-            env->DeleteGlobalRef(obj);
-            _vm->DetachCurrentThread();
+            JNIScope scope;
+            if (!scope.env) return;
+            scope.env->DeleteGlobalRef(obj);
         }
     }
 

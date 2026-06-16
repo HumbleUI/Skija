@@ -10,14 +10,12 @@ public:
     }
 
     ~SkijaDrawableImpl() {
-        JNIEnv* env;
-        fJavaVM->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_6);
-        env->DeleteWeakGlobalRef(fObject);
+        JNIScope scope;
+        if (scope.env) scope.env->DeleteWeakGlobalRef(fObject);
     }
 
     void init(JNIEnv* e, jobject o) {
         fEnv = e;
-        fEnv->GetJavaVM(&fJavaVM);
         fObject = fEnv->NewWeakGlobalRef(o);
     }
 
@@ -35,7 +33,6 @@ protected:
 
 private:
     JNIEnv* fEnv;
-    JavaVM* fJavaVM;
     jobject fObject;
 };
 
