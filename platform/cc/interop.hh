@@ -29,7 +29,11 @@ struct JNIScope {
     JNIScope(int capacity = 0) {
         jint stat = gJavaVM->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_6);
         if (stat == JNI_EDETACHED) {
+#ifdef ANDROID
+            if (gJavaVM->AttachCurrentThread(&env, nullptr) != JNI_OK) {
+#else
             if (gJavaVM->AttachCurrentThread(reinterpret_cast<void**>(&env), nullptr) != JNI_OK) {
+#endif
                 env = nullptr;
                 return;
             }

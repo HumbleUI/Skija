@@ -1,9 +1,10 @@
-# 0.143.17 - Jun 15, 2026
+# 0.143.17 - Jun 16, 2026
 
 Added:
 
-- `Graphics` #119
-- `Canvas::getDeviceClipBounds`, `::getDeviceClipBounds` #118
+- `Graphics` #119 via @vladimirsamsonov
+- `Canvas::getDeviceClipBounds`, `::getDeviceClipBounds` #118 via @vladimirsamsonov
+- `BackendTexture`, `GLTextureInfo`, `VkImageInfo`, `VulkanAlloc` #116 via @Lyzev
 
 # 0.143.16 - May 20, 2026
 
@@ -216,9 +217,9 @@ Removed:
 
 Added:
 
-- `Graphics` #119
-- `Canvas::getDeviceClipBounds`, `::getDeviceClipBounds` #118
-- `Path(Path)` ctor #117
+- `Graphics` #119 via @vladimirsamsonov
+- `Canvas::getDeviceClipBounds`, `::getDeviceClipBounds` #118 via @vladimirsamsonov
+- `Path(Path)` ctor #117 via @vladimirsamsonov
 
 # 0.119.4 - Mar 9, 2026
 
