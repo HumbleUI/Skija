@@ -1208,10 +1208,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
             assert dst != null : "Path::fillPath expected dst != null";
             assert matrix != null : "Path::fillPath expected matrix != null";
             Stats.onNativeCall();
-            if (cull == null)
-                return _nFillPathWithPaint(_ptr, Native.getPtr(paint), Native.getPtr(dst), 0, 0, 0, 0, matrix._mat);
-            else
-                return _nFillPathWithPaint(_ptr, Native.getPtr(paint), Native.getPtr(dst), cull._left, cull._top, cull._right, cull._bottom, matrix._mat);
+            return _nFillPathWithPaint(_ptr, Native.getPtr(paint), Native.getPtr(dst), cull, matrix._mat);
         } finally {
             ReferenceUtil.reachabilityFence(this);
             ReferenceUtil.reachabilityFence(paint);
@@ -2065,7 +2062,7 @@ public class Path extends Managed implements Iterable<PathSegment> {
     public static native void    _nEllipticalArcTo(long ptr, float rx, float ry, float xAxisRotate, int size, int direction, float x, float y);
     public static native void    _nREllipticalArcTo(long ptr, float rx, float ry, float xAxisRotate, int size, int direction, float dx, float dy);
     public static native void    _nClosePath(long ptr);
-    public static native boolean _nFillPathWithPaint(long ptr, long srcPath, long dstPath, float left, float top, float right, float bottom, float[] matrix);
+    public static native boolean _nFillPathWithPaint(long ptr, long srcPath, long dstPath, Rect cull, float[] matrix);
     public static native Point[] _nConvertConicToQuads(float x0, float y0, float x1, float y1, float x2, float y2, float w, int pow2);
     public static native Rect    _nIsRect(long ptr);
     public static native void    _nAddRect(long ptr, float l, float t, float r, float b, int dir, int start);
