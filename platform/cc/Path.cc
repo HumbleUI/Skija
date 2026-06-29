@@ -456,11 +456,11 @@ extern "C" JNIEXPORT jboolean JNICALL Java_io_github_humbleui_skija_Path__1nIsVa
 }
 
 extern "C" JNIEXPORT jboolean JNICALL Java_io_github_humbleui_skija_Path__1nFillWithPaint
-  (JNIEnv* env, jclass jclass, jlong ptr, jlong paintPtr, jlong dstPtr, jfloat left, jfloat top, jfloat right, jfloat bottom, jfloatArray matrixArr) {
+  (JNIEnv* env, jclass jclass, jlong ptr, jlong paintPtr, jlong dstPtr, jobject cullObj, jfloatArray matrixArr) {
     SkPath* instance = reinterpret_cast<SkPath*>(static_cast<uintptr_t>(ptr));
     SkPaint* paint = reinterpret_cast<SkPaint*>(static_cast<uintptr_t>(paintPtr));
     SkPathBuilder* dst = reinterpret_cast<SkPathBuilder*>(static_cast<uintptr_t>(dstPtr));
-    SkRect cull {left, top, right, bottom};
+    std::unique_ptr<SkRect> cull = types::Rect::toSkRect(env, cullObj);
     std::unique_ptr<SkMatrix> matrix = skMatrix(env, matrixArr);
-    return skpathutils::FillPathWithPaint(*instance, *paint, dst, &cull, *matrix);
+    return skpathutils::FillPathWithPaint(*instance, *paint, dst, cull.get(), *matrix);
 }

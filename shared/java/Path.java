@@ -1216,14 +1216,11 @@ public class Path extends Managed implements Iterable<PathSegment> {
     @Contract("!null, !null, _, _ -> _; null, _, _, _ -> fail")
     public boolean fillWithPaint(@NotNull Paint paint, @NotNull PathBuilder dst, @Nullable Rect cull, @NotNull Matrix33 matrix) {
         try {
-            assert paint != null : "Path::fillPath expected paint != null";
-            assert dst != null : "Path::fillPath expected dst != null";
-            assert matrix != null : "Path::fillPath expected matrix != null";
+            assert paint != null : "Path::fillWithPaint expected paint != null";
+            assert dst != null : "Path::fillWithPaint expected dst != null";
+            assert matrix != null : "Path::fillWithPaint expected matrix != null";
             Stats.onNativeCall();
-            if (cull == null)
-                return _nFillWithPaint(_ptr, Native.getPtr(paint), Native.getPtr(dst), 0, 0, 0, 0, matrix._mat);
-            else
-                return _nFillWithPaint(_ptr, Native.getPtr(paint), Native.getPtr(dst), cull._left, cull._top, cull._right, cull._bottom, matrix._mat);
+            return _nFillWithPaint(_ptr, Native.getPtr(paint), Native.getPtr(dst), cull, matrix._mat);
         } finally {
             ReferenceUtil.reachabilityFence(this);
             ReferenceUtil.reachabilityFence(paint);
@@ -1307,5 +1304,5 @@ public class Path extends Managed implements Iterable<PathSegment> {
     public static native long    _nMakeFromBytes(byte[] data);
     public static native int     _nGetGenerationId(long ptr);
     public static native boolean _nIsValid(long ptr);
-    public static native boolean _nFillWithPaint(long ptr, long srcPath, long dstPathBuilder, float left, float top, float right, float bottom, float[] matrix);
+    public static native boolean _nFillWithPaint(long ptr, long srcPath, long dstPathBuilder, Rect cull, float[] matrix);
 }

@@ -7,16 +7,7 @@ import static io.github.humbleui.skija.test.runner.TestRunner.assertThrows;
 
 import java.util.NoSuchElementException;
 
-import io.github.humbleui.skija.Matrix33;
-import io.github.humbleui.skija.Paint;
-import io.github.humbleui.skija.PaintMode;
-import io.github.humbleui.skija.Path;
-import io.github.humbleui.skija.PathBuilder;
-import io.github.humbleui.skija.PathDirection;
-import io.github.humbleui.skija.PathFillMode;
-import io.github.humbleui.skija.PathSegment;
-import io.github.humbleui.skija.PathSegmentType;
-import io.github.humbleui.skija.PathVerb;
+import io.github.humbleui.skija.*;
 import io.github.humbleui.types.Point;
 import io.github.humbleui.types.RRect;
 import io.github.humbleui.types.Rect;
@@ -36,6 +27,7 @@ public class PathTest implements Executable {
         TestRunner.testMethod(this, "utils");
         TestRunner.testMethod(this, "serialize");
         TestRunner.testMethod(this, "fillWithPaint");
+        TestRunner.testMethod(this, "dashedFillPathBoundsTest");
     }
 
     public void iter() {
@@ -328,6 +320,42 @@ public class PathTest implements Executable {
             result = src.fillWithPaint(paint, dst, 3.0f);
             assertEquals(true, result);
             assertEquals(false, dst.isEmpty());
+        }
+    }
+
+    public void dashedFillPathBoundsTest() {
+        final float w = 3.5f;
+        final float[] dash = { 12.5f, 9.375f };
+        final float expectedWidth = 2000f;
+
+         try (Paint paint = new Paint();
+              Path src = new PathBuilder()
+                           .moveTo(0f, 1000f)
+                           .lineTo(2000f, 1000f)
+                           .build();)
+         {
+            paint.setMode(PaintMode.STROKE);
+            paint.setStrokeWidth(w);
+            paint.setStrokeCap(PaintStrokeCap.BUTT);
+            paint.setPathEffect(PathEffect.makeDash(dash, 0f));
+
+            try (PathBuilder dst = new PathBuilder()) {
+                src.fillWithPaint(paint, dst);
+                Rect bounds = dst.detach().getBounds();
+                assertEquals(expectedWidth, bounds.getWidth());
+                assertEquals(w, bounds.getHeight());
+            }
+            try (PathBuilder dst = new PathBuilder()) {
+               src.fillWithPaint(paint, dst, Rect.makeLTRB(-1e7f, -1e7f, 1e7f, 1e7f), Matrix33.IDENTITY);
+               Rect bounds = dst.detach().getBounds();
+               assertEquals(expectedWidth, bounds.getWidth());
+               assertEquals(w, bounds.getHeight());
+            }
+            try (Path dst = paint.getFillPath(src)) {
+                Rect bounds = dst.getBounds();
+                assertEquals(expectedWidth, bounds.getWidth());
+                assertEquals(w, bounds.getHeight());
+            }
         }
     }
 }

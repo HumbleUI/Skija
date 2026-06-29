@@ -1,3 +1,9 @@
+# WIP
+
+Fixed:
+
+- `Path.fillPath` with null cull rect passing zero rect to Skia #120 via @vladimirsamsonov
+
 # 0.143.17 - Jun 16, 2026
 
 Added:
@@ -212,6 +218,12 @@ Removed:
 - [ BREAKING ] `Typeface::makeFromData` (use `FontMgr::makeFromData`)
 - [ BREAKING ] `Surface::flush` (use `DirectContext::flush(Surface)`)
 - [ BREAKING ] `Surface::flushAndSubmit` (use `DirectContext::flushAndSubmit(Surface)`)
+
+# 0.119.6 - Jun 29, 2026
+
+Fixed:
+
+- `Path.fillPath` with null cull rect passing zero rect to Skia #120 via @vladimirsamsonov
 
 # 0.119.5 - Jun 15, 2026
 
