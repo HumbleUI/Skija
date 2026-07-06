@@ -9,12 +9,14 @@ def main():
   (args, _) = parser.parse_known_args()
 
   # Javac
-  swt_artifact = {'macos': 'org.eclipse.swt.cocoa.macosx.x86_64',
-                  'windows': 'org.eclipse.swt.win32.win32.x86_64',
-                  'linux': 'org.eclipse.swt.gtk.linux.x86_64'}[build_utils.system]
+  swt_system = {'macos': 'org.eclipse.swt.cocoa.macosx',
+                'windows': 'org.eclipse.swt.win32.win32',
+                'linux': 'org.eclipse.swt.gtk.linux'}[build_utils.system]
+  swt_arch = {'x64': 'x86_64', 'arm64': 'aarch64'}[build_utils.arch]
+  swt_artifact = swt_system + '.' + swt_arch
   classpath = common.deps_compile() + [
     # build_utils.fetch_maven('org.projectlombok', 'lombok', '1.18.20'),
-    build_utils.fetch_maven('org.eclipse.platform', swt_artifact, '3.115.100')
+    build_utils.fetch_maven('org.eclipse.platform', swt_artifact, '3.126.0')
   ]
 
   if args.skija_version:
