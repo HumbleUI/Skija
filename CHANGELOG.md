@@ -3,6 +3,7 @@
 Changed:
 
 - Skia version m143-da51f0d60e-4 -> m143-da51f0d60e-5
+- Linux and Windows native libraries are built with Clang, same as Skia
 
 Fixed:
 

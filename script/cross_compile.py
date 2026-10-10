@@ -60,8 +60,7 @@ def setup_linux_arm64(native_build_dir: str, cmake_args: List[str]):
   cmake_args += [
     '-DCMAKE_SYSTEM_NAME=Linux',
     '-DCMAKE_SYSTEM_PROCESSOR=aarch64',
-    '-DCMAKE_C_COMPILER=/usr/bin/aarch64-linux-gnu-gcc-10',
-    '-DCMAKE_CXX_COMPILER=/usr/bin/aarch64-linux-gnu-g++-10',
+    '-DCMAKE_CXX_COMPILER_TARGET=aarch64-linux-gnu',
     '-DFREETYPE_LIBRARY=' + f'{deps_dir}/libfreetype.so',
     '-DFONTCONFIG_LIBRARY=' + f'{deps_dir}/libfontconfig.so',
     '-DSKIA_EGL_LIBRARY=' + f'{deps_dir}/libEGL.so',

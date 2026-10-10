@@ -8,6 +8,7 @@ def main():
   parser.add_argument('--skia-dir')
   parser.add_argument('--skia-release', default='m143-da51f0d60e-5')
   parser.add_argument('--cmake-toolchain-file')
+  parser.add_argument('--ndk')
   (args, _) = parser.parse_known_args()
 
   # Fetch Skia
@@ -45,13 +46,16 @@ def main():
 
   if args.cmake_toolchain_file:
     cmake_args += ['-DCMAKE_TOOLCHAIN_FILE=' + args.cmake_toolchain_file]
-  elif (build_utils.system == 'linux') and (build_utils.arch != build_utils.native_arch):
-    if build_utils.arch == 'arm64':
+  elif build_utils.system == 'linux':
+    cmake_args += ['-DCMAKE_CXX_COMPILER=clang++']
+    if (build_utils.arch == 'arm64') and (build_utils.arch != build_utils.native_arch):
       cross_compile.setup_linux_arm64(native_build_dir, cmake_args)
+  elif build_utils.system == 'windows':
+    cmake_args += ['-DCMAKE_CXX_COMPILER=C:/Program Files/LLVM/bin/clang-cl.exe']
   elif build_utils.system == 'android':
-    ndk = os.getenv('ANDROID_NDK_HOME') or os.getenv('ANDROID_NDK')
+    ndk = args.ndk or os.getenv('ANDROID_NDK_HOME') or os.getenv('ANDROID_NDK')
     if not ndk:
-      raise Exception("ANDROID_NDK_HOME or ANDROID_NDK not set")
+      raise Exception("--ndk, ANDROID_NDK_HOME or ANDROID_NDK not set")
     cmake_args += [
       '-DCMAKE_TOOLCHAIN_FILE=' + os.path.join(ndk, 'build/cmake/android.toolchain.cmake'),
       '-DANDROID_ABI=' + {'arm64': 'arm64-v8a', 'arm32': 'armeabi-v7a', 'x64': 'x86_64', 'x86': 'x86'}.get(build_utils.arch, build_utils.arch),
