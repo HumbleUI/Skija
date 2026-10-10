@@ -119,7 +119,7 @@ jobs:
   build_windows:
     strategy:
       matrix:
-        os: [ windows-2022, windows-11-arm ]
+        os: [ windows-latest, windows-11-arm ]
       fail-fast: false
     runs-on: ${{ matrix.os }}
     steps:
