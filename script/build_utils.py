@@ -14,7 +14,7 @@ arch   = get_arg("arch")   or native_arch
 system = get_arg("system") or {'Darwin': 'macos', 'Linux': 'linux', 'Windows': 'windows'}[platform.system()]
 classpath_separator = ';' if platform.system() == 'Windows' else ':'
 mvn = "mvn.cmd" if platform.system() == "Windows" else "mvn"
-lombok_version = '1.18.42'
+lombok_version = '1.18.48'
 
 def classpath_join(entries):
   return classpath_separator.join(entries)
