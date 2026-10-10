@@ -1,5 +1,5 @@
 #! /usr/bin/env python3
-import argparse, build_utils, common, cross_compile, os, re, subprocess, sys, zipfile
+import argparse, build_utils, common, os, re, subprocess, sys, zipfile
 
 def main():
   parser = argparse.ArgumentParser()
@@ -8,6 +8,7 @@ def main():
   parser.add_argument('--skia-dir')
   parser.add_argument('--skia-release', default='m143-da51f0d60e-5')
   parser.add_argument('--cmake-toolchain-file')
+  parser.add_argument('--ndk')
   (args, _) = parser.parse_known_args()
 
   # Fetch Skia
@@ -39,19 +40,22 @@ def main():
     '-DSKIA_ARCH=' + build_utils.arch]
 
   if build_utils.system == 'macos':
-    cmake_args += ['-DCMAKE_OSX_ARCHITECTURES=' + {'x64': 'x86_64', 'arm64': 'arm64'}[build_utils.arch]]
+    cmake_args += [
+      '-DCMAKE_OSX_ARCHITECTURES=' + {'x64': 'x86_64', 'arm64': 'arm64'}[build_utils.arch],
+      '-DCMAKE_OSX_DEPLOYMENT_TARGET=11.0']
 
   cmake_args += [os.path.abspath('.')]
 
   if args.cmake_toolchain_file:
     cmake_args += ['-DCMAKE_TOOLCHAIN_FILE=' + args.cmake_toolchain_file]
-  elif (build_utils.system == 'linux') and (build_utils.arch != build_utils.native_arch):
-    if build_utils.arch == 'arm64':
-      cross_compile.setup_linux_arm64(native_build_dir, cmake_args)
+  elif build_utils.system == 'linux':
+    cmake_args += ['-DCMAKE_CXX_COMPILER=clang++']
+  elif build_utils.system == 'windows':
+    cmake_args += ['-DCMAKE_CXX_COMPILER=C:/Program Files/LLVM/bin/clang-cl.exe']
   elif build_utils.system == 'android':
-    ndk = os.getenv('ANDROID_NDK_HOME') or os.getenv('ANDROID_NDK')
+    ndk = args.ndk or os.getenv('ANDROID_NDK_HOME') or os.getenv('ANDROID_NDK')
     if not ndk:
-      raise Exception("ANDROID_NDK_HOME or ANDROID_NDK not set")
+      raise Exception("--ndk, ANDROID_NDK_HOME or ANDROID_NDK not set")
     cmake_args += [
       '-DCMAKE_TOOLCHAIN_FILE=' + os.path.join(ndk, 'build/cmake/android.toolchain.cmake'),
       '-DANDROID_ABI=' + {'arm64': 'arm64-v8a', 'arm32': 'armeabi-v7a', 'x64': 'x86_64', 'x86': 'x86'}.get(build_utils.arch, build_utils.arch),

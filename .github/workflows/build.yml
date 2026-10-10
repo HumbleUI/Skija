@@ -25,98 +25,62 @@ on:
       - README.md
 
 jobs:
-  build_macos:
-    runs-on: macos-14
+  macos:
+    runs-on: macos-15
+    strategy:
+      matrix:
+        machine: ["x64", "arm64"]
+      fail-fast: false
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - run: |
           echo "JAVA_HOME=$JAVA_HOME_11_arm64" >> $GITHUB_ENV
           echo "$JAVA_HOME_11_arm64/bin" >> $GITHUB_PATH
-      # x64
-      - run: python3 script/build.py --arch x64
-      - run: python3 script/test.py
-      - run: python3 script/package_platform.py --arch x64
-      - uses: actions/upload-artifact@v6
+      - run: python3 script/build.py --arch ${{ matrix.machine }}
+      - run: python3 script/test.py --arch ${{ matrix.machine }}
+        if: ${{ matrix.machine == 'arm64' }}
+      - run: python3 script/package_platform.py --arch ${{ matrix.machine }}
+      - uses: actions/upload-artifact@v7
         with:
-          name: macos-x64-jars
-          path: target/skija-macos-x64-*
-      # arm64
-      - run: python3 script/clean.py
-      - run: python3 script/build.py --arch arm64
-      - run: python3 script/test.py
-      - run: python3 script/package_platform.py --arch arm64
-      - uses: actions/upload-artifact@v6
-        with:
-          name: macos-arm64-jars
-          path: target/skija-macos-arm64-*
+          name: macos-${{ matrix.machine }}-jars
+          path: target/skija-macos-${{ matrix.machine }}-*
 
-  build_linux:
-    runs-on: ubuntu-22.04
+  linux:
+    strategy:
+      matrix:
+        os: [ ubuntu-22.04, ubuntu-22.04-arm ]
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
     steps:
-      - run: |
-          echo "JAVA_HOME=$JAVA_HOME_11_X64" >> $GITHUB_ENV
-          echo "$JAVA_HOME_11_X64/bin" >> $GITHUB_PATH
-          sudo apt-get update
-          sudo apt-get --quiet --yes install ninja-build libglu1-mesa-dev libegl-dev g\+\+-10-aarch64-linux-gnu libwayland-dev libglvnd-dev libegl1-mesa libegl1-mesa-dev
-          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 60 --slave /usr/bin/g++ g++ /usr/bin/g++-10
-          sudo update-alternatives --config gcc
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
-      # x64
+      - run: |
+          os_arch=$(echo "${{ runner.arch }}" | tr '[:upper:]' '[:lower:]')
+          echo "os_arch=$os_arch" >> $GITHUB_ENV
+      - uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: '11'
+      - run: sudo ./script/prepare_linux.sh
       - run: python3 script/build.py
       - run: python3 script/package_shared.py
-      - uses: actions/upload-artifact@v6
+        if: ${{ env.os_arch == 'x64' }}
+      - uses: actions/upload-artifact@v7
+        if: ${{ env.os_arch == 'x64' }}
         with:
           name: shared-jars
           path: target/skija-shared-*.jar
       - run: python3 script/test.py
       - run: python3 script/package_platform.py
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         with:
-          name: linux-x64-jars
-          path: target/skija-linux-x64-*
-      # arm64
-      - run: python3 script/clean.py
-      - run: python3 script/build.py --arch arm64
-      - run: python3 script/package_platform.py --arch arm64
-      - uses: actions/upload-artifact@v6
-        with:
-          name: linux-arm64-jars
-          path: target/skija-linux-arm64-*
+          name: linux-${{ env.os_arch }}-jars
+          path: target/skija-linux-${{ env.os_arch }}-*
 
-  build_android:
-    runs-on: ubuntu-22.04
-    strategy:
-      matrix:
-        arch: ["arm64", "x64"]
-      fail-fast: false
-    steps:
-      - uses: actions/checkout@v5
-        with:
-          fetch-depth: 0
-      - name: Setup Java
-        run: |
-          echo "JAVA_HOME=$JAVA_HOME_17_X64" >> $GITHUB_ENV
-          echo "$JAVA_HOME_17_X64/bin" >> $GITHUB_PATH
-      - name: Setup Android NDK
-        uses: android-actions/setup-android@v3
-      - name: Install NDK
-        run: sdkmanager "ndk;25.1.8937393"
-      - name: Set NDK Home
-        run: echo "ANDROID_NDK_HOME=${{ env.ANDROID_HOME }}/ndk/25.1.8937393" >> $GITHUB_ENV
-      - name: Build Android ${{ matrix.arch }}
-        run: python3 script/build.py --system android --arch ${{ matrix.arch }}
-      - name: Package Android ${{ matrix.arch }}
-        run: python3 script/package_platform.py --system android --arch ${{ matrix.arch }}
-      - uses: actions/upload-artifact@v6
-        with:
-          name: android-${{ matrix.arch }}-jars
-          path: target/skija-android-${{ matrix.arch }}-*
-
-  build_windows:
+  windows:
     strategy:
       matrix:
         os: [ windows-latest, windows-11-arm ]
@@ -130,26 +94,52 @@ jobs:
       - uses: microsoft/setup-msbuild@v3
         with:
           msbuild-architecture: ${{ env.os_arch }}
-      - uses: ilammy/msvc-dev-cmd@v1
-        with:
-          arch: ${{ env.os_arch }}
       - uses: actions/setup-java@v5
         with:
           distribution: 'microsoft'
           java-version: '11'
-      - run: python3 script/build.py
+      - shell: bash
+        run: python3 script/build.py
       - shell: bash
         run: python3 script/test.py
-      - run: python3 script/package_platform.py
+      - shell: bash
+        run: python3 script/package_platform.py
       - uses: actions/upload-artifact@v7
         with:
           name: windows-${{ env.os_arch }}-jars
           path: target/skija-windows-${{ env.os_arch }}-*
 
+  android:
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        target_machine: ["arm64", "x64"]
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - run: |
+          echo "JAVA_HOME=$JAVA_HOME_11_X64" >> $GITHUB_ENV
+          echo "$JAVA_HOME_11_X64/bin" >> $GITHUB_PATH
+      - run: |
+          wget https://dl.google.com/android/repository/commandlinetools-linux-8512546_latest.zip -O cmdline-tools.zip
+          unzip cmdline-tools.zip
+          sudo mkdir -p /opt/android-sdk/cmdline-tools/latest
+          sudo mv cmdline-tools/* /opt/android-sdk/cmdline-tools/latest/
+          sudo chown -R $USER:$USER /opt/android-sdk
+          echo "y" | /opt/android-sdk/cmdline-tools/latest/bin/sdkmanager "platforms;android-33" "build-tools;33.0.0" "ndk;25.1.8937393"
+      - run: python3 script/build.py --system android --arch ${{ matrix.target_machine }} --ndk /opt/android-sdk/ndk/25.1.8937393
+      - run: python3 script/package_platform.py --system android --arch ${{ matrix.target_machine }}
+      - uses: actions/upload-artifact@v7
+        with:
+          name: android-${{ matrix.target_machine }}-jars
+          path: target/skija-android-${{ matrix.target_machine }}-*
+
   release:
     if: startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
-    needs: [build_windows, build_linux, build_macos, build_android]
+    needs: [macos, linux, windows, android]
     steps:
       - uses: actions/checkout@v5
       - run: |

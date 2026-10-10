@@ -216,6 +216,10 @@ Finally, [LWJGL demo app](/examples/lwjgl) has examples of most of the APIs that
 
 Prerequisites: Git, CMake, Ninja, JDK 9+, $JAVA_HOME, Python 3.
 
+- macOS: Xcode command line tools.
+- Linux: see [script/prepare_linux.sh](script/prepare_linux.sh).
+- Windows: Visual Studio with C++ tools and LLVM.
+
 Checkout:
 
 ```sh

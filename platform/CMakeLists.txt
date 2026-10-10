@@ -54,29 +54,18 @@ elseif(ANDROID)
 
 elseif(UNIX)
     target_include_directories(skija PRIVATE $ENV{JAVA_HOME}/include $ENV{JAVA_HOME}/include/linux)
-    target_compile_options(skija PRIVATE -Wno-attributes)
 
     # https://github.com/HumbleUI/Skija/issues/106
     target_compile_options(skija PRIVATE -ffile-prefix-map=${CMAKE_SOURCE_DIR}/=)
 
 elseif(WIN32)
-    set(CMAKE_C_COMPILER cl)
-    set(CMAKE_CXX_COMPILER cl)
-
     target_include_directories(skija PRIVATE $ENV{JAVA_HOME}/include $ENV{JAVA_HOME}/include/win32)
     target_link_libraries(skija d3d12 dxgi d3dcompiler)
 
     # https://github.com/HumbleUI/Skija/issues/106
     target_compile_options(skija
         PRIVATE /source-charset:utf-8
-        PRIVATE "/d1trimfile:${CMAKE_SOURCE_DIR}/")
-
-    # Suppress warnings from Skia headers and size_t conversions
-    target_compile_options(skija PRIVATE
-        /wd4244  # conversion from 'int32_t' to 'float'
-        /wd4267  # conversion from 'size_t' to smaller type
-        /wd5030  # attribute not recognized
-    )
+        PRIVATE "/clang:-ffile-prefix-map=${CMAKE_SOURCE_DIR}/=")
 
     # set_property(TARGET skija PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded")
     set(CMAKE_CXX_FLAGS_RELEASE "/MT")
