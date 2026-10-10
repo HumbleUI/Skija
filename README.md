@@ -216,11 +216,9 @@ Finally, [LWJGL demo app](/examples/lwjgl) has examples of most of the APIs that
 
 Prerequisites: Git, CMake, Ninja, JDK 9+, $JAVA_HOME, Python 3.
 
-Native code is compiled with Clang, same as Skia itself:
-
 - macOS: Xcode command line tools.
 - Linux: see [script/prepare_linux.sh](script/prepare_linux.sh).
-- Windows: Visual Studio with C++ tools and LLVM installed to `C:\Program Files\LLVM` (`winget install LLVM.LLVM`).
+- Windows: Visual Studio with C++ tools and LLVM.
 
 Checkout:
 
