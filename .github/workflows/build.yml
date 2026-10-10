@@ -48,34 +48,36 @@ jobs:
           path: target/skija-macos-${{ matrix.machine }}-*
 
   linux:
-    runs-on: ubuntu-22.04
     strategy:
       matrix:
-        target_machine: ["x64", "arm64"]
+        os: [ ubuntu-22.04, ubuntu-22.04-arm ]
       fail-fast: false
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - run: |
-          echo "JAVA_HOME=$JAVA_HOME_11_X64" >> $GITHUB_ENV
-          echo "$JAVA_HOME_11_X64/bin" >> $GITHUB_PATH
+          os_arch=$(echo "${{ runner.arch }}" | tr '[:upper:]' '[:lower:]')
+          echo "os_arch=$os_arch" >> $GITHUB_ENV
+          java_home=JAVA_HOME_11_${{ runner.arch }}
+          echo "JAVA_HOME=${!java_home}" >> $GITHUB_ENV
+          echo "${!java_home}/bin" >> $GITHUB_PATH
       - run: sudo ./script/prepare_linux.sh
-      - run: python3 script/build.py --arch ${{ matrix.target_machine }}
+      - run: python3 script/build.py
       - run: python3 script/package_shared.py
-        if: ${{ matrix.target_machine == 'x64' }}
+        if: ${{ env.os_arch == 'x64' }}
       - uses: actions/upload-artifact@v7
-        if: ${{ matrix.target_machine == 'x64' }}
+        if: ${{ env.os_arch == 'x64' }}
         with:
           name: shared-jars
           path: target/skija-shared-*.jar
-      - run: python3 script/test.py --arch ${{ matrix.target_machine }}
-        if: ${{ matrix.target_machine == 'x64' }}
-      - run: python3 script/package_platform.py --arch ${{ matrix.target_machine }}
+      - run: python3 script/test.py
+      - run: python3 script/package_platform.py
       - uses: actions/upload-artifact@v7
         with:
-          name: linux-${{ matrix.target_machine }}-jars
-          path: target/skija-linux-${{ matrix.target_machine }}-*
+          name: linux-${{ env.os_arch }}-jars
+          path: target/skija-linux-${{ env.os_arch }}-*
 
   windows:
     strategy:

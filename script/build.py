@@ -1,5 +1,5 @@
 #! /usr/bin/env python3
-import argparse, build_utils, common, cross_compile, os, re, subprocess, sys, zipfile
+import argparse, build_utils, common, os, re, subprocess, sys, zipfile
 
 def main():
   parser = argparse.ArgumentParser()
@@ -40,7 +40,9 @@ def main():
     '-DSKIA_ARCH=' + build_utils.arch]
 
   if build_utils.system == 'macos':
-    cmake_args += ['-DCMAKE_OSX_ARCHITECTURES=' + {'x64': 'x86_64', 'arm64': 'arm64'}[build_utils.arch]]
+    cmake_args += [
+      '-DCMAKE_OSX_ARCHITECTURES=' + {'x64': 'x86_64', 'arm64': 'arm64'}[build_utils.arch],
+      '-DCMAKE_OSX_DEPLOYMENT_TARGET=11.0']
 
   cmake_args += [os.path.abspath('.')]
 
@@ -48,8 +50,6 @@ def main():
     cmake_args += ['-DCMAKE_TOOLCHAIN_FILE=' + args.cmake_toolchain_file]
   elif build_utils.system == 'linux':
     cmake_args += ['-DCMAKE_CXX_COMPILER=clang++']
-    if (build_utils.arch == 'arm64') and (build_utils.arch != build_utils.native_arch):
-      cross_compile.setup_linux_arm64(native_build_dir, cmake_args)
   elif build_utils.system == 'windows':
     cmake_args += ['-DCMAKE_CXX_COMPILER=C:/Program Files/LLVM/bin/clang-cl.exe']
   elif build_utils.system == 'android':

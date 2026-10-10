@@ -4,6 +4,7 @@ Changed:
 
 - Skia version m143-da51f0d60e-4 -> m143-da51f0d60e-5
 - Linux and Windows native libraries are built with Clang, same as Skia
+- macOS native libraries target macOS 11.0, same as Skia (was 14.0)
 
 Fixed:
 
