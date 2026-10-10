@@ -60,9 +60,10 @@ jobs:
       - run: |
           os_arch=$(echo "${{ runner.arch }}" | tr '[:upper:]' '[:lower:]')
           echo "os_arch=$os_arch" >> $GITHUB_ENV
-          java_home=JAVA_HOME_11_${{ runner.arch }}
-          echo "JAVA_HOME=${!java_home}" >> $GITHUB_ENV
-          echo "${!java_home}/bin" >> $GITHUB_PATH
+      - uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: '11'
       - run: sudo ./script/prepare_linux.sh
       - run: python3 script/build.py
       - run: python3 script/package_shared.py
