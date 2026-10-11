@@ -9,11 +9,14 @@ import io.github.humbleui.skija.Bitmap;
 import io.github.humbleui.skija.BlendMode;
 import io.github.humbleui.skija.Canvas;
 import io.github.humbleui.skija.ColorFilter;
+import io.github.humbleui.skija.ColorSpace;
+import io.github.humbleui.skija.FilterTileMode;
 import io.github.humbleui.skija.ImageFilter;
 import io.github.humbleui.skija.Paint;
 import io.github.humbleui.skija.Path;
 import io.github.humbleui.skija.PathBuilder;
 import io.github.humbleui.skija.SaveLayerRec;
+import io.github.humbleui.skija.SaveLayerRecFlag;
 import io.github.humbleui.skija.test.runner.*;
 
 
@@ -26,6 +29,7 @@ public class CanvasTests implements Executable {
         TestRunner.testMethod(this, "saveLayerFilterOrder");
         TestRunner.testMethod(this, "saveLayerEmptyFilters");
         TestRunner.testMethod(this, "saveLayerInvalidFilters");
+        TestRunner.testMethod(this, "saveLayerFilterOptions");
     }
 
     public void localClipBounds() {
@@ -215,6 +219,23 @@ public class CanvasTests implements Executable {
                     assertEquals(0xFFFF0000, bitmap.getColor(6, 6));
                 }
             }
+        }
+    }
+
+    public void saveLayerFilterOptions() {
+        try (Paint paint = new Paint().setAlpha(128);
+             ImageFilter backdrop = ImageFilter.makeOffset(1, 1, null)) {
+            SaveLayerRec original = new SaveLayerRec(Rect.makeWH(32, 32), paint, backdrop,
+                FilterTileMode.MIRROR, ColorSpace.getSRGB(),
+                SaveLayerRecFlag.INIT_WITH_PREVIOUS, SaveLayerRecFlag.F16_COLOR_TYPE);
+            SaveLayerRec filtered = original.withFilters(backdrop, null);
+            assertEquals(original.getBounds(), filtered.getBounds());
+            assertEquals(original.getPaint(), filtered.getPaint());
+            assertEquals(original.getBackdrop(), filtered.getBackdrop());
+            assertEquals(original.getTileMode(), filtered.getTileMode());
+            assertEquals(original.getColorSpace(), filtered.getColorSpace());
+            assertEquals(original.getFlags(), filtered.getFlags());
+            assertArrayEquals(new ImageFilter[] {backdrop, null}, filtered.getFilters());
         }
     }
 }
