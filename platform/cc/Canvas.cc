@@ -1,6 +1,8 @@
+#include <array>
 #include <iostream>
 #include <jni.h>
 #include "SkCanvas.h"
+#include "SkImageFilter.h"
 #include "SkRRect.h"
 #include "SkSurface.h"
 #include "SkTextBlob.h"
@@ -396,25 +398,46 @@ extern "C" JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_Canvas__1nSaveLa
     return canvas->saveLayerAlpha(&bounds, alpha);
 }
 
-extern "C" JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_Canvas__1nSaveLayerRec
-  (JNIEnv* env, jclass jclass, jlong ptr, jlong paintPtr, jlong backdropPtr, jint tileMode, jlong colorSpacePtr, jint flags) {
+static jint saveLayer(JNIEnv* env, jlong ptr, const SkRect* bounds, jlong paintPtr, jlongArray filtersArray,
+                      jlong backdropPtr, jint tileMode, jlong colorSpacePtr, jint flags) {
     SkCanvas* canvas = reinterpret_cast<SkCanvas*>(static_cast<uintptr_t>(ptr));
     SkPaint* paint = reinterpret_cast<SkPaint*>(static_cast<uintptr_t>(paintPtr));
     SkImageFilter* backdrop = reinterpret_cast<SkImageFilter*>(static_cast<uintptr_t>(backdropPtr));
     SkColorSpace* colorSpace = reinterpret_cast<SkColorSpace*>(static_cast<uintptr_t>(colorSpacePtr));
-    SkCanvas::SaveLayerRec layerRec(nullptr, paint, backdrop, static_cast<SkTileMode>(tileMode), colorSpace, flags);
+    jsize count = filtersArray ? env->GetArrayLength(filtersArray) : 0;
+    if (count > SkCanvas::kMaxFiltersPerLayer) {
+        env->ThrowNew(env->FindClass("java/lang/IllegalArgumentException"), "Too many layer filters");
+        return 0;
+    }
+    if (count > 0 && paint && paint->getImageFilter()) {
+        env->ThrowNew(env->FindClass("java/lang/IllegalArgumentException"), "Layer filters cannot be combined with the paint's image filter");
+        return 0;
+    }
+
+    std::array<jlong, SkCanvas::kMaxFiltersPerLayer> filterPtrs;
+    std::array<sk_sp<SkImageFilter>, SkCanvas::kMaxFiltersPerLayer> filters;
+    if (count > 0) {
+        env->GetLongArrayRegion(filtersArray, 0, count, filterPtrs.data());
+        if (env->ExceptionCheck())
+            return 0;
+        for (jsize i = 0; i < count; ++i)
+            filters[i] = sk_ref_sp(reinterpret_cast<SkImageFilter*>(static_cast<uintptr_t>(filterPtrs[i])));
+    }
+
+    SkCanvas::SaveLayerRec layerRec(bounds, paint, backdrop, static_cast<SkTileMode>(tileMode), colorSpace, flags);
+    layerRec.fFilters = {filters.data(), static_cast<size_t>(count)};
     return canvas->saveLayer(layerRec);
 }
 
+extern "C" JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_Canvas__1nSaveLayerRec
+  (JNIEnv* env, jclass jclass, jlong ptr, jlong paintPtr, jlongArray filtersArray, jlong backdropPtr, jint tileMode, jlong colorSpacePtr, jint flags) {
+    return saveLayer(env, ptr, nullptr, paintPtr, filtersArray, backdropPtr, tileMode, colorSpacePtr, flags);
+}
+
 extern "C" JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_Canvas__1nSaveLayerRecRect
-  (JNIEnv* env, jclass jclass, jlong ptr, jfloat left, jfloat top, jfloat right, jfloat bottom, jlong paintPtr, jlong backdropPtr, jint tileMode, jlong colorSpacePtr, jint flags) {
-    SkCanvas* canvas = reinterpret_cast<SkCanvas*>(static_cast<uintptr_t>(ptr));
+  (JNIEnv* env, jclass jclass, jlong ptr, jfloat left, jfloat top, jfloat right, jfloat bottom, jlong paintPtr, jlongArray filtersArray, jlong backdropPtr, jint tileMode, jlong colorSpacePtr, jint flags) {
     SkRect bounds {left, top, right, bottom};
-    SkPaint* paint = reinterpret_cast<SkPaint*>(static_cast<uintptr_t>(paintPtr));
-    SkImageFilter* backdrop = reinterpret_cast<SkImageFilter*>(static_cast<uintptr_t>(backdropPtr));
-    SkColorSpace* colorSpace = reinterpret_cast<SkColorSpace*>(static_cast<uintptr_t>(colorSpacePtr));
-    SkCanvas::SaveLayerRec layerRec(&bounds, paint, backdrop, static_cast<SkTileMode>(tileMode), colorSpace, flags);
-    return canvas->saveLayer(layerRec);
+    return saveLayer(env, ptr, &bounds, paintPtr, filtersArray, backdropPtr, tileMode, colorSpacePtr, flags);
 }
 
 extern "C" JNIEXPORT jint JNICALL Java_io_github_humbleui_skija_Canvas__1nGetSaveCount(JNIEnv* env, jclass jclass, jlong ptr) {

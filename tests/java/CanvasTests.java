@@ -6,9 +6,14 @@ import java.util.concurrent.ArrayBlockingQueue;
 
 import io.github.humbleui.types.*;
 import io.github.humbleui.skija.Bitmap;
+import io.github.humbleui.skija.BlendMode;
 import io.github.humbleui.skija.Canvas;
+import io.github.humbleui.skija.ColorFilter;
+import io.github.humbleui.skija.ImageFilter;
+import io.github.humbleui.skija.Paint;
 import io.github.humbleui.skija.Path;
 import io.github.humbleui.skija.PathBuilder;
+import io.github.humbleui.skija.SaveLayerRec;
 import io.github.humbleui.skija.test.runner.*;
 
 
@@ -17,6 +22,10 @@ public class CanvasTests implements Executable {
     public void execute() throws Exception {
         TestRunner.testMethod(this, "localClipBounds");
         TestRunner.testMethod(this, "deviceClipBounds");
+        TestRunner.testMethod(this, "saveLayerFilters");
+        TestRunner.testMethod(this, "saveLayerFilterOrder");
+        TestRunner.testMethod(this, "saveLayerEmptyFilters");
+        TestRunner.testMethod(this, "saveLayerInvalidFilters");
     }
 
     public void localClipBounds() {
@@ -92,6 +101,120 @@ public class CanvasTests implements Executable {
             assertEquals(115, bounds._bottom);
 
             canvas.close();
+        }
+    }
+
+    public void saveLayerFilters() {
+        for (Rect bounds : new Rect[] {null, Rect.makeWH(32, 32)}) {
+            try (Bitmap bitmap = new Bitmap();
+                 Paint paint = new Paint().setColor(0xFFFF0000)) {
+                bitmap.allocN32Pixels(32, 32);
+                try (Canvas canvas = new Canvas(bitmap)) {
+                    canvas.clear(0);
+                    int saveCount;
+                    try (ImageFilter offsetX = ImageFilter.makeOffset(12, 0, null);
+                         ImageFilter offsetY = ImageFilter.makeOffset(0, 12, null)) {
+                        ImageFilter[] filters = {offsetX, offsetY, null};
+                        SaveLayerRec original = new SaveLayerRec(bounds, null);
+                        SaveLayerRec layer = original.withFilters(filters);
+                        assertEquals(0, original.getFilters().length);
+                        filters[0] = null;
+                        assertEquals(offsetX, layer.getFilters()[0]);
+                        layer.getFilters()[0] = null;
+                        assertEquals(offsetX, layer.getFilters()[0]);
+                        saveCount = canvas.saveLayer(layer);
+                    }
+                    canvas.drawRect(Rect.makeXYWH(4, 4, 8, 8), paint);
+                    canvas.restoreToCount(saveCount);
+                    assertEquals(saveCount, canvas.getSaveCount());
+                    assertEquals(0xFFFF0000, bitmap.getColor(6, 6));
+                    assertEquals(0xFFFF0000, bitmap.getColor(18, 6));
+                    assertEquals(0xFFFF0000, bitmap.getColor(6, 18));
+                    assertEquals(0, bitmap.getColor(18, 18));
+                }
+            }
+        }
+    }
+
+    public void saveLayerFilterOrder() {
+        try (Bitmap bitmap = new Bitmap();
+             Paint paint = new Paint().setColor(0xFFFF0000);
+             Paint restorePaint = new Paint().setAlpha(128);
+             ColorFilter green = ColorFilter.makeBlend(0xFF00FF00, BlendMode.SRC_IN);
+             ImageFilter tint = ImageFilter.makeColorFilter(green, null)) {
+            bitmap.allocN32Pixels(16, 16);
+            try (Canvas canvas = new Canvas(bitmap)) {
+                ImageFilter[][] orders = {{null, tint}, {tint, null}};
+                int[] colors = {0xFF00FF00, 0xFFFF0000};
+                for (int i = 0; i < orders.length; ++i) {
+                    canvas.clear(0);
+                    int saveCount = canvas.saveLayer(new SaveLayerRec().withFilters(orders[i]));
+                    canvas.drawRect(Rect.makeXYWH(4, 4, 8, 8), paint);
+                    canvas.restoreToCount(saveCount);
+                    assertEquals(colors[i], bitmap.getColor(6, 6));
+                    assertEquals(0, bitmap.getColor(0, 0));
+                }
+                canvas.clear(0);
+                int saveCount = canvas.saveLayer(new SaveLayerRec(null, restorePaint).withFilters(null, null));
+                canvas.drawRect(Rect.makeXYWH(4, 4, 8, 8), paint);
+                canvas.restoreToCount(saveCount);
+                assertEquals(0xC0FF0000, bitmap.getColor(6, 6));
+            }
+        }
+    }
+
+    public void saveLayerEmptyFilters() {
+        for (Rect bounds : new Rect[] {null, Rect.makeWH(32, 32)}) {
+            try (Bitmap bitmap = new Bitmap();
+                 Paint paint = new Paint().setColor(0xFFFF0000);
+                 ImageFilter offset = ImageFilter.makeOffset(12, 0, null);
+                 Paint restorePaint = new Paint().setImageFilter(offset)) {
+                bitmap.allocN32Pixels(32, 32);
+                try (Canvas canvas = new Canvas(bitmap)) {
+                    SaveLayerRec original = new SaveLayerRec(bounds, restorePaint);
+                    SaveLayerRec cleared = original.withFilters(offset).withFilters();
+                    for (SaveLayerRec layer : new SaveLayerRec[] {original, cleared}) {
+                        canvas.clear(0);
+                        int saveCount = canvas.saveLayer(layer);
+                        canvas.drawRect(Rect.makeXYWH(4, 4, 8, 8), paint);
+                        canvas.restoreToCount(saveCount);
+                        assertEquals(0, bitmap.getColor(6, 6));
+                        assertEquals(0xFFFF0000, bitmap.getColor(18, 6));
+                    }
+                }
+            }
+        }
+    }
+
+    public void saveLayerInvalidFilters() {
+        for (Rect bounds : new Rect[] {null, Rect.makeWH(32, 32)}) {
+            try (Bitmap bitmap = new Bitmap();
+                 Paint paint = new Paint().setColor(0xFFFF0000);
+                 ImageFilter offset = ImageFilter.makeOffset(12, 0, null);
+                 Paint restorePaint = new Paint().setImageFilter(offset)) {
+                bitmap.allocN32Pixels(32, 32);
+                try (Canvas canvas = new Canvas(bitmap)) {
+                    int saveCount = canvas.getSaveCount();
+                    SaveLayerRec tooMany = new SaveLayerRec(bounds, null).withFilters(new ImageFilter[17]);
+                    assertThrows(IllegalArgumentException.class, () -> canvas.saveLayer(tooMany));
+                    assertEquals(saveCount, canvas.getSaveCount());
+
+                    SaveLayerRec conflict = new SaveLayerRec(bounds, restorePaint).withFilters(offset);
+                    assertThrows(IllegalArgumentException.class, () -> canvas.saveLayer(conflict));
+                    assertEquals(saveCount, canvas.getSaveCount());
+
+                    offset.close();
+                    SaveLayerRec closed = new SaveLayerRec(bounds, null).withFilters(offset);
+                    assertThrows(IllegalStateException.class, () -> canvas.saveLayer(closed));
+                    assertEquals(saveCount, canvas.getSaveCount());
+
+                    canvas.clear(0);
+                    canvas.saveLayer(new SaveLayerRec(bounds, null).withFilters(new ImageFilter[16]));
+                    canvas.drawRect(Rect.makeXYWH(4, 4, 8, 8), paint);
+                    canvas.restoreToCount(saveCount);
+                    assertEquals(0xFFFF0000, bitmap.getColor(6, 6));
+                }
+            }
         }
     }
 }
