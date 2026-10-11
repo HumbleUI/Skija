@@ -88,7 +88,7 @@ Platforms:
 
 - Windows:
   - [x] x64
-  - [ ] arm64
+  - [x] arm64
 - Linux:
   - [x] x64
   - [x] arm64
@@ -185,6 +185,7 @@ Replace `${artifact}` and `${version}` with:
 | Platform      | `${artifact}`       | `${version}`                                                                                                                                                |
 |---------------|---------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Windows (x64) | `skija-windows-x64` | [![](https://img.shields.io/maven-central/v/io.github.humbleui/skija-windows-x64)](https://mvnrepository.com/artifact/io.github.humbleui/skija-windows-x64) |
+| Windows (arm64) | `skija-windows-arm64` | [![](https://img.shields.io/maven-central/v/io.github.humbleui/skija-windows-arm64)](https://mvnrepository.com/artifact/io.github.humbleui/skija-windows-arm64) |
 | Linux (x64)   | `skija-linux-x64`   | [![](https://img.shields.io/maven-central/v/io.github.humbleui/skija-linux-x64)](https://mvnrepository.com/artifact/io.github.humbleui/skija-linux-x64)     |
 | Linux (arm64)   | `skija-linux-arm64`   | [![](https://img.shields.io/maven-central/v/io.github.humbleui/skija-linux-arm64)](https://mvnrepository.com/artifact/io.github.humbleui/skija-linux-arm64)     |
 | macOS (x64)   | `skija-macos-x64`   | [![](https://img.shields.io/maven-central/v/io.github.humbleui/skija-macos-x64)](https://mvnrepository.com/artifact/io.github.humbleui/skija-macos-x64)     |
