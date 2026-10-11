@@ -1503,18 +1503,28 @@ public class Canvas extends Managed {
      * 
      * @param layerRec  layer state
      * @return          depth of save state stack before this call was made.
+     * @throws IllegalArgumentException if more than 16 filters are supplied, or a non-empty
+     *                                  filter array is combined with the paint's image filter
+     * @throws IllegalStateException    if a filter in the array is closed
      * 
      * @see <a href="https://fiddle.skia.org/c/@Canvas_saveLayer_3">https://fiddle.skia.org/c/@Canvas_saveLayer_3</a>
      */
     public int saveLayer(@NotNull SaveLayerRec layerRec) {
         try {
             assert _ptr != 0 : "Canvas is closed";
+            long[] filters = layerRec._filters.length == 0 ? null : new long[layerRec._filters.length];
+            for (int i = 0; i < layerRec._filters.length; ++i) {
+                ImageFilter filter = layerRec._filters[i];
+                if (filter != null && filter.isClosed())
+                    throw new IllegalStateException("Can't saveLayer with a closed filter");
+                filters[i] = Native.getPtr(filter);
+            }
             Stats.onNativeCall();
             Rect bounds = layerRec._bounds;
             if (bounds == null)
-                return _nSaveLayerRec(_ptr, Native.getPtr(layerRec._paint), Native.getPtr(layerRec._backdrop), layerRec._tileMode.ordinal(), Native.getPtr(layerRec._colorSpace), layerRec._flags);
+                return _nSaveLayerRec(_ptr, Native.getPtr(layerRec._paint), filters, Native.getPtr(layerRec._backdrop), layerRec._tileMode.ordinal(), Native.getPtr(layerRec._colorSpace), layerRec._flags);
             else
-                return _nSaveLayerRecRect(_ptr, bounds._left, bounds._top, bounds._right, bounds._bottom, Native.getPtr(layerRec._paint), Native.getPtr(layerRec._backdrop), layerRec._tileMode.ordinal(), Native.getPtr(layerRec._colorSpace), layerRec._flags);
+                return _nSaveLayerRecRect(_ptr, bounds._left, bounds._top, bounds._right, bounds._bottom, Native.getPtr(layerRec._paint), filters, Native.getPtr(layerRec._backdrop), layerRec._tileMode.ordinal(), Native.getPtr(layerRec._colorSpace), layerRec._flags);
         } finally {
             ReferenceUtil.reachabilityFence(this);
             ReferenceUtil.reachabilityFence(layerRec);
@@ -1605,8 +1615,8 @@ public class Canvas extends Managed {
     public static native int  _nSaveLayerRect(long ptr, float left, float top, float right, float bottom, long paintPtr);
     public static native int  _nSaveLayerAlpha(long ptr, int alpha);
     public static native int  _nSaveLayerAlphaRect(long ptr, float left, float top, float right, float bottom, int alpha);
-    public static native int  _nSaveLayerRec(long ptr, long paintPtr, long backdropPtr, int tileMode, long colorSpacePtr, int flags);
-    public static native int  _nSaveLayerRecRect(long ptr, float left, float top, float right, float bottom, long paintPtr, long backdropPtr, int tileMode, long colorSpacePtr, int flags);
+    public static native int  _nSaveLayerRec(long ptr, long paintPtr, long[] filters, long backdropPtr, int tileMode, long colorSpacePtr, int flags);
+    public static native int  _nSaveLayerRecRect(long ptr, float left, float top, float right, float bottom, long paintPtr, long[] filters, long backdropPtr, int tileMode, long colorSpacePtr, int flags);
     public static native int  _nGetSaveCount(long ptr);
     public static native void _nRestore(long ptr);
     public static native void _nRestoreToCount(long ptr, int saveCount);
