@@ -31,6 +31,7 @@ public class TestSuite {
         TestRunner.testClass(StreamAssetTest.class);
         TestRunner.testClass(SurfaceTest.class);
         TestRunner.testClass(SVGCanvasTest.class);
+        TestRunner.testClass(SVGDOMTest.class);
         TestRunner.testClass(TextLineTest.class);
         TestRunner.testClass(TextStyleTest.class);
         TestRunner.testClass(TypefaceTest.class);

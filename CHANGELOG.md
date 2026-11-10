@@ -1,3 +1,9 @@
+# 0.143.19
+
+Added:
+
+- `SVGDOM(Data, FontMgr)`, `SVGDOM(Data, FontMgr, ResourceProvider)` to render `<text>` and `<image>` nodes
+
 # 0.143.18 - Oct 11, 2026
 
 Changed:
