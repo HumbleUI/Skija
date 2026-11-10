@@ -2,15 +2,32 @@
 #include "../interop.hh"
 #include "SkCanvas.h"
 #include "SkData.h"
+#include "SkFontMgr.h"
+#include "SkResources.h"
 #include "SkStream.h"
 #include "SkSVGDOM.h"
 #include "SkSVGSVG.h"
+#include "modules/skshaper/utils/FactoryHelpers.h"
 
 extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_svg_SVGDOM__1nMakeFromData
   (JNIEnv* env, jclass jclass, jlong dataPtr) {
     SkData* data = reinterpret_cast<SkData*>(static_cast<uintptr_t>(dataPtr));
     SkMemoryStream stream(sk_ref_sp(data));
     sk_sp<SkSVGDOM> instance = SkSVGDOM::MakeFromStream(stream);
+    return reinterpret_cast<jlong>(instance.release());
+}
+
+extern "C" JNIEXPORT jlong JNICALL Java_io_github_humbleui_skija_svg_SVGDOM__1nMake
+  (JNIEnv* env, jclass jclass, jlong dataPtr, jlong fontMgrPtr, jlong resourceProviderPtr) {
+    SkData* data = reinterpret_cast<SkData*>(static_cast<uintptr_t>(dataPtr));
+    SkFontMgr* fontMgr = reinterpret_cast<SkFontMgr*>(static_cast<uintptr_t>(fontMgrPtr));
+    skresources::ResourceProvider* resourceProvider = reinterpret_cast<skresources::ResourceProvider*>(static_cast<uintptr_t>(resourceProviderPtr));
+    SkMemoryStream stream(sk_ref_sp(data));
+    sk_sp<SkSVGDOM> instance = SkSVGDOM::Builder()
+        .setFontManager(sk_ref_sp(fontMgr))
+        .setResourceProvider(sk_ref_sp(resourceProvider))
+        .setTextShapingFactory(SkShapers::BestAvailable())
+        .make(stream);
     return reinterpret_cast<jlong>(instance.release());
 }
 

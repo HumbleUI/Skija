@@ -3,6 +3,7 @@ package io.github.humbleui.skija.svg;
 import org.jetbrains.annotations.*;
 import io.github.humbleui.skija.*;
 import io.github.humbleui.skija.impl.*;
+import io.github.humbleui.skija.resources.*;
 import io.github.humbleui.types.*;
 
 public class SVGDOM extends RefCnt {
@@ -12,6 +13,25 @@ public class SVGDOM extends RefCnt {
         this(_nMakeFromData(Native.getPtr(data)));
         Stats.onNativeCall();
         ReferenceUtil.reachabilityFence(data);
+    }
+
+    /**
+     * @param fontMgr  used to resolve fonts for &lt;text&gt; nodes; without one, text is not rendered
+     */
+    public SVGDOM(@NotNull Data data, @Nullable FontMgr fontMgr) {
+        this(data, fontMgr, null);
+    }
+
+    /**
+     * @param fontMgr           used to resolve fonts for &lt;text&gt; nodes; without one, text is not rendered
+     * @param resourceProvider  used to load images referenced by &lt;image&gt; nodes
+     */
+    public SVGDOM(@NotNull Data data, @Nullable FontMgr fontMgr, @Nullable ResourceProvider resourceProvider) {
+        this(_nMake(Native.getPtr(data), Native.getPtr(fontMgr), Native.getPtr(resourceProvider)));
+        Stats.onNativeCall();
+        ReferenceUtil.reachabilityFence(data);
+        ReferenceUtil.reachabilityFence(fontMgr);
+        ReferenceUtil.reachabilityFence(resourceProvider);
     }
 
     @Nullable
@@ -70,6 +90,7 @@ public class SVGDOM extends RefCnt {
     }
 
     @ApiStatus.Internal public static native long  _nMakeFromData(long dataPtr);
+    @ApiStatus.Internal public static native long  _nMake(long dataPtr, long fontMgrPtr, long resourceProviderPtr);
     @ApiStatus.Internal public static native long  _nGetRoot(long ptr);
     @ApiStatus.Internal public static native Point _nGetContainerSize(long ptr);
     @ApiStatus.Internal public static native void  _nSetContainerSize(long ptr, float width, float height);
