@@ -5,8 +5,10 @@ import static io.github.humbleui.skija.test.runner.TestRunner.*;
 import io.github.humbleui.skija.Bitmap;
 import io.github.humbleui.skija.Canvas;
 import io.github.humbleui.skija.ColorAlphaType;
+import io.github.humbleui.skija.ColorType;
 import io.github.humbleui.skija.ImageInfo;
 import io.github.humbleui.skija.test.runner.*;
+import io.github.humbleui.types.IRect;
 
 public class BitmapTest implements Executable {
     @Override
@@ -14,6 +16,7 @@ public class BitmapTest implements Executable {
         TestRunner.testMethod(this, "base");
         TestRunner.testMethod(this, "swap");
         TestRunner.testMethod(this, "getSurfaceNull");
+        TestRunner.testMethod(this, "readPixels");
     }
 
     public void base() throws Exception {
@@ -74,5 +77,31 @@ public class BitmapTest implements Executable {
             assertNull(canvas.getSurface());
             canvas.close();
         }
+    }
+
+    public void readPixels() throws Exception {
+        try (var bitmap = new Bitmap()) {
+            bitmap.allocN32Pixels(2, 3);
+            bitmap.erase(0xFF112233);
+            bitmap.erase(0xFF445566, IRect.makeXYWH(0, 1, 2, 1));
+
+            byte[] all = bitmap.readPixels();
+            assertEquals(2 * 3 * 4, all.length);
+
+            var rgba = new ImageInfo(2, 3, ColorType.RGBA_8888, ColorAlphaType.PREMUL);
+            byte[] a = {0x11, 0x22, 0x33, (byte) 0xFF};
+            byte[] b = {0x44, 0x55, 0x66, (byte) 0xFF};
+            assertArrayEquals(concat(a, a, b, b, a, a), bitmap.readPixels(rgba, 8, 0, 0));
+            assertArrayEquals(concat(b, b, a, a), bitmap.readPixels(rgba, 8, 0, 1));
+            assertNull(bitmap.readPixels(rgba, 8, 0, 3));
+            assertNull(bitmap.readPixels(rgba, 4, 0, 0));
+        }
+    }
+
+    public byte[] concat(byte[]... parts) {
+        byte[] res = new byte[parts.length * 4];
+        for (int i = 0; i < parts.length; ++i)
+            System.arraycopy(parts[i], 0, res, i * 4, 4);
+        return res;
     }
 }
