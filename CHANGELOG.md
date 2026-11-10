@@ -1,3 +1,9 @@
+# 0.143.19
+
+Changed:
+
+- `Bitmap::readPixels` reads directly into the returned array, about 2x faster
+
 # 0.143.18 - Oct 11, 2026
 
 Changed:

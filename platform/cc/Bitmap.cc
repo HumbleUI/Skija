@@ -256,11 +256,18 @@ extern "C" JNIEXPORT jbyteArray JNICALL Java_io_github_humbleui_skija_Bitmap__1n
                                               static_cast<SkColorType>(colorType),
                                               static_cast<SkAlphaType>(alphaType),
                                               sk_ref_sp<SkColorSpace>(colorSpace));
-    std::vector<jbyte> pixels(std::min(height, instance->height() - srcY) * rowBytes);
-    if (instance->readPixels(imageInfo, pixels.data(), rowBytes, srcX, srcY))
-        return javaByteArray(env, pixels);
-    else
+    jlong size = std::min(height, instance->height() - srcY) * rowBytes;
+    if (size <= 0 || size > INT32_MAX)
         return nullptr;
+    jbyteArray res = env->NewByteArray(static_cast<jsize>(size));
+    if (!res)
+        return nullptr;
+    void* pixels = env->GetPrimitiveArrayCritical(res, nullptr);
+    if (!pixels)
+        return nullptr;
+    bool ok = instance->readPixels(imageInfo, pixels, rowBytes, srcX, srcY);
+    env->ReleasePrimitiveArrayCritical(res, pixels, 0);
+    return ok ? res : nullptr;
 }
 
 extern "C" JNIEXPORT jobject JNICALL Java_io_github_humbleui_skija_Bitmap__1nExtractAlpha
