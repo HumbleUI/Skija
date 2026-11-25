@@ -1049,6 +1049,16 @@ public class Path extends Managed implements Iterable<PathSegment> {
     }
 
     /**
+     * Iterates over verbs and points exactly as stored, without implicit closing lines.
+     *
+     * @return  {@link PathRawIterator} over a copy of this path
+     */
+    @NotNull @Contract("-> new")
+    public PathRawIterator rawIterator() {
+        return new PathRawIterator(this);
+    }
+
+    /**
      * Returns true if the point (x, y) is contained by Path, taking into
      * account {@link PathFillMode}.
      *
