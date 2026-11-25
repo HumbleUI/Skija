@@ -6,8 +6,10 @@ import static io.github.humbleui.skija.test.runner.TestRunner.assertNotEquals;
 import static io.github.humbleui.skija.test.runner.TestRunner.assertThrows;
 
 import java.util.NoSuchElementException;
+import java.util.Random;
 
 import io.github.humbleui.skija.*;
+import io.github.humbleui.skija.impl.Native;
 import io.github.humbleui.types.Point;
 import io.github.humbleui.types.RRect;
 import io.github.humbleui.types.Rect;
@@ -28,6 +30,11 @@ public class PathTest implements Executable {
         TestRunner.testMethod(this, "serialize");
         TestRunner.testMethod(this, "fillWithPaint");
         TestRunner.testMethod(this, "dashedFillPathBoundsTest");
+        TestRunner.testMethod(this, "iterClosedContour");
+        TestRunner.testMethod(this, "iterAfterClose");
+        TestRunner.testMethod(this, "iterLarge");
+        TestRunner.testMethod(this, "iterMatchesSkia");
+        TestRunner.testMethod(this, "iterCloseAfterNaN");
     }
 
     public void iter() {
@@ -358,4 +365,122 @@ public class PathTest implements Executable {
             }
         }
     }
+
+    public void iterClosedContour() {
+        try (Path p = new PathBuilder()
+                .moveTo(0, 0).lineTo(10, 0).lineTo(10, 10)
+                .moveTo(20, 0).lineTo(30, 0).lineTo(30, 10).closePath()
+                .moveTo(40, 0).lineTo(50, 0)
+                .build()) {
+            // Skia quirk: the last segment of an open contour and CLOSE report the next contour
+            assertEquals(String.join(", ",
+                "MOVE", "LINE", "LINE closed",
+                "MOVE closed", "LINE closed", "LINE closed", "LINE closeLine closed", "CLOSE",
+                "MOVE", "LINE"
+            ), segments(p, false));
+            // Skia quirk: after the last verb, the contour is reported open even with forceClose
+            assertEquals(String.join(", ",
+                "MOVE closed", "LINE closed", "LINE closed", "LINE closeLine closed", "CLOSE closed",
+                "MOVE closed", "LINE closed", "LINE closed", "LINE closeLine closed", "CLOSE closed",
+                "MOVE closed", "LINE", "LINE closeLine", "CLOSE"
+            ), segments(p, true));
+        }
+    }
+
+    public void iterAfterClose() {
+        Path p = new PathBuilder().moveTo(1, 2).lineTo(3, 4).build();
+        try (var it = p.iterator()) {
+            p.close();
+            assertEquals(new PathSegment(PathVerb.MOVE.ordinal(), 1, 2, false), it.next());
+            assertEquals(new PathSegment(1, 2, 3, 4, false, false), it.next());
+            assertEquals(false, it.hasNext());
+        }
+    }
+
+    public void iterLarge() {
+        int segments = 400_000;
+        float[] coords = new float[segments * 2];
+        for (int i = 0; i < coords.length; i++)
+            coords[i] = i % 1000;
+        try (Path p = new PathBuilder().moveTo(0, 0).polylineTo(coords).build()) {
+            long start = System.nanoTime();
+            int count = 0;
+            try (var it = p.iterator()) {
+                while (it.hasNext()) {
+                    it.next();
+                    count++;
+                }
+            }
+            long elapsedMs = (System.nanoTime() - start) / 1_000_000;
+            assertEquals(segments + 1, count);
+            assertEquals("under 2000 ms", elapsedMs < 2000 ? "under 2000 ms" : elapsedMs + " ms");
+        }
+    }
+
+    private static String segments(Path p, boolean forceClose) {
+        StringBuilder res = new StringBuilder();
+        try (var it = p.iterator(forceClose)) {
+            while (it.hasNext()) {
+                PathSegment s = it.next();
+                if (res.length() > 0)
+                    res.append(", ");
+                res.append(s.getVerb()).append(s.isCloseLine() ? " closeLine" : "").append(s.isClosedContour() ? " closed" : "");
+            }
+        }
+        return res.toString();
+    }
+
+    // PathSegmentIterator repeats SkPath::Iter::isClosedContour() logic: compare with Skia on random paths
+    public void iterMatchesSkia() {
+        String mismatch = null;
+        for (int seed = 0; seed < 1000 && mismatch == null; seed++) {
+            try (Path p = randomPath(new Random(seed))) {
+                for (boolean forceClose : new boolean[] {false, true}) {
+                    String m = _nFindIterMismatch(Native.getPtr(p), forceClose);
+                    if (m != null && mismatch == null)
+                        mismatch = "seed " + seed + ", forceClose " + forceClose + ", " + m;
+                }
+            }
+        }
+        assertEquals(null, mismatch);
+    }
+
+    private static Path randomPath(Random r) {
+        try (PathBuilder b = new PathBuilder()) {
+            int ops = 1 + r.nextInt(30);
+            for (int i = 0; i < ops; i++) {
+                float x = r.nextInt(5) * 10, y = r.nextInt(5) * 10; // small grid: frequent coincident points
+                switch (r.nextInt(10)) {
+                    case 0: case 1: b.moveTo(x, y); break;
+                    case 2: case 3: b.lineTo(x, y); break;
+                    case 4: b.quadTo(x, y, y, x); break;
+                    case 5: b.conicTo(x, y, y, x, 0.5f); break;
+                    case 6: b.cubicTo(x, y, y, x, x, x); break;
+                    case 7: case 8: b.closePath(); break;
+                    default: b.lineTo(r.nextInt(20) == 0 ? Float.NaN : x, y); break;
+                }
+            }
+            return b.detach();
+        }
+    }
+
+    public void iterCloseAfterNaN() {
+        try (Path closed = new PathBuilder().moveTo(1, 2).lineTo(5, 6).lineTo(Float.NaN, 3).closePath().build();
+             Path open = new PathBuilder().moveTo(1, 2).lineTo(5, 6).lineTo(Float.NaN, 3).build()) {
+            // Skia gives no point for CLOSE after NaN; like any CLOSE, it gets the contour start
+            assertEquals(new Point(1, 2), lastSegment(closed, false).getP0());
+            assertEquals(new Point(1, 2), lastSegment(open, true).getP0());
+        }
+    }
+
+    private static PathSegment lastSegment(Path p, boolean forceClose) {
+        PathSegment last = null;
+        try (var it = p.iterator(forceClose)) {
+            while (it.hasNext())
+                last = it.next();
+        }
+        return last;
+    }
+
+    public static native String _nFindIterMismatch(long pathPtr, boolean forceClose);
 }
