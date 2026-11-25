@@ -5,6 +5,7 @@ import static io.github.humbleui.skija.test.runner.TestRunner.assertEquals;
 import static io.github.humbleui.skija.test.runner.TestRunner.assertNotEquals;
 import static io.github.humbleui.skija.test.runner.TestRunner.assertThrows;
 
+import java.util.Arrays;
 import java.util.NoSuchElementException;
 
 import io.github.humbleui.skija.*;
@@ -18,6 +19,10 @@ public class PathTest implements Executable {
     @Override
     public void execute() throws Exception {
         TestRunner.testMethod(this, "iter");
+        TestRunner.testMethod(this, "rawIter");
+        TestRunner.testMethod(this, "rawIterSnapshot");
+        TestRunner.testMethod(this, "rawIterNonFinite");
+        TestRunner.testMethod(this, "rawIterLarge");
         TestRunner.testMethod(this, "convexity");
         TestRunner.testMethod(this, "isShape");
         TestRunner.testMethod(this, "checks");
@@ -70,6 +75,90 @@ public class PathTest implements Executable {
         }
     }
 
+    public void rawIter() {
+        try (PathBuilder b = new PathBuilder()
+                .moveTo(10, 10)
+                .lineTo(20, 0)
+                .quadTo(30, 0, 30, 10)
+                .conicTo(30, 20, 20, 20, 0.5f)
+                .cubicTo(10, 20, 0, 20, 0, 10)
+                .closePath()
+                .moveTo(100, 100)
+                .lineTo(110, 110)
+                .moveTo(200, 200);
+             var it = b.rawIterator();) {
+            assertEquals(PathVerb.MOVE, it.peek());
+            assertNext(it, PathVerb.MOVE, 10, 10);
+            assertNext(it, PathVerb.LINE, 10, 10, 20, 0);
+            assertNext(it, PathVerb.QUAD, 20, 0, 30, 0, 30, 10);
+            assertNext(it, PathVerb.CONIC, 30, 10, 30, 20, 20, 20);
+            assertEquals(0.5f, it.getConicWeight());
+            assertNext(it, PathVerb.CUBIC, 20, 20, 10, 20, 0, 20, 0, 10);
+            assertNext(it, PathVerb.CLOSE);
+            assertNext(it, PathVerb.MOVE, 100, 100);
+            assertNext(it, PathVerb.LINE, 100, 100, 110, 110);
+            assertNext(it, PathVerb.MOVE, 200, 200); // trailing MOVE is returned as is
+            assertEquals(PathVerb.DONE, it.peek());
+            assertNext(it, PathVerb.DONE);
+            assertNext(it, PathVerb.DONE);
+            assertThrows(IllegalArgumentException.class, () -> it.next(new float[4]));
+        }
+    }
+
+    public void rawIterSnapshot() {
+        PathBuilder b = new PathBuilder().moveTo(1, 2).lineTo(3, 4);
+        try (var it = b.rawIterator()) {
+            b.reset().moveTo(100, 100).lineTo(200, 200);
+            b.close();
+            assertNext(it, PathVerb.MOVE, 1, 2);
+            assertNext(it, PathVerb.LINE, 1, 2, 3, 4);
+            assertNext(it, PathVerb.DONE);
+        }
+
+        Path p = new PathBuilder().moveTo(5, 6).lineTo(7, 8).build();
+        try (var it = p.rawIterator()) {
+            p.close();
+            assertNext(it, PathVerb.MOVE, 5, 6);
+            assertNext(it, PathVerb.LINE, 5, 6, 7, 8);
+            assertNext(it, PathVerb.DONE);
+        }
+    }
+
+    public void rawIterNonFinite() {
+        try (PathBuilder b = new PathBuilder().moveTo(0, 0).lineTo(Float.NaN, 1);
+             var it = b.rawIterator();) {
+            assertNext(it, PathVerb.DONE);
+        }
+    }
+
+    public void rawIterLarge() {
+        int segments = 400_000;
+        float[] coords = new float[segments * 2];
+        for (int i = 0; i < coords.length; i++)
+            coords[i] = i % 1000;
+        try (PathBuilder b = new PathBuilder().moveTo(0, 0).polylineTo(coords)) {
+            long start = System.nanoTime();
+            int verbs = 0;
+            try (var it = b.rawIterator()) {
+                float[] pts = new float[PathRawIterator.COORDS_BUFFER_SIZE];
+                while (it.next(pts) != PathVerb.DONE)
+                    verbs++;
+            }
+            long elapsedMs = (System.nanoTime() - start) / 1_000_000;
+            assertEquals(segments + 1, verbs);
+            assertEquals("under 2000 ms", elapsedMs < 2000 ? "under 2000 ms" : elapsedMs + " ms");
+        }
+    }
+
+    private static void assertNext(PathRawIterator it, PathVerb verb, float... coords) {
+        float[] pts = new float[PathRawIterator.COORDS_BUFFER_SIZE];
+        Arrays.fill(pts, -1);
+        assertEquals(verb, it.next(pts));
+        assertEquals(coords.length / 2, PathRawIterator.getPointsCount(verb));
+        float[] expected = Arrays.copyOf(coords, pts.length);
+        Arrays.fill(expected, coords.length, pts.length, -1);
+        assertArrayEquals(expected, pts);
+    }
 
     public void convexity() {
         try (Path p = new PathBuilder().lineTo(40, 20).lineTo(0, 40).lineTo(0, 0).closePath().build()) {

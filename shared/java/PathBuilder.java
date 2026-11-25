@@ -1590,6 +1590,17 @@ public class PathBuilder extends Managed {
         }
     }
 
+    /**
+     * Iterates over verbs and points exactly as stored, without implicit closing lines.
+     * Later changes to the builder do not affect the iterator.
+     *
+     * @return  {@link PathRawIterator} over a snapshot of this builder
+     */
+    @NotNull @Contract("-> new")
+    public PathRawIterator rawIterator() {
+        return new PathRawIterator(this);
+    }
+
     @ApiStatus.Internal
     public PathBuilder(long ptr, long finalizer) {
         super(ptr, finalizer);
